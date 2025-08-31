@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Virtual da Queda Livre</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #5D9CEC 0%, #4A89DC 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .simulation-area {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .input-group input[type="number"]:focus {
+            outline: none;
+            border-color: #5D9CEC;
+        }
+        .object-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .object-card {
+            background: #f7fafc;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .object-card:hover {
+            border-color: #5D9CEC;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .object-card.selected {
+            background: #eef2ff';
+            border-color: #5D9CEC;
+        }
+        .object-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        .object-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        .btn-primary {
+            background: #5D9CEC;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4A89DC;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(93, 156, 236, 0.4);
+        }
+        .btn-secondary {
+            background: #f7fafc;
+            color: #5D9CEC;
+            border: 2px solid #5D9CEC;
+        }
+        .btn-secondary:hover {
+            background: #5D9CEC;
+            color: white;
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #5D9CEC;
+            cursor: pointer;
+        }
+        .info-panel {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .info-panel h3 {
+            color: #5D9CEC;
+            margin-bottom: 10px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+        .air-resistance-info {
+            background: #fff5f5;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #e53e3e;
+            display: none;
+        }
+        .air-resistance-info.show {
+            display: block;
+        }
+        .air-resistance-info h4 {
+            color: #e53e3e;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .air-resistance-info p {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        #canvas {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 80%, #8BC34A 80%, #689F38 100%);
+            margin-bottom: 20px;
+        }
+        .simulation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #5D9CEC;
+        }
+        .chart {
+            width: 100%;
+            height: 250px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .experiments-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .experiment-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .experiment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #5D9CEC;
+        }
+        .experiment-card.active {
+            background: #eef2ff';
+            border-color: #5D9CEC;
+        }
+        .experiment-card h4 {
+            color: #5D9CEC;
+            margin-bottom: 10px;
+        }
+        .theory-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .theory-section h2 {
+            color: #5D9CEC;
+            margin-bottom: 15px;
+        }
+        .formula {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 15px 0;
+            border-left: 4px solid #5D9CEC;
+        }
+        .challenge-section {
+            background: #fef3c7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #f59e0b;
+        }
+        .challenge-section h3 {
+            color: #d97706;
+            margin-bottom: 10px;
+        }
+        .challenge-question {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        .challenge-options {
+            margin-bottom: 15px;
+        }
+        .challenge-option {
+            background: white;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .challenge-option:hover {
+            background: #fffbeb;
+            transform: translateX(5px);
+        }
+        .challenge-option.selected {
+            background: #fbbf24;
+            border-color: #d97706;
+            font-weight: 600;
+        }
+        .challenge-option.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        .challenge-option.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        .challenge-answer {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border: 2px solid #48bb78;
+        }
+        .challenge-answer.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .challenge-answer h4 {
+            color: #48bb78;
+            margin-bottom: 10px;
+        }
+        .challenge-feedback {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        .challenge-feedback.show {
+            display: block;
+        }
+        .challenge-feedback.correct {
+            border: 2px solid #48bb78;
+            color: #48bb78';
+        }
+        .challenge-feedback.incorrect {
+            border: 2px solid #e53e3e;
+            color: #e53e3e;
+        }
+        .results-panel {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        .results-panel.show {
+            display: block;
+        }
+        .results-panel h3 {
+            color: #5D9CEC;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .result-table th, .result-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .result-table th {
+            background: #5D9CEC;
+            color: white;
+        }
+        .result-table tr:last-child td {
+            border-bottom: none;
+        }
+        .result-table .winner {
+            background: #e6fffa;
+            font-weight: 600;
+        }
+        .real-time-data {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .real-time-data h3 {
+            color: #5D9CEC;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .real-time-objects {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .real-time-object {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .real-time-object h4 {
+            color: #5D9CEC;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+            .object-selector {
+                grid-template-columns: 1fr;
+            }
+            .simulation-controls {
+                flex-direction: column;
+            }
+            .real-time-objects {
+                grid-template-columns: 1fr;
+            }
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .object-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .object-panel {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .object-panel h4 {
+            color: #5D9CEC;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .simulation-title {
+            color: #5D9CEC;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        .challenge-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Laboratório Virtual da Queda Livre</h1>
+            <p>Explore os princípios da queda livre e o efeito da resistência do ar</p>
+        </header>
+        
+        <section class="theory-section">
+            <h2>📚 Queda Livre e Resistência do Ar</h2>
+            <p>A queda livre é o movimento de um objeto sob a influência exclusiva da gravidade. Na ausência de resistência do ar, todos os objetos caem com a mesma aceleração, independentemente de sua massa, como demonstrado por Galileu em sua famosa experiência na Torre de Pisa.</p>
+            
+            <div class="formula">
+                y = y₀ + v₀t + ½gt²
+            </div>
+            
+            <p>Onde:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>y</strong> = Posição final (m)</li>
+                <li><strong>y₀</strong> = Posição inicial (m)</li>
+                <li><strong>v₀</strong> = Velocidade inicial (m/s)</li>
+                <li><strong>g</strong> = Aceleração da gravidade (9,8 m/s²)</li>
+                <li><strong>t</strong> = Tempo (s)</li>
+            </ul>
+            
+            <p style="margin-top: 15px;"><strong>Com resistência do ar:</strong></p>
+            <p>A resistência do ar é uma força que se opõe ao movimento de um objeto através do ar. Ela depende da velocidade do objeto, de sua área de contato e de um coeficiente de arrasto. A força de resistência do ar pode ser calculada por:</p>
+            
+            <div class="formula">
+                F_res = ½ × ρ × v² × C_d × A
+            </div>
+            
+            <p>Onde:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>F_res</strong> = Força de resistência do ar (N)</li>
+                <li><strong>ρ</strong> = Densidade do ar (aproximadamente 1,2 kg/m³)</li>
+                <li><strong>v</strong> = Velocidade do objeto (m/s)</li>
+                <li><strong>C_d</strong> = Coeficiente de arrasto (depende da forma do objeto)</li>
+                <li><strong>A</strong> = Área de contato (m²)</li>
+            </ul>
+        </section>
+        
+        <div class="main-content">
+            <div class="control-panel">
+                <h3>📊 Dados em Tempo Real</h3>
+                <div class="real-time-objects">
+                    <div class="real-time-object">
+                        <h4>Objeto 2</h4>
+                        <div class="info-item">
+                            <span>Aceleração:</span>
+                            <span class="info-value" id="acceleration2">9.8 m/s²</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Velocidade:</span>
+                            <span class="info-value" id="velocity2">0 m/s</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Altura:</span>
+                            <span class="info-value" id="height2">50 m</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Tempo de queda:</span>
+                            <span class="info-value" id="time2">0 s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="real-time-object">
+                        <h4>Objeto 1</h4>
+                        <div class="info-item">
+                            <span>Aceleração:</span>
+                            <span class="info-value" id="acceleration1">9.8 m/s²</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Velocidade:</span>
+                            <span class="info-value" id="velocity1">0 m/s</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Altura:</span>
+                            <span class="info-value" id="height1">50 m</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Tempo de queda:</span>
+                            <span class="info-value" id="time1">0 s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-container">
+                    <label for="height">Altura Inicial: <span id="heightValue">50</span> m</label>
+                    <input type="range" id="height" min="10" max="200" step="5" value="50">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="airResistance">
+                    <label for="airResistance">Incluir resistência do ar</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="strongWind">
+                    <label for="strongWind">Vento forte (aumenta resistência)</label>
+                </div>
+                
+                <div class="air-resistance-info" id="airResistanceInfo">
+                    <h4>📌 Informações de Resistência do Ar</h4>
+                    <p>Força de resistência - Objeto 1: <span id="airResistanceForce1">0 N</span></p>
+                    <p>Força de resistência - Objeto 2: <span id="airResistanceForce2">0 N</span></p>
+                </div>
+                
+                <div class="object-comparison">
+                    <div class="object-panel">
+                        <h4>Objeto 1</h4>
+                        <div class="object-selector">
+                            <div class="object-card selected" data-object="iron-ball" data-target="1">
+                                <div class="object-icon">⚪</div>
+                                <div class="object-name">Bola de Ferro</div>
+                            </div>
+                            <div class="object-card" data-object="stone" data-target="1">
+                                <div class="object-icon">🪨</div>
+                                <div class="object-name">Pedra</div>
+                            </div>
+                            <div class="object-card" data-object="paper" data-target="1">
+                                <div class="object-icon">📄</div>
+                                <div class="object-name">Folha de Papel</div>
+                            </div>
+                            <div class="object-card" data-object="feather" data-target="1">
+                                <div class="object-icon">🪶</div>
+                                <div class="object-name">Pena</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="mass1">Massa (kg)</label>
+                            <input type="number" id="mass1" value="5" min="0.1" max="20" step="0.1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="area1">Área de Contato (m²)</label>
+                            <input type="number" id="area1" value="0.05" min="0.01" max="1" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="object-panel">
+                        <h4>Objeto 2</h4>
+                        <div class="object-selector">
+                            <div class="object-card" data-object="iron-ball" data-target="2">
+                                <div class="object-icon">⚪</div>
+                                <div class="object-name">Bola de Ferro</div>
+                            </div>
+                            <div class="object-card selected" data-object="stone" data-target="2">
+                                <div class="object-icon">🪨</div>
+                                <div class="object-name">Pedra</div>
+                            </div>
+                            <div class="object-card" data-object="paper" data-target="2">
+                                <div class="object-icon">📄</div>
+                                <div class="object-name">Folha de Papel</div>
+                            </div>
+                            <div class="object-card" data-object="feather" data-target="2">
+                                <div class="object-icon">🪶</div>
+                                <div class="object-name">Pena</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="mass2">Massa (kg)</label>
+                            <input type="number" id="mass2" value="3" min="0.1" max="20" step="0.1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="area2">Área de Contato (m²)</label>
+                            <input type="number" id="area2" value="0.03" min="0.01" max="1" step="0.01">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="results-panel" id="resultsPanel">
+                    <h3>🏆 Resultados da Simulação</h3>
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Objeto</th>
+                                <th>Tempo de Queda</th>
+                                <th>Velocidade Final</th>
+                                <th>Vencedor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="resultRow1">
+                                <td id="resultName1">Bola de Ferro</td>
+                                <td id="resultTime1">-</td>
+                                <td id="resultVelocity1">-</td>
+                                <td id="resultWinner1">-</td>
+                            </tr>
+                            <tr id="resultRow2">
+                                <td id="resultName2">Pedra</td>
+                                <td id="resultTime2">-</td>
+                                <td id="resultVelocity2">-</td>
+                                <td id="resultWinner2">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="challenge-section">
+                    <h3>🎯 Desafio do Professor</h3>
+                    <div class="challenge-question" id="challengeText">
+                        Se soltar uma bola de ferro e uma pena de 50 m sem resistência do ar, qual objeto chegará primeiro ao chão?
+                    </div>
+                    
+                    <div class="challenge-options" id="challengeOptions">
+                        <div class="challenge-option" data-answer="a">A bola de ferro chegará primeiro</div>
+                        <div class="challenge-option" data-answer="b">A pena chegará primeiro</div>
+                        <div class="challenge-option" data-answer="c">Ambos chegarão ao mesmo tempo</div>
+                        <div class="challenge-option" data-answer="d">Depende da massa dos objetos</div>
+                    </div>
+                    
+                    <div class="challenge-feedback" id="challengeFeedback"></div>
+                    
+                    <div class="challenge-answer" id="challengeAnswer">
+                        <h4>✅ Resposta Correta!</h4>
+                        <p><strong>Explicação:</strong> Na ausência de resistência do ar, todos os objetos caem com a mesma aceleração (g = 9,8 m/s²), independentemente de sua massa. Portanto, a bola de ferro e a pena chegarão ao chão exatamente no mesmo tempo.</p>
+                        <p>Este foi um dos experimentos realizados na Lua pelos astronautas da Apollo 15, onde um martelo e uma pena foram soltos simultaneamente e atingiram o solo ao mesmo tempo, devido à ausência de atmosfera lunar.</p>
+                    </div>
+                    
+                    <div class="challenge-controls">
+                        <button class="btn-primary" id="submitAnswerBtn">Enviar Resposta</button>
+                        <button class="btn-secondary" id="nextChallengeBtn" style="display: none;">Próximo Desafio</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="simulation-area">
+                <h3 class="simulation-title">🎮 Controles da Simulação</h3>
+                
+                <div class="simulation-controls">
+                    <button class="btn-primary" id="startBtn">▶️ Iniciar Queda</button>
+                    <button class="btn-secondary" id="pauseBtn">⏸️ Pausar</button>
+                    <button class="btn-danger" id="resetBtn">🔄 Resetar</button>
+                </div>
+                
+                <h3>🎬 Simulação Visual</h3>
+                <canvas id="canvas"></canvas>
+                
+                <div class="info-panel">
+                    <h3>📊 Informações da Simulação</h3>
+                    <div class="info-item">
+                        <span>Altura inicial:</span>
+                        <span class="info-value" id="simHeight">50 m</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Resistência do ar:</span>
+                        <span class="info-value" id="simAirResistance">Desativada</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Vento forte:</span>
+                        <span class="info-value" id="simStrongWind">Desativado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <section class="charts-section">
+            <div class="chart-container">
+                <h3>📈 Velocidade × Tempo</h3>
+                <canvas class="chart" id="velocityChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>📍 Altura × Tempo</h3>
+                <canvas class="chart" id="heightChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>⚡ Aceleração × Tempo</h3>
+                <canvas class="chart" id="accelerationChart"></canvas>
+            </div>
+        </section>
+        
+        <section class="experiments-section">
+            <h3>🧪 Experimentos Guiados</h3>
+            
+            <div class="experiment-card" data-experiment="1">
+                <h4>Cenário 1: Queda livre sem resistência do ar (Experimento de Galileu)</h4>
+                <p>Desative a resistência do ar e solte dois objetos de massas diferentes (ex: bola de ferro e pena). Observe que ambos chegam ao chão ao mesmo tempo, confirmando o princípio de que a aceleração da gravidade é a mesma para todos os objetos, independentemente da massa.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="2">
+                <h4>Cenário 2: Queda com resistência do ar</h4>
+                <p>Ative a resistência do ar e solte uma pena e uma bola de ferro da mesma altura. Observe que a bola de ferro chega primeiro ao chão devido à sua maior massa em relação à área de contato, o que reduz o efeito da resistência do ar.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="3">
+                <h4>Cenário 3: Efeito do vento forte</h4>
+                <p>Ative a resistência do ar e o vento forte. Compare a queda de uma folha de papel com e sem vento forte. Observe como o vento aumenta significativamente a resistência do ar, tornando a queda muito mais lenta.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="4">
+                <h4>Cenário 4: Influência da área de contato</h4>
+                <p>Mantenha a massa constante e varie a área de contato de um objeto (ex: folha de papel). Observe como uma maior área de contato aumenta a resistência do ar e diminui a velocidade de queda.</p>
+            </div>
+        </section>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        // Classe principal da simulação
+        class FreeFallSimulation {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Propriedades dos objetos
+                this.objects = [
+                    {
+                        id: 1,
+                        type: 'iron-ball',
+                        name: 'Bola de Ferro',
+                        mass: 5,
+                        area: 0.05,
+                        dragCoefficient: 0.47,
+                        color: '#A9A9A9',
+                        icon: '⚪',
+                        position: 50, // Posição inicial em metros (altura)
+                        velocity: 0,
+                        acceleration: 9.8,
+                        time: 0,
+                        finished: false,
+                        finalTime: 0,
+                        finalVelocity: 0
+                    },
+                    {
+                        id: 2,
+                        type: 'stone',
+                        name: 'Pedra',
+                        mass: 3,
+                        area: 0.03,
+                        dragCoefficient: 0.8,
+                        color: '#808080',
+                        icon: '🪨',
+                        position: 50, // Posição inicial em metros (altura)
+                        velocity: 0,
+                        acceleration: 9.8,
+                        time: 0,
+                        finished: false,
+                        finalTime: 0,
+                        finalVelocity: 0
+                    }
+                ];
+                
+                // Configurações da simulação
+                this.initialHeight = 50;
+                this.airResistance = false;
+                this.strongWind = false;
+                this.g = 9.8; // Aceleração da gravidade (m/s²)
+                this.airDensity = 1.2; // Densidade do ar (kg/m³)
+                
+                // Estado da simulação
+                this.isRunning = false;
+                this.isPaused = false;
+                this.timeScale = 1;
+                this.groundLevel = 0;
+                this.topMargin = 50; // Margem superior para o início da queda
+                
+                // Dados para gráficos
+                this.velocityData = [[], []];
+                this.heightData = [[], []];
+                this.accelerationData = [[], []];
+                this.timeData = [];
+                
+                // Tamanho dos objetos na tela
+                this.objectSize = 30;
+                
+                // Configurar canvas e event listeners
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.setupCharts();
+                
+                // Configurar desafios
+                this.setupChallenges();
+                this.currentChallenge = 0;
+                this.selectedAnswer = null;
+                this.challengeAnswered = false;
+                
+                // Garantir que o canvas seja renderizado corretamente após o carregamento
+                setTimeout(() => {
+                    this.setupCanvas();
+                    this.updateDisplay();
+                    this.draw();
+                }, 100);
+            }
+            
+            setupCanvas() {
+                const rect = this.canvas.getBoundingClientRect();
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
+                this.groundLevel = this.canvas.height - 50;
+            }
+            
+            setupEventListeners() {
+                // Event listener para redimensionamento da janela
+                window.addEventListener('resize', () => {
+                    this.setupCanvas();
+                    this.updateDisplay();
+                    this.draw();
+                });
+                
+                // Seletores de objeto
+                document.querySelectorAll('.object-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const target = parseInt(card.dataset.target);
+                        const objectType = card.dataset.object;
+                        
+                        // Remover seleção anterior
+                        document.querySelectorAll(`.object-card[data-target="${target}"]`).forEach(c => {
+                            c.classList.remove('selected');
+                        });
+                        
+                        // Adicionar seleção ao objeto clicado
+                        card.classList.add('selected');
+                        
+                        // Atualizar objeto na simulação
+                        this.updateObject(target, objectType);
+                    });
+                });
+                
+                // Inputs de massa e área
+                document.getElementById('mass1').addEventListener('input', (e) => {
+                    this.objects[0].mass = parseFloat(e.target.value);
+                    this.updateDisplay();
+                });
+                
+                document.getElementById('area1').addEventListener('input', (e) => {
+                    this.objects[0].area = parseFloat(e.target.value);
+                    this.updateDisplay();
+                });
+                
+                document.getElementById('mass2').addEventListener('input', (e) => {
+                    this.objects[1].mass = parseFloat(e.target.value);
+                    this.updateDisplay();
+                });
+                
+                document.getElementById('area2').addEventListener('input', (e) => {
+                    this.objects[1].area = parseFloat(e.target.value);
+                    this.updateDisplay();
+                });
+                
+                // Altura inicial
+                document.getElementById('height').addEventListener('input', (e) => {
+                    this.initialHeight = parseFloat(e.target.value);
+                    document.getElementById('heightValue').textContent = this.initialHeight;
+                    document.getElementById('simHeight').textContent = this.initialHeight + ' m';
+                    this.reset();
+                });
+                
+                // Resistência do ar e vento
+                document.getElementById('airResistance').addEventListener('change', (e) => {
+                    this.airResistance = e.target.checked;
+                    const airResistanceInfo = document.getElementById('airResistanceInfo');
+                    const simAirResistance = document.getElementById('simAirResistance');
+                    
+                    if (this.airResistance) {
+                        airResistanceInfo.classList.add('show');
+                        simAirResistance.textContent = 'Ativada';
+                    } else {
+                        airResistanceInfo.classList.remove('show');
+                        simAirResistance.textContent = 'Desativada';
+                    }
+                    
+                    this.reset();
+                });
+                
+                document.getElementById('strongWind').addEventListener('change', (e) => {
+                    this.strongWind = e.target.checked;
+                    const simStrongWind = document.getElementById('simStrongWind');
+                    
+                    if (this.strongWind) {
+                        simStrongWind.textContent = 'Ativado';
+                    } else {
+                        simStrongWind.textContent = 'Desativado';
+                    }
+                    
+                    this.reset();
+                });
+                
+                // Botões
+                document.getElementById('startBtn').addEventListener('click', () => this.start());
+                document.getElementById('pauseBtn').addEventListener('click', () => this.pause());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+                
+                // Experimentos
+                document.querySelectorAll('.experiment-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.experiment-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        this.loadExperiment(parseInt(card.dataset.experiment));
+                    });
+                });
+                
+                // Desafio
+                document.getElementById('submitAnswerBtn').addEventListener('click', () => this.submitChallengeAnswer());
+                document.getElementById('nextChallengeBtn').addEventListener('click', () => this.nextChallenge());
+            }
+            
+            setupCharts() {
+                // Configurar gráficos
+                this.velocityChart = document.getElementById('velocityChart');
+                this.velocityCtx = this.velocityChart.getContext('2d');
+                
+                this.heightChart = document.getElementById('heightChart');
+                this.heightCtx = this.heightChart.getContext('2d');
+                
+                this.accelerationChart = document.getElementById('accelerationChart');
+                this.accelerationCtx = this.accelerationChart.getContext('2d');
+                
+                // Ajustar tamanho dos gráficos
+                [this.velocityChart, this.heightChart, this.accelerationChart].forEach(chart => {
+                    const rect = chart.getBoundingClientRect();
+                    chart.width = rect.width;
+                    chart.height = rect.height;
+                });
+            }
+            
+            setupChallenges() {
+                this.challenges = [
+                    {
+                        question: "Se soltar uma bola de ferro e uma pena de 50 m sem resistência do ar, qual objeto chegará primeiro ao chão?",
+                        options: [
+                            "A bola de ferro chegará primeiro",
+                            "A pena chegará primeiro",
+                            "Ambos chegarão ao mesmo tempo",
+                            "Depende da massa dos objetos"
+                        ],
+                        correctAnswer: "c",
+                        explanation: "Na ausência de resistência do ar, todos os objetos caem com a mesma aceleração (g = 9,8 m/s²), independentemente de sua massa. Portanto, a bola de ferro e a pena chegarão ao chão exatamente no mesmo tempo. Este foi um dos experimentos realizados na Lua pelos astronautas da Apollo 15, onde um martelo e uma pena foram soltos simultaneamente e atingiram o solo ao mesmo tempo, devido à ausência de atmosfera lunar."
+                    },
+                    {
+                        question: "Dois objetos de mesma massa e formatos diferentes são soltados de uma mesma altura com resistência do ar. Qual objeto chegará primeiro ao chão?",
+                        options: [
+                            "O objeto com maior área de contato",
+                            "O objeto com menor área de contato",
+                            "Ambos chegarão ao mesmo tempo",
+                            "Depende da cor dos objetos"
+                        ],
+                        correctAnswer: "b",
+                        explanation: "Com resistência do ar, o objeto com menor área de contato sofre menos resistência do ar, pois a força de resistência é proporcional à área de contato (F_res = ½ × ρ × v² × C_d × A). Portanto, o objeto com menor área de contato chegará primeiro ao chão."
+                    },
+                    {
+                        question: "Se dobrarmos a altura de queda de um objeto, o tempo de queda será:",
+                        options: [
+                            "O dobro do tempo original",
+                            "A metade do tempo original",
+                            "Aproximadamente 1,4 vezes o tempo original",
+                            "O quadrado do tempo original"
+                        ],
+                        correctAnswer: "c",
+                        explanation: "Pela equação da queda livre (h = ½gt²), o tempo é proporcional à raiz quadrada da altura. Se dobrarmos a altura, o tempo será multiplicado por √2, que é aproximadamente 1,4. Por exemplo, se um objeto leva 1 segundo para cair de 4,9m, levará aproximadamente 1,4 segundos para cair de 9,8m."
+                    },
+                    {
+                        question: "Qual fator NÃO influencia a força de resistência do ar?",
+                        options: [
+                            "Velocidade do objeto",
+                            "Massa do objeto",
+                            "Área de contato do objeto",
+                            "Densidade do ar"
+                        ],
+                        correctAnswer: "b",
+                        explanation: "A força de resistência do ar é calculada por F_res = ½ × ρ × v² × C_d × A, onde ρ é a densidade do ar, v é a velocidade, C_d é o coeficiente de arrasto (depende do formato) e A é a área de contato. A massa do objeto não aparece nesta fórmula, portanto não influencia diretamente a força de resistência do ar."
+                    },
+                    {
+                        question: "Em um planeta com gravidade metade da da Terra, como seria a queda de um objeto?",
+                        options: [
+                            "O objeto cairia com o dobro da velocidade",
+                            "O objeto cairia com metade da aceleração",
+                            "O objeto levaria o mesmo tempo para cair",
+                            "O objeto não cairia"
+                        ],
+                        correctAnswer: "b",
+                        explanation: "A aceleração da gravidade determina como os objetos caem. Em um planeta com gravidade metade da da Terra (g = 4,9 m/s² em vez de 9,8 m/s²), os objetos cairiam com metade da aceleração. Isso significa que levariam mais tempo para atingir o solo e teriam velocidades menores em comparação com a queda na Terra."
+                    }
+                ];
+                
+                // Adicionar event listeners para as opções do desafio
+                document.querySelectorAll('.challenge-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        if (this.challengeAnswered) return;
+                        
+                        // Remover seleção anterior
+                        document.querySelectorAll('.challenge-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Adicionar seleção à opção clicada
+                        option.classList.add('selected');
+                        this.selectedAnswer = option.dataset.answer;
+                    });
+                });
+                
+                // Carregar primeiro desafio
+                this.loadChallenge(0);
+            }
+            
+            loadChallenge(index) {
+                const challenge = this.challenges[index];
+                document.getElementById('challengeText').textContent = challenge.question;
+                
+                const optionsContainer = document.getElementById('challengeOptions');
+                optionsContainer.innerHTML = '';
+                
+                const optionLetters = ['a', 'b', 'c', 'd'];
+                challenge.options.forEach((option, i) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'challenge-option';
+                    optionElement.dataset.answer = optionLetters[i];
+                    optionElement.textContent = option;
+                    
+                    optionElement.addEventListener('click', () => {
+                        if (this.challengeAnswered) return;
+                        
+                        // Remover seleção anterior
+                        document.querySelectorAll('.challenge-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Adicionar seleção à opção clicada
+                        optionElement.classList.add('selected');
+                        this.selectedAnswer = optionLetters[i];
+                    });
+                    
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                // Resetar estado do desafio
+                this.selectedAnswer = null;
+                this.challengeAnswered = false;
+                document.getElementById('challengeAnswer').classList.remove('show');
+                document.getElementById('challengeFeedback').classList.remove('show');
+                document.getElementById('submitAnswerBtn').style.display = 'block';
+                document.getElementById('nextChallengeBtn').style.display = 'none';
+            }
+            
+            submitChallengeAnswer() {
+                if (!this.selectedAnswer) {
+                    this.showNotification('Por favor, selecione uma resposta antes de enviar', 'warning');
+                    return;
+                }
+                
+                this.challengeAnswered = true;
+                const challenge = this.challenges[this.currentChallenge];
+                const feedbackElement = document.getElementById('challengeFeedback');
+                const answerElement = document.getElementById('challengeAnswer');
+                
+                // Verificar se a resposta está correta
+                const isCorrect = this.selectedAnswer === challenge.correctAnswer;
+                
+                // Mostrar feedback
+                feedbackElement.classList.add('show');
+                if (isCorrect) {
+                    feedbackElement.className = 'challenge-feedback correct show';
+                    feedbackElement.textContent = '✅ Resposta correta! Parabéns!';
+                } else {
+                    feedbackElement.className = 'challenge-feedback incorrect show';
+                    feedbackElement.textContent = '❌ Resposta incorreta. Tente novamente ou veja a explicação.';
+                }
+                
+                // Destacar opções corretas e incorretas
+                document.querySelectorAll('.challenge-option').forEach(option => {
+                    if (option.dataset.answer === challenge.correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (option.dataset.answer === this.selectedAnswer && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Mostrar explicação
+                answerElement.querySelector('p').innerHTML = `<strong>Explicação:</strong> ${challenge.explanation}`;
+                answerElement.classList.add('show');
+                
+                // Atualizar botões
+                document.getElementById('submitAnswerBtn').style.display = 'none';
+                document.getElementById('nextChallengeBtn').style.display = 'block';
+                
+                // Notificação
+                if (isCorrect) {
+                    this.showNotification('Resposta correta! Ótimo trabalho!', 'success');
+                } else {
+                    this.showNotification('Resposta incorreta. Estude a explicação para aprender mais.', 'error');
+                }
+            }
+            
+            nextChallenge() {
+                // Avançar para o próximo desafio
+                this.currentChallenge = (this.currentChallenge + 1) % this.challenges.length;
+                this.loadChallenge(this.currentChallenge);
+                this.showNotification(`Carregando desafio ${this.currentChallenge + 1} de ${this.challenges.length}`, 'info');
+            }
+            
+            updateObject(target, objectType) {
+                const objectIndex = target - 1;
+                
+                // Configurar propriedades baseadas no tipo de objeto
+                switch(objectType) {
+                    case 'iron-ball':
+                        this.objects[objectIndex].type = 'iron-ball';
+                        this.objects[objectIndex].name = 'Bola de Ferro';
+                        this.objects[objectIndex].mass = 5;
+                        this.objects[objectIndex].area = 0.05;
+                        this.objects[objectIndex].dragCoefficient = 0.47;
+                        this.objects[objectIndex].color = '#A9A9A9';
+                        this.objects[objectIndex].icon = '⚪';
+                        break;
+                    case 'stone':
+                        this.objects[objectIndex].type = 'stone';
+                        this.objects[objectIndex].name = 'Pedra';
+                        this.objects[objectIndex].mass = 3;
+                        this.objects[objectIndex].area = 0.03;
+                        this.objects[objectIndex].dragCoefficient = 0.8;
+                        this.objects[objectIndex].color = '#808080';
+                        this.objects[objectIndex].icon = '🪨';
+                        break;
+                    case 'paper':
+                        this.objects[objectIndex].type = 'paper';
+                        this.objects[objectIndex].name = 'Folha de Papel';
+                        this.objects[objectIndex].mass = 0.005;
+                        this.objects[objectIndex].area = 0.06;
+                        this.objects[objectIndex].dragCoefficient = 1.05;
+                        this.objects[objectIndex].color = '#FFFFFF';
+                        this.objects[objectIndex].icon = '📄';
+                        break;
+                    case 'feather':
+                        this.objects[objectIndex].type = 'feather';
+                        this.objects[objectIndex].name = 'Pena';
+                        this.objects[objectIndex].mass = 0.001;
+                        this.objects[objectIndex].area = 0.04;
+                        this.objects[objectIndex].dragCoefficient = 1.4;
+                        this.objects[objectIndex].color = '#F0F8FF';
+                        this.objects[objectIndex].icon = '🪶';
+                        break;
+                }
+                
+                // Atualizar inputs
+                document.getElementById(`mass${target}`).value = this.objects[objectIndex].mass;
+                document.getElementById(`area${target}`).value = this.objects[objectIndex].area;
+                
+                this.reset();
+            }
+            
+            start() {
+                if (!this.isRunning) {
+                    this.isRunning = true;
+                    this.isPaused = false;
+                    this.animate();
+                    this.showNotification('Simulação iniciada!', 'success');
+                }
+            }
+            
+            pause() {
+                if (this.isRunning && !this.isPaused) {
+                    this.isPaused = true;
+                    this.showNotification('Simulação pausada', 'info');
+                } else if (this.isPaused) {
+                    this.isPaused = false;
+                    this.animate();
+                    this.showNotification('Simulação retomada', 'info');
+                }
+            }
+            
+            reset() {
+                this.isRunning = false;
+                this.isPaused = false;
+                
+                // Resetar objetos
+                this.objects.forEach(obj => {
+                    obj.position = this.initialHeight; // Posição inicial (altura)
+                    obj.velocity = 0;
+                    obj.acceleration = this.airResistance ? this.calculateInitialAcceleration(obj) : this.g;
+                    obj.time = 0;
+                    obj.finished = false;
+                    obj.finalTime = 0;
+                    obj.finalVelocity = 0;
+                });
+                
+                // Limpar dados dos gráficos
+                this.velocityData = [[], []];
+                this.heightData = [[], []];
+                this.accelerationData = [[], []];
+                this.timeData = [];
+                
+                // Esconder painel de resultados
+                document.getElementById('resultsPanel').classList.remove('show');
+                
+                this.updateDisplay();
+                this.draw();
+                this.drawCharts();
+                this.showNotification('Simulação resetada', 'info');
+            }
+            
+            calculateInitialAcceleration(obj) {
+                if (!this.airResistance) {
+                    return this.g;
+                }
+                
+                // F_res = 0.5 * ρ * v² * C_d * A
+                // Como v = 0 no início, a resistência do ar é 0
+                // Portanto, a aceleração inicial é apenas a gravidade
+                return this.g;
+            }
+            
+            calculateAcceleration(obj) {
+                if (!this.airResistance) {
+                    return this.g;
+                }
+                
+                // F_res = 0.5 * ρ * v² * C_d * A
+                const airResistanceForce = 0.5 * this.airDensity * Math.pow(obj.velocity, 2) * obj.dragCoefficient * obj.area;
+                
+                // Aumentar a resistência se vento forte estiver ativado
+                const windFactor = this.strongWind ? 2.5 : 1;
+                const totalResistanceForce = airResistanceForce * windFactor;
+                
+                // F_resultante = Peso - F_resistência
+                const weight = obj.mass * this.g;
+                const resultantForce = weight - totalResistanceForce;
+                
+                // a = F / m
+                const acceleration = resultantForce / obj.mass;
+                
+                // Atualizar display da força de resistência
+                if (obj.id === 1) {
+                    document.getElementById('airResistanceForce1').textContent = totalResistanceForce.toFixed(2) + ' N';
+                } else {
+                    document.getElementById('airResistanceForce2').textContent = totalResistanceForce.toFixed(2) + ' N';
+                }
+                
+                return acceleration;
+            }
+            
+            animate() {
+                if (!this.isRunning || this.isPaused) return;
+                
+                // Atualizar tempo
+                const dt = 0.016 * this.timeScale; // 60 FPS
+                
+                // Verificar se todos os objetos terminaram
+                const allFinished = this.objects.every(obj => obj.finished);
+                if (allFinished) {
+                    this.isRunning = false;
+                    this.showResults();
+                    return;
+                }
+                
+                // Atualizar cada objeto
+                this.objects.forEach((obj, index) => {
+                    if (obj.finished) return;
+                    
+                    // Atualizar tempo
+                    obj.time += dt;
+                    
+                    // Calcular aceleração
+                    obj.acceleration = this.calculateAcceleration(obj);
+                    
+                    // Atualizar velocidade (v = v0 + a * t)
+                    obj.velocity += obj.acceleration * dt;
+                    
+                    // Atualizar posição (s = s0 + v * t + 0.5 * a * t²)
+                    // Como estamos simulando queda livre, a posição diminui
+                    obj.position -= (obj.velocity * dt + 0.5 * obj.acceleration * dt * dt);
+                    
+                    // Verificar se atingiu o chão (posição <= 0)
+                    if (obj.position <= 0) {
+                        obj.position = 0;
+                        obj.finished = true;
+                        obj.finalTime = obj.time;
+                        obj.finalVelocity = obj.velocity;
+                    }
+                });
+                
+                // Coletar dados para gráficos
+                this.collectData();
+                
+                // Atualizar displays
+                this.updateDisplay();
+                this.draw();
+                
+                // Continuar animação
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            collectData() {
+                this.timeData.push(this.objects[0].time);
+                
+                this.objects.forEach((obj, index) => {
+                    this.velocityData[index].push(obj.velocity);
+                    this.heightData[index].push(obj.position);
+                    this.accelerationData[index].push(obj.acceleration);
+                });
+                
+                // Limitar quantidade de dados
+                if (this.timeData.length > 100) {
+                    this.timeData.shift();
+                    this.velocityData.forEach(data => data.shift());
+                    this.heightData.forEach(data => data.shift());
+                    this.accelerationData.forEach(data => data.shift());
+                }
+                
+                // Atualizar gráficos periodicamente
+                if (Math.floor(this.objects[0].time * 10) % 5 === 0) {
+                    this.drawCharts();
+                }
+            }
+            
+            updateDisplay() {
+                this.objects.forEach((obj, index) => {
+                    const objNum = index + 1;
+                    
+                    // Atualizar painel de informações
+                    document.getElementById(`acceleration${objNum}`).textContent = obj.acceleration.toFixed(2) + ' m/s²';
+                    document.getElementById(`velocity${objNum}`).textContent = obj.velocity.toFixed(2) + ' m/s';
+                    document.getElementById(`height${objNum}`).textContent = obj.position.toFixed(2) + ' m';
+                    document.getElementById(`time${objNum}`).textContent = obj.time.toFixed(2) + ' s';
+                });
+            }
+            
+            draw() {
+                // Limpar canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Desenhar fundo com gradiente
+                const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                gradient.addColorStop(0, '#87CEEB'); // Céu azul
+                gradient.addColorStop(0.8, '#E0F7FA'); // Céu claro
+                gradient.addColorStop(0.8, '#8BC34A'); // Início do solo
+                gradient.addColorStop(1, '#689F38'); // Solo mais escuro
+                
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Desenhar linha do solo
+                this.ctx.strokeStyle = '#689F38';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, this.groundLevel);
+                this.ctx.lineTo(this.canvas.width, this.groundLevel);
+                this.ctx.stroke();
+                
+                // Desenhar objetos
+                const canvasWidth = this.canvas.width;
+                const spacing = canvasWidth / 3;
+                
+                // Calcular a altura disponível para a animação
+                const availableHeight = this.groundLevel - this.topMargin;
+                
+                this.objects.forEach((obj, index) => {
+                    // Calcular posição X
+                    const x = spacing * (index + 1);
+                    
+                    // Calcular posição Y (baseado na altura atual)
+                    // Posição 0 = chão, posição inicial = topo
+                    const y = this.groundLevel - (obj.position / this.initialHeight) * availableHeight;
+                    
+                    // Desenhar objeto
+                    this.ctx.fillStyle = obj.color;
+                    this.ctx.strokeStyle = '#333';
+                    this.ctx.lineWidth = 2;
+                    
+                    // Desenhar forma diferente baseada no tipo
+                    switch(obj.type) {
+                        case 'iron-ball':
+                            // Desenhar círculo
+                            this.ctx.beginPath();
+                            this.ctx.arc(x, y, this.objectSize / 2, 0, Math.PI * 2);
+                            this.ctx.fill();
+                            this.ctx.stroke();
+                            break;
+                        case 'stone':
+                            // Desenhar polígono irregular
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(x - this.objectSize / 2, y);
+                            this.ctx.lineTo(x - this.objectSize / 3, y - this.objectSize / 2);
+                            this.ctx.lineTo(x + this.objectSize / 4, y - this.objectSize / 2.5);
+                            this.ctx.lineTo(x + this.objectSize / 2, y - this.objectSize / 6);
+                            this.ctx.lineTo(x + this.objectSize / 3, y + this.objectSize / 3);
+                            this.ctx.closePath();
+                            this.ctx.fill();
+                            this.ctx.stroke();
+                            break;
+                        case 'paper':
+                            // Desenhar retângulo
+                            this.ctx.fillRect(x - this.objectSize / 2, y - this.objectSize / 4, this.objectSize, this.objectSize / 2);
+                            this.ctx.strokeRect(x - this.objectSize / 2, y - this.objectSize / 4, this.objectSize, this.objectSize / 2);
+                            break;
+                        case 'feather':
+                            // Desenhar forma de pena
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(x, y - this.objectSize / 2);
+                            this.ctx.lineTo(x - this.objectSize / 3, y);
+                            this.ctx.lineTo(x - this.objectSize / 6, y + this.objectSize / 2);
+                            this.ctx.lineTo(x + this.objectSize / 6, y + this.objectSize / 2);
+                            this.ctx.lineTo(x + this.objectSize / 3, y);
+                            this.ctx.closePath();
+                            this.ctx.fill();
+                            this.ctx.stroke();
+                            break;
+                    }
+                    
+                    // Desenhar ícone
+                    this.ctx.font = `${this.objectSize}px Arial`;
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'middle';
+                    this.ctx.fillText(obj.icon, x, y);
+                    
+                    // Desenhar informações
+                    this.ctx.fillStyle = '#333';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(obj.name, x, y + this.objectSize + 15);
+                    
+                    // Se o objeto terminou, mostrar tempo
+                    if (obj.finished) {
+                        this.ctx.fillStyle = '#e53e3e';
+                        this.ctx.font = 'bold 14px Arial';
+                        this.ctx.fillText(`Tempo: ${obj.finalTime.toFixed(2)}s`, x, y + this.objectSize + 30);
+                    }
+                });
+                
+                // Desenhar altura inicial
+                this.ctx.strokeStyle = '#999';
+                this.ctx.lineWidth = 1;
+                this.ctx.setLineDash([5, 5]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, this.topMargin);
+                this.ctx.lineTo(this.canvas.width, this.topMargin);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                
+                // Texto da altura inicial
+                this.ctx.fillStyle = '#333';
+                this.ctx.font = '12px Arial';
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`Altura inicial: ${this.initialHeight}m`, 10, this.topMargin - 5);
+            }
+            
+            drawCharts() {
+                this.drawVelocityChart();
+                this.drawHeightChart();
+                this.drawAccelerationChart();
+            }
+            
+            drawVelocityChart() {
+                const ctx = this.velocityCtx;
+                const width = this.velocityChart.width;
+                const height = this.velocityChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                if (this.timeData.length < 2) return;
+                
+                // Encontrar valores máximos
+                const maxTime = Math.max(...this.timeData);
+                const maxVelocity1 = Math.max(...this.velocityData[0], 10);
+                const maxVelocity2 = Math.max(...this.velocityData[1], 10);
+                const maxVelocity = Math.max(maxVelocity1, maxVelocity2);
+                
+                // Desenhar eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Tempo (s)', width / 2 - 30, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Velocidade (m/s)', -40, 0);
+                ctx.restore();
+                
+                // Desenhar gráficos
+                const colors = ['#A9A9A9', '#808080'];
+                
+                this.objects.forEach((obj, index) => {
+                    ctx.strokeStyle = colors[index];
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    
+                    this.timeData.forEach((time, i) => {
+                        const x = 40 + (time / maxTime) * (width - 60);
+                        const y = height - 30 - (this.velocityData[index][i] / maxVelocity) * (height - 50);
+                        
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+                    
+                    ctx.stroke();
+                });
+                
+                // Legenda
+                ctx.font = '12px Arial';
+                this.objects.forEach((obj, index) => {
+                    ctx.fillStyle = colors[index];
+                    ctx.fillRect(width - 120, 20 + index * 20, 10, 10);
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(obj.name, width - 105, 30 + index * 20);
+                });
+            }
+            
+            drawHeightChart() {
+                const ctx = this.heightCtx;
+                const width = this.heightChart.width;
+                const height = this.heightChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                if (this.timeData.length < 2) return;
+                
+                const maxTime = Math.max(...this.timeData);
+                const maxHeight = this.initialHeight;
+                
+                // Desenhar eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Tempo (s)', width / 2 - 30, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Altura (m)', -35, 0);
+                ctx.restore();
+                
+                // Desenhar gráficos
+                const colors = ['#A9A9A9', '#808080'];
+                
+                this.objects.forEach((obj, index) => {
+                    ctx.strokeStyle = colors[index];
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    
+                    this.timeData.forEach((time, i) => {
+                        const x = 40 + (time / maxTime) * (width - 60);
+                        const y = height - 30 - (this.heightData[index][i] / maxHeight) * (height - 50);
+                        
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+                    
+                    ctx.stroke();
+                });
+                
+                // Legenda
+                ctx.font = '12px Arial';
+                this.objects.forEach((obj, index) => {
+                    ctx.fillStyle = colors[index];
+                    ctx.fillRect(width - 120, 20 + index * 20, 10, 10);
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(obj.name, width - 105, 30 + index * 20);
+                });
+            }
+            
+            drawAccelerationChart() {
+                const ctx = this.accelerationCtx;
+                const width = this.accelerationChart.width;
+                const height = this.accelerationChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                if (this.timeData.length < 2) return;
+                
+                const maxTime = Math.max(...this.timeData);
+                const maxAcceleration = this.g * 1.2;
+                
+                // Desenhar eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Tempo (s)', width / 2 - 30, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Aceleração (m/s²)', -50, 0);
+                ctx.restore();
+                
+                // Desenhar gráficos
+                const colors = ['#A9A9A9', '#808080'];
+                
+                this.objects.forEach((obj, index) => {
+                    ctx.strokeStyle = colors[index];
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    
+                    this.timeData.forEach((time, i) => {
+                        const x = 40 + (time / maxTime) * (width - 60);
+                        const y = height - 30 - (this.accelerationData[index][i] / maxAcceleration) * (height - 50);
+                        
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+                    
+                    ctx.stroke();
+                });
+                
+                // Legenda
+                ctx.font = '12px Arial';
+                this.objects.forEach((obj, index) => {
+                    ctx.fillStyle = colors[index];
+                    ctx.fillRect(width - 120, 20 + index * 20, 10, 10);
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(obj.name, width - 105, 30 + index * 20);
+                });
+            }
+            
+            showResults() {
+                const resultsPanel = document.getElementById('resultsPanel');
+                resultsPanel.classList.add('show');
+                
+                // Determinar vencedor
+                let winner = null;
+                if (this.objects[0].finalTime < this.objects[1].finalTime) {
+                    winner = 1;
+                } else if (this.objects[1].finalTime < this.objects[0].finalTime) {
+                    winner = 2;
+                }
+                
+                // Preencher tabela de resultados
+                this.objects.forEach((obj, index) => {
+                    const objNum = index + 1;
+                    
+                    document.getElementById(`resultName${objNum}`).textContent = obj.name;
+                    document.getElementById(`resultTime${objNum}`).textContent = obj.finalTime.toFixed(2) + ' s';
+                    document.getElementById(`resultVelocity${objNum}`).textContent = obj.finalVelocity.toFixed(2) + ' m/s';
+                    
+                    // Marcar vencedor
+                    const winnerCell = document.getElementById(`resultWinner${objNum}`);
+                    if (winner === objNum) {
+                        winnerCell.textContent = '🏆';
+                        document.getElementById(`resultRow${objNum}`).classList.add('winner');
+                    } else if (winner === null) {
+                        winnerCell.textContent = '⚖️ Empate';
+                    } else {
+                        winnerCell.textContent = '';
+                    }
+                });
+                
+                // Mensagem final
+                let message = 'Simulação concluída! ';
+                if (winner === null) {
+                    message += 'Ambos os objetos chegaram ao chão ao mesmo tempo.';
+                } else {
+                    const winnerObj = this.objects[winner - 1];
+                    message += `${winnerObj.name} chegou primeiro ao chão.`;
+                }
+                
+                if (this.airResistance) {
+                    message += ' A resistência do ar afetou a queda dos objetos.';
+                } else {
+                    message += ' Sem resistência do ar, a aceleração foi a mesma para ambos.';
+                }
+                
+                this.showNotification(message, 'success');
+            }
+            
+            loadExperiment(experiment) {
+                this.reset();
+                
+                switch(experiment) {
+                    case 1:
+                        // Experimento de Galileu - sem resistência do ar
+                        document.getElementById('airResistance').checked = false;
+                        this.airResistance = false;
+                        document.getElementById('airResistanceInfo').classList.remove('show');
+                        document.getElementById('simAirResistance').textContent = 'Desativada';
+                        
+                        // Configurar objetos
+                        this.updateObject(1, 'iron-ball');
+                        this.updateObject(2, 'feather');
+                        
+                        // Ajustar altura
+                        document.getElementById('height').value = 50;
+                        this.initialHeight = 50;
+                        document.getElementById('heightValue').textContent = 50;
+                        document.getElementById('simHeight').textContent = '50 m';
+                        
+                        this.showNotification('Cenário 1 carregado: Queda livre sem resistência do ar', 'info');
+                        break;
+                    case 2:
+                        // Queda com resistência do ar
+                        document.getElementById('airResistance').checked = true;
+                        this.airResistance = true;
+                        document.getElementById('airResistanceInfo').classList.add('show');
+                        document.getElementById('simAirResistance').textContent = 'Ativada';
+                        document.getElementById('strongWind').checked = false;
+                        this.strongWind = false;
+                        document.getElementById('simStrongWind').textContent = 'Desativado';
+                        
+                        // Configurar objetos
+                        this.updateObject(1, 'iron-ball');
+                        this.updateObject(2, 'feather');
+                        
+                        // Ajustar altura
+                        document.getElementById('height').value = 50;
+                        this.initialHeight = 50;
+                        document.getElementById('heightValue').textContent = 50;
+                        document.getElementById('simHeight').textContent = '50 m';
+                        
+                        this.showNotification('Cenário 2 carregado: Queda com resistência do ar', 'info');
+                        break;
+                    case 3:
+                        // Efeito do vento forte
+                        document.getElementById('airResistance').checked = true;
+                        this.airResistance = true;
+                        document.getElementById('airResistanceInfo').classList.add('show');
+                        document.getElementById('simAirResistance').textContent = 'Ativada';
+                        document.getElementById('strongWind').checked = true;
+                        this.strongWind = true;
+                        document.getElementById('simStrongWind').textContent = 'Ativado';
+                        
+                        // Configurar objetos
+                        this.updateObject(1, 'paper');
+                        this.updateObject(2, 'paper');
+                        
+                        // Ajustar altura
+                        document.getElementById('height').value = 30;
+                        this.initialHeight = 30;
+                        document.getElementById('heightValue').textContent = 30;
+                        document.getElementById('simHeight').textContent = '30 m';
+                        
+                        this.showNotification('Cenário 3 carregado: Efeito do vento forte', 'info');
+                        break;
+                    case 4:
+                        // Influência da área de contato
+                        document.getElementById('airResistance').checked = true;
+                        this.airResistance = true;
+                        document.getElementById('airResistanceInfo').classList.add('show');
+                        document.getElementById('simAirResistance').textContent = 'Ativada';
+                        document.getElementById('strongWind').checked = false;
+                        this.strongWind = false;
+                        document.getElementById('simStrongWind').textContent = 'Desativado';
+                        
+                        // Configurar objetos
+                        this.updateObject(1, 'paper');
+                        this.updateObject(2, 'paper');
+                        
+                        // Ajustar massas para serem iguais
+                        this.objects[0].mass = 0.005;
+                        this.objects[1].mass = 0.005;
+                        document.getElementById('mass1').value = 0.005;
+                        document.getElementById('mass2').value = 0.005;
+                        
+                        // Ajustar áreas para serem diferentes
+                        this.objects[0].area = 0.03;
+                        this.objects[1].area = 0.09;
+                        document.getElementById('area1').value = 0.03;
+                        document.getElementById('area2').value = 0.09;
+                        
+                        // Ajustar altura
+                        document.getElementById('height').value = 30;
+                        this.initialHeight = 30;
+                        document.getElementById('heightValue').textContent = 30;
+                        document.getElementById('simHeight').textContent = '30 m';
+                        
+                        this.showNotification('Cenário 4 carregado: Influência da área de contato', 'info');
+                        break;
+                }
+                
+                this.updateDisplay();
+                this.draw();
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = 'notification show';
+                
+                // Cor baseada no tipo
+                switch(type) {
+                    case 'success':
+                        notification.style.background = '#48bb78';
+                        break;
+                    case 'error':
+                        notification.style.background = '#e53e3e';
+                        break;
+                    case 'warning':
+                        notification.style.background = '#ed8936';
+                        break;
+                    default:
+                        notification.style.background = '#5D9CEC';
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+        }
+        
+        // Inicializar simulação quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            const simulation = new FreeFallSimulation();
+        });
+    </script>
+</body>
+</html>
