@@ -1,11 +1,707 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Meu Site no GitHub Pages</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Meta Tags Otimizadas para SEO -->
+    <title>Simuladores de Física Interativos | Laboratório Virtual de Física</title>
+    <meta name="description" content="Explore simuladores de física interativos sobre queda livre e leis de Newton. Aprenda conceitos físicos complexos de forma visual e prática. Ideal para estudantes e educadores.">
+    <meta name="keywords" content="simuladores de física, física interativa, queda livre, leis de newton, laboratório virtual, educação física, aprendizado de física, simulador online, experimentos virtuais, física para estudantes">
+    <meta name="author" content="Gerson Ferreira">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.seusite.com/index.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.seusite.com/index.html">
+    <meta property="og:title" content="Simuladores de Física Interativos | Laboratório Virtual de Física">
+    <meta property="og:description" content="Explore simuladores de física interativos sobre queda livre e leis de Newton. Aprenda conceitos físicos complexos de forma visual e prática.">
+    <meta property="og:image" content="https://www.seusite.com/imagens/fisica-simuladores.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.seusite.com/index.html">
+    <meta property="twitter:title" content="Simuladores de Física Interativos | Laboratório Virtual de Física">
+    <meta property="twitter:description" content="Explore simuladores de física interativos sobre queda livre e leis de Newton. Aprenda conceitos físicos complexos de forma visual e prática.">
+    <meta property="twitter:image" content="https://www.seusite.com/imagens/fisica-simuladores.jpg">
+    
+    <!-- Ícone -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>">
+    
+    <!-- Schema.org - Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Laboratório Virtual de Física",
+        "url": "https://www.seusite.com",
+        "logo": "https://www.seusite.com/imagens/logo.jpg",
+        "description": "Plataforma de simuladores interativos de física para educação",
+        "creator": {
+            "@type": "Person",
+            "name": "Gerson Ferreira"
+        },
+        "knowsAbout": ["Física", "Educação", "Simuladores", "Queda Livre", "Leis de Newton"]
+    }
+    </script>
+    
+    <!-- Schema.org - WebSite -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Laboratório Virtual de Física",
+        "url": "https://www.seusite.com",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.seusite.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
+    <!-- Schema.org - SoftwareApplication para cada simulador -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Simulador de Queda Livre",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser",
+        "applicationSubCategory": "Physics Simulator",
+        "description": "Simulador interativo para explorar os princípios da queda livre e o efeito da resistência do ar",
+        "url": "https://www.seusite.com/queda.html",
+        "creator": {
+            "@type": "Person",
+            "name": "Gerson Ferreira"
+        }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Simulador das Leis de Newton",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser",
+        "applicationSubCategory": "Physics Simulator",
+        "description": "Simulador interativo para compreender as três leis fundamentais da mecânica",
+        "url": "https://www.seusite.com/newton.html",
+        "creator": {
+            "@type": "Person",
+            "name": "Gerson Ferreira"
+        }
+    }
+    </script>
+    
+    <!-- Schema.org - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "O que é um simulador de física?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Um simulador de física é uma ferramenta interativa que permite visualizar e experimentar conceitos físicos em um ambiente virtual, facilitando o aprendizado através da prática."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Quais temas de física são abordados nos simuladores?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nossos simuladores abordam principalmente queda livre e as leis de Newton, conceitos fundamentais da mecânica clássica."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Os simuladores são gratuitos?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sim, todos os simuladores do Laboratório Virtual de Física são gratuitos e de acesso aberto para estudantes e educadores."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Posso usar os simuladores em sala de aula?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Com certeza! Os simuladores foram projetados para serem utilizados como recursos educacionais em sala de aula, auxiliando professores na explicação de conceitos complexos."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Os simuladores funcionam em dispositivos móveis?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sim, nossos simuladores são responsivos e funcionam em computadores, tablets e smartphones, permitindo o estudo em qualquer lugar."
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+        
+        .intro-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .intro-section h2 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .intro-section p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .simulators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .simulator-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .simulator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .simulator-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+        
+        .simulator-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .simulator-card h3 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .simulator-card p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+        
+        .simulator-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .simulator-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .credits-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .credits-section h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .creator-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .creator-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .creator-details h3 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .creator-details p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .credits-text {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+        }
+        
+        footer p {
+            opacity: 0.8;
+        }
+        
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .feature-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .faq-section {
+            margin: 50px 0;
+        }
+        
+        .faq-section h2 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #666;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 20px 20px;
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .sitemap-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .sitemap-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .sitemap-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .sitemap-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .sitemap-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .simulators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .creator-info {
+                flex-direction: column;
+            }
+            
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .sitemap-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Olá, mundo! 🚀</h1>
-  <p>Esse é meu site no GitHub Pages.</p>
+    <div class="container">
+        <header>
+            <h1>🔬 Laboratório Virtual de Física</h1>
+            <p>Explore os princípios fundamentais da física através de simulações interativas e educativas</p>
+        </header>
+        
+        <main class="main-content">
+            <section class="intro-section">
+                <h2>Bem-vindo ao Laboratório Virtual</h2>
+                <p>Aqui você encontrará simuladores interativos que ajudam a compreender conceitos complexos da física de forma visual e prática. Cada simulador foi cuidadosamente desenvolvido para proporcionar uma experiência de aprendizado imersiva.</p>
+            </section>
+            
+            <section class="features-section" aria-label="Recursos do Laboratório Virtual">
+                <h2 style="text-align: center; color: #667eea; font-size: 2.5rem; margin-bottom: 40px;">Recursos Educacionais</h2>
+                
+                <div class="features-list">
+                    <article class="feature-item">
+                        <div class="feature-icon" aria-hidden="true">🎯</div>
+                        <h4>Aprendizado Interativo</h4>
+                        <p>Aprenda fazendo experimentos virtuais que demonstram conceitos físicos na prática</p>
+                    </article>
+                    
+                    <article class="feature-item">
+                        <div class="feature-icon" aria-hidden="true">📊</div>
+                        <h4>Visualização de Dados</h4>
+                        <p>Gráficos em tempo real mostram o comportamento das variáveis físicas</p>
+                    </article>
+                    
+                    <article class="feature-item">
+                        <div class="feature-icon" aria-hidden="true">🧪</div>
+                        <h4>Experimentos Guiados</h4>
+                        <p>Siga roteiros de experimentos para explorar diferentes cenários físicos</p>
+                    </article>
+                    
+                    <article class="feature-item">
+                        <div class="feature-icon" aria-hidden="true">🎓</div>
+                        <h4>Educação Completa</h4>
+                        <p>Conceitos teóricos explicados de forma clara e objetiva</p>
+                    </article>
+                </div>
+            </section>
+            
+            <section class="simulators-section" aria-label="Simuladores Disponíveis">
+                <h2>Simuladores Disponíveis</h2>
+                
+                <div class="simulators-grid">
+                    <article class="simulator-card">
+                        <span class="simulator-icon" aria-hidden="true">🍎</span>
+                        <h3>Queda Livre</h3>
+                        <p>Explore os princípios da queda livre e o efeito da resistência do ar. Compare diferentes objetos e observe como a massa, área de contato e resistência do ar influenciam o movimento.</p>
+                        <a href="queda.html" class="simulator-link" aria-label="Acessar o simulador de queda livre">Acessar Simulador</a>
+                    </article>
+                    
+                    <article class="simulator-card">
+                        <span class="simulator-icon" aria-hidden="true">⚖️</span>
+                        <h3>Leis de Newton</h3>
+                        <p>Compreenda as três leis fundamentais da mecânica através de simulações interativas. Visualize forças, acelerações e o princípio da ação e reação.</p>
+                        <a href="newton.html" class="simulator-link" aria-label="Acessar o simulador das leis de Newton">Acessar Simulador</a>
+                    </article>
+                </div>
+            </section>
+            
+            <section class="faq-section" aria-label="Perguntas Frequentes">
+                <h2>Perguntas Frequentes</h2>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>O que é um simulador de física?</span>
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Um simulador de física é uma ferramenta interativa que permite visualizar e experimentar conceitos físicos em um ambiente virtual, facilitando o aprendizado através da prática.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Quais temas de física são abordados nos simuladores?</span>
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Nossos simuladores abordam principalmente queda livre e as leis de Newton, conceitos fundamentais da mecânica clássica.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Os simuladores são gratuitos?</span>
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Sim, todos os simuladores do Laboratório Virtual de Física são gratuitos e de acesso aberto para estudantes e educadores.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Posso usar os simuladores em sala de aula?</span>
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Com certeza! Os simuladores foram projetados para serem utilizados como recursos educacionais em sala de aula, auxiliando professores na explicação de conceitos complexos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Os simuladores funcionam em dispositivos móveis?</span>
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Sim, nossos simuladores são responsivos e funcionam em computadores, tablets e smartphones, permitindo o estudo em qualquer lugar.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <section class="credits-section" aria-label="Créditos">
+            <h2>Créditos</h2>
+            <div class="creator-info">
+                <div class="creator-avatar" aria-label="Avatar do criador Gerson Ferreira">GF</div>
+                <div class="creator-details">
+                    <h3>Gerson Ferreira</h3>
+                    <h5>Contato: <a href="mailto:gerson10caicorn@gmail.com">gerson10caicorn@gmail.com</a></h5>
+                    <p>Criador e Desenvolvedor</p>
+                </div>
+            </div>
+            <div class="credits-text">
+                <p>Este projeto foi desenvolvido com paixão pela educação e pela física. O objetivo é tornar conceitos complexos acessíveis e interessantes para estudantes de todas as idades. Cada simulador foi cuidadosamente planejado para proporcionar uma experiência de aprendizado significativa e envolvente.</p>
+                <br>
+                <p>"A física é a poesia do universo. Através destes simuladores, espero inspirar a mesma curiosidade que me move a explorar os mistérios da natureza."</p>
+            </div>
+        </section>
+        
+        <section class="sitemap-info" aria-label="Mapa do Site">
+            <h3>Mapa do Site</h3>
+            <p>Para facilitar a navegação, confira abaixo as principais páginas do nosso site:</p>
+            <div class="sitemap-links">
+                <a href="index.html">Página Inicial</a>
+                <a href="queda.html">Simulador de Queda Livre</a>
+                <a href="newton.html">Simulador das Leis de Newton</a>
+
+            </div>
+        </section>
+        
+        <footer>
+            <p>&copy; 2025 Laboratório Virtual de Física. Todos os direitos reservados.</p>
+            <p>Desenvolvido com ❤️ para a educação</p>
+        </footer>
+    </div>
+    
+    <script>
+        // FAQ Accordion
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Toggle active class
+                    item.classList.toggle('active');
+                    
+                    // Close other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
