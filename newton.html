@@ -254,11 +254,11 @@
             border-color: #667eea';
         }
         .experiment-card.active {
-            background: #eef2ff';
-            border-color: #667eea';
+            background: '#eef2ff';
+            border-color: '#667eea';
         }
         .experiment-card h4 {
-            color: #667eea';
+            color: '#667eea';
             margin-bottom: 10px;
         }
         .theory-section {
@@ -269,7 +269,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         .theory-section h2 {
-            color: #667eea';
+            color: '#667eea';
             margin-bottom: 15px;
         }
         .formula {
@@ -280,14 +280,14 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin: 15px 0;
-            border-left: 4px solid #667eea';
+            border-left: 4px solid '#667eea';
         }
         .challenge-section {
             background: #fef3c7;
             border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
-            border: 2px solid #f59e0b';
+            border: 2px solid '#f59e0b';
         }
         .challenge-section h3 {
             color: #d97706;
@@ -322,7 +322,7 @@
             border-radius: 8px;
             margin-top: 15px;
             display: none;
-            border: 2px solid #48bb78';
+            border: 2px solid '#48bb78';
         }
         .challenge-answer.show {
             display: block;
@@ -339,7 +339,7 @@
             }
         }
         .challenge-answer h4 {
-            color: #48bb78';
+            color: '#48bb78';
             margin-bottom: 10px;
         }
         .challenge-feedback {
@@ -354,7 +354,7 @@
         }
         .challenge-feedback.correct {
             border: 2px solid #48bb78;
-            color: #48bb78';
+            color: '#48bb78';
         }
         .challenge-feedback.incorrect {
             border: 2px solid #e53e3e;
@@ -596,9 +596,17 @@
                 this.forceData = [];
                 this.timeData = [];
                 
-                // Objeto visual
-                this.object = {
+                // Objeto visual (boneco e caixa)
+                this.doll = {
                     x: 50,
+                    y: 130,
+                    width: 30,
+                    height: 60,
+                    color: '#4c51bf'
+                };
+                
+                this.box = {
+                    x: 90,
                     y: 150,
                     width: 60,
                     height: 40,
@@ -762,16 +770,19 @@
                 
                 // Ajustar posição do objeto se não estiver em movimento
                 if (!this.isRunning && this.velocity === 0) {
-                    this.object.x = newX;
+                    const offset = newX - this.baseX;
+                    this.doll.x = 50 + offset;
+                    this.box.x = 90 + offset;
                     // Ajustar também a posição base para manter a proporção
-                    this.position = (this.object.x - 50) / 2;
+                    this.position = (this.box.x - 90) / 2;
                 }
             }
             
             resetObjectPosition() {
                 // Voltar para a posição original se não estiver em movimento
                 if (!this.isRunning && this.velocity === 0) {
-                    this.object.x = this.baseX;
+                    this.doll.x = 50;
+                    this.box.x = 90;
                     this.position = 0;
                 }
             }
@@ -882,16 +893,43 @@
                 // Atualizar posição (s = s0 + v * t + 0.5 * a * t²)
                 this.position += this.velocity * dt;
                 
-                // Atualizar posição visual
-                this.object.x = 50 + (this.position * 2); // Escala visual
+                // Calcular a nova posição da caixa
+                const newBoxX = 90 + (this.position * 2);
+                const newDollX = 50 + (this.position * 2);
                 
-                // Limitar posição na tela
-                if (this.object.x > this.canvas.width - this.object.width - 50) {
-                    this.object.x = this.canvas.width - this.object.width - 50;
+                // Calcular onde a ponta da seta da força estaria
+                const forceScale = 2; // Mesma escala usada no drawForceVector
+                const arrowTipX = newBoxX + this.box.width + (this.force * forceScale);
+                
+                // Verificar limites:
+                // 1. Se a ponta da seta da força atingir o limite da tela
+                // 2. Se a caixa atingir o limite da tela
+                const maxX = this.canvas.width - 20;
+                const boxLimit = this.canvas.width - this.box.width - 50;
+                
+                if (arrowTipX >= maxX || newBoxX >= boxLimit) {
+                    // Parar o movimento
                     this.velocity = 0;
                     this.isRunning = false;
                     this.reachedLimit = true;
+                    
+                    // Ajustar posições finais para não ultrapassar os limites
+                    if (newBoxX >= boxLimit) {
+                        this.doll.x = boxLimit - 40;
+                        this.box.x = boxLimit;
+                    } else {
+                        // Se a seta atingiu o limite primeiro, calcular a posição máxima permitida
+                        const maxPosition = (maxX - this.box.width - 90 - (this.force * forceScale)) / 2;
+                        this.position = Math.max(0, maxPosition);
+                        this.doll.x = 50 + (this.position * 2);
+                        this.box.x = 90 + (this.position * 2);
+                    }
+                    
                     this.showNotification('Objeto atingiu o limite! Pressione Iniciar para recomeçar.', 'warning');
+                } else {
+                    // Atualizar posições visuais
+                    this.doll.x = newDollX;
+                    this.box.x = newBoxX;
                 }
                 
                 // Coletar dados para gráficos
@@ -902,7 +940,9 @@
                 this.draw();
                 
                 // Continuar animação
-                requestAnimationFrame(() => this.animate());
+                if (this.isRunning) {
+                    requestAnimationFrame(() => this.animate());
+                }
             }
             
             collectData() {
@@ -937,21 +977,18 @@
                 
                 // Desenhar plano
                 this.ctx.fillStyle = '#e0e0e0';
-                this.ctx.fillRect(0, this.object.y + this.object.height, this.canvas.width, 5);
+                this.ctx.fillRect(0, this.box.y + this.box.height, this.canvas.width, 5);
                 
                 // Desenhar vetor de atrito primeiro (para ficar atrás do objeto)
                 if (this.friction && this.force > 0) {
                     this.drawFrictionVector();
                 }
                 
-                // Desenhar objeto
-                this.ctx.fillStyle = this.object.color;
-                this.ctx.fillRect(this.object.x, this.object.y, this.object.width, this.object.height);
+                // Desenhar boneco
+                this.drawDoll();
                 
-                // Desenhar detalhes do objeto
-                this.ctx.fillStyle = '#4c51bf';
-                this.ctx.fillRect(this.object.x + 10, this.object.y + 10, 15, 20);
-                this.ctx.fillRect(this.object.x + 35, this.object.y + 10, 15, 20);
+                // Desenhar caixa
+                this.drawBox();
                 
                 // Desenhar vetor de força
                 if (this.force > 0) {
@@ -963,33 +1000,92 @@
                 this.ctx.font = '14px Arial';
                 
                 // Ajustar posição do texto baseado na posição do objeto
-                let infoY = this.object.y - 10;
-                if (this.object.x > this.canvas.width - 150) {
+                let infoY = this.box.y - 10;
+                if (this.box.x > this.canvas.width - 150) {
                     // Se o objeto está perto do limite direito, colocar texto à esquerda
                     this.ctx.textAlign = 'right';
-                    this.ctx.fillText(`m = ${this.mass} kg`, this.object.x - 5, infoY);
-                    this.ctx.fillText(`F = ${this.force} N`, this.object.x - 5, infoY - 20);
+                    this.ctx.fillText(`m = ${this.mass} kg`, this.box.x - 5, infoY);
+                    this.ctx.fillText(`F = ${this.force} N`, this.box.x - 5, infoY - 20);
                     
                     if (this.friction) {
                         this.ctx.fillStyle = '#e53e3e';
-                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.object.x - 5, infoY - 40);
+                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.box.x - 5, infoY - 40);
                     }
                     this.ctx.textAlign = 'left';
                 } else {
                     // Posição normal
-                    this.ctx.fillText(`m = ${this.mass} kg`, this.object.x, infoY);
-                    this.ctx.fillText(`F = ${this.force} N`, this.object.x, infoY - 20);
+                    this.ctx.fillText(`m = ${this.mass} kg`, this.box.x, infoY);
+                    this.ctx.fillText(`F = ${this.force} N`, this.box.x, infoY - 20);
                     
                     if (this.friction) {
                         this.ctx.fillStyle = '#e53e3e';
-                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.object.x, infoY - 40);
+                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.box.x, infoY - 40);
                     }
                 }
             }
             
+            drawDoll() {
+                const ctx = this.ctx;
+                const doll = this.doll;
+                
+                // Corpo
+                ctx.fillStyle = doll.color;
+                ctx.fillRect(doll.x + 10, doll.y + 20, 10, 30);
+                
+                // Cabeça
+                ctx.beginPath();
+                ctx.arc(doll.x + 15, doll.y + 10, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pernas
+                ctx.fillRect(doll.x + 10, doll.y + 45, 4, 15);
+                ctx.fillRect(doll.x + 16, doll.y + 45, 4, 15);
+                
+                // Braços (em posição de empurrar)
+                ctx.fillRect(doll.x + 5, doll.y + 25, 8, 4);
+                ctx.fillRect(doll.x + 17, doll.y + 25, 15, 4);
+                
+                // Mão tocando a caixa
+                ctx.beginPath();
+                ctx.arc(doll.x + 32, doll.y + 27, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            drawBox() {
+                const ctx = this.ctx;
+                const box = this.box;
+                
+                // Corpo da caixa
+                ctx.fillStyle = box.color;
+                ctx.fillRect(box.x, box.y, box.width, box.height);
+                
+                // Detalhes da caixa (linhas para dar efeito 3D)
+                ctx.strokeStyle = '#4c51bf';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(box.x, box.y);
+                ctx.lineTo(box.x + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width, box.y);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(box.x + box.width, box.y);
+                ctx.lineTo(box.x + box.width + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width + 10, box.y + box.height - 10);
+                ctx.lineTo(box.x + box.width, box.y + box.height);
+                ctx.stroke();
+                
+                // Símbolo de peso na caixa
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`${this.mass}kg`, box.x + 15, box.y + 25);
+            }
+            
             drawForceVector() {
-                const arrowStartX = this.object.x + this.object.width;
-                const arrowStartY = this.object.y + this.object.height / 2;
+                // A seta da força começa na caixa e aponta para a direita (direção do movimento)
+                const arrowStartX = this.box.x + this.box.width;
+                const arrowStartY = this.box.y + this.box.height / 2;
                 
                 // Calcular o comprimento total do vetor baseado na força
                 const scale = 2; // Escala para visualização
@@ -1012,13 +1108,24 @@
                 this.ctx.lineTo(visibleEndX, idealEndY);
                 this.ctx.stroke();
                 
-                // Desenhar ponta da seta (se houver espaço suficiente)
-                if (visibleLength > 15) {
+                // Desenhar ponta da seta (sempre, mesmo que parcialmente fora da tela)
+                if (totalArrowLength > 15) {
                     this.ctx.fillStyle = '#667eea';
                     this.ctx.beginPath();
-                    this.ctx.moveTo(visibleEndX, idealEndY);
-                    this.ctx.lineTo(visibleEndX - 10, idealEndY - 5);
-                    this.ctx.lineTo(visibleEndX - 10, idealEndY + 5);
+                    
+                    // Calcular a posição da ponta da seta
+                    let arrowTipX = idealEndX;
+                    let arrowTipY = idealEndY;
+                    
+                    // Se a ponta da seta está fora da tela, ajustar para o limite
+                    if (arrowTipX > maxX) {
+                        arrowTipX = maxX;
+                    }
+                    
+                    // Desenhar a ponta da seta
+                    this.ctx.moveTo(arrowTipX, arrowTipY);
+                    this.ctx.lineTo(arrowTipX - 10, arrowTipY - 5);
+                    this.ctx.lineTo(arrowTipX - 10, arrowTipY + 5);
                     this.ctx.closePath();
                     this.ctx.fill();
                 }
@@ -1043,18 +1150,19 @@
                 let labelX, labelY;
                 
                 if (visibleLength > 30) {
-                    // Se há espaço, colocar o label no final do vetor visível
-                    labelX = visibleEndX + 5;
-                    labelY = idealEndY + 5;
+                    // Se há espaço, colocar o label no meio do vetor visível
+                    labelX = arrowStartX + (visibleLength / 2) - 5;
+                    labelY = idealEndY - 15;
                     
                     // Se o label sair da tela, reposicionar
                     if (labelX + 20 > this.canvas.width) {
                         labelX = arrowStartX - 25;
+                        labelY = arrowStartY - 15;
                     }
                 } else {
-                    // Se não há espaço, colocar o label acima do objeto
-                    labelX = this.object.x + this.object.width / 2 - 5;
-                    labelY = this.object.y - 45;
+                    // Se não há espaço, colocar o label acima da caixa
+                    labelX = this.box.x + this.box.width / 2 - 5;
+                    labelY = this.box.y - 45;
                 }
                 
                 this.ctx.fillText('F', labelX, labelY);
@@ -1073,9 +1181,10 @@
                 const scale = 1.5; // Escala para visualização
                 const arrowLength = Math.min(frictionForce * scale, 60);
                 
-                // Posicionar o vetor de atrito começando próximo ao objeto
-                const arrowStartX = this.object.x - 5; // 5 pixels antes do objeto
-                const arrowStartY = this.object.y + this.object.height / 2;
+                // Posicionar o vetor de atrito bem atrás do boneco
+                // Início do vetor: 20 pixels antes do início do boneco
+                const arrowStartX = this.doll.x - 20;
+                const arrowStartY = this.doll.y + this.doll.height / 2;
                 
                 // O vetor de atrito termina à esquerda do ponto inicial
                 const arrowEndX = arrowStartX - arrowLength;
@@ -1102,18 +1211,18 @@
                 this.ctx.closePath();
                 this.ctx.fill();
                 
-                // Label do atrito
+                // Label do atrito - posicionar mais acima e à esquerda para evitar sobreposição
                 this.ctx.fillStyle = '#e53e3e';
                 this.ctx.font = 'bold 12px Arial';
                 
-                // Posicionar o label acima do vetor
+                // Posicionar o label bem acima do vetor para evitar sobreposição
                 let labelX = arrowStartX - arrowLength / 2;
-                let labelY = arrowEndY - 15;
+                let labelY = arrowEndY - 25; // Mais acima do que antes
                 
                 // Se o label ficar muito à esquerda, ajustar
                 if (labelX < 25) {
-                    labelX = arrowStartX + 5;
-                    labelY = arrowEndY - 20;
+                    labelX = arrowStartX - 5;
+                    labelY = arrowEndY - 30;
                 }
                 
                 this.ctx.fillText('Fat', labelX, labelY);
