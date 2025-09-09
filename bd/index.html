@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Ensino - Banco de Dados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --dark-bg: #1F2937;
+            --light-bg: #F3F4F6;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        .dark {
+            --light-bg: #111827;
+            --dark-bg: #374151;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item:hover {
+            padding-left: 1.5rem;
+        }
+
+        .code-example {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .table-animation {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option:hover {
+            transform: scale(1.02);
+        }
+
+        .quiz-option.correct {
+            background-color: #10B981 !important;
+            color: white !important;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #EF4444 !important;
+            color: white !important;
+        }
+
+        .highlight {
+            background-color: #FEF3C7;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .dark .highlight {
+            background-color: #451A03;
+        }
+
+        .diagram {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .dark .diagram {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Barra de Progresso -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 z-50">
+        <div id="progressBar" class="progress-bar h-full bg-blue-500" style="width: 0%"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-1 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg z-40 transition-colors duration-300">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button id="menuToggle" class="lg:hidden text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-database mr-2 text-blue-500"></i>
+                        Portal de Banco de Dados
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="searchToggle" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
+                        <i class="fas fa-search text-xl"></i>
+                    </button>
+                    <button id="darkModeToggle" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
+                        <i class="fas fa-moon text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Barra de Busca -->
+    <div id="searchBar" class="fixed top-16 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg z-30 hidden transition-all duration-300">
+        <div class="container mx-auto px-4 py-3">
+            <input type="text" id="searchInput" placeholder="Buscar no conteúdo..." 
+                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-20 overflow-y-auto">
+        <nav class="p-4">
+            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Navegação</h2>
+            <ul class="space-y-2">
+                <li><a href="#conceitos-basicos" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-book mr-2"></i>Conceitos Básicos
+                </a></li>
+                <li><a href="#sgbd" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-server mr-2"></i>SGBD e Sistemas
+                </a></li>
+                <li><a href="#vantagens" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-star mr-2"></i>Vantagens do SGBD
+                </a></li>
+                <li><a href="#estrutura" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-table mr-2"></i>Campos, Registros e Tabelas
+                </a></li>
+                <li><a href="#indices" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-search-plus mr-2"></i>Índices
+                </a></li>
+                <li><a href="#chaves" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-key mr-2"></i>Tipos de Chaves
+                </a></li>
+                <li><a href="#integridade" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-shield-alt mr-2"></i>Integridade de Dados
+                </a></li>
+                <li><a href="#quiz" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-question-circle mr-2"></i>Quiz Interativo
+                </a></li>
+                <li><a href="#exercicios" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <i class="fas fa-tasks mr-2"></i>Exercícios Práticos
+                </a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 mt-16 p-6">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Hero Section -->
+            <section class="gradient-bg rounded-2xl p-8 mb-8 text-white">
+                <h2 class="text-4xl font-bold mb-4">Bem-vindo ao Portal de Banco de Dados</h2>
+                <p class="text-xl mb-6">Aprenda os conceitos fundamentais de banco de dados de forma interativa e prática</p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 flex-1 min-w-[200px]">
+                        <i class="fas fa-clock text-3xl mb-2"></i>
+                        <h3 class="font-semibold">Duração Estimada</h3>
+                        <p>45 minutos</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 flex-1 min-w-[200px]">
+                        <i class="fas fa-signal text-3xl mb-2"></i>
+                        <h3 class="font-semibold">Nível</h3>
+                        <p>Iniciante</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 flex-1 min-w-[200px]">
+                        <i class="fas fa-certificate text-3xl mb-2"></i>
+                        <h3 class="font-semibold">Certificado</h3>
+                        <p>Ao completar</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conceitos Básicos -->
+            <section id="conceitos-basicos" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-book mr-3 text-blue-500"></i>
+                    Conceitos Básicos de Banco de Dados
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">O que é um Banco de Dados?</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Um <span class="highlight">banco de dados</span> é uma coleção organizada de dados que podem ser facilmente acessados, gerenciados e atualizados. Pense nele como uma biblioteca digital onde as informações são armazenadas de forma estruturada.
+                        </p>
+                        <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                            <p class="text-sm text-blue-800 dark:text-blue-200">
+                                <i class="fas fa-lightbulb mr-2"></i>
+                                <strong>Exemplo:</strong> Uma lista de contatos no seu celular é um banco de dados simples.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Características Principais</h3>
+                        <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span><strong>Organização:</strong> Dados estruturados de forma lógica</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span><strong>Consistência:</strong> Informações confiáveis e sem contradições</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span><strong>Compartilhamento:</strong> Acesso simultâneo por múltiplos usuários</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span><strong>Persistência:</strong> Dados armazenados permanentemente</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-lg p-6 mb-6">
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
+                        <i class="fas fa-info-circle mr-2"></i>Curiosidade
+                    </h4>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        O primeiro sistema de banco de dados comercial foi desenvolvido pela IBM na década de 1960, chamado IMS (Information Management System). Desde então, a evolução dos bancos de dados revolucionou a forma como armazenamos e acessamos informações.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SGBD e Sistemas -->
+            <section id="sgbd" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-server mr-3 text-green-500"></i>
+                    Banco de Dados, SGBD e Sistema de Banco de Dados
+                </h2>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover border-t-4 border-blue-500">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            <i class="fas fa-database mr-2 text-blue-500"></i>
+                            Banco de Dados (BD)
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            É o conjunto de dados em si, armazenados de forma organizada. Não inclui o software para gerenciá-lo.
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                            <p class="text-sm"><strong>Analogia:</strong> Os livros em uma biblioteca</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover border-t-4 border-green-500">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            <i class="fas fa-cogs mr-2 text-green-500"></i>
+                            SGBD
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            <span class="highlight">Sistema de Gerenciamento de Banco de Dados</span> - Software que gerencia o BD, permitindo criar, consultar, atualizar e administrar os dados.
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                            <p class="text-sm"><strong>Analogia:</strong> O bibliotecário e o sistema de catalogação</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover border-t-4 border-purple-500">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            <i class="fas fa-project-diagram mr-2 text-purple-500"></i>
+                            Sistema de BD
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Conjunto completo incluindo o BD, o SGBD, os usuários, aplicativos e procedimentos.
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                            <p class="text-sm"><strong>Analogia:</strong> A biblioteca inteira com funcionários e regras</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Exemplos de SGBDs Populares</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <i class="fas fa-elephant text-3xl text-blue-600 mb-2"></i>
+                            <p class="font-semibold">PostgreSQL</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Open Source</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <i class="fas fa-dolphin text-3xl text-blue-500 mb-2"></i>
+                            <p class="font-semibold">MySQL</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Open Source</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <i class="fas fa-database text-3xl text-red-600 mb-2"></i>
+                            <p class="font-semibold">Oracle</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Comercial</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <i class="fas fa-server text-3xl text-green-600 mb-2"></i>
+                            <p class="font-semibold">SQL Server</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Comercial</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="diagram">
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Arquitetura de um Sistema de Banco de Dados</h4>
+                    <div class="space-y-4">
+                        <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg text-center">
+                            <p class="font-semibold text-blue-800 dark:text-blue-200">Usuários / Aplicações</p>
+                        </div>
+                        <div class="flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-400"></i>
+                        </div>
+                        <div class="bg-green-100 dark:bg-green-900 p-4 rounded-lg text-center">
+                            <p class="font-semibold text-green-800 dark:text-green-200">SGBD (Software)</p>
+                        </div>
+                        <div class="flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-400"></i>
+                        </div>
+                        <div class="bg-purple-100 dark:bg-purple-900 p-4 rounded-lg text-center">
+                            <p class="font-semibold text-purple-800 dark:text-purple-200">Banco de Dados (Dados)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vantagens do SGBD -->
+            <section id="vantagens" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-star mr-3 text-yellow-500"></i>
+                    Vantagens de Usar um SGBD
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-shield-alt text-blue-600 dark:text-blue-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Segurança de Dados</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Controle de acesso granular com diferentes níveis de permissão para usuários, garantindo que apenas pessoas autorizadas possam acessar ou modificar informações sensíveis.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 dark:bg-blue-900 p-3 rounded-lg">
+                            <p class="text-sm text-blue-800 dark:text-blue-200">
+                                <strong>Exemplo:</strong> Um funcionário do RH pode ver salários, mas um vendedor não.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-users text-green-600 dark:text-green-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Concorrência e Multiusuário</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Permite que múltiplos usuários acessem e modifiquem os dados simultaneamente sem causar inconsistências, através de mecanismos de controle de concorrência.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 dark:bg-green-900 p-3 rounded-lg">
+                            <p class="text-sm text-green-800 dark:text-green-200">
+                                <strong>Exemplo:</strong> Vários caixas de um supermercado podem atualizar o estoque ao mesmo tempo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-sync text-purple-600 dark:text-purple-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Integridade de Dados</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Garante que os dados sigam regras de negócio e restrições definidas, prevenindo entrada de informações inválidas ou inconsistentes.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 dark:bg-purple-900 p-3 rounded-lg">
+                            <p class="text-sm text-purple-800 dark:text-purple-200">
+                                <strong>Exemplo:</strong> Impedir que um produto tenha preço negativo ou estoque fracionário.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-red-100 dark:bg-red-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-database text-red-600 dark:text-red-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Independência de Dados</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Permite modificar a estrutura do banco de dados sem afetar as aplicações que o utilizam, facilitando manutenção e evolução do sistema.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-red-50 dark:bg-red-900 p-3 rounded-lg">
+                            <p class="text-sm text-red-800 dark:text-red-200">
+                                <strong>Exemplo:</strong> Adicionar um novo campo na tabela de clientes sem quebrar o sistema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-bolt text-yellow-600 dark:text-yellow-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Performance Otimizada</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Algoritmos de otimização de consultas, indexação automática e cache de dados garantem respostas rápidas mesmo com grandes volumes de informação.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 dark:bg-yellow-900 p-3 rounded-lg">
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                <strong>Exemplo:</strong> Buscar um cliente entre milhões em milissegundos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card-hover">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-undo text-indigo-600 dark:text-indigo-300 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Recuperação de Falhas</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Mecanismos de backup e recuperação automáticos garantem que os dados possam ser restaurados em caso de falhas do sistema ou desastres.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 dark:bg-indigo-900 p-3 rounded-lg">
+                            <p class="text-sm text-indigo-800 dark:text-indigo-200">
+                                <strong>Exemplo:</strong> Restaurar o banco para um estado consistente após uma queda de energia.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Campos, Registros e Tabelas -->
+            <section id="estrutura" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-table mr-3 text-indigo-500"></i>
+                    Campos, Registros e Tabelas
+                </h2>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Estes são os elementos fundamentais que compõem a estrutura de um banco de dados relacional. Vamos entender cada um deles com exemplos práticos.
+                    </p>
+
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-3">
+                                <i class="fas fa-th mr-2"></i>Campos (Colunas)
+                            </h3>
+                            <p class="text-blue-700 dark:text-blue-300 mb-3">
+                                São as unidades básicas de informação que representam características específicas dos dados.
+                            </p>
+                            <ul class="space-y-2 text-sm text-blue-600 dark:text-blue-400">
+                                <li>• Tipo de dado definido</li>
+                                <li>• Nome único na tabela</li>
+                                <li>• Podem ter restrições</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-green-800 dark:text-green-200 mb-3">
+                                <i class="fas fa-list mr-2"></i>Registros (Linhas)
+                            </h3>
+                            <p class="text-green-700 dark:text-green-300 mb-3">
+                                Cada registro representa uma instância completa de dados, contendo valores para todos os campos.
+                            </p>
+                            <ul class="space-y-2 text-sm text-green-600 dark:text-green-400">
+                                <li>• Conjunto de valores</li>
+                                <li>• Representa um item</li>
+                                <li>• Deve ser único</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-purple-800 dark:text-purple-200 mb-3">
+                                <i class="fas fa-border-all mr-2"></i>Tabelas
+                            </h3>
+                            <p class="text-purple-700 dark:text-purple-300 mb-3">
+                                Estrutura que organiza dados em linhas e colunas, representando uma entidade do mundo real.
+                            </p>
+                            <ul class="space-y-2 text-sm text-purple-600 dark:text-purple-400">
+                                <li>• Nome único no BD</li>
+                                <li>• Define a estrutura</li>
+                                <li>• Armazena registros</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto border-collapse table-animation">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
+                                        <i class="fas fa-key text-yellow-500 mr-1"></i>ID
+                                    </th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Nome</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Email</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Idade</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Cidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold">1</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">João Silva</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">joao@email.com</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">28</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">São Paulo</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold">2</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Maria Santos</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">maria@email.com</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">32</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Rio de Janeiro</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold">3</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pedro Oliveira</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">pedro@email.com</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">25</td>
+                                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Belo Horizonte</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-6 grid md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                                <i class="fas fa-code mr-2"></i>Exemplo SQL - Criar Tabela
+                            </h4>
+                            <pre class="code-example"><code class="language-sql">CREATE TABLE clientes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    idade INT CHECK (idade >= 0),
+    cidade VARCHAR(50)
+);</code></pre>
+                        </div>
+                        <div class="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">
+                                <i class="fas fa-code mr-2"></i>Exemplo SQL - Inserir Dados
+                            </h4>
+                            <pre class="code-example"><code class="language-sql">INSERT INTO clientes (nome, email, idade, cidade)
+VALUES ('João Silva', 'joao@email.com', 28, 'São Paulo'),
+       ('Maria Santos', 'maria@email.com', 32, 'Rio de Janeiro'),
+       ('Pedro Oliveira', 'pedro@email.com', 25, 'Belo Horizonte');</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Índices -->
+            <section id="indices" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-search-plus mr-3 text-orange-500"></i>
+                    Índices
+                </h2>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Índices são estruturas de dados que melhoram significativamente a velocidade de operações de recuperação de dados em uma tabela. Funcionam como o índice de um livro, permitindo encontrar informações rapidamente sem precisar ler tudo.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-orange-50 dark:bg-orange-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-orange-800 dark:text-orange-200 mb-4">
+                                <i class="fas fa-tachometer-alt mr-2"></i>Benefícios dos Índices
+                            </h3>
+                            <ul class="space-y-3 text-orange-700 dark:text-orange-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3"></i>
+                                    <span><strong>Busca Rápida:</strong> Reduz drasticamente o tempo de consultas</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3"></i>
+                                    <span><strong>Ordenação Eficiente:</strong> Acelera operações ORDER BY</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3"></i>
+                                    <span><strong>Junções Otimizadas:</strong> Melhora performance de JOINs</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3"></i>
+                                    <span><strong>Unicidade Garantida:</strong> Índices únicos evitam duplicatas</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-red-50 dark:bg-red-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-red-800 dark:text-red-200 mb-4">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>Desvantagens
+                            </h3>
+                            <ul class="space-y-3 text-red-700 dark:text-red-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-times-circle mt-1 mr-3"></i>
+                                    <span><strong>Espaço Extra:</strong> Consome armazenamento adicional</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-times-circle mt-1 mr-3"></i>
+                                    <span><strong>Inserções Lentas:</strong> INSERT, UPDATE e DELETE ficam mais lentos</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-times-circle mt-1 mr-3"></i>
+                                    <span><strong>Manutenção:</strong> Precisa ser atualizado com cada modificação</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-times-circle mt-1 mr-3"></i>
+                                    <span><strong>Complexidade:</strong> Índices mal planejados podem piorar performance</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-6 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Como Funciona um Índice?</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Sem Índice</h5>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Busca linear: O banco lê cada registro</p>
+                                    <div class="space-y-1">
+                                        <div class="bg-gray-200 dark:bg-gray-600 p-2 rounded text-sm">Registro 1: ID=100</div>
+                                        <div class="bg-gray-200 dark:bg-gray-600 p-2 rounded text-sm">Registro 2: ID=250</div>
+                                        <div class="bg-yellow-200 dark:bg-yellow-700 p-2 rounded text-sm border-2 border-yellow-500">Registro 3: ID=375 ← Encontrado!</div>
+                                        <div class="bg-gray-200 dark:bg-gray-600 p-2 rounded text-sm">Registro 4: ID=500</div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Tempo: O(n) - Linear</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Com Índice</h5>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Busca binária: Pula diretamente ao registro</p>
+                                    <div class="space-y-1">
+                                        <div class="bg-blue-200 dark:bg-blue-700 p-2 rounded text-sm">Índice: 100 → Registro 1</div>
+                                        <div class="bg-blue-200 dark:bg-blue-700 p-2 rounded text-sm">Índice: 250 → Registro 2</div>
+                                        <div class="bg-green-200 dark:bg-green-700 p-2 rounded text-sm border-2 border-green-500">Índice: 375 → Registro 3 ← Encontrado!</div>
+                                        <div class="bg-blue-200 dark:bg-blue-700 p-2 rounded text-sm">Índice: 500 → Registro 4</div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Tempo: O(log n) - Logarítmico</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-purple-800 dark:text-purple-200 mb-2">
+                                <i class="fas fa-code mr-2"></i>Criar Índice
+                            </h4>
+                            <pre class="code-example"><code class="language-sql">-- Índice simples
+CREATE INDEX idx_cliente_nome 
+ON clientes(nome);
+
+-- Índice composto
+CREATE INDEX idx_cliente_cidade_idade 
+ON clientes(cidade, idade);
+
+-- Índice único
+CREATE UNIQUE INDEX idx_cliente_email 
+ON clientes(email);</code></pre>
+                        </div>
+                        <div class="bg-teal-50 dark:bg-teal-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-teal-800 dark:text-teal-200 mb-2">
+                                <i class="fas fa-lightbulb mr-2"></i>Quando Usar Índices?
+                            </h4>
+                            <ul class="space-y-2 text-sm text-teal-700 dark:text-teal-300">
+                                <li>• Colunas frequentemente usadas em WHERE</li>
+                                <li>• Colunas de JOIN entre tabelas</li>
+                                <li>• Colunas em ORDER BY frequentes</li>
+                                <li>• Colunas com alta cardinalidade (muitos valores únicos)</li>
+                                <li>• Evitar em tabelas com muitas atualizações</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tipos de Chaves -->
+            <section id="chaves" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-key mr-3 text-yellow-500"></i>
+                    Tipos de Chaves
+                </h2>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Chaves são colunas ou combinações de colunas usadas para identificar exclusivamente registros em uma tabela e estabelecer relacionamentos entre tabelas.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-yellow-800 dark:text-yellow-200 mb-3">
+                                <i class="fas fa-crown mr-2"></i>Chave Primária (PK)
+                            </h3>
+                            <p class="text-yellow-700 dark:text-yellow-300 mb-3">
+                                Identifica exclusivamente cada registro na tabela. Deve ser única e não nula.
+                            </p>
+                            <div class="bg-yellow-100 dark:bg-yellow-800 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Única</li>
+                                    <li>• Não nula</li>
+                                    <li>• Imutável (geralmente)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-3">
+                                <i class="fas fa-link mr-2"></i>Chave Estrangeira (FK)
+                            </h3>
+                            <p class="text-blue-700 dark:text-blue-300 mb-3">
+                                Referencia a chave primária de outra tabela, estabelecendo relacionamentos.
+                            </p>
+                            <div class="bg-blue-100 dark:bg-blue-800 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Referencial</li>
+                                    <li>• Mantém integridade</li>
+                                    <li>• Pode ser nula</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900 dark:to-teal-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-green-800 dark:text-green-200 mb-3">
+                                <i class="fas fa-star mr-2"></i>Chave Candidata
+                            </h3>
+                            <p class="text-green-700 dark:text-green-300 mb-3">
+                                Qualquer coluna ou conjunto que poderia servir como chave primária.
+                            </p>
+                            <div class="bg-green-100 dark:bg-green-800 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Única</li>
+                                    <li>• Não nula</li>
+                                    <li>• Múltiplas por tabela</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-purple-800 dark:text-purple-200 mb-3">
+                                <i class="fas fa-fingerprint mr-2"></i>Chave Única
+                            </h3>
+                            <p class="text-purple-700 dark:text-purple-300 mb-3">
+                                Garante que os valores em uma coluna sejam únicos, mas não é a chave primária.
+                            </p>
+                            <div class="bg-purple-100 dark:bg-purple-800 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Única</li>
+                                    <li>• Pode ser nula</li>
+                                    <li>• Múltiplas por tabela</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900 dark:to-orange-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-red-800 dark:text-red-200 mb-3">
+                                <i class="fas fa-compress-alt mr-2"></i>Chave Composta
+                            </h3>
+                            <p class="text-red-700 dark:text-red-300 mb-3">
+                                Chave primária formada por duas ou mais colunas.
+                            </p>
+                            <div class="bg-red-100 dark:bg-red-800 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Múltiplas colunas</li>
+                                    <li>• Combinação única</li>
+                                    <li>• Usada em tabelas de junção</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-800 dark:to-slate-800 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                                <i class="fas fa-infinity mr-2"></i>Chave Surrogate
+                            </h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                Chave primária artificial, sem significado de negócio (ex: auto-incremento).
+                            </p>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm">
+                                <p class="font-semibold mb-1">Características:</p>
+                                <ul class="space-y-1">
+                                    <li>• Artificial</li>
+                                    <li>• Numérica</li>
+                                    <li>• Sem significado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-6 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Exemplo Prático de Relacionamento</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Tabela: Clientes</h5>
+                                <div class="bg-white dark:bg-gray-800 rounded overflow-hidden">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-200 dark:bg-gray-600">
+                                            <tr>
+                                                <th class="p-2 text-left">id (PK)</th>
+                                                <th class="p-2 text-left">nome</th>
+                                                <th class="p-2 text-left">email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td class="p-2 font-semibold text-yellow-600">1</td>
+                                                <td class="p-2">João Silva</td>
+                                                <td class="p-2">joao@email.com</td>
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td class="p-2 font-semibold text-yellow-600">2</td>
+                                                <td class="p-2">Maria Santos</td>
+                                                <td class="p-2">maria@email.com</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Tabela: Pedidos</h5>
+                                <div class="bg-white dark:bg-gray-800 rounded overflow-hidden">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-200 dark:bg-gray-600">
+                                            <tr>
+                                                <th class="p-2 text-left">id (PK)</th>
+                                                <th class="p-2 text-left">cliente_id (FK)</th>
+                                                <th class="p-2 text-left">valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td class="p-2 font-semibold">101</td>
+                                                <td class="p-2 font-semibold text-blue-600">1</td>
+                                                <td class="p-2">R$ 150,00</td>
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td class="p-2 font-semibold">102</td>
+                                                <td class="p-2 font-semibold text-blue-600">2</td>
+                                                <td class="p-2">R$ 200,00</td>
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td class="p-2 font-semibold">103</td>
+                                                <td class="p-2 font-semibold text-blue-600">1</td>
+                                                <td class="p-2">R$ 75,00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-400"></i>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                <strong>Relacionamento:</strong> Um cliente pode ter vários pedidos (1:N)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                                <i class="fas fa-code mr-2"></i>SQL com Chaves
+                            </h4>
+                            <pre class="code-example"><code class="language-sql">-- Tabela com chave primária
+CREATE TABLE clientes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE
+);
+
+-- Tabela com chave estrangeira
+CREATE TABLE pedidos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    cliente_id INT,
+    valor DECIMAL(10,2),
+    FOREIGN KEY (cliente_id) 
+    REFERENCES clientes(id)
+);</code></pre>
+                        </div>
+                        <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                                <i class="fas fa-info-circle mr-2"></i>Boas Práticas
+                            </h4>
+                            <ul class="space-y-2 text-sm text-blue-700 dark:text-blue-300">
+                                <li>• Use chaves surrogate (auto-incremento) como PK</li>
+                                <li>• Mantenha chaves estrangeiras consistentes</li>
+                                <li>• Crie índices em chaves estrangeiras</li>
+                                <li>• Use nomes significativos para as chaves</li>
+                                <li>• Evite chaves compostas quando possível</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Integridade de Dados -->
+            <section id="integridade" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-shield-alt mr-3 text-red-500"></i>
+                    Tipos de Integridade
+                </h2>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Integridade de dados refere-se à precisão, consistência e confiabilidade dos dados armazenados no banco de dados. Existem vários tipos de integridade que garantem a qualidade das informações.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900 dark:to-pink-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-red-800 dark:text-red-200 mb-4 flex items-center">
+                                <i class="fas fa-ban mr-2"></i>Integridade de Entidade
+                            </h3>
+                            <p class="text-red-700 dark:text-red-300 mb-4">
+                                Garante que cada tabela tenha uma chave primária e que todos os valores na chave primária sejam únicos e não nulos. Nenhum registro pode ser duplicado.
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Exemplo:</h4>
+                                <pre class="code-example"><code class="language-sql">CREATE TABLE funcionarios (
+    id INT PRIMARY KEY,  -- Garante integridade de entidade
+    nome VARCHAR(100) NOT NULL,
+    salario DECIMAL(10,2)
+);
+
+-- Tentativa de inserir ID duplicado falhará
+INSERT INTO funcionarios VALUES (1, 'João', 5000);
+INSERT INTO funcionarios VALUES (1, 'Maria', 6000); -- ERRO!</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-4 flex items-center">
+                                <i class="fas fa-link mr-2"></i>Integridade Referencial
+                            </h3>
+                            <p class="text-blue-700 dark:text-blue-300 mb-4">
+                                Assegura que os relacionamentos entre tabelas permaneçam consistentes. Uma chave estrangeira deve sempre referenciar uma chave primária válida existente.
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Exemplo:</h4>
+                                <pre class="code-example"><code class="language-sql">CREATE TABLE departamentos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(50)
+);
+
+CREATE TABLE funcionarios (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    depto_id INT,
+    FOREIGN KEY (depto_id) 
+    REFERENCES departamentos(id)
+);
+
+-- Tentativa de inserir funcionário com depto inexistente falha
+INSERT INTO funcionarios VALUES (1, 'João', 99); -- ERRO!</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900 dark:to-teal-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
+                                <i class="fas fa-check-double mr-2"></i>Integridade de Domínio
+                            </h3>
+                            <p class="text-green-700 dark:text-green-300 mb-4">
+                                Especifica que todos os valores em uma coluna devem pertencer a um domínio definido, incluindo tipo de dado, formato, intervalo de valores e outras restrições.
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Exemplo:</h4>
+                                <pre class="code-example"><code class="language-sql">CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) CHECK (preco > 0),
+    estoque INT DEFAULT 0 CHECK (estoque >= 0),
+    categoria VARCHAR(20) 
+        CHECK (categoria IN ('Eletrônico', 'Vestuário', 'Alimentos'))
+);
+
+-- Valores inválidos serão rejeitados
+INSERT INTO produtos VALUES 
+    (1, 'Celular', -100, 10, 'Eletrônico'); -- ERRO: preço negativo
+INSERT INTO produtos VALUES 
+    (2, 'Camisa', 50, -5, 'Vestuário');    -- ERRO: estoque negativo</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-purple-800 dark:text-purple-200 mb-4 flex items-center">
+                                <i class="fas fa-user-shield mr-2"></i>Integridade de Definida pelo Usuário
+                            </h3>
+                            <p class="text-purple-700 dark:text-purple-300 mb-4">
+                                Regras de negócio complexas que não podem ser expressas através das integridades anteriores. Geralmente implementadas através de triggers, stored procedures ou validações na aplicação.
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Exemplo com Trigger:</h4>
+                                <pre class="code-example"><code class="language-sql">CREATE TRIGGER verificar_salario_minimo
+BEFORE INSERT ON funcionarios
+FOR EACH ROW
+BEGIN
+    DECLARE salario_min DECIMAL(10,2);
+    SELECT valor INTO salario_min 
+    FROM parametros_sistema 
+    WHERE nome = 'salario_minimo';
+    
+    IF NEW.salario < salario_min THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Salário abaixo do mínimo permitido';
+    END IF;
+END;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-gray-100 dark:bg-gray-700 rounded-lg p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Ações de Integridade Referencial</h4>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                <h5 class="font-semibold text-blue-600 dark:text-blue-400 mb-2">CASCADE</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    Ao deletar/atualizar o registro pai, todos os registros filhos correspondentes são também deletados/atualizados.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                <h5 class="font-semibold text-green-600 dark:text-green-400 mb-2">SET NULL</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    Ao deletar/atualizar o registro pai, os registros filhos têm sua chave estrangeira definida como NULL.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                <h5 class="font-semibold text-red-600 dark:text-red-400 mb-2">RESTRICT</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    Impede a deleção/atualização do registro pai se existirem registros filhos referenciando-o.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Interativo -->
+            <section id="quiz" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-question-circle mr-3 text-purple-500"></i>
+                    Quiz Interativo
+                </h2>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                Questão <span id="currentQuestion">1</span> de <span id="totalQuestions">5</span>
+                            </span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                Pontuação: <span id="score">0</span>
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div id="quizProgress" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                        </div>
+                    </div>
+
+                    <div id="quizContainer">
+                        <!-- Questões serão inseridas aqui via JavaScript -->
+                    </div>
+
+                    <div class="mt-6 flex justify-between">
+                        <button id="prevQuestion" class="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition disabled:opacity-50" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i>Anterior
+                        </button>
+                        <button id="nextQuestion" class="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                            Próxima<i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exercícios Práticos -->
+            <section id="exercicios" class="mb-12 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-tasks mr-3 text-green-500"></i>
+                    Exercícios Práticos
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Exercício 1: Criando um Banco de Dados de Biblioteca</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Crie as tabelas necessárias para um sistema de biblioteca que armazene informações sobre livros, autores e empréstimos.
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold mb-2">Requisitos:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>Cada livro tem um título, ISBN, ano de publicação e um autor</li>
+                                <li>Cada autor tem nome, nacionalidade e data de nascimento</li>
+                                <li>Registre empréstimos com data de empréstimo e devolução prevista</li>
+                                <li>Um livro pode ter apenas um empréstimo ativo por vez</li>
+                            </ul>
+                        </div>
+                        <button onclick="toggleSolution('solution1')" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                            <i class="fas fa-eye mr-2"></i>Ver Solução
+                        </button>
+                        <div id="solution1" class="hidden mt-4">
+                            <pre class="code-example"><code class="language-sql">-- Tabela de Autores
+CREATE TABLE autores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    nacionalidade VARCHAR(50),
+    data_nascimento DATE
+);
+
+-- Tabela de Livros
+CREATE TABLE livros (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(200) NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,
+    ano_publicacao INT,
+    autor_id INT,
+    FOREIGN KEY (autor_id) REFERENCES autores(id)
+);
+
+-- Tabela de Empréstimos
+CREATE TABLE emprestimos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    livro_id INT,
+    data_emprestimo DATE NOT NULL,
+    data_devolucao_prevista DATE NOT NULL,
+    data_devolucao_real DATE,
+    FOREIGN KEY (livro_id) REFERENCES livros(id),
+    CHECK (data_devolucao_prevista > data_emprestimo)
+);
+
+-- Índice para melhorar performance de buscas
+CREATE INDEX idx_livros_titulo ON livros(titulo);
+CREATE INDEX idx_emprestimos_livro ON emprestimos(livro_id);</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Exercício 2: Consultas SQL</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Usando as tabelas criadas no exercício anterior, escreva consultas SQL para responder às seguintes perguntas:
+                        </p>
+                        <div class="space-y-4">
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="font-semibold mb-2">a) Liste todos os livros publicados após 2010:</p>
+                                <button onclick="toggleSolution('solution2a')" class="text-blue-500 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-code mr-1"></i>Ver SQL
+                                </button>
+                                <div id="solution2a" class="hidden mt-2">
+                                    <pre class="code-example"><code class="language-sql">SELECT titulo, ano_publicacao 
+FROM livros 
+WHERE ano_publicacao > 2010
+ORDER BY ano_publicacao DESC;</code></pre>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="font-semibold mb-2">b) Encontre todos os livros de autores brasileiros:</p>
+                                <button onclick="toggleSolution('solution2b')" class="text-blue-500 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-code mr-1"></i>Ver SQL
+                                </button>
+                                <div id="solution2b" class="hidden mt-2">
+                                    <pre class="code-example"><code class="language-sql">SELECT l.titulo, a.nome AS autor
+FROM livros l
+JOIN autores a ON l.autor_id = a.id
+WHERE a.nacionalidade = 'Brasileira';</code></pre>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="font-semibold mb-2">c) Liste livros com empréstimos em atraso:</p>
+                                <button onclick="toggleSolution('solution2c')" class="text-blue-500 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-code mr-1"></i>Ver SQL
+                                </button>
+                                <div id="solution2c" class="hidden mt-2">
+                                    <pre class="code-example"><code class="language-sql">SELECT l.titulo, e.data_devolucao_prevista,
+       DATEDIFF(CURDATE(), e.data_devolucao_prevista) AS dias_atraso
+FROM emprestimos e
+JOIN livros l ON e.livro_id = l.id
+WHERE e.data_devolucao_real IS NULL 
+  AND e.data_devolucao_prevista < CURDATE();</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Exercício 3: Desafio de Normalização</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            A tabela abaixo contém informações de vendas. Identifique os problemas de design e normalize para 3FN (Terceira Forma Normal).
+                        </p>
+                        <div class="overflow-x-auto mb-4">
+                            <table class="w-full table-auto border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-200 dark:bg-gray-700">
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">ID_Venda</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Data</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Cliente</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Endereço Cliente</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Produto</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Categoria</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Quantidade</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Preço Unitário</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">2024-01-15</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">João Silva</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Rua A, 123</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Notebook</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Eletrônico</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">3500.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="toggleSolution('solution3')" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                            <i class="fas fa-lightbulb mr-2"></i>Ver Solução Normalizada
+                        </button>
+                        <div id="solution3" class="hidden mt-4 space-y-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Problemas identificados:</h4>
+                                <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                                    <li>Redundância de dados (cliente e endereço repetidos)</li>
+                                    <li>Anomalias de atualização (mudar endereço do cliente em múltiplos lugares)</li>
+                                    <li>Dependências parciais (categoria depende apenas do produto)</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Tabelas normalizadas (3FN):</h4>
+                                <pre class="code-example"><code class="language-sql">-- Tabela Clientes
+CREATE TABLE clientes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(200)
+);
+
+-- Tabela Categorias
+CREATE TABLE categorias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Tabela Produtos
+CREATE TABLE produtos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    categoria_id INT,
+    preco_unitario DECIMAL(10,2),
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+);
+
+-- Tabela Vendas
+CREATE TABLE vendas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    data DATE NOT NULL,
+    cliente_id INT,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+);
+
+-- Tabela Itens_Venda
+CREATE TABLE itens_venda (
+    venda_id INT,
+    produto_id INT,
+    quantidade INT NOT NULL,
+    PRIMARY KEY (venda_id, produto_id),
+    FOREIGN KEY (venda_id) REFERENCES vendas(id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id)
+);</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-8 lg:ml-64">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Portal de Banco de Dados</h3>
+                    <p class="text-gray-400">
+                        Aprenda os conceitos fundamentais de banco de dados de forma interativa e prática.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Recursos</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Documentação</a></li>
+                        <li><a href="#" class="hover:text-white transition">Exemplos</a></li>
+                        <li><a href="#" class="hover:text-white transition">Exercícios</a></li>
+                        <li><a href="#" class="hover:text-white transition">Certificação</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contato</h3>
+                    <p class="text-gray-400 mb-2">
+                        <i class="fas fa-envelope mr-2"></i>contato@portaldb.com
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Portal de Banco de Dados. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const icon = darkModeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
+
+        // Check saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+        }
+
+        // Sidebar Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Search Toggle
+        const searchToggle = document.getElementById('searchToggle');
+        const searchBar = document.getElementById('searchBar');
+        const searchInput = document.getElementById('searchInput');
+        
+        searchToggle.addEventListener('click', () => {
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                searchInput.focus();
+            }
+        });
+
+        // Search Functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm) || searchTerm === '') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Smooth Scroll for Sidebar Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close sidebar on mobile
+                    if (window.innerWidth < 1024) {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                }
+            });
+        });
+
+        // Quiz Data
+        const quizData = [
+            {
+                question: "O que é um Banco de Dados?",
+                options: [
+                    "Um software para gerenciar dados",
+                    "Uma coleção organizada de dados",
+                    "Uma linguagem de programação",
+                    "Um tipo de computador"
+                ],
+                correct: 1,
+                explanation: "Um banco de dados é uma coleção organizada de dados que podem ser facilmente acessados, gerenciados e atualizados."
+            },
+            {
+                question: "Qual é a função principal de um SGBD?",
+                options: [
+                    "Apenas armazenar dados",
+                    "Gerenciar e controlar o acesso aos dados",
+                    "Criar interfaces gráficas",
+                    "Desenvolver aplicações web"
+                ],
+                correct: 1,
+                explanation: "O SGBD (Sistema de Gerenciamento de Banco de Dados) é responsável por gerenciar e controlar o acesso aos dados, garantindo segurança, integridade e eficiência."
+            },
+            {
+                question: "O que diferencia uma chave primária de uma chave estrangeira?",
+                options: [
+                    "A chave primária pode ser nula",
+                    "A chave estrangeira identifica registros na própria tabela",
+                    "A chave primária identifica exclusivamente registros na tabela, enquanto a estrangeira referencia outra tabela",
+                    "Não há diferença entre elas"
+                ],
+                correct: 2,
+                explanation: "A chave primária identifica exclusivamente cada registro em sua tabela, enquanto a chave estrangeira referencia a chave primária de outra tabela para estabelecer relacionamentos."
+            },
+            {
+                question: "Qual o principal benefício de usar índices em um banco de dados?",
+                options: [
+                    "Aumentar o espaço de armazenamento",
+                    "Diminuir a segurança dos dados",
+                    "Melhorar a performance de consultas",
+                    "Tornar os dados mais complexos"
+                ],
+                correct: 2,
+                explanation: "Índices melhoram significativamente a performance de consultas, permitindo que o banco de dados encontre informações rapidamente sem precisar ler todos os registros."
+            },
+            {
+                question: "O que garante a Integridade Referencial?",
+                options: [
+                    "Que todos os dados sejam numéricos",
+                    "Que chaves estrangeiras sempre referenciem chaves primárias válidas",
+                    "Que as tabelas tenham no máximo 10 colunas",
+                    "Que os usuários tenham permissão para tudo"
+                ],
+                correct: 1,
+                explanation: "A Integridade Referencial garante que os relacionamentos entre tabelas permaneçam consistentes, assegurando que chaves estrangeiras sempre referenciem chaves primárias existentes."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        // Initialize Quiz
+        function initQuiz() {
+            document.getElementById('totalQuestions').textContent = quizData.length;
+            showQuestion(0);
+        }
+
+        // Show Question
+        function showQuestion(index) {
+            const question = quizData[index];
+            const container = document.getElementById('quizContainer');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                        ${question.question}
+                    </h3>
+                    <div class="space-y-3">
+                        ${question.options.map((option, i) => `
+                            <button onclick="selectAnswer(${i})" 
+                                    class="quiz-option w-full text-left p-4 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                <span class="font-semibold">${String.fromCharCode(65 + i)}.</span> ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+                <div id="explanation" class="hidden bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                    <p class="text-blue-800 dark:text-blue-200"></p>
+                </div>
+            `;
+            
+            // Restore previous answer if exists
+            if (userAnswers[index] !== undefined) {
+                selectAnswer(userAnswers[index], true);
+            }
+            
+            updateQuizControls();
+        }
+
+        // Select Answer
+        function selectAnswer(optionIndex, isRestoring = false) {
+            const question = quizData[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.quiz-option');
+            const explanation = document.getElementById('explanation');
+            
+            // Clear previous selections
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
+            
+            // Mark selected answer
+            buttons[optionIndex].classList.add(optionIndex === question.correct ? 'correct' : 'incorrect');
+            
+            // Show explanation
+            explanation.classList.remove('hidden');
+            explanation.querySelector('p').textContent = question.explanation;
+            
+            // Save answer
+            if (!isRestoring) {
+                userAnswers[currentQuestionIndex] = optionIndex;
+                if (optionIndex === question.correct) {
+                    score++;
+                    document.getElementById('score').textContent = score;
+                }
+            }
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+        }
+
+        // Update Quiz Controls
+        function updateQuizControls() {
+            const prevBtn = document.getElementById('prevQuestion');
+            const nextBtn = document.getElementById('nextQuestion');
+            const progress = document.getElementById('quizProgress');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Finalizar';
+            } else {
+                nextBtn.innerHTML = 'Próxima<i class="fas fa-arrow-right ml-2"></i>';
+            }
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            progress.style.width = ((currentQuestionIndex + 1) / quizData.length * 100) + '%';
+        }
+
+        // Navigation
+        document.getElementById('prevQuestion').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        document.getElementById('nextQuestion').addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            } else {
+                showQuizResults();
+            }
+        });
+
+        // Show Quiz Results
+        function showQuizResults() {
+            const container = document.getElementById('quizContainer');
+            const percentage = Math.round((score / quizData.length) * 100);
+            
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-trophy text-6xl ${percentage >= 70 ? 'text-yellow-500' : 'text-gray-400'} mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                        Quiz Concluído!
+                    </h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-4">
+                        Você acertou ${score} de ${quizData.length} questões (${percentage}%)
+                    </p>
+                    <div class="mb-6">
+                        ${percentage >= 70 ? 
+                            '<p class="text-green-600 dark:text-green-400 font-semibold">Parabéns! Você tem um bom entendimento dos conceitos!</p>' :
+                            '<p class="text-orange-600 dark:text-orange-400 font-semibold">Continue estudando para melhorar seu conhecimento!</p>'
+                        }
+                    </div>
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                        <i class="fas fa-redo mr-2"></i>Refazer Quiz
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('prevQuestion').style.display = 'none';
+            document.getElementById('nextQuestion').style.display = 'none';
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            document.getElementById('score').textContent = '0';
+            document.getElementById('prevQuestion').style.display = 'block';
+            document.getElementById('nextQuestion').style.display = 'block';
+            initQuiz();
+        }
+
+        // Toggle Solutions
+        function toggleSolution(solutionId) {
+            const solution = document.getElementById(solutionId);
+            solution.classList.toggle('hidden');
+        }
+
+        // Initialize quiz on page load
+        initQuiz();
+
+        // Add syntax highlighting to code blocks
+        Prism.highlightAll();
+    </script>
+</body>
+</html>
