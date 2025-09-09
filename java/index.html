@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendendo Java Estruturado com NetBeans</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --font-size-base: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            font-size: var(--font-size-base);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: var(--dark);
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-tab.active {
+            background-color: var(--secondary);
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .topic-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .topic-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .card h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .card h4 {
+            color: var(--secondary);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .card p, .card li {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        ul {
+            padding-left: 2rem;
+        }
+
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #f687b3;
+        }
+
+        .code-block .string {
+            color: #68d391;
+        }
+
+        .code-block .comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .code-block .number {
+            color: #fbb6ce;
+        }
+
+        .activity {
+            background-color: #f7fafc;
+            border: 2px dashed var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .activity h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            margin: 1rem 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #229954;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .memory-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .memory-cell {
+            background-color: var(--light);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+
+        .memory-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .memory-cell .name {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .memory-cell .value {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .memory-cell .type {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .operator-card {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .operator-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .operator-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .operator-name {
+            color: var(--dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .operator-example {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .io-example {
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .io-example h4 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .io-terminal {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+
+        .io-terminal .input {
+            color: #68d391;
+        }
+
+        .io-terminal .output {
+            color: #fbb6ce;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Estilos para seção de prática no NetBeans */
+        .practice-module {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--success);
+        }
+
+        .practice-module h3 {
+            color: var(--success);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .step {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .step-number {
+            display: inline-block;
+            background-color: var(--warning);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .netbeans-screenshot {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .netbeans-header {
+            background-color: #3c3f41;
+            padding: 0.5rem 1rem;
+            border-radius: 5px 5px 0 0;
+            margin: -1rem -1rem 1rem -1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .netbeans-title {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+
+        .netbeans-menu {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .netbeans-menu-item {
+            background-color: #555;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .netbeans-code {
+            background-color: #1e1e1e;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+        }
+
+        .netbeans-output {
+            background-color: #0d1117;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            color: #58a6ff;
+        }
+
+        .tip-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .tip-box h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .warning-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background-color: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            background-color: var(--success);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .checkpoint {
+            background-color: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .checkpoint h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-tabs {
+                width: 100%;
+            }
+
+            .nav-tab {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .operator-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* Acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        :focus {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Aprendendo Java Estruturado com NetBeans</h1>
+                    <p class="subtitle">Fundamentos - Material educativo Adaptado</p>
+                </div>
+                <div>
+                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+                </div>
+            </div>
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" data-topic="algoritmos" role="tab" aria-selected="true">Algoritmos</button>
+                <button class="nav-tab" data-topic="tipos" role="tab" aria-selected="false">Tipos de Dados</button>
+                <button class="nav-tab" data-topic="memoria" role="tab" aria-selected="false">Memória e Variáveis</button>
+                <button class="nav-tab" data-topic="operadores" role="tab" aria-selected="false">Operadores</button>
+                <button class="nav-tab" data-topic="comandos" role="tab" aria-selected="false">Comandos Básicos</button>
+                <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Tópico 1: Algoritmos -->
+        <section id="algoritmos" class="topic-section active" role="tabpanel">
+            <div class="card">
+                <h2>1. Implementação de Algoritmos: Conceitos Fundamentais</h2>
+                <p>Um <strong>algoritmo</strong> é uma sequência de passos lógicos para resolver um problema. Pense como uma receita de bolo: você precisa seguir as instruções na ordem certa para obter o resultado desejado.</p>
+                
+                <h3>Características de um bom algoritmo:</h3>
+                <ul>
+                    <li><strong>Precisão:</strong> Cada passo deve ser claro e sem ambiguidades</li>
+                    <li><strong>Finitude:</strong> Deve terminar após um número finito de passos</li>
+                    <li><strong>Entrada:</strong> Recebe dados de entrada para processar</li>
+                    <li><strong>Saída:</strong> Produz resultados após o processamento</li>
+                    <li><strong>Eficácia:</strong> Cada passo deve ser simples o suficiente para ser executado</li>
+                </ul>
+
+                <h3>Exemplo de Algoritmo: Calcular a média de dois números</h3>
+                <div class="code-block">
+                    <span class="comment">// Passo 1: Receber o primeiro número</span><br>
+                    <span class="keyword">ler</span> numero1<br><br>
+                    <span class="comment">// Passo 2: Receber o segundo número</span><br>
+                    <span class="keyword">ler</span> numero2<br><br>
+                    <span class="comment">// Passo 3: Calcular a soma</span><br>
+                    soma = numero1 + numero2<br><br>
+                    <span class="comment">// Passo 4: Calcular a média</span><br>
+                    media = soma / 2<br><br>
+                    <span class="comment">// Passo 5: Mostrar o resultado</span><br>
+                    <span class="keyword">escrever</span> <span class="string">"A média é: "</span> + media
+                </div>
+
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Organize os passos abaixo na ordem correta para criar um algoritmo que calcula a área de um retângulo:</p>
+                    <div id="dragContainer" style="margin: 1rem 0;">
+                        <div class="draggable" draggable="true" data-order="3" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Calcular área = base × altura</div>
+                        <div class="draggable" draggable="true" data-order="1" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Ler a base do retângulo</div>
+                        <div class="draggable" draggable="true" data-order="2" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Ler a altura do retângulo</div>
+                        <div class="draggable" draggable="true" data-order="4" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Mostrar o valor da área</div>
+                    </div>
+                    <button id="checkOrder" class="btn">Verificar Ordem</button>
+                    <div id="orderFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tópico 2: Tipos de Dados -->
+        <section id="tipos" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>2. Tipos Básicos de Dados</h2>
+                <p>Em Java, os tipos de dados definem que tipo de informação uma variável pode armazenar. Os tipos básicos (primitivos) são:</p>
+
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">int</div>
+                        <div class="operator-name">Inteiro</div>
+                        <div class="operator-example">Ex: 10, -5, 0</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">double</div>
+                        <div class="operator-name">Decimal</div>
+                        <div class="operator-example">Ex: 3.14, -0.5, 100.0</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">char</div>
+                        <div class="operator-name">Caractere</div>
+                        <div class="operator-example">Ex: 'A', '7', '@'</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">boolean</div>
+                        <div class="operator-name">Lógico</div>
+                        <div class="operator-example">Ex: true, false</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">String</div>
+                        <div class="operator-name">Texto</div>
+                        <div class="operator-example">Ex: "Olá", "Java"</div>
+                    </div>
+                </div>
+
+                <h3>Exemplos em Código Java:</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> idade = <span class="number">25</span>;<br>
+                    <span class="keyword">double</span> altura = <span class="number">1.75</span>;<br>
+                    <span class="keyword">char</span> inicial = <span class="string">'J'</span>;<br>
+                    <span class="keyword">boolean</span> estudante = <span class="keyword">true</span>;<br>
+                    <span class="keyword">String</span> nome = <span class="string">"Maria"</span>;
+                </div>
+
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Associe cada valor ao seu tipo de dado correto:</p>
+                    <div class="input-group">
+                        <label for="valor1">"42.5" é do tipo:</label>
+                        <select id="valor1">
+                            <option value="">Selecione...</option>
+                            <option value="int">int</option>
+                            <option value="double">double</option>
+                            <option value="char">char</option>
+                            <option value="boolean">boolean</option>
+                            <option value="String">String</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="valor2">true é do tipo:</label>
+                        <select id="valor2">
+                            <option value="">Selecione...</option>
+                            <option value="int">int</option>
+                            <option value="double">double</option>
+                            <option value="char">char</option>
+                            <option value="boolean">boolean</option>
+                            <option value="String">String</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="valor3">'X' é do tipo:</label>
+                        <select id="valor3">
+                            <option value="">Selecione...</option>
+                            <option value="int">int</option>
+                            <option value="double">double</option>
+                            <option value="char">char</option>
+                            <option value="boolean">boolean</option>
+                            <option value="String">String</option>
+                        </select>
+                    </div>
+                    <button id="checkTypes" class="btn">Verificar Respostas</button>
+                    <div id="typesFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tópico 3: Memória e Variáveis -->
+        <section id="memoria" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>3. Memória, Constantes e Variáveis</h2>
+                <p>A <strong>memória</strong> do computador é como um armário com muitas gavetas. Cada <strong>variável</strong> é uma gaveta onde guardamos informações.</p>
+
+                <h3>Variáveis</h3>
+                <p>Uma variável é um espaço na memória que pode armazenar um valor que pode ser alterado durante a execução do programa.</p>
+                
+                <h3>Constantes</h3>
+                <p>Uma constante é um espaço na memória que armazena um valor que não pode ser alterado após sua definição.</p>
+
+                <h3>Visualização da Memória</h3>
+                <div class="memory-visual">
+                    <div class="memory-cell">
+                        <div class="name">idade</div>
+                        <div class="value">25</div>
+                        <div class="type">int</div>
+                    </div>
+                    <div class="memory-cell">
+                        <div class="name">PI</div>
+                        <div class="value">3.14159</div>
+                        <div class="type">final double</div>
+                    </div>
+                    <div class="memory-cell">
+                        <div class="name">nome</div>
+                        <div class="value">"Ana"</div>
+                        <div class="type">String</div>
+                    </div>
+                    <div class="memory-cell">
+                        <div class="name">ativo</div>
+                        <div class="value">true</div>
+                        <div class="type">boolean</div>
+                    </div>
+                </div>
+
+                <h3>Declaração em Java:</h3>
+                <div class="code-block">
+                    <span class="comment">// Declaração de variáveis</span><br>
+                    <span class="keyword">int</span> idade = <span class="number">25</span>;<br>
+                    <span class="keyword">String</span> nome = <span class="string">"Ana"</span>;<br><br>
+                    <span class="comment">// Declaração de constantes (usando 'final')</span><br>
+                    <span class="keyword">final double</span> PI = <span class="number">3.14159</span>;<br>
+                    <span class="keyword">final int</span> MAX_TENTATIVAS = <span class="number">3</span>;
+                </div>
+
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Crie variáveis e constantes para armazenar as seguintes informações:</p>
+                    <div class="input-group">
+                        <label for="varNome">Seu nome (variável do tipo String):</label>
+                        <input type="text" id="varNome" placeholder="Ex: String nome = &quot;João&quot;;">
+                    </div>
+                    <div class="input-group">
+                        <label for="varIdade">Sua idade (variável do tipo int):</label>
+                        <input type="text" id="varIdade" placeholder="Ex: int idade = 20;">
+                    </div>
+                    <div class="input-group">
+                        <label for="constPi">Valor de PI (constante do tipo double):</label>
+                        <input type="text" id="constPi" placeholder="Ex: final double PI = 3.14;">
+                    </div>
+                    <button id="checkVariables" class="btn">Verificar Código</button>
+                    <div id="variablesFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tópico 4: Operadores -->
+        <section id="operadores" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>4. Operadores Aritméticos, Lógicos e Relacionais</h2>
+                <p>Operadores são símbolos especiais que realizam operações sobre variáveis e valores.</p>
+
+                <h3>Operadores Aritméticos</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">+</div>
+                        <div class="operator-name">Adição</div>
+                        <div class="operator-example">5 + 3 = 8</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">-</div>
+                        <div class="operator-name">Subtração</div>
+                        <div class="operator-example">10 - 4 = 6</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">*</div>
+                        <div class="operator-name">Multiplicação</div>
+                        <div class="operator-example">3 * 4 = 12</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">/</div>
+                        <div class="operator-name">Divisão</div>
+                        <div class="operator-example">15 / 3 = 5</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">%</div>
+                        <div class="operator-name">Módulo (resto)</div>
+                        <div class="operator-example">10 % 3 = 1</div>
+                    </div>
+                </div>
+
+                <h3>Operadores Relacionais</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">==</div>
+                        <div class="operator-name">Igual a</div>
+                        <div class="operator-example">5 == 5 → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">!=</div>
+                        <div class="operator-name">Diferente de</div>
+                        <div class="operator-example">5 != 3 → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">></div>
+                        <div class="operator-name">Maior que</div>
+                        <div class="operator-example">8 > 5 → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol"><</div>
+                        <div class="operator-name">Menor que</div>
+                        <div class="operator-example">3 < 7 → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">>=</div>
+                        <div class="operator-name">Maior ou igual</div>
+                        <div class="operator-example">5 >= 5 → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol"><=</div>
+                        <div class="operator-name">Menor ou igual</div>
+                        <div class="operator-example">4 <= 4 → true</div>
+                    </div>
+                </div>
+
+                <h3>Operadores Lógicos</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">&&</div>
+                        <div class="operator-name">E (AND)</div>
+                        <div class="operator-example">true && false → false</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">||</div>
+                        <div class="operator-name">OU (OR)</div>
+                        <div class="operator-example">true || false → true</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">!</div>
+                        <div class="operator-name">NÃO (NOT)</div>
+                        <div class="operator-example">!true → false</div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Calcule o resultado das seguintes expressões:</p>
+                    <div class="input-group">
+                        <label for="calc1">10 + 5 * 2 = ?</label>
+                        <input type="number" id="calc1" placeholder="Digite o resultado">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc2">(20 / 4) + 3 = ?</label>
+                        <input type="number" id="calc2" placeholder="Digite o resultado">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc3">15 % 4 = ? (resto da divisão)</label>
+                        <input type="number" id="calc3" placeholder="Digite o resultado">
+                    </div>
+                    <button id="checkCalculations" class="btn">Verificar Cálculos</button>
+                    <div id="calculationsFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tópico 5: Comandos Básicos -->
+        <section id="comandos" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>5. Comandos Básicos de Atribuição, Entrada e Saída</h2>
+                <p>Estes são os comandos fundamentais para interagir com dados em um programa.</p>
+
+                <h3>Comando de Atribuição (=)</h3>
+                <p>Usado para atribuir um valor a uma variável. O valor à direita do "=" é armazenado na variável à esquerda.</p>
+                <div class="code-block">
+                    <span class="keyword">int</span> idade;<br>
+                    idade = <span class="number">25</span>;  <span class="comment">// Atribuindo 25 à variável idade</span><br>
+                    <span class="keyword">String</span> nome = <span class="string">"Carlos"</span>;  <span class="comment">// Declaração e atribuição</span>
+                </div>
+
+                <h3>Comando de Entrada (Scanner)</h3>
+                <p>Usado para receber dados do usuário via teclado.</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                    System.out.print(<span class="string">"Digite seu nome: "</span>);<br>
+                    <span class="keyword">String</span> nome = scanner.nextLine();<br><br>
+                    System.out.print(<span class="string">"Digite sua idade: "</span>);<br>
+                    <span class="keyword">int</span> idade = scanner.nextInt();
+                </div>
+
+                <h3>Comando de Saída (System.out)</h3>
+                <p>Usado para exibir informações na tela.</p>
+                <div class="code-block">
+                    System.out.println(<span class="string">"Olá, mundo!"</span>);  <span class="comment">// Exibe e pula linha</span><br>
+                    System.out.print(<span class="string">"Nome: "</span>);  <span class="comment">// Exibe sem pular linha</span><br>
+                    System.out.printf(<span class="string">"Idade: %d anos\n"</span>, idade);  <span class="comment">// Formatação</span>
+                </div>
+
+                <div class="io-example">
+                    <h4>Exemplo Completo: Programa de Saudação</h4>
+                    <div class="io-terminal">
+                        <div class="input">Digite seu nome: Maria</div>
+                        <div class="input">Digite sua idade: 20</div>
+                        <div class="output">Olá, Maria!</div>
+                        <div class="output">Você tem 20 anos.</div>
+                        <div class="output">No próximo ano você terá 21 anos.</div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para criar um programa que calcula a média de três notas:</p>
+                    <div class="code-block">
+                        <span class="keyword">import</span> java.util.Scanner;<br><br>
+                        <span class="keyword">public class</span> CalculaMedia {<br>
+                        &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite a primeira nota: "</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> nota1 = scanner.nextDouble();<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite a segunda nota: "</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> nota2 = scanner.nextDouble();<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite a terceira nota: "</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> nota3 = <input type="text" id="nota3" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = <input type="text" id="mediaCalc" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"A média é: "</span> + <input type="text" id="mediaPrint" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <button id="checkCode" class="btn">Verificar Código</button>
+                    <div id="codeFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nova Seção: Prática no NetBeans -->
+        <section id="pratica" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>Prática Guiada no NetBeans</h2>
+                <p>Nesta seção, vamos criar programas Java passo a passo usando o NetBeans. Siga cuidadosamente cada instrução.</p>
+                
+                <div class="tip-box">
+                    <h4>Dica Importante</h4>
+                    <p>Antes de começar, certifique-se de que o NetBeans está instalado em seu computador. Se não estiver, peça ajuda ao seu professor para instalá-lo.</p>
+                </div>
+
+                <!-- Módulo 1: Criando o Primeiro Projeto -->
+                <div class="practice-module">
+                    <h3>Módulo 1: Criando seu Primeiro Projeto Java</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress1"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Abrindo o NetBeans</h4>
+                        <p>Clique no ícone do NetBeans na área de trabalho ou no menu iniciar. Aguarde o programa carregar completamente.</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-menu">
+                                    <span class="netbeans-menu-item">File</span>
+                                    <span class="netbeans-menu-item">Edit</span>
+                                    <span class="netbeans-menu-item">View</span>
+                                    <span class="netbeans-menu-item">Navigate</span>
+                                </div>
+                                <div class="netbeans-title">NetBeans IDE 8.2</div>
+                            </div>
+                            <div class="netbeans-code">
+                                Welcome to NetBeans IDE<br>
+                                Recent Projects:<br>
+                                - [No recent projects]<br><br>
+                                Quick Start:<br>
+                                [ ] New Project<br>
+                                [ ] Open Project<br>
+                                [ ] Open File
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Criando um Novo Projeto</h4>
+                        <p>Vá em <strong>File → New Project</strong> ou clique no botão "New Project" na tela inicial.</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">New Project</div>
+                            </div>
+                            <div class="netbeans-code">
+                                Choose Project:<br>
+                                Categories: [Java]<br>
+                                Projects:  [Java Application]<br><br>
+                                Description:<br>
+                                Creates a new Java SE application
+                            </div>
+                        </div>
+                        <p>Clique em "Next" para continuar.</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Configurando o Projeto</h4>
+                        <p>Nesta tela, você precisa dar um nome ao seu projeto:</p>
+                        <ul>
+                            <li><strong>Project Name:</strong> Digite "MeuPrimeiroPrograma"</li>
+                            <li><strong>Project Location:</strong> Escolha onde salvar (pode deixar o padrão)</li>
+                            <li>Marque a opção <strong>Create Main Class</strong></li>
+                            <li><strong>Main Class:</strong> Deixe como "meuprimeiroprograma.Meuprimeiroprograma"</li>
+                        </ul>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">New Java Application</div>
+                            </div>
+                            <div class="netbeans-code">
+                                Project Name: [MeuPrimeiroPrograma]<br>
+                                Project Location: [C:\Users\Aluno\Documents]<br>
+                                Project Folder: [C:\Users\Aluno\Documents\MeuPrimeiroPrograma]<br><br>
+                                [✓] Create Main Class<br>
+                                Main Class: [meuprimeiroprograma.Meuprimeiroprograma]<br><br>
+                                [ ] Set as Main Project
+                            </div>
+                        </div>
+                        <p>Clique em "Finish" para criar o projeto.</p>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Ponto de Verificação</h4>
+                        <p>Se você fez tudo corretamente, verá uma tela de código com um programa básico já criado:</p>
+                        <div class="code-block">
+                            <span class="keyword">package</span> meuprimeiroprograma;<br><br>
+                            <span class="keyword">public class</span> Meuprimeiroprograma {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// TODO code application logic here</span><br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 2: Primeiro Programa com Saída -->
+                <div class="practice-module">
+                    <h3>Módulo 2: Criando seu Primeiro Programa com Saída</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress2"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Entendendo a Estrutura do Código</h4>
+                        <p>O NetBeans já criou uma estrutura básica para você. Vamos entender cada parte:</p>
+                        <ul>
+                            <li><strong>package meuprimeiroprograma;</strong> - Organiza seu código em uma "pasta"</li>
+                            <li><strong>public class Meuprimeiroprograma</strong> - Define a classe do programa</li>
+                            <li><strong>public static void main(String[] args)</strong> - O ponto de entrada do programa</li>
+                        </ul>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Adicionando um Comando de Saída</h4>
+                        <p>Dentro do método main, após o comentário, digite o seguinte código:</p>
+                        <div class="code-block">
+                            System.out.println(<span class="string">"Olá, mundo! Este é meu primeiro programa em Java."</span>);
+                        </div>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Meuprimeiroprograma.java</div>
+                            </div>
+                            <div class="netbeans-code">
+                                package meuprimeiroprograma;<br><br>
+                                public class Meuprimeiroprograma {<br>
+                                &nbsp;&nbsp;public static void main(String[] args) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;// TODO code application logic here<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Olá, mundo! Este é meu primeiro programa em Java.");<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <h4>Dica de Digitação</h4>
+                            <p>Quando você digitar "System." o NetBeans mostrará uma lista de opções. Use as setas do teclado para selecionar "out" e pressione Enter. Depois digite "." novamente e selecione "println".</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Salvando o Código</h4>
+                        <p>Pressione <strong>Ctrl + S</strong> ou clique no ícone de disquete na barra de ferramentas para salvar seu código.</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Executando o Programa</h4>
+                        <p>Para rodar seu programa, você tem três opções:</p>
+                        <ol>
+                            <li>Pressione a tecla <strong>F6</strong></li>
+                            <li>Clique no botão verde de "Play" na barra de ferramentas</li>
+                            <li>Vá em <strong>Run → Run Project</strong></li>
+                        </ol>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - MeuPrimeiroPrograma (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Olá, mundo! Este é meu primeiro programa em Java.<br>
+                                BUILD SUCCESSFUL (total time: 0 seconds)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Parabéns!</h4>
+                        <p>Você acabou de criar e executar seu primeiro programa Java! Se você viu a mensagem "Olá, mundo!" na janela de saída, tudo funcionou perfeitamente.</p>
+                    </div>
+                </div>
+
+                <!-- Módulo 3: Trabalhando com Variáveis -->
+                <div class="practice-module">
+                    <h3>Módulo 3: Trabalhando com Variáveis e Tipos de Dados</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress3"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando um Novo Projeto</h4>
+                        <p>Vamos criar um novo projeto para praticar variáveis. Siga os mesmos passos do Módulo 1, mas com o nome "VariaveisJava".</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Declarando Variáveis</h4>
+                        <p>No método main, vamos declarar diferentes tipos de variáveis. Digite o seguinte código:</p>
+                        <div class="code-block">
+                            <span class="comment">// Declarando variáveis de diferentes tipos</span><br>
+                            <span class="keyword">int</span> idade = <span class="number">25</span>;<br>
+                            <span class="keyword">double</span> altura = <span class="number">1.75</span>;<br>
+                            <span class="keyword">char</span> inicial = <span class="string">'M'</span>;<br>
+                            <span class="keyword">boolean</span> estudante = <span class="keyword">true</span>;<br>
+                            <span class="keyword">String</span> nome = <span class="string">"Maria"</span>;
+                        </div>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Variaveisjava.java</div>
+                            </div>
+                            <div class="netbeans-code">
+                                package variaveisjava;<br><br>
+                                public class Variaveisjava {<br>
+                                &nbsp;&nbsp;public static void main(String[] args) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;// Declarando variáveis de diferentes tipos<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;int idade = 25;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;double altura = 1.75;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;char inicial = 'M';<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;boolean estudante = true;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;String nome = "Maria";<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Exibindo os Valores das Variáveis</h4>
+                        <p>Agora vamos exibir os valores das variáveis na tela. Adicione estes comandos:</p>
+                        <div class="code-block">
+                            <span class="comment">// Exibindo os valores</span><br>
+                            System.out.println(<span class="string">"Nome: "</span> + nome);<br>
+                            System.out.println(<span class="string">"Idade: "</span> + idade);<br>
+                            System.out.println(<span class="string">"Altura: "</span> + altura);<br>
+                            System.out.println(<span class="string">"Inicial: "</span> + inicial);<br>
+                            System.out.println(<span class="string">"É estudante: "</span> + estudante);
+                        </div>
+                        <div class="warning-box">
+                            <h4>Atenção</h4>
+                            <p>Observe que usamos o operador "+" para juntar (concatenar) texto com variáveis. Isso é muito útil para criar mensagens personalizadas.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Modificando Valores das Variáveis</h4>
+                        <p>Vamos modificar o valor de algumas variáveis. Adicione este código antes dos comandos de saída:</p>
+                        <div class="code-block">
+                            <span class="comment">// Modificando valores</span><br>
+                            idade = idade + <span class="number">1</span>;  <span class="comment">// Incrementando a idade</span><br>
+                            estudante = <span class="keyword">false</span>;  <span class="comment">// Mudando o status</span>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Executando e Verificando</h4>
+                        <p>Pressione F6 para executar o programa. Você deverá ver algo assim:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - VariaveisJava (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Nome: Maria<br>
+                                Idade: 26<br>
+                                Altura: 1.75<br>
+                                Inicial: M<br>
+                                É estudante: false<br>
+                                BUILD SUCCESSFUL (total time: 0 seconds)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Experimente!</h4>
+                        <p>Tente modificar os valores iniciais das variáveis e execute novamente para ver como o resultado muda.</p>
+                    </div>
+                </div>
+
+                <!-- Módulo 4: Entrada de Dados -->
+                <div class="practice-module">
+                    <h3>Módulo 4: Recebendo Dados do Usuário</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress4"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando Projeto com Entrada</h4>
+                        <p>Crie um novo projeto chamado "EntradaDados". Este projeto vai interagir com o usuário.</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Importando a Classe Scanner</h4>
+                        <p>Para receber dados do usuário, precisamos usar a classe Scanner. Adicione esta linha no início do arquivo, após a linha do package:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;
+                        </div>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Entradadados.java</div>
+                            </div>
+                            <div class="netbeans-code">
+                                package entradadados;<br><br>
+                                import java.util.Scanner;<br><br>
+                                public class Entradadados {<br>
+                                &nbsp;&nbsp;public static void main(String[] args) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;// TODO code application logic here<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Criando o Objeto Scanner</h4>
+                        <p>Dentro do método main, crie um objeto Scanner para ler dados do teclado:</p>
+                        <div class="code-block">
+                            <span class="comment">// Criando objeto Scanner para ler dados</span><br>
+                            Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Solicitando e Lendo o Nome</h4>
+                        <p>Agora vamos pedir o nome do usuário e ler o que ele digitar:</p>
+                        <div class="code-block">
+                            <span class="comment">// Pedindo o nome</span><br>
+                            System.out.print(<span class="string">"Digite seu nome: "</span>);<br>
+                            <span class="keyword">String</span> nome = scanner.nextLine();
+                        </div>
+                        <div class="tip-box">
+                            <h4>Dica Importante</h4>
+                            <p>Use <strong>System.out.print()</strong> quando quiser que o cursor fique na mesma linha, e <strong>System.out.println()</strong> quando quiser pular para a próxima linha.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Solicitando e Lendo a Idade</h4>
+                        <p>Vamos pedir a idade do usuário. Como idade é um número inteiro, usamos nextInt():</p>
+                        <div class="code-block">
+                            <span class="comment">// Pedindo a idade</span><br>
+                            System.out.print(<span class="string">"Digite sua idade: "</span>);<br>
+                            <span class="keyword">int</span> idade = scanner.nextInt();
+                        </div>
+                        <div class="warning-box">
+                            <h4>Cuidado!</h4>
+                            <p>Se você usar nextInt() e depois quiser ler texto, precisa adicionar scanner.nextLine() para limpar o buffer. Isso evita problemas na leitura.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Exibindo os Dados Lidos</h4>
+                        <p>Agora vamos mostrar os dados que o usuário digitou:</p>
+                        <div class="code-block">
+                            <span class="comment">// Exibindo os dados</span><br>
+                            System.out.println(<span class="string">"\n--- Dados do Usuário ---"</span>);<br>
+                            System.out.println(<span class="string">"Nome: "</span> + nome);<br>
+                            System.out.println(<span class="string">"Idade: "</span> + idade);<br>
+                            System.out.println(<span class="string">"No próximo ano você terá "</span> + (idade + <span class="number">1</span>) + <span class="string">" anos."</span>);
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">7</span>
+                        <h4>Fechando o Scanner</h4>
+                        <p>No final do programa, é uma boa prática fechar o Scanner para liberar recursos:</p>
+                        <div class="code-block">
+                            <span class="comment">// Fechando o scanner</span><br>
+                            scanner.close();
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">8</span>
+                        <h4>Executando o Programa</h4>
+                        <p>Pressione F6 para executar. O programa irá pedir seu nome e idade:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - EntradaDados (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Digite seu nome: João<br>
+                                Digite sua idade: 20<br><br>
+                                --- Dados do Usuário ---<br>
+                                Nome: João<br>
+                                Idade: 20<br>
+                                No próximo ano você terá 21 anos.<br>
+                                BUILD SUCCESSFUL (total time: 5 seconds)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Excelente!</h4>
+                        <p>Você criou um programa interativo! Agora tente adicionar mais campos, como pedir a altura do usuário e mostrar seu IMC (Índice de Massa Corporal).</p>
+                    </div>
+                </div>
+
+                <!-- Módulo 5: Calculadora Simples -->
+                <div class="practice-module">
+                    <h3>Módulo 5: Criando uma Calculadora Simples</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress5"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando o Projeto Calculadora</h4>
+                        <p>Crie um novo projeto chamado "CalculadoraSimples". Este projeto vai realizar operações matemáticas básicas.</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Configure o projeto com a importação do Scanner e a estrutura básica:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br><br>
+                            <span class="keyword">public class</span> CalculadoraSimples {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código da calculadora virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Solicitando os Números</h4>
+                        <p>Vamos pedir dois números ao usuário:</p>
+                        <div class="code-block">
+                            <span class="comment">// Solicitando os números</span><br>
+                            System.out.print(<span class="string">"Digite o primeiro número: "</span>);<br>
+                            <span class="keyword">double</span> num1 = scanner.nextDouble();<br><br>
+                            System.out.print(<span class="string">"Digite o segundo número: "</span>);<br>
+                            <span class="keyword">double</span> num2 = scanner.nextDouble();
+                        </div>
+                        <div class="tip-box">
+                            <h4>Por que double?</h4>
+                            <p>Usamos double para permitir números decimais. Se usássemos int, não poderíamos calcular com números como 3.14 ou 0.5.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Realizando as Operações</h4>
+                        <p>Agora vamos realizar as quatro operações básicas:</p>
+                        <div class="code-block">
+                            <span class="comment">// Realizando as operações</span><br>
+                            <span class="keyword">double</span> soma = num1 + num2;<br>
+                            <span class="keyword">double</span> subtracao = num1 - num2;<br>
+                            <span class="keyword">double</span> multiplicacao = num1 * num2;<br>
+                            <span class="keyword">double</span> divisao = num1 / num2;<br>
+                            <span class="keyword">double</span> resto = num1 % num2;
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Exibindo os Resultados</h4>
+                        <p>Vamos mostrar todos os resultados de forma organizada:</p>
+                        <div class="code-block">
+                            <span class="comment">// Exibindo os resultados</span><br>
+                            System.out.println(<span class="string">"\n--- Resultados ---"</span>);<br>
+                            System.out.println(num1 + <span class="string">" + "</span> + num2 + <span class="string">" = "</span> + soma);<br>
+                            System.out.println(num1 + <span class="string">" - "</span> + num2 + <span class="string">" = "</span> + subtracao);<br>
+                            System.out.println(num1 + <span class="string">" * "</span> + num2 + <span class="string">" = "</span> + multiplicacao);<br>
+                            System.out.println(num1 + <span class="string">" / "</span> + num2 + <span class="string">" = "</span> + divisao);<br>
+                            System.out.println(<span class="string">"Resto da divisão: "</span> + resto);
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Tratando Divisão por Zero</h4>
+                        <p>Vamos adicionar uma verificação para evitar divisão por zero:</p>
+                        <div class="code-block">
+                            <span class="comment">// Verificando divisão por zero</span><br>
+                            <span class="keyword">if</span> (num2 != <span class="number">0</span>) {<br>
+                            &nbsp;&nbsp;System.out.println(num1 + <span class="string">" / "</span> + num2 + <span class="string">" = "</span> + divisao);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Não é possível dividir por zero!"</span>);<br>
+                            }
+                        </div>
+                        <div class="warning-box">
+                            <h4>Importante!</h4>
+                            <p>Dividir por zero causa um erro no programa. Sempre verifique se o divisor não é zero antes de fazer a divisão.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">7</span>
+                        <h4>Testando a Calculadora</h4>
+                        <p>Execute o programa e teste com diferentes números:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - CalculadoraSimples (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Digite o primeiro número: 10<br>
+                                Digite o segundo número: 3<br><br>
+                                --- Resultados ---<br>
+                                10.0 + 3.0 = 13.0<br>
+                                10.0 - 3.0 = 7.0<br>
+                                10.0 * 3.0 = 30.0<br>
+                                10.0 / 3.0 = 3.3333333333333335<br>
+                                Resto da divisão: 1.0<br>
+                                BUILD SUCCESSFUL (total time: 6 seconds)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Desafio Extra</h4>
+                        <p>Tente modificar a calculadora para:</p>
+                        <ul>
+                            <li>Pedir ao usuário qual operação deseja realizar (+, -, *, /)</li>
+                            <li>Mostrar apenas o resultado da operação escolhida</li>
+                            <li>Adicionar mais operações como potência (Math.pow())</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Módulo 6: Projeto Final -->
+                <div class="practice-module">
+                    <h3>Módulo 6: Projeto Final - Sistema de Médias</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress6"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Objetivo do Projeto</h4>
+                        <p>Vamos criar um programa que calcula a média de um aluno e informa se ele foi aprovado ou reprovado. Este projeto usa tudo que aprendemos!</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto chamado "SistemaMedias". Configure com a importação do Scanner.</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Solicitando Dados do Aluno</h4>
+                        <p>Vamos pedir o nome do aluno e suas três notas:</p>
+                        <div class="code-block">
+                            <span class="comment">// Solicitando dados do aluno</span><br>
+                            System.out.print(<span class="string">"Digite o nome do aluno: "</span>);<br>
+                            <span class="keyword">String</span> nome = scanner.nextLine();<br><br>
+                            System.out.print(<span class="string">"Digite a primeira nota: "</span>);<br>
+                            <span class="keyword">double</span> nota1 = scanner.nextDouble();<br><br>
+                            System.out.print(<span class="string">"Digite a segunda nota: "</span>);<br>
+                            <span class="keyword">double</span> nota2 = scanner.nextDouble();<br><br>
+                            System.out.print(<span class="string">"Digite a terceira nota: "</span>);<br>
+                            <span class="keyword">double</span> nota3 = scanner.nextDouble();
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Calculando a Média</h4>
+                        <p>Calcule a média das três notas:</p>
+                        <div class="code-block">
+                            <span class="comment">// Calculando a média</span><br>
+                            <span class="keyword">double</span> media = (nota1 + nota2 + nota3) / <span class="number">3</span>;
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Determinando a Situação</h4>
+                        <p>Use uma estrutura if-else para determinar se o aluno foi aprovado:</p>
+                        <div class="code-block">
+                            <span class="comment">// Determinando a situação</span><br>
+                            <span class="keyword">String</span> situacao;<br>
+                            <span class="keyword">if</span> (media >= <span class="number">7.0</span>) {<br>
+                            &nbsp;&nbsp;situacao = <span class="string">"APROVADO"</span>;<br>
+                            } <span class="keyword">else if</span> (media >= <span class="number">5.0</span>) {<br>
+                            &nbsp;&nbsp;situacao = <span class="string">"RECUPERAÇÃO"</span>;<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;situacao = <span class="string">"REPROVADO"</span>;<br>
+                            }
+                        </div>
+                        <div class="tip-box">
+                            <h4>Regras do Sistema</h4>
+                            <p>Nosso sistema considera:<br>
+                            - Média ≥ 7.0: Aprovado<br>
+                            - 5.0 ≤ Média < 7.0: Recuperação<br>
+                            - Média < 5.0: Reprovado</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Exibindo o Resultado Final</h4>
+                        <p>Mostre todas as informações de forma organizada:</p>
+                        <div class="code-block">
+                            <span class="comment">// Exibindo o resultado</span><br>
+                            System.out.println(<span class="string">"\n=== BOLETIM DO ALUNO ==="</span>);<br>
+                            System.out.println(<span class="string">"Aluno: "</span> + nome);<br>
+                            System.out.println(<span class="string">"Nota 1: "</span> + nota1);<br>
+                            System.out.println(<span class="string">"Nota 2: "</span> + nota2);<br>
+                            System.out.println(<span class="string">"Nota 3: "</span> + nota3);<br>
+                            System.out.printf(<span class="string">"Média Final: %.2f\n"</span>, media);<br>
+                            System.out.println(<span class="string">"Situação: "</span> + situacao);
+                        </div>
+                        <div class="warning-box">
+                            <h4>Formatando Números</h4>
+                            <p>Usamos printf com "%.2f" para mostrar a média com apenas 2 casas decimais. Isso deixa o resultado mais bonito!</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">7</span>
+                        <h4>Testando o Sistema Completo</h4>
+                        <p>Execute o programa com os dados de um aluno:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - SistemaMedias (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Digite o nome do aluno: Ana Silva<br>
+                                Digite a primeira nota: 8.5<br>
+                                Digite a segunda nota: 7.0<br>
+                                Digite a terceira nota: 9.0<br><br>
+                                === BOLETIM DO ALUNO ===<br>
+                                Aluno: Ana Silva<br>
+                                Nota 1: 8.5<br>
+                                Nota 2: 7.0<br>
+                                Nota 3: 9.0<br>
+                                Média Final: 8.17<br>
+                                Situação: APROVADO<br>
+                                BUILD SUCCESSFUL (total time: 8 seconds)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>Parabéns! Você Concluiu Todos os Módulos!</h4>
+                        <p>Você agora sabe:</p>
+                        <ul>
+                            <li>Criar projetos no NetBeans</li>
+                            <li>Trabalhar com variáveis e tipos de dados</li>
+                            <li>Receber dados do usuário</li>
+                            <li>Realizar operações matemáticas</li>
+                            <li>Tomar decisões com if-else</li>
+                            <li>Formatar saída de dados</li>
+                        </ul>
+                        <p>Continue praticando e explorando novos conceitos em Java!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; Aprendendo Java Estruturado - Material educativo Adaptado</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navegação entre tópicos
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const topicSections = document.querySelectorAll('.topic-section');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTopic = tab.getAttribute('data-topic');
+                
+                // Remove classe active de todas as abas e seções
+                navTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                topicSections.forEach(section => section.classList.remove('active'));
+                
+                // Adiciona classe active na aba e seção correspondentes
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(targetTopic).classList.add('active');
+            });
+        });
+
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+
+        // Atividade 1: Ordenar algoritmo
+        const draggables = document.querySelectorAll('.draggable');
+        const dragContainer = document.getElementById('dragContainer');
+        let draggedElement = null;
+
+        if (draggables.length > 0) {
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    draggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                });
+
+                draggable.addEventListener('dragend', (e) => {
+                    e.target.style.opacity = '';
+                });
+            });
+
+            dragContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(dragContainer, e.clientY);
+                if (afterElement == null) {
+                    dragContainer.appendChild(draggedElement);
+                } else {
+                    dragContainer.insertBefore(draggedElement, afterElement);
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // Verificar ordem do algoritmo
+        const checkOrderBtn = document.getElementById('checkOrder');
+        if (checkOrderBtn) {
+            checkOrderBtn.addEventListener('click', () => {
+                const items = [...document.querySelectorAll('.draggable')];
+                const correctOrder = items.every((item, index) => 
+                    parseInt(item.getAttribute('data-order')) === index + 1
+                );
+                
+                const feedback = document.getElementById('orderFeedback');
+                feedback.style.display = 'block';
+                
+                if (correctOrder) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Parabéns! Você organizou o algoritmo corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A ordem não está correta. Tente novamente!';
+                }
+            });
+        }
+
+        // Atividade 2: Tipos de dados
+        const checkTypesBtn = document.getElementById('checkTypes');
+        if (checkTypesBtn) {
+            checkTypesBtn.addEventListener('click', () => {
+                const valor1 = document.getElementById('valor1').value;
+                const valor2 = document.getElementById('valor2').value;
+                const valor3 = document.getElementById('valor3').value;
+                
+                const feedback = document.getElementById('typesFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = valor1 === 'String';
+                const correct2 = valor2 === 'boolean';
+                const correct3 = valor3 === 'char';
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Algumas respostas estão incorretas. ';
+                    if (!correct1) message += '"42.5" é uma String. ';
+                    if (!correct2) message += 'true é um boolean. ';
+                    if (!correct3) message += "'X' é um char. ";
+                    feedback.textContent = message;
+                }
+            });
+        }
+
+        // Atividade 3: Memória e variáveis
+        const checkVariablesBtn = document.getElementById('checkVariables');
+        if (checkVariablesBtn) {
+            checkVariablesBtn.addEventListener('click', () => {
+                const nome = document.getElementById('varNome').value.trim();
+                const idade = document.getElementById('varIdade').value.trim();
+                const pi = document.getElementById('constPi').value.trim();
+                
+                const feedback = document.getElementById('variablesFeedback');
+                feedback.style.display = 'block';
+                
+                const nomeRegex = /^String\s+\w+\s*=\s*"[^"]*";?$/i;
+                const idadeRegex = /^int\s+\w+\s*=\s*\d+;?$/i;
+                const piRegex = /^final\s+double\s+\w+\s*=\s*\d+(\.\d+)?;?$/i;
+                
+                const correctNome = nomeRegex.test(nome);
+                const correctIdade = idadeRegex.test(idade);
+                const correctPi = piRegex.test(pi);
+                
+                if (correctNome && correctIdade && correctPi) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Perfeito! Todas as declarações estão corretas.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes declarações: ';
+                    if (!correctNome) message += 'Nome (ex: String nome = "Ana";). ';
+                    if (!correctIdade) message += 'Idade (ex: int idade = 25;). ';
+                    if (!correctPi) message += 'PI (ex: final double PI = 3.14;). ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+
+        // Atividade 4: Operadores
+        const checkCalculationsBtn = document.getElementById('checkCalculations');
+        if (checkCalculationsBtn) {
+            checkCalculationsBtn.addEventListener('click', () => {
+                const calc1 = parseInt(document.getElementById('calc1').value);
+                const calc2 = parseInt(document.getElementById('calc2').value);
+                const calc3 = parseInt(document.getElementById('calc3').value);
+                
+                const feedback = document.getElementById('calculationsFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = calc1 === 20; // 10 + 5 * 2 = 10 + 10 = 20
+                const correct2 = calc2 === 8;  // (20 / 4) + 3 = 5 + 3 = 8
+                const correct3 = calc3 === 3;  // 15 % 4 = 3
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Ótimo! Você acertou todos os cálculos.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Revise os cálculos: ';
+                    if (!correct1) message += '10 + 5 * 2 = 20. ';
+                    if (!correct2) message += '(20 / 4) + 3 = 8. ';
+                    if (!correct3) message += '15 % 4 = 3. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+
+        // Atividade 5: Comandos básicos
+        const checkCodeBtn = document.getElementById('checkCode');
+        if (checkCodeBtn) {
+            checkCodeBtn.addEventListener('click', () => {
+                const nota3 = document.getElementById('nota3').value.trim();
+                const mediaCalc = document.getElementById('mediaCalc').value.trim();
+                const mediaPrint = document.getElementById('mediaPrint').value.trim();
+                
+                const feedback = document.getElementById('codeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctNota3 = nota3 === 'scanner.nextDouble()';
+                const correctMediaCalc = mediaCalc === '(nota1 + nota2 + nota3) / 3';
+                const correctMediaPrint = mediaPrint === 'media';
+                
+                if (correctNota3 && correctMediaCalc && correctMediaPrint) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctNota3) message += 'Leitura da nota3: scanner.nextDouble(). ';
+                    if (!correctMediaCalc) message += 'Cálculo da média: (nota1 + nota2 + nota3) / 3. ';
+                    if (!correctMediaPrint) message += 'Impressão: media. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+
+        // Animação das barras de progresso quando a seção de prática é ativada
+        const praticaTab = document.querySelector('[data-topic="pratica"]');
+        praticaTab.addEventListener('click', () => {
+            setTimeout(() => {
+                // Anima as barras de progresso
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach((bar, index) => {
+                    setTimeout(() => {
+                        bar.style.width = '100%';
+                    }, index * 200);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
