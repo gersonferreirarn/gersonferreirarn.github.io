@@ -373,6 +373,49 @@
         .truth-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .practice-module {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--success);
+        }
+        .practice-module h3 {
+            color: var(--success);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .step {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--warning);
+        }
+        .step-number {
+            display: inline-block;
+            background-color: var(--warning);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        .checkpoint {
+            background-color: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        .checkpoint h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
         footer {
             background-color: var(--primary);
             color: white;
@@ -1434,137 +1477,364 @@
         <!-- Tópico 6: Exercícios Práticos -->
         <section id="exercicios" class="topic-section" role="tabpanel">
             <div class="card">
-                <h2>6. Exercícios Práticos</h2>
-                <p>Nesta seção, você encontrará exercícios que combinam todos os conceitos aprendidos sobre estruturas de decisão e operadores lógicos em Java.</p>
+                <h2>6. Exercícios Práticos no NetBeans</h2>
+                <p>Nesta seção, você encontrará exercícios para implementar no NetBeans. Siga as instruções para cada exercício e pratique criando projetos reais!</p>
                 
-                <div class="activity">
+                <div class="tip-box">
+                    <h4>Como usar esta seção</h4>
+                    <p>Para cada exercício:</p>
+                    <ol>
+                        <li>Leia atentamente o enunciado e os requisitos</li>
+                        <li>Crie um novo projeto no NetBeans</li>
+                        <li>Implemente o código seguindo as orientações</li>
+                        <li>Teste seu programa com diferentes valores de entrada</li>
+                        <li>Compare com a solução sugerida (se disponível)</li>
+                    </ol>
+                </div>
+                
+                <div class="practice-module">
                     <h3>Exercício 1: Calculadora IMC</h3>
-                    <p>Crie um programa que calcula o Índice de Massa Corporal (IMC) e classifica o resultado usando estruturas de decisão:</p>
-                    <div class="input-group">
-                        <label for="imcCode">Código completo:</label>
-                        <textarea id="imcCode" rows="20" placeholder="import java.util.Scanner;
-
-public class CalculadoraIMC {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print(&quot;Digite seu peso em kg: &quot;);
-        double peso = scanner.nextDouble();
-        
-        System.out.print(&quot;Digite sua altura em metros: &quot;);
-        double altura = scanner.nextDouble();
-        
-        double imc = peso / (altura * altura);
-        
-        // Complete o código com as estruturas de decisão
-        
-        scanner.close();
-    }
-}"></textarea>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que calcula o Índice de Massa Corporal (IMC) e classifica o resultado. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar o peso do usuário em kg</li>
+                            <li>Solicitar a altura do usuário em metros</li>
+                            <li>Calcular o IMC: peso / (altura × altura)</li>
+                            <li>Classificar o resultado conforme a tabela:</li>
+                        </ul>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>IMC</th>
+                                    <th>Classificação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Abaixo de 18.5</td>
+                                    <td>Abaixo do peso</td>
+                                </tr>
+                                <tr>
+                                    <td>18.5 - 24.9</td>
+                                    <td>Peso normal</td>
+                                </tr>
+                                <tr>
+                                    <td>25.0 - 29.9</td>
+                                    <td>Sobrepeso</td>
+                                </tr>
+                                <tr>
+                                    <td>30.0 - 34.9</td>
+                                    <td>Obesidade Grau I</td>
+                                </tr>
+                                <tr>
+                                    <td>35.0 - 39.9</td>
+                                    <td>Obesidade Grau II</td>
+                                </tr>
+                                <tr>
+                                    <td>40.0 ou acima</td>
+                                    <td>Obesidade Grau III</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button id="checkIMC" class="btn">Verificar Código</button>
-                    <div id="imcFeedback" class="feedback"></div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Abra o NetBeans e crie um novo projeto: <strong>File → New Project</strong></li>
+                            <li>Selecione a categoria <strong>Java</strong> e o tipo <strong>Java Application</strong></li>
+                            <li>Dê um nome ao projeto: <strong>CalculadoraIMC</strong></li>
+                            <li>Marque a opção <strong>Create Main Class</strong> e clique em <strong>Finish</strong></li>
+                            <li>No método <strong>main</strong>, implemente o código usando estruturas <strong>if-else</strong> ou <strong>switch-case</strong></li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use a classe <strong>Scanner</strong> para ler os dados do usuário</li>
+                            <li>Organize as condições do menor para o maior valor de IMC</li>
+                            <li>Use <strong>System.out.printf()</strong> para formatar o IMC com 2 casas decimais</li>
+                            <li>Teste com valores extremos para verificar todas as condições</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa (F6) e teste com os seguintes valores:</p>
+                        <ul>
+                            <li>Peso: 70kg, Altura: 1.75m → IMC: 22.86 (Peso normal)</li>
+                            <li>Peso: 90kg, Altura: 1.80m → IMC: 27.78 (Sobrepeso)</li>
+                            <li>Peso: 110kg, Altura: 1.65m → IMC: 40.40 (Obesidade Grau III)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Solicitar também o nome do usuário</li>
+                            <li>Mostrar uma mensagem personalizada com o nome e a classificação</li>
+                            <li>Incluir uma recomendação baseada na classificação</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="activity">
-                    <h3>Exercício 2: Sistema de Descontos</h3>
-                    <p>Crie um programa que aplica descontos com base no valor da compra e no tipo de cliente, usando operadores lógicos:</p>
-                    <ul>
-                        <li>Clientes VIP: 20% de desconto em qualquer valor</li>
-                        <li>Clientes regulares: 10% se compra > R$ 100,00</li>
-                        <li>Clientes novos: 5% se compra > R$ 200,00</li>
-                        <li>Nenhum desconto para outras situações</li>
-                    </ul>
-                    <div class="input-group">
-                        <label for="descontoCode">Código completo:</label>
-                        <textarea id="descontoCode" rows="20" placeholder="import java.util.Scanner;
-
-public class SistemaDescontos {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print(&quot;Digite o valor da compra: R$ &quot;);
-        double valorCompra = scanner.nextDouble();
-        
-        System.out.print(&quot;Tipo de cliente (1-VIP, 2-Regular, 3-Novo): &quot;);
-        int tipoCliente = scanner.nextInt();
-        
-        // Complete o código com as estruturas de decisão e operadores lógicos
-        
-        scanner.close();
-    }
-}"></textarea>
+                <div class="practice-module">
+                    <h3>Exercício 2: Sistema de Descontos com Operadores Lógicos</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que aplica descontos com base no valor da compra e no tipo de cliente. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar o valor da compra</li>
+                            <li>Solicitar o tipo de cliente (1-VIP, 2-Regular, 3-Novo)</li>
+                            <li>Aplicar os descontos conforme as regras:</li>
+                        </ul>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Cliente</th>
+                                    <th>Condição</th>
+                                    <th>Desconto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>VIP</td>
+                                    <td>Qualquer valor</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td>Regular</td>
+                                    <td>Compra > R$ 100,00</td>
+                                    <td>10%</td>
+                                </tr>
+                                <tr>
+                                    <td>Regular</td>
+                                    <td>Compra ≤ R$ 100,00</td>
+                                    <td>0%</td>
+                                </tr>
+                                <tr>
+                                    <td>Novo</td>
+                                    <td>Compra > R$ 200,00</td>
+                                    <td>5%</td>
+                                </tr>
+                                <tr>
+                                    <td>Novo</td>
+                                    <td>Compra ≤ R$ 200,00</td>
+                                    <td>0%</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button id="checkDesconto" class="btn">Verificar Código</button>
-                    <div id="descontoFeedback" class="feedback"></div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>SistemaDescontos</strong></li>
+                            <li>Use estruturas <strong>if-else</strong> combinadas com operadores lógicos (<strong>&&</strong> e <strong>||</strong>)</li>
+                            <li>Implemente a lógica de desconto usando variáveis booleanas para melhor legibilidade</li>
+                            <li>Mostre o valor original, o desconto aplicado e o valor final</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use <strong>switch-case</strong> para o tipo de cliente</li>
+                            <li>Dentro de cada case, use <strong>if-else</strong> para verificar o valor da compra</li>
+                            <li>Use <strong>System.out.printf()</strong> para formatar valores monetários</li>
+                            <li>Considere usar variáveis booleanas como <code>ehVIP</code>, <code>ehRegular</code>, etc.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Cliente VIP, compra de R$ 150,00 → Desconto: R$ 30,00 (20%)</li>
+                            <li>Cliente Regular, compra de R$ 250,00 → Desconto: R$ 25,00 (10%)</li>
+                            <li>Cliente Regular, compra de R$ 80,00 → Desconto: R$ 0,00 (0%)</li>
+                            <li>Cliente Novo, compra de R$ 300,00 → Desconto: R$ 15,00 (5%)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir um quarto tipo de cliente: "Funcionário" com 25% de desconto</li>
+                            <li>Adicionar validação para valores negativos</li>
+                            <li>Mostrar uma mensagem especial para compras acima de R$ 500,00</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="activity">
-                    <h3>Exercício 3: Menu de Opções</h3>
-                    <p>Crie um menu de opções usando switch case que realiza diferentes operações matemáticas com validação de entrada:</p>
-                    <div class="input-group">
-                        <label for="menuCode">Código completo:</label>
-                        <textarea id="menuCode" rows="20" placeholder="import java.util.Scanner;
-
-public class MenuOperacoes {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.println(&quot;=== MENU DE OPERAÇÕES ===&quot;);
-        System.out.println(&quot;1 - Adição&quot;);
-        System.out.println(&quot;2 - Subtração&quot;);
-        System.out.println(&quot;3 - Multiplicação&quot;);
-        System.out.println(&quot;4 - Divisão&quot;);
-        System.out.print(&quot;Escolha uma opção: &quot;);
-        
-        int opcao = scanner.nextInt();
-        
-        // Complete o código com switch case e validações
-        
-        scanner.close();
-    }
-}"></textarea>
+                <div class="practice-module">
+                    <h3>Exercício 3: Menu de Operações Matemáticas</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que apresenta um menu de operações matemáticas e executa a operação escolhida pelo usuário. O programa deve:</p>
+                        <ul>
+                            <li>Exibir um menu com as opções: 1-Adição, 2-Subtração, 3-Multiplicação, 4-Divisão, 5-Sair</li>
+                            <li>Solicitar dois números para a operação escolhida</li>
+                            <li>Executar a operação e mostrar o resultado</li>
+                            <li>Validar entradas (opção inválida, divisão por zero)</li>
+                            <li>Permitir múltiplas operações até o usuário escolher sair</li>
+                        </ul>
                     </div>
-                    <button id="checkMenu" class="btn">Verificar Código</button>
-                    <div id="menuFeedback" class="feedback"></div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>MenuOperacoes</strong></li>
+                            <li>Use <strong>switch-case</strong> para o menu de opções</li>
+                            <li>Implemente um laço <strong>while</strong> para manter o programa em execução</li>
+                            <li>Adicione validações para entradas inválidas</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use uma variável <code>int opcao</code> para armazenar a escolha do usuário</li>
+                            <li>Use <code>while (opcao != 5)</code> para controlar o loop</li>
+                            <li>Na divisão, verifique se o segundo número é diferente de zero</li>
+                            <li>Use <code>Scanner.nextDouble()</code> para ler os números</li>
+                            <li>Limpe o buffer do teclado com <code>scanner.nextLine()</code> após ler números</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Escolha opção 1, números 10 e 5 → Resultado: 15</li>
+                            <li>Escolha opção 4, números 10 e 0 → Mensagem de erro</li>
+                            <li>Escolha opção 6 → Mensagem de opção inválida</li>
+                            <li>Escolha opção 5 → Programa encerra</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir operações adicionais: 6-Potência, 7-Raiz Quadrada</li>
+                            <li>Armazenar o histórico das operações realizadas</li>
+                            <li>Permitir ao usuário ver o histórico antes de sair</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="activity">
-                    <h3>Exercício 4: Sistema de Login</h3>
-                    <p>Crie um sistema de login que verifica múltiplas condições usando operadores lógicos e operador ternário:</p>
-                    <ul>
-                        <li>Usuário: "admin" e Senha: "12345"</li>
-                        <li>Conta deve estar ativa e não bloqueada</li>
-                        <li>Se login falhar 3 vezes, bloquear temporariamente</li>
-                    </ul>
-                    <div class="input-group">
-                        <label for="loginCode">Código completo:</label>
-                        <textarea id="loginCode" rows="20" placeholder="import java.util.Scanner;
-
-public class SistemaLogin {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        String usuarioCorreto = &quot;admin&quot;;
-        String senhaCorreta = &quot;12345&quot;;
-        boolean contaAtiva = true;
-        boolean contaBloqueada = false;
-        int tentativas = 0;
-        final int MAX_TENTATIVAS = 3;
-        
-        // Complete o código com estruturas de decisão, operadores lógicos e ternário
-        
-        scanner.close();
-    }
-}"></textarea>
+                <div class="practice-module">
+                    <h3>Exercício 4: Sistema de Login com Validação</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um sistema de login que valida usuário e senha com múltiplas condições. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar usuário e senha</li>
+                            <li>Validar as credenciais (usuário: "admin", senha: "12345")</li>
+                            <li>Verificar se a conta está ativa e não bloqueada</li>
+                            <li>Permitir apenas 3 tentativas de login</li>
+                            <li>Bloquear temporariamente após 3 tentativas falhas</li>
+                            <li>Usar operadores lógicos e operador ternário</li>
+                        </ul>
                     </div>
-                    <button id="checkLogin" class="btn">Verificar Código</button>
-                    <div id="loginFeedback" class="feedback"></div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>SistemaLogin</strong></li>
+                            <li>Use operadores lógicos (<strong>&&</strong>) para combinar múltiplas condições</li>
+                            <li>Use operador ternário para mensagens de status</li>
+                            <li>Implemente um contador de tentativas com <strong>while</strong></li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use <code>String.equals()</code> para comparar usuário e senha</li>
+                            <li>Use variáveis booleanas: <code>contaAtiva = true</code>, <code>contaBloqueada = false</code></li>
+                            <li>Use um contador <code>int tentativas = 0</code></li>
+                            <li>Use operador ternário para mensagens: <code>String mensagem = loginSucesso ? "Bem-vindo!" : "Acesso negado";</code></li>
+                            <li>Limpe o buffer do teclado após ler números</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Usuário: "admin", Senha: "12345" → Login bem-sucedido</li>
+                            <li>Usuário: "admin", Senha: "errada" → Tentativa falha</li>
+                            <li>Três tentativas incorretas → Conta bloqueada</li>
+                            <li>Tentativa após bloqueio → Mensagem de conta bloqueada</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir um sistema de recuperação de senha</li>
+                            <li>Adicionar um temporizador de 30 segundos para desbloquear a conta</li>
+                            <li>Permitir o cadastro de novos usuários</li>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div class="tip-box">
-                    <h4>Dica Final</h4>
-                    <p>Praticar é essencial para dominar estruturas de decisão e operadores lógicos. Tente resolver os exercícios de diferentes maneiras, combinando if-else, switch case e operadores ternários quando apropriado. Isso ajudará você a entender quando usar cada estrutura!</p>
+                    <h4>Dicas para trabalhar no NetBeans</h4>
+                    <ul>
+                        <li><strong>Atalhos úteis:</strong> F6 para executar, Ctrl+Shift+C para comentar/descomentar</li>
+                        <li><strong>Autocompletar:</strong> Pressione Ctrl+Espaço para sugestões de código</li>
+                        <li><strong>Depuração:</strong> Use breakpoints para analisar seu código passo a passo</li>
+                        <li><strong>Organização:</strong> Use Ctrl+Shift+F para formatar automaticamente seu código</li>
+                        <li><strong>Refatoração:</strong> Clique com o botão direito em uma variável para renomeá-la</li>
+                    </ul>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Importante</h4>
+                    <p>Lembre-se de fechar sempre o objeto Scanner ao final do programa com <code>scanner.close()</code> para evitar vazamento de recursos. Além disso, trate possíveis exceções quando trabalhar com entrada de dados do usuário.</p>
+                </div>
+                
+                <div class="checkpoint">
+                    <h4>Parabéns por chegar até aqui!</h4>
+                    <p>Ao completar todos os exercícios, você terá praticado:</p>
+                    <ul>
+                        <li>Estruturas de decisão (if-else, switch-case)</li>
+                        <li>Operadores lógicos (&&, ||, !)</li>
+                        <li>Operador ternário</li>
+                        <li>Entrada e saída de dados</li>
+                        <li>Validação de entrada</li>
+                        <li>Estruturas de repetição</li>
+                        <li>Boas práticas de programação</li>
+                    </ul>
+                    <p>Continue praticando e explorando novos conceitos em Java!</p>
                 </div>
             </div>
         </section>
@@ -1763,130 +2033,6 @@ public class SistemaLogin {
                     let message = 'Corrija as conversões: ';
                     if (!correctTernario1) message += 'Exemplo 1: (idade >= 18) ? "Adulto" : "Menor de idade". ';
                     if (!correctTernario2) message += 'Exemplo 2: (preco > 50.0) ? preco * 0.1 : 0. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Exercício 1: Calculadora IMC
-        const checkIMCBtn = document.getElementById('checkIMC');
-        if (checkIMCBtn) {
-            checkIMCBtn.addEventListener('click', () => {
-                const code = document.getElementById('imcCode').value.trim();
-                const feedback = document.getElementById('imcFeedback');
-                feedback.style.display = 'block';
-                
-                // Verificar se o código contém os elementos essenciais
-                const hasIfElse = code.includes('if') && code.includes('else');
-                const hasElseIf = code.includes('else if');
-                const hasIMCCalculation = code.includes('imc = peso / (altura * altura)');
-                const hasClassifications = code.includes('Abaixo do peso') || 
-                                          code.includes('Peso normal') || 
-                                          code.includes('Sobrepeso') || 
-                                          code.includes('Obesidade');
-                
-                if (hasIfElse && hasIMCCalculation && hasClassifications) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Seu código está completo e funcional.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Seu código está incompleto. Verifique se incluiu: ';
-                    if (!hasIMCCalculation) message += 'cálculo do IMC. ';
-                    if (!hasIfElse && !hasElseIf) message += 'estruturas de decisão. ';
-                    if (!hasClassifications) message += 'classificações do IMC. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Exercício 2: Sistema de Descontos
-        const checkDescontoBtn = document.getElementById('checkDesconto');
-        if (checkDescontoBtn) {
-            checkDescontoBtn.addEventListener('click', () => {
-                const code = document.getElementById('descontoCode').value.trim();
-                const feedback = document.getElementById('descontoFeedback');
-                feedback.style.display = 'block';
-                
-                // Verificar se o código contém os elementos essenciais
-                const hasDecisionStructure = code.includes('if') || code.includes('switch');
-                const hasLogicalOperators = code.includes('&&') || code.includes('||');
-                const hasDiscountCalculation = code.includes('desconto') || code.includes('0.05') || code.includes('0.1') || code.includes('0.2');
-                const hasFinalPrice = code.includes('valorFinal') || code.includes('valor - desconto');
-                
-                if (hasDecisionStructure && hasLogicalOperators && hasDiscountCalculation && hasFinalPrice) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Ótimo! Seu sistema de descontos está implementado corretamente com operadores lógicos.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Seu código precisa de melhorias: ';
-                    if (!hasDecisionStructure) message += 'estruturas de decisão. ';
-                    if (!hasLogicalOperators) message += 'operadores lógicos. ';
-                    if (!hasDiscountCalculation) message += 'cálculo dos descontos. ';
-                    if (!hasFinalPrice) message += 'cálculo do preço final. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Exercício 3: Menu de Opções
-        const checkMenuBtn = document.getElementById('checkMenu');
-        if (checkMenuBtn) {
-            checkMenuBtn.addEventListener('click', () => {
-                const code = document.getElementById('menuCode').value.trim();
-                const feedback = document.getElementById('menuFeedback');
-                feedback.style.display = 'block';
-                
-                // Verificar se o código contém os elementos essenciais
-                const hasSwitch = code.includes('switch');
-                const hasCases = code.includes('case 1') && code.includes('case 2') && 
-                                code.includes('case 3') && code.includes('case 4');
-                const hasOperations = code.includes('+') || code.includes('-') || 
-                                    code.includes('*') || code.includes('/');
-                const hasValidation = code.includes('if') || code.includes('validar');
-                const hasBreak = code.includes('break');
-                
-                if (hasSwitch && hasCases && hasOperations && hasValidation && hasBreak) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Perfeito! Seu menu de operações está completo com validações.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Complete seu menu: ';
-                    if (!hasSwitch) message += 'estrutura switch. ';
-                    if (!hasCases) message += 'todos os cases (1-4). ';
-                    if (!hasOperations) message += 'operações matemáticas. ';
-                    if (!hasValidation) message += 'validações de entrada. ';
-                    if (!hasBreak) message += 'comandos break. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Exercício 4: Sistema de Login
-        const checkLoginBtn = document.getElementById('checkLogin');
-        if (checkLoginBtn) {
-            checkLoginBtn.addEventListener('click', () => {
-                const code = document.getElementById('loginCode').value.trim();
-                const feedback = document.getElementById('loginFeedback');
-                feedback.style.display = 'block';
-                
-                // Verificar se o código contém os elementos essenciais
-                const hasLogicalOperators = code.includes('&&') || code.includes('||');
-                const hasTernary = code.includes('?') && code.includes(':');
-                const hasLoop = code.includes('while') || code.includes('for');
-                const hasComparison = code.includes('.equals') || code.includes('==');
-                const hasAttemptsControl = code.includes('tentativas') || code.includes('MAX_TENTATIVAS');
-                
-                if (hasLogicalOperators && hasTernary && hasLoop && hasComparison && hasAttemptsControl) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você implementou corretamente o sistema de login com todos os requisitos.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Seu código precisa de ajustes: ';
-                    if (!hasLogicalOperators) message += 'operadores lógicos. ';
-                    if (!hasTernary) message += 'operador ternário. ';
-                    if (!hasLoop) message += 'estrutura de repetição para tentativas. ';
-                    if (!hasComparison) message += 'comparação de usuário e senha. ';
-                    if (!hasAttemptsControl) message += 'controle de tentativas. ';
                     feedback.textContent = message;
                 }
             });
