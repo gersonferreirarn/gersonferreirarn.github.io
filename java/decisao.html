@@ -315,6 +315,64 @@
         .io-terminal .output {
             color: #fbb6ce;
         }
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .operator-card {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .operator-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .operator-symbol {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .operator-name {
+            color: var(--dark);
+            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+        }
+        .operator-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .truth-table {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        .truth-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .truth-table th, .truth-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .truth-table th {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .truth-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
         footer {
             background-color: var(--primary);
             color: white;
@@ -345,6 +403,9 @@
             }
             .comparison-table th, .comparison-table td {
                 padding: 0.5rem;
+            }
+            .operator-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
         }
         /* Acessibilidade */
@@ -381,6 +442,7 @@
             <nav class="nav-tabs" role="tablist">
                 <button class="nav-tab active" data-topic="if-else" role="tab" aria-selected="true">if e else</button>
                 <button class="nav-tab" data-topic="else-if" role="tab" aria-selected="false">else if</button>
+                <button class="nav-tab" data-topic="operadores-logicos" role="tab" aria-selected="false">Operadores Lógicos</button>
                 <button class="nav-tab" data-topic="switch-case" role="tab" aria-selected="false">switch case</button>
                 <button class="nav-tab" data-topic="ternario" role="tab" aria-selected="false">Operador Ternário</button>
                 <button class="nav-tab" data-topic="exercicios" role="tab" aria-selected="false">Exercícios Práticos</button>
@@ -639,10 +701,376 @@
             </div>
         </section>
         
-        <!-- Tópico 3: switch case -->
+        <!-- Tópico 3: Operadores Lógicos -->
+        <section id="operadores-logicos" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>3. Operadores Lógicos</h2>
+                <p>Os <strong>operadores lógicos</strong> são usados para combinar múltiplas condições em estruturas de decisão. Eles permitem criar expressões booleanas mais complexas, avaliando duas ou mais condições simultaneamente.</p>
+                
+                <h3>Principais Operadores Lógicos</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">&&</div>
+                        <div class="operator-name">E (AND)</div>
+                        <div class="operator-description">Retorna true apenas se todas as condições forem verdadeiras</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">||</div>
+                        <div class="operator-name">OU (OR)</div>
+                        <div class="operator-description">Retorna true se pelo menos uma condição for verdadeira</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">!</div>
+                        <div class="operator-name">NÃO (NOT)</div>
+                        <div class="operator-description">Inverte o valor lógico da condição</div>
+                    </div>
+                </div>
+                
+                <h3>Operador E (AND) - &&</h3>
+                <p>O operador <strong>&&</strong> (E lógico) retorna <code>true</code> apenas se todas as condições envolvidas forem verdadeiras. Se pelo menos uma condição for falsa, o resultado será <code>false</code>.</p>
+                
+                <h4>Tabela Verdade do AND (&&)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>Condição B</th>
+                                <th>A && B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um número está em um intervalo</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">15</span>;<br><br>
+                    <span class="comment">// Verifica se o número está entre 10 e 20 (inclusive)</span><br>
+                    <span class="keyword">if</span> (numero >= <span class="number">10</span> && numero <= <span class="number">20</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número está entre 10 e 20."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número não está entre 10 e 20."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número está entre 10 e 20.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar condições para empréstimo</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> temRendaComprovada = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temNomeLimpo = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temGarantia = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Para aprovar o empréstimo, precisa ter renda comprovada E nome limpo</span><br>
+                    <span class="keyword">if</span> (temRendaComprovada && temNomeLimpo) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Empréstimo aprovado!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Empréstimo negado."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Empréstimo aprovado!</div>
+                    </div>
+                </div>
+                
+                <h3>Operador OU (OR) - ||</h3>
+                <p>O operador <strong>||</strong> (OU lógico) retorna <code>true</code> se pelo menos uma das condições for verdadeira. Retorna <code>false</code> apenas se todas as condições forem falsas.</p>
+                
+                <h4>Tabela Verdade do OR (||)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>Condição B</th>
+                                <th>A || B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um caractere é vogal</h4>
+                <div class="code-block">
+                    <span class="keyword">char</span> letra = <span class="string">'a'</span>;<br><br>
+                    <span class="comment">// Verifica se a letra é uma vogal (minúscula ou maiúscula)</span><br>
+                    <span class="keyword">if</span> (letra == <span class="string">'a'</span> || letra == <span class="string">'e'</span> || letra == <span class="string">'i'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'o'</span> || letra == <span class="string">'u'</span> || letra == <span class="string">'A'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'E'</span> || letra == <span class="string">'I'</span> || letra == <span class="string">'O'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'U'</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"A letra é uma vogal."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"A letra é uma consoante."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">A letra é uma vogal.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar condições para desconto</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> ehIdoso = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> ehEstudante = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> ehDeficiente = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Concede desconto se for idoso OU estudante OU deficiente</span><br>
+                    <span class="keyword">if</span> (ehIdoso || ehEstudante || ehDeficiente) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Desconto concedido!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Sem direito a desconto."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Desconto concedido!</div>
+                    </div>
+                </div>
+                
+                <h3>Operador NÃO (NOT) - !</h3>
+                <p>O operador <strong>!</strong> (NÃO lógico) inverte o valor lógico de uma condição. Se a condição for <code>true</code>, ele retorna <code>false</code>, e vice-versa.</p>
+                
+                <h4>Tabela Verdade do NOT (!)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>!A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um número não é positivo</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">-5</span>;<br><br>
+                    <span class="comment">// Verifica se o número NÃO é positivo</span><br>
+                    <span class="keyword">if</span> (!(numero > <span class="number">0</span>)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número não é positivo."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número é positivo."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número não é positivo.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar se um campo não está vazio</h4>
+                <div class="code-block">
+                    <span class="keyword">String</span> nome = <span class="string">""</span>;<br><br>
+                    <span class="comment">// Verifica se o nome NÃO está vazio</span><br>
+                    <span class="keyword">if</span> (!nome.isEmpty()) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Nome: "</span> + nome);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O nome não pode ser vazio!"</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O nome não pode ser vazio!</div>
+                    </div>
+                </div>
+                
+                <h3>Combinando Operadores Lógicos</h3>
+                <p>Podemos combinar múltiplos operadores lógicos para criar condições mais complexas. Nesses casos, é importante entender a <strong>precedência dos operadores</strong>:</p>
+                
+                <ol>
+                    <li><strong>!</strong> (NÃO) - Maior precedência</li>
+                    <li><strong>&&</strong> (E)</li>
+                    <li><strong>||</strong> (OU) - Menor precedência</li>
+                </ol>
+                
+                <h4>Exemplo: Sistema de login</h4>
+                <div class="code-block">
+                    <span class="keyword">String</span> usuario = <span class="string">"admin"</span>;<br>
+                    <span class="keyword">String</span> senha = <span class="string">"12345"</span>;<br>
+                    <span class="keyword">boolean</span> contaAtiva = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> contaBloqueada = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Login válido se: usuário E senha corretos E conta ativa E NÃO bloqueada</span><br>
+                    <span class="keyword">if</span> (usuario.equals(<span class="string">"admin"</span>) && senha.equals(<span class="string">"12345"</span>) && <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;contaAtiva && !contaBloqueada) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Login realizado com sucesso!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Usuário ou senha incorretos, ou conta inativa/bloqueada."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Login realizado com sucesso!</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar elegibilidade para vaga</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> idade = <span class="number">22</span>;<br>
+                    <span class="keyword">boolean</span> temEnsinoSuperior = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temExperiencia = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> ehEstagiario = <span class="keyword">true</span>;<br><br>
+                    <span class="comment">// Elegível se: (idade entre 18 e 30) E (tem ensino superior OU é estagiário)</span><br>
+                    <span class="keyword">if</span> (idade >= <span class="number">18</span> && idade <= <span class="number">30</span> && <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(temEnsinoSuperior || ehEstagiario)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Candidato elegível para a vaga."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Candidato não elegível para a vaga."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Candidato elegível para a vaga.</div>
+                    </div>
+                </div>
+                
+                <h3>Lei de De Morgan</h3>
+                <p>A <strong>Lei de De Morgan</strong> é um conjunto de regras que relacionam os operadores E e OU através da negação. Ela é útil para simplificar expressões lógicas complexas:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Primeira lei: !(A && B) = !A || !B</span><br>
+                    <span class="comment">// Segunda lei: !(A || B) = !A && !B</span>
+                </div>
+                
+                <h4>Exemplo: Aplicando a Lei de De Morgan</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> temDinheiro = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> temCartao = <span class="keyword">true</span>;<br><br>
+                    <span class="comment">// Expressão original</span><br>
+                    <span class="keyword">if</span> (!(temDinheiro && temCartao)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Não pode comprar"</span>);<br>
+                    }<br><br>
+                    <span class="comment">// Equivalente usando a Lei de De Morgan</span><br>
+                    <span class="keyword">if</span> (!temDinheiro || !temCartao) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Não pode comprar"</span>);<br>
+                    }
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Legibilidade</h4>
+                    <p>Para condições muito complexas, considere usar variáveis booleanas intermediárias para tornar o código mais legível:</p>
+                    <div class="code-block">
+                        <span class="keyword">boolean</span> idadeValida = idade >= <span class="number">18</span> && idade <= <span class="number">30</span>;<br>
+                        <span class="keyword">boolean</span> qualificacaoValida = temEnsinoSuperior || ehEstagiario;<br><br>
+                        <span class="keyword">if</span> (idadeValida && qualificacaoValida) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Candidato elegível para a vaga."</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com Avaliação de Curto-Circuito!</h4>
+                    <p>Os operadores && e || usam avaliação de curto-cuito:</p>
+                    <ul>
+                        <li><strong>&&</strong>: Se a primeira condição for falsa, a segunda não é avaliada</li>
+                        <li><strong>||</strong>: Se a primeira condição for verdadeira, a segunda não é avaliada</li>
+                    </ul>
+                    <p>Isso pode causar problemas se a segunda condição tiver efeitos colaterais:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> x = <span class="number">0</span>;<br>
+                        <span class="keyword">int</span> y = <span class="number">5</span>;<br><br>
+                        <span class="comment">// Cuidado: divisão por zero não ocorre devido ao curto-circuito</span><br>
+                        <span class="keyword">if</span> (x != <span class="number">0</span> && (y / x) > <span class="number">2</span>) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Condição atendida"</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo usando operadores lógicos para verificar se um aluno foi aprovado:</p>
+                    <div class="code-block">
+                        <span class="keyword">double</span> media = <span class="number">7.5</span>;<br>
+                        <span class="keyword">int</span> frequencia = <span class="number">75</span>;<br>
+                        <span class="keyword">boolean</span> entregouTrabalho = <span class="keyword">true</span>;<br><br>
+                        <span class="comment">// Aluno aprovado se: média >= 7.0 E frequência >= 75 E entregou o trabalho</span><br>
+                        <span class="keyword">if</span> (<input type="text" id="logicaCondicao" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Aluno aprovado!"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Aluno reprovado."</span>);<br>
+                        }
+                    </div>
+                    <button id="checkLogica" class="btn">Verificar Código</button>
+                    <div id="logicaFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 4: switch case -->
         <section id="switch-case" class="topic-section" role="tabpanel">
             <div class="card">
-                <h2>3. Estrutura switch case</h2>
+                <h2>4. Estrutura switch case</h2>
                 <p>A estrutura <strong>switch case</strong> é uma alternativa ao <strong>else if</strong> quando precisamos comparar uma única variável com múltiplos valores constantes. Ela torna o código mais limpo e legível em certas situações.</p>
                 
                 <h3>Sintaxe do switch case</h3>
@@ -842,10 +1270,10 @@
             </div>
         </section>
         
-        <!-- Tópico 4: Operador Ternário -->
+        <!-- Tópico 5: Operador Ternário -->
         <section id="ternario" class="topic-section" role="tabpanel">
             <div class="card">
-                <h2>4. Operador Ternário</h2>
+                <h2>5. Operador Ternário</h2>
                 <p>O <strong>operador ternário</strong> é uma forma compacta de escrever uma estrutura <strong>if-else</strong> simples. Ele é chamado de "ternário" porque usa três operandos.</p>
                 
                 <h3>Sintaxe do Operador Ternário</h3>
@@ -1003,15 +1431,15 @@
             </div>
         </section>
         
-        <!-- Tópico 5: Exercícios Práticos -->
+        <!-- Tópico 6: Exercícios Práticos -->
         <section id="exercicios" class="topic-section" role="tabpanel">
             <div class="card">
-                <h2>5. Exercícios Práticos</h2>
-                <p>Nesta seção, você encontrará exercícios que combinam todos os conceitos aprendidos sobre estruturas de decisão em Java.</p>
+                <h2>6. Exercícios Práticos</h2>
+                <p>Nesta seção, você encontrará exercícios que combinam todos os conceitos aprendidos sobre estruturas de decisão e operadores lógicos em Java.</p>
                 
                 <div class="activity">
                     <h3>Exercício 1: Calculadora IMC</h3>
-                    <p>Crie um programa que calcula o Índice de Massa Corporal (IMC) e classifica o resultado:</p>
+                    <p>Crie um programa que calcula o Índice de Massa Corporal (IMC) e classifica o resultado usando estruturas de decisão:</p>
                     <div class="input-group">
                         <label for="imcCode">Código completo:</label>
                         <textarea id="imcCode" rows="20" placeholder="import java.util.Scanner;
@@ -1040,12 +1468,12 @@ public class CalculadoraIMC {
                 
                 <div class="activity">
                     <h3>Exercício 2: Sistema de Descontos</h3>
-                    <p>Crie um programa que aplica descontos com base no valor da compra:</p>
+                    <p>Crie um programa que aplica descontos com base no valor da compra e no tipo de cliente, usando operadores lógicos:</p>
                     <ul>
-                        <li>Até R$ 100,00: sem desconto</li>
-                        <li>De R$ 100,01 a R$ 500,00: 5% de desconto</li>
-                        <li>De R$ 500,01 a R$ 1000,00: 10% de desconto</li>
-                        <li>Acima de R$ 1000,00: 15% de desconto</li>
+                        <li>Clientes VIP: 20% de desconto em qualquer valor</li>
+                        <li>Clientes regulares: 10% se compra > R$ 100,00</li>
+                        <li>Clientes novos: 5% se compra > R$ 200,00</li>
+                        <li>Nenhum desconto para outras situações</li>
                     </ul>
                     <div class="input-group">
                         <label for="descontoCode">Código completo:</label>
@@ -1058,7 +1486,10 @@ public class SistemaDescontos {
         System.out.print(&quot;Digite o valor da compra: R$ &quot;);
         double valorCompra = scanner.nextDouble();
         
-        // Complete o código com as estruturas de decisão
+        System.out.print(&quot;Tipo de cliente (1-VIP, 2-Regular, 3-Novo): &quot;);
+        int tipoCliente = scanner.nextInt();
+        
+        // Complete o código com as estruturas de decisão e operadores lógicos
         
         scanner.close();
     }
@@ -1070,7 +1501,7 @@ public class SistemaDescontos {
                 
                 <div class="activity">
                     <h3>Exercício 3: Menu de Opções</h3>
-                    <p>Crie um menu de opções usando switch case que realiza diferentes operações matemáticas:</p>
+                    <p>Crie um menu de opções usando switch case que realiza diferentes operações matemáticas com validação de entrada:</p>
                     <div class="input-group">
                         <label for="menuCode">Código completo:</label>
                         <textarea id="menuCode" rows="20" placeholder="import java.util.Scanner;
@@ -1088,7 +1519,7 @@ public class MenuOperacoes {
         
         int opcao = scanner.nextInt();
         
-        // Complete o código com switch case
+        // Complete o código com switch case e validações
         
         scanner.close();
     }
@@ -1099,37 +1530,41 @@ public class MenuOperacoes {
                 </div>
                 
                 <div class="activity">
-                    <h3>Exercício 4: Verificação de Ano Bissexto</h3>
-                    <p>Crie um programa que verifica se um ano é bissexto usando operador ternário:</p>
-                    <p>Regras:</p>
+                    <h3>Exercício 4: Sistema de Login</h3>
+                    <p>Crie um sistema de login que verifica múltiplas condições usando operadores lógicos e operador ternário:</p>
                     <ul>
-                        <li>Um ano é bissexto se for divisível por 400</li>
-                        <li>OU se for divisível por 4 mas não por 100</li>
+                        <li>Usuário: "admin" e Senha: "12345"</li>
+                        <li>Conta deve estar ativa e não bloqueada</li>
+                        <li>Se login falhar 3 vezes, bloquear temporariamente</li>
                     </ul>
                     <div class="input-group">
-                        <label for="bissextoCode">Código completo:</label>
-                        <textarea id="bissextoCode" rows="15" placeholder="import java.util.Scanner;
+                        <label for="loginCode">Código completo:</label>
+                        <textarea id="loginCode" rows="20" placeholder="import java.util.Scanner;
 
-public class AnoBissexto {
+public class SistemaLogin {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.print(&quot;Digite um ano: &quot;);
-        int ano = scanner.nextInt();
+        String usuarioCorreto = &quot;admin&quot;;
+        String senhaCorreta = &quot;12345&quot;;
+        boolean contaAtiva = true;
+        boolean contaBloqueada = false;
+        int tentativas = 0;
+        final int MAX_TENTATIVAS = 3;
         
-        // Complete o código usando operador ternário
+        // Complete o código com estruturas de decisão, operadores lógicos e ternário
         
         scanner.close();
     }
 }"></textarea>
                     </div>
-                    <button id="checkBissexto" class="btn">Verificar Código</button>
-                    <div id="bissextoFeedback" class="feedback"></div>
+                    <button id="checkLogin" class="btn">Verificar Código</button>
+                    <div id="loginFeedback" class="feedback"></div>
                 </div>
                 
                 <div class="tip-box">
                     <h4>Dica Final</h4>
-                    <p>Praticar é essencial para dominar estruturas de decisão. Tente resolver os exercícios de diferentes maneiras, usando if-else, switch case e operadores ternários quando apropriado. Isso ajudará você a entender quando usar cada estrutura!</p>
+                    <p>Praticar é essencial para dominar estruturas de decisão e operadores lógicos. Tente resolver os exercícios de diferentes maneiras, combinando if-else, switch case e operadores ternários quando apropriado. Isso ajudará você a entender quando usar cada estrutura!</p>
                 </div>
             </div>
         </section>
@@ -1260,7 +1695,25 @@ public class AnoBissexto {
             });
         }
         
-        // Atividade 3: switch case
+        // Atividade 3: Operadores Lógicos
+        const checkLogicaBtn = document.getElementById('checkLogica');
+        if (checkLogicaBtn) {
+            checkLogicaBtn.addEventListener('click', () => {
+                const condicao = document.getElementById('logicaCondicao').value.trim();
+                const feedback = document.getElementById('logicaFeedback');
+                feedback.style.display = 'block';
+                
+                if (condicao === 'media >= 7.0 && frequencia >= 75 && entregouTrabalho') {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você usou corretamente os operadores lógicos.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A condição incorreta. Use: media >= 7.0 && frequencia >= 75 && entregouTrabalho';
+                }
+            });
+        }
+        
+        // Atividade 4: switch case
         const checkSwitchBtn = document.getElementById('checkSwitch');
         if (checkSwitchBtn) {
             checkSwitchBtn.addEventListener('click', () => {
@@ -1289,7 +1742,7 @@ public class AnoBissexto {
             });
         }
         
-        // Atividade 4: Operador Ternário
+        // Atividade 5: Operador Ternário
         const checkTernarioBtn = document.getElementById('checkTernario');
         if (checkTernarioBtn) {
             checkTernarioBtn.addEventListener('click', () => {
@@ -1356,16 +1809,18 @@ public class AnoBissexto {
                 
                 // Verificar se o código contém os elementos essenciais
                 const hasDecisionStructure = code.includes('if') || code.includes('switch');
-                const hasDiscountCalculation = code.includes('desconto') || code.includes('0.05') || code.includes('0.1') || code.includes('0.15');
+                const hasLogicalOperators = code.includes('&&') || code.includes('||');
+                const hasDiscountCalculation = code.includes('desconto') || code.includes('0.05') || code.includes('0.1') || code.includes('0.2');
                 const hasFinalPrice = code.includes('valorFinal') || code.includes('valor - desconto');
                 
-                if (hasDecisionStructure && hasDiscountCalculation && hasFinalPrice) {
+                if (hasDecisionStructure && hasLogicalOperators && hasDiscountCalculation && hasFinalPrice) {
                     feedback.className = 'feedback success';
-                    feedback.textContent = 'Ótimo! Seu sistema de descontos está implementado corretamente.';
+                    feedback.textContent = 'Ótimo! Seu sistema de descontos está implementado corretamente com operadores lógicos.';
                 } else {
                     feedback.className = 'feedback error';
                     let message = 'Seu código precisa de melhorias: ';
                     if (!hasDecisionStructure) message += 'estruturas de decisão. ';
+                    if (!hasLogicalOperators) message += 'operadores lógicos. ';
                     if (!hasDiscountCalculation) message += 'cálculo dos descontos. ';
                     if (!hasFinalPrice) message += 'cálculo do preço final. ';
                     feedback.textContent = message;
@@ -1387,46 +1842,51 @@ public class AnoBissexto {
                                 code.includes('case 3') && code.includes('case 4');
                 const hasOperations = code.includes('+') || code.includes('-') || 
                                     code.includes('*') || code.includes('/');
+                const hasValidation = code.includes('if') || code.includes('validar');
                 const hasBreak = code.includes('break');
                 
-                if (hasSwitch && hasCases && hasOperations && hasBreak) {
+                if (hasSwitch && hasCases && hasOperations && hasValidation && hasBreak) {
                     feedback.className = 'feedback success';
-                    feedback.textContent = 'Perfeito! Seu menu de operações está completo.';
+                    feedback.textContent = 'Perfeito! Seu menu de operações está completo com validações.';
                 } else {
                     feedback.className = 'feedback error';
                     let message = 'Complete seu menu: ';
                     if (!hasSwitch) message += 'estrutura switch. ';
                     if (!hasCases) message += 'todos os cases (1-4). ';
                     if (!hasOperations) message += 'operações matemáticas. ';
+                    if (!hasValidation) message += 'validações de entrada. ';
                     if (!hasBreak) message += 'comandos break. ';
                     feedback.textContent = message;
                 }
             });
         }
         
-        // Exercício 4: Verificação de Ano Bissexto
-        const checkBissextoBtn = document.getElementById('checkBissexto');
-        if (checkBissextoBtn) {
-            checkBissextoBtn.addEventListener('click', () => {
-                const code = document.getElementById('bissextoCode').value.trim();
-                const feedback = document.getElementById('bissextoFeedback');
+        // Exercício 4: Sistema de Login
+        const checkLoginBtn = document.getElementById('checkLogin');
+        if (checkLoginBtn) {
+            checkLoginBtn.addEventListener('click', () => {
+                const code = document.getElementById('loginCode').value.trim();
+                const feedback = document.getElementById('loginFeedback');
                 feedback.style.display = 'block';
                 
                 // Verificar se o código contém os elementos essenciais
+                const hasLogicalOperators = code.includes('&&') || code.includes('||');
                 const hasTernary = code.includes('?') && code.includes(':');
-                const hasCorrectLogic = code.includes('ano % 400 == 0') || 
-                                      (code.includes('ano % 4 == 0') && code.includes('ano % 100 != 0'));
-                const hasOutput = code.includes('System.out.println');
+                const hasLoop = code.includes('while') || code.includes('for');
+                const hasComparison = code.includes('.equals') || code.includes('==');
+                const hasAttemptsControl = code.includes('tentativas') || code.includes('MAX_TENTATIVAS');
                 
-                if (hasTernary && hasCorrectLogic && hasOutput) {
+                if (hasLogicalOperators && hasTernary && hasLoop && hasComparison && hasAttemptsControl) {
                     feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você implementou corretamente a verificação de ano bissexto.';
+                    feedback.textContent = 'Excelente! Você implementou corretamente o sistema de login com todos os requisitos.';
                 } else {
                     feedback.className = 'feedback error';
                     let message = 'Seu código precisa de ajustes: ';
+                    if (!hasLogicalOperators) message += 'operadores lógicos. ';
                     if (!hasTernary) message += 'operador ternário. ';
-                    if (!hasCorrectLogic) message += 'lógica correta para ano bissexto. ';
-                    if (!hasOutput) message += 'saída do resultado. ';
+                    if (!hasLoop) message += 'estrutura de repetição para tentativas. ';
+                    if (!hasComparison) message += 'comparação de usuário e senha. ';
+                    if (!hasAttemptsControl) message += 'controle de tentativas. ';
                     feedback.textContent = message;
                 }
             });
