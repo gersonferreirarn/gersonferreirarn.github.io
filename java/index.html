@@ -546,6 +546,23 @@
             color: var(--primary);
             margin-bottom: 1rem;
         }
+        .scanner-methods {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .scanner-method {
+            background-color: white;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        .scanner-method h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -912,7 +929,8 @@
         <section id="comandos" class="topic-section" role="tabpanel">
             <div class="card">
                 <h2>5. Comandos Básicos de Atribuição, Entrada e Saída</h2>
-                <p>Estes são os comandos fundamentais para interagir com dados em um programa.</p>
+                <p>Estes são os comandos fundamentais para interagir com dados em um programa Java.</p>
+                
                 <h3>Comando de Atribuição (=)</h3>
                 <p>Usado para atribuir um valor a uma variável. O valor à direita do "=" é armazenado na variável à esquerda.</p>
                 <div class="code-block">
@@ -920,16 +938,7 @@
                     idade = <span class="number">25</span>;  <span class="comment">// Atribuindo 25 à variável idade</span><br>
                     <span class="keyword">String</span> nome = <span class="string">"Carlos"</span>;  <span class="comment">// Declaração e atribuição</span>
                 </div>
-                <h3>Comando de Entrada (Scanner)</h3>
-                <p>Usado para receber dados do usuário via teclado.</p>
-                <div class="code-block">
-                    <span class="keyword">import</span> java.util.Scanner;<br><br>
-                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
-                    System.out.print(<span class="string">"Digite seu nome: "</span>);<br>
-                    <span class="keyword">String</span> nome = scanner.nextLine();<br><br>
-                    System.out.print(<span class="string">"Digite sua idade: "</span>);<br>
-                    <span class="keyword">int</span> idade = scanner.nextInt();
-                </div>
+                
                 <h3>Comando de Saída (System.out)</h3>
                 <p>Usado para exibir informações na tela.</p>
                 <div class="code-block">
@@ -937,16 +946,210 @@
                     System.out.print(<span class="string">"Nome: "</span>);  <span class="comment">// Exibe sem pular linha</span><br>
                     System.out.printf(<span class="string">"Idade: %d anos\n"</span>, idade);  <span class="comment">// Formatação</span>
                 </div>
-                <div class="io-example">
-                    <h4>Exemplo Completo: Programa de Saudação</h4>
-                    <div class="io-terminal">
-                        <div class="input">Digite seu nome: Maria</div>
-                        <div class="input">Digite sua idade: 20</div>
-                        <div class="output">Olá, Maria!</div>
-                        <div class="output">Você tem 20 anos.</div>
-                        <div class="output">No próximo ano você terá 21 anos.</div>
+                
+                <h3>A Biblioteca Scanner</h3>
+                <p>A classe <strong>Scanner</strong> é uma ferramenta poderosa em Java para ler entradas do usuário. Ela faz parte do pacote <code>java.util</code> e oferece diversos métodos para capturar diferentes tipos de dados.</p>
+                
+                <p>Para usar a classe Scanner, primeiro precisamos importá-la em nosso programa:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;
+                </div>
+                
+                <p>Depois, criamos um objeto Scanner que lerá dados da entrada padrão (teclado):</p>
+                <div class="code-block">
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+                </div>
+                
+                <div class="scanner-methods">
+                    <h3>Métodos da Classe Scanner</h3>
+                    
+                    <div class="scanner-method">
+                        <h4>nextInt()</h4>
+                        <p>Lê um valor inteiro (int) digitado pelo usuário. Este método lê apenas o próximo token como um número inteiro.</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite sua idade: "</span>);<br>
+                            <span class="keyword">int</span> idade = scanner.nextInt();<br>
+                            System.out.println(<span class="string">"Você tem "</span> + idade + <span class="string">" anos."</span>);
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Digite sua idade: 25</div>
+                                <div class="output">Você tem 25 anos.</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <h4>Atenção!</h4>
+                            <p>Se o usuário digitar algo que não é um número inteiro, o programa gerará um erro (InputMismatchException). É importante tratar essas exceções em programas robustos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-method">
+                        <h4>nextFloat()</h4>
+                        <p>Lê um valor decimal de precisão simples (float) digitado pelo usuário. Útil para valores que não exigem alta precisão.</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite sua altura em metros: "</span>);<br>
+                            <span class="keyword">float</span> altura = scanner.nextFloat();<br>
+                            System.out.println(<span class="string">"Sua altura é: "</span> + altura + <span class="string">"m"</span>);
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Digite sua altura em metros: 1.75</div>
+                                <div class="output">Sua altura é: 1.75m</div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <h4>Dica</h4>
+                            <p>Para maior precisão, especialmente em cálculos científicos ou financeiros, prefira usar nextDouble() que oferece precisão dupla.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-method">
+                        <h4>nextDouble()</h4>
+                        <p>Lê um valor decimal de precisão dupla (double) digitado pelo usuário. Oferece maior precisão que o float.</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite o valor de PI: "</span>);<br>
+                            <span class="keyword">double</span> pi = scanner.nextDouble();<br>
+                            System.out.println(<span class="string">"Valor digitado: "</span> + pi);
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Digite o valor de PI: 3.14159265359</div>
+                                <div class="output">Valor digitado: 3.14159265359</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <h4>Atenção!</h4>
+                            <p>Em alguns países, o separador decimal é a vírgula (,) em vez do ponto (.). O Scanner usa o padrão do sistema para interpretar números decimais.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-method">
+                        <h4>nextLine()</h4>
+                        <p>Lê uma linha completa de texto digitada pelo usuário até que a tecla Enter seja pressionada. Retorna uma String.</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite seu endereço completo: "</span>);<br>
+                            <span class="keyword">String</span> endereco = scanner.nextLine();<br>
+                            System.out.println(<span class="string">"Endereço: "</span> + endereco);
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Digite seu endereço completo: Rua das Flores, 123, Bairro Jardim</div>
+                                <div class="output">Endereço: Rua das Flores, 123, Bairro Jardim</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <h4>Problema comum com nextLine()</h4>
+                            <p>Após usar métodos como nextInt(), nextDouble() ou nextFloat(), o cursor permanece na mesma linha. Se você usar nextLine() em seguida, ele lerá apenas o caractere de nova linha restante. Para evitar isso, use um nextLine() extra para limpar o buffer:</p>
+                            <div class="code-block">
+                                <span class="keyword">int</span> numero = scanner.nextInt();<br>
+                                scanner.nextLine();  <span class="comment">// Limpa o buffer</span><br>
+                                <span class="keyword">String</span> texto = scanner.nextLine();  <span class="comment">// Agora funciona corretamente</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-method">
+                        <h4>next()</h4>
+                        <p>Lê a próxima palavra (token) digitada pelo usuário, até encontrar um espaço em branco. Retorna uma String.</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite seu primeiro nome: "</span>);<br>
+                            <span class="keyword">String</span> nome = scanner.next();<br>
+                            System.out.println(<span class="string">"Olá, "</span> + nome + <span class="string">"!"</span>);
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Digite seu primeiro nome: Maria Silva</div>
+                                <div class="output">Olá, Maria!</div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <h4>Diferença entre next() e nextLine()</h4>
+                            <p>Enquanto next() lê apenas até o primeiro espaço, nextLine() lê toda a linha até o Enter. Use next() para ler palavras isoladas e nextLine() para ler frases completas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-method">
+                        <h4>nextBoolean()</h4>
+                        <p>Lê um valor booleano (true ou false) digitado pelo usuário. Aceita apenas as strings "true" ou "false" (sem aspas).</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Você é estudante? (true/false): "</span>);<br>
+                            <span class="keyword">boolean</span> estudante = scanner.nextBoolean();<br>
+                            <span class="keyword">if</span> (estudante) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Continue estudando!"</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Nunca é tarde para voltar a estudar!"</span>);<br>
+                            }
+                        </div>
+                        <div class="io-example">
+                            <h4>Exemplo de Execução:</h4>
+                            <div class="io-terminal">
+                                <div class="input">Você é estudante? (true/false): true</div>
+                                <div class="output">Continue estudando!</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <h4>Atenção!</h4>
+                            <p>O método nextBoolean() é sensível a maiúsculas e minúsculas. Ele só aceita exatamente "true" ou "false" em letras minúsculas. Qualquer outro valor causará um erro.</p>
+                        </div>
                     </div>
                 </div>
+                
+                <h3>Exemplo Completo: Programa de Cadastro</h3>
+                <p>Vamos criar um programa que utiliza vários métodos da classe Scanner:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    <span class="keyword">public class</span> CadastroUsuario {<br>
+                    &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Lendo dados do usuário</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite seu nome completo: "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> nome = scanner.nextLine();<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite sua idade: "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> idade = scanner.nextInt();<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite sua altura em metros: "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> altura = scanner.nextDouble();<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Limpa o buffer do teclado</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;scanner.nextLine();<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Você é estudante? (true/false): "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">boolean</span> estudante = scanner.nextBoolean();<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Exibindo os dados</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"\n--- Dados do Usuário ---"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nome: "</span> + nome);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Idade: "</span> + idade + <span class="string">" anos"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Altura: "</span> + altura + <span class="string">"m"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Estudante: "</span> + estudante);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Fechando o scanner</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+                
+                <div class="io-example">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="input">Digite seu nome completo: Ana Santos Oliveira</div>
+                        <div class="input">Digite sua idade: 28</div>
+                        <div class="input">Digite sua altura em metros: 1.68</div>
+                        <div class="input">Você é estudante? (true/false): true</div>
+                        <div class="output"></div>
+                        <div class="output">--- Dados do Usuário ---</div>
+                        <div class="output">Nome: Ana Santos Oliveira</div>
+                        <div class="output">Idade: 28 anos</div>
+                        <div class="output">Altura: 1.68m</div>
+                        <div class="output">Estudante: true</div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Boa Prática</h4>
+                    <p>Sempre feche o Scanner após usá-lo com o método <code>scanner.close()</code>. Isso libera recursos do sistema e evita possíveis vazamentos de memória.</p>
+                </div>
+                
                 <div class="activity">
                     <h3>Atividade Prática</h3>
                     <p>Complete o código abaixo para criar um programa que calcula a média de três notas:</p>
