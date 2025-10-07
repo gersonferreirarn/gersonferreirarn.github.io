@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estruturas de Decisão em Java</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
     <style>
         :root {
             --primary: #2c3e50;
@@ -19,284 +13,83 @@
             --danger: #e74c3c;
             --light: #ecf0f1;
             --dark: #34495e;
-            --font-size-base: 16px;
+            --font-size-base: 18px;
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
             font-size: var(--font-size-base);
-            padding-top: 80px; /* Espaço para o header fixo */
         }
-        
-        /* Header Styles */
-        .main-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--primary);
             color: white;
+            padding: 1.5rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-            transition: all 0.3s ease;
         }
-        
         .header-content {
-            padding: 1rem 0;
-        }
-        
-        .navbar-brand {
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-        
-        .navbar-nav .nav-link {
-            color: rgba(255,255,255,0.8) !important;
-            padding: 0.5rem 1rem !important;
-            border-radius: 0.25rem;
-            transition: all 0.3s;
-        }
-        
-        .navbar-nav .nav-link:hover {
-            color: white !important;
-            background-color: rgba(255,255,255,0.1);
-        }
-        
-        .navbar-nav .nav-link.active {
-            color: white !important;
-            background-color: var(--secondary);
-        }
-        
-        .course-badge {
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .progress-info {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
+            flex-wrap: wrap;
         }
-        
-        .progress-bar-mini {
-            width: 60px;
-            height: 4px;
-            background-color: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress-fill-mini {
-            height: 100%;
-            background-color: var(--success);
-            width: 25%; /* 2/8 */
-            border-radius: 2px;
-        }
-        
-        .font-controls {
-            display: flex;
-            align-items: center;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 0.2rem;
-        }
-        
-        .font-btn {
-            background: none;
-            border: none;
-            color: white;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        
-        .font-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-        
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu-toggle:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 80px;
-            left: -300px;
-            width: 300px;
-            height: calc(100vh - 80px);
-            background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            transition: left 0.3s ease;
-            z-index: 1029;
-            overflow-y: auto;
-        }
-        
-        .sidebar.show {
-            left: 0;
-        }
-        
-        .sidebar-header {
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-            background-color: #f8f9fa;
-        }
-        
-        .sidebar-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .sidebar-content {
-            padding: 1rem;
-        }
-        
-        .stage-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem;
+        h1 {
+            font-size: 2rem;
             margin-bottom: 0.5rem;
-            border-radius: 0.5rem;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
         }
-        
-        .stage-link:hover {
-            background-color: #f8f9fa;
-            transform: translateX(5px);
-        }
-        
-        .stage-link.active {
-            background-color: rgba(52, 152, 219, 0.1);
-            border-left-color: var(--secondary);
-            color: var(--secondary);
-            font-weight: 600;
-        }
-        
-        .stage-link.completed {
-            color: var(--success);
-        }
-        
-        .stage-link.locked {
-            color: #999;
-            cursor: not-allowed;
-        }
-        
-        .stage-icon {
+        .subtitle {
             font-size: 1.2rem;
-            margin-right: 0.75rem;
+            opacity: 0.9;
         }
-        
-        .stage-content {
-            flex: 1;
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: var(--dark);
+            margin-top: 1rem;
+            border-radius: 8px;
         }
-        
-        .stage-number {
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #666;
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            white-space: nowrap;
         }
-        
-        .stage-title {
-            font-size: 0.9rem;
-            font-weight: 500;
+        .nav-tab:hover {
+            background-color: rgba(255,255,255,0.1);
         }
-        
-        .stage-status {
-            font-size: 0.7rem;
-            margin-top: 0.2rem;
+        .nav-tab.active {
+            background-color: var(--secondary);
         }
-        
-        .stage-link.completed .stage-status::after {
-            content: '✓ Concluído';
-            color: var(--success);
-        }
-        
-        .stage-link.locked .stage-status::after {
-            content: '🔒 Bloqueado';
-        }
-        
-        /* Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1028;
-            display: none;
-        }
-        
-        .overlay.show {
-            display: block;
-        }
-        
-        /* Main Content */
-        .main-content {
+        main {
             padding: 2rem 0;
-            min-height: calc(100vh - 80px);
         }
-        
         .topic-section {
             display: none;
             animation: fadeIn 0.5s;
         }
-        
         .topic-section.active {
             display: block;
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Cards */
-        .custom-card {
+        .card {
             background: white;
             border-radius: 10px;
             padding: 2rem;
@@ -304,31 +97,28 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--secondary);
         }
-        
-        .custom-card h2 {
+        .card h2 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.8rem;
         }
-        
-        .custom-card h3 {
+        .card h3 {
             color: var(--dark);
             margin: 1.5rem 0 0.8rem;
             font-size: 1.4rem;
         }
-        
-        .custom-card h4 {
+        .card h4 {
             color: var(--secondary);
             margin: 1rem 0 0.5rem;
             font-size: 1.2rem;
         }
-        
-        .custom-card p, .custom-card li {
+        .card p, .card li {
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
-        
-        /* Code Blocks */
+        ul {
+            padding-left: 2rem;
+        }
         .code-block {
             background-color: #2d3748;
             color: #e2e8f0;
@@ -340,25 +130,19 @@
             font-size: 1rem;
             line-height: 1.5;
         }
-        
         .code-block .keyword {
             color: #f687b3;
         }
-        
         .code-block .string {
             color: #68d391;
         }
-        
         .code-block .comment {
             color: #a0aec0;
             font-style: italic;
         }
-        
         .code-block .number {
             color: #fbb6ce;
         }
-        
-        /* Activities */
         .activity {
             background-color: #f7fafc;
             border: 2px dashed var(--secondary);
@@ -366,30 +150,32 @@
             padding: 1.5rem;
             margin: 2rem 0;
         }
-        
         .activity h3 {
             color: var(--secondary);
             margin-bottom: 1rem;
         }
-        
-        .form-group {
-            margin-bottom: 1rem;
+        .input-group {
+            margin: 1rem 0;
         }
-        
-        .form-control {
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
             padding: 0.8rem;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        
-        .form-control:focus {
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
             border-color: var(--secondary);
-            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
-        
-        .btn-custom {
+        .btn {
             display: inline-block;
             background-color: var(--secondary);
             color: white;
@@ -401,40 +187,32 @@
             transition: all 0.3s;
             margin-top: 1rem;
         }
-        
-        .btn-custom:hover {
+        .btn:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
         }
-        
         .btn-success {
             background-color: var(--success);
         }
-        
         .btn-success:hover {
             background-color: #229954;
         }
-        
         .feedback {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 5px;
             display: none;
         }
-        
         .feedback.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
         .feedback.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
-        /* Visualizações */
         .flowchart {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -442,7 +220,6 @@
             margin: 1.5rem 0;
             text-align: center;
         }
-        
         .flowchart-item {
             background-color: white;
             border: 2px solid var(--secondary);
@@ -452,7 +229,6 @@
             max-width: 300px;
             position: relative;
         }
-        
         .flowchart-item.diamond {
             transform: rotate(45deg);
             width: 150px;
@@ -462,47 +238,37 @@
             justify-content: center;
             margin: 1rem auto;
         }
-        
         .flowchart-item.diamond span {
             transform: rotate(-45deg);
             text-align: center;
             width: 100px;
         }
-        
         .flowchart-arrow {
             font-size: 2rem;
             color: var(--secondary);
             margin: 0.5rem 0;
         }
-        
-        /* Tables */
-        .custom-table {
+        .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
             font-size: 1rem;
         }
-        
-        .custom-table th, .custom-table td {
+        .comparison-table th, .comparison-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
-        .custom-table th {
+        .comparison-table th {
             background-color: var(--secondary);
             color: white;
         }
-        
-        .custom-table tr:nth-child(even) {
+        .comparison-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        
-        .custom-table tr:hover {
+        .comparison-table tr:hover {
             background-color: #e2e2e2;
         }
-        
-        /* Info Boxes */
         .tip-box {
             background-color: #e3f2fd;
             border-left: 4px solid var(--secondary);
@@ -510,12 +276,10 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
-        
         .tip-box h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
-        
         .warning-box {
             background-color: #fff3cd;
             border-left: 4px solid var(--warning);
@@ -523,24 +287,20 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
-        
         .warning-box h4 {
             color: var(--warning);
             margin-bottom: 0.5rem;
         }
-        
         .example-box {
             background-color: #f1f5f9;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
-        
         .example-box h4 {
             color: var(--dark);
             margin-bottom: 1rem;
         }
-        
         .io-terminal {
             background-color: #1e293b;
             color: #e2e8f0;
@@ -549,23 +309,18 @@
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
         }
-        
         .io-terminal .input {
             color: #68d391;
         }
-        
         .io-terminal .output {
             color: #fbb6ce;
         }
-        
-        /* Operator Cards */
         .operator-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        
         .operator-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -574,32 +329,26 @@
             text-align: center;
             transition: all 0.3s;
         }
-        
         .operator-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
         .operator-symbol {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-        
         .operator-name {
             color: var(--dark);
             margin-bottom: 0.3rem;
             font-size: 1.2rem;
         }
-        
         .operator-description {
             color: #666;
             font-size: 0.9rem;
         }
-        
-        /* Truth Table */
         .truth-table {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -607,29 +356,23 @@
             margin: 1.5rem 0;
             overflow-x: auto;
         }
-        
         .truth-table table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1rem;
         }
-        
         .truth-table th, .truth-table td {
             padding: 0.8rem;
             text-align: center;
             border: 1px solid #ddd;
         }
-        
         .truth-table th {
             background-color: var(--secondary);
             color: white;
         }
-        
         .truth-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        
-        /* Practice Modules */
         .practice-module {
             background: white;
             border-radius: 10px;
@@ -638,13 +381,11 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--success);
         }
-        
         .practice-module h3 {
             color: var(--success);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
-        
         .step {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -652,7 +393,6 @@
             margin: 1.5rem 0;
             border-left: 4px solid var(--warning);
         }
-        
         .step-number {
             display: inline-block;
             background-color: var(--warning);
@@ -665,7 +405,6 @@
             font-weight: bold;
             margin-right: 1rem;
         }
-        
         .checkpoint {
             background-color: #e8f5e9;
             border: 2px solid var(--success);
@@ -673,13 +412,10 @@
             padding: 1rem;
             margin: 1.5rem 0;
         }
-        
         .checkpoint h4 {
             color: var(--success);
             margin-bottom: 0.5rem;
         }
-        
-        /* Footer */
         footer {
             background-color: var(--primary);
             color: white;
@@ -687,127 +423,34 @@
             padding: 1.5rem 0;
             margin-top: 3rem;
         }
-        
-        /* Responsive */
-        @media (max-width: 992px) {
-            .mobile-menu-toggle {
-                display: block;
-            }
-            
-            .sidebar {
-                width: 280px;
-            }
-        }
-        
         @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            
             .header-content {
-                padding: 0.75rem 0;
+                flex-direction: column;
+                text-align: center;
             }
-            
-            .navbar-brand {
-                font-size: 1rem;
+            .nav-tabs {
+                width: 100%;
             }
-            
-            .course-badge {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.6rem;
+            .nav-tab {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
             }
-            
-            .progress-info {
-                font-size: 0.7rem;
-            }
-            
-            .progress-bar-mini {
-                width: 50px;
-            }
-            
-            .sidebar {
-                width: 250px;
-                top: 70px;
-                height: calc(100vh - 70px);
-            }
-            
-            .custom-card {
-                padding: 1.5rem;
-            }
-            
-            .custom-card h2 {
+            h1 {
                 font-size: 1.5rem;
             }
-            
+            .card {
+                padding: 1.5rem;
+            }
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            .comparison-table th, .comparison-table td {
+                padding: 0.5rem;
+            }
             .operator-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
-            
-            .custom-table {
-                font-size: 0.9rem;
-            }
-            
-            .custom-table th, .custom-table td {
-                padding: 0.5rem;
-            }
         }
-        
-        @media (max-width: 576px) {
-            .header-content {
-                padding: 0.5rem 0;
-            }
-            
-            .navbar-brand {
-                font-size: 0.9rem;
-            }
-            
-            .sidebar {
-                width: 100%;
-                left: -100%;
-            }
-            
-            .sidebar.show {
-                left: 0;
-            }
-            
-            .stage-link {
-                padding: 0.6rem;
-            }
-            
-            .stage-icon {
-                font-size: 1rem;
-            }
-            
-            .stage-title {
-                font-size: 0.85rem;
-            }
-            
-            .next-class-info h4 {
-                font-size: 0.8rem;
-            }
-            
-            .next-class-info p {
-                font-size: 0.7rem;
-            }
-            
-            .next-class-btn {
-                font-size: 0.7rem;
-                padding: 0.4rem 0.8rem;
-            }
-            
-            .custom-card {
-                padding: 1rem;
-            }
-            
-            .custom-card h2 {
-                font-size: 1.3rem;
-            }
-            
-            .custom-card h3 {
-                font-size: 1.2rem;
-            }
-        }
-        
         /* Acessibilidade */
         .sr-only {
             position: absolute;
@@ -820,7 +463,6 @@
             white-space: nowrap;
             border: 0;
         }
-        
         :focus {
             outline: 3px solid var(--secondary);
             outline-offset: 2px;
@@ -828,229 +470,1573 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="main-header">
-        <div class="container-fluid header-content">
-            <div class="row align-items-center">
-                <div class="col-auto">
-                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu">
-                        <i class="bi bi-list"></i>
-                    </button>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Estruturas de Decisão em Java</h1>
+                    <p class="subtitle">Controle de Fluxo com if, else, switch e Operadores Ternários</p>
                 </div>
-                <div class="col">
-                    <nav class="navbar navbar-expand-lg navbar-dark p-0">
-                        <a class="navbar-brand" href="#">
-                            <i class="bi bi-code-slash me-2"></i>
-                            Estruturas de Decisão em Java
-                        </a>
-                        <div class="navbar-nav ms-auto d-none d-lg-flex">
-                            <a class="nav-link active" href="#" data-topic="if-else">if e else</a>
-                            <a class="nav-link" href="#" data-topic="else-if">else if</a>
-                            <a class="nav-link" href="#" data-topic="operadores-logicos">Operadores Lógicos</a>
-                            <a class="nav-link" href="#" data-topic="switch-case">switch case</a>
-                            <a class="nav-link" href="#" data-topic="ternario">Operador Ternário</a>
-                            <a class="nav-link" href="#" data-topic="exercicios">Exercícios Práticos</a>
-                        </div>
-                        <div class="d-flex align-items-center ms-3">
-                            <div class="course-badge me-3">
-                                <i class="bi bi-book"></i>
-                                <span>Java</span>
-                            </div>
-                            <div class="progress-info me-3">
-                                <span>2/8</span>
-                                <div class="progress-bar-mini">
-                                    <div class="progress-fill-mini"></div>
-                                </div>
-                            </div>
-                            <div class="font-controls">
-                                <button class="font-btn" id="decreaseFont" aria-label="Diminuir fonte">A-</button>
-                                <button class="font-btn" id="increaseFont" aria-label="Aumentar fonte">A+</button>
-                            </div>
-                        </div>
-                    </nav>
+                <div>
+                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
                 </div>
             </div>
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" data-topic="if-else" role="tab" aria-selected="true">if e else</button>
+                <button class="nav-tab" data-topic="else-if" role="tab" aria-selected="false">else if</button>
+                <button class="nav-tab" data-topic="operadores-logicos" role="tab" aria-selected="false">Operadores Lógicos</button>
+                <button class="nav-tab" data-topic="switch-case" role="tab" aria-selected="false">switch case</button>
+                <button class="nav-tab" data-topic="ternario" role="tab" aria-selected="false">Operador Ternário</button>
+                <button class="nav-tab" data-topic="exercicios" role="tab" aria-selected="false">Exercícios Práticos</button>
+            </nav>
         </div>
     </header>
-    
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3 class="sidebar-title">
-                <i class="bi bi-list-task"></i>
-                <span>Etapas do Curso</span>
-            </h3>
-        </div>
-        <div class="sidebar-content">
-            <a href="index.html" class="stage-link completed">
-                <i class="bi bi-book stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 1</span>
-                    <span class="stage-title">Fundamentos do Java</span>
-                    <span class="stage-status"></span>
+    <main class="container">
+        <!-- Tópico 1: if e else -->
+        <section id="if-else" class="topic-section active" role="tabpanel">
+            <div class="card">
+                <h2>1. Estruturas if e else</h2>
+                <p>As estruturas <strong>if</strong> e <strong>else</strong> são as estruturas de decisão mais básicas em Java. Elas permitem que um programa execute diferentes blocos de código com base em uma condição booleana (verdadeira ou falsa).</p>
+                
+                <h3>Estrutura if</h3>
+                <p>A estrutura <strong>if</strong> executa um bloco de código apenas se a condição especificada for verdadeira.</p>
+                
+                <div class="code-block">
+                    <span class="keyword">if</span> (condição) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for verdadeira</span><br>
+                    }
                 </div>
-            </a>
-            <a href="#" class="stage-link active">
-                <i class="bi bi-arrow-repeat stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 2</span>
-                    <span class="stage-title">Estrutura de Decisão</span>
-                    <span class="stage-status"></span>
+                
+                <h3>Exemplo: Verificar se um número é positivo</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">10</span>;<br><br>
+                    <span class="keyword">if</span> (numero > <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número é positivo."</span>);<br>
+                    }
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-arrow-repeat stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 3</span>
-                    <span class="stage-title">Estrutura de Repetição</span>
-                    <span class="stage-status"></span>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número é positivo.</div>
+                    </div>
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-list-ol stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 4</span>
-                    <span class="stage-title">Vetores e Matrizes</span>
-                    <span class="stage-status"></span>
+                
+                <h3>Estrutura else</h3>
+                <p>A estrutura <strong>else</strong> é usada em conjunto com o <strong>if</strong> para executar um bloco de código quando a condição do <strong>if</strong> é falsa.</p>
+                
+                <div class="code-block">
+                    <span class="keyword">if</span> (condição) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for verdadeira</span><br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for falsa</span><br>
+                    }
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-gear stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 5</span>
-                    <span class="stage-title">Funções e Métodos</span>
-                    <span class="stage-status"></span>
+                
+                <h3>Exemplo: Verificar se um número é par ou ímpar</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">7</span>;<br><br>
+                    <span class="keyword">if</span> (numero % <span class="number">2</span> == <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número é par."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número é ímpar."</span>);<br>
+                    }
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-folder stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 6</span>
-                    <span class="stage-title">Manipulação de Arquivos</span>
-                    <span class="stage-status"></span>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número é ímpar.</div>
+                    </div>
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-bug stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 7</span>
-                    <span class="stage-title">Tratamento de Exceções</span>
-                    <span class="stage-status"></span>
+                
+                <h3>Fluxograma da Estrutura if-else</h3>
+                <div class="flowchart">
+                    <div class="flowchart-item">Início</div>
+                    <div class="flowchart-arrow">↓</div>
+                    <div class="flowchart-item diamond"><span>Condição?</span></div>
+                    <div class="flowchart-arrow">↓</div>
+                    <div style="display: flex; justify-content: space-around;">
+                        <div>
+                            <div class="flowchart-item">Verdadeiro</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-item">Bloco if</div>
+                        </div>
+                        <div>
+                            <div class="flowchart-item">Falso</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-item">Bloco else</div>
+                        </div>
+                    </div>
+                    <div class="flowchart-arrow">↓</div>
+                    <div class="flowchart-item">Fim</div>
                 </div>
-            </a>
-            <a href="#" class="stage-link locked">
-                <i class="bi bi-trophy stage-icon"></i>
-                <div class="stage-content">
-                    <span class="stage-number">Etapa 8</span>
-                    <span class="stage-title">Projeto Final</span>
-                    <span class="stage-status"></span>
+                
+                <h3>Boas Práticas</h3>
+                <ul>
+                    <li><strong>Indentação:</strong> Use sempre indentação para tornar o código mais legível.</li>
+                    <li><strong>Chaves:</strong> Mesmo para blocos de código com uma única instrução, é recomendado usar chaves {}.</li>
+                    <li><strong>Condições claras:</strong> Escreva condições que sejam fáceis de entender.</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <h4>Dica Importante</h4>
+                    <p>Evite condições muito complexas dentro de um único if. Se necessário, divida em múltiplas condições ou use variáveis booleanas para armazenar resultados intermediários.</p>
                 </div>
-            </a>
-            
-            <div class="mt-4 p-3">
-                <h4 class="text-primary">Próxima Aula</h4>
-                <p class="small text-muted">Na próxima aula, você aprenderá sobre estruturas de repetição em Java, que permitem executar blocos de código várias vezes.</p>
-                <a href="#" class="btn btn-success btn-sm mt-2 w-100">Ir para Próxima Aula</a>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para verificar se uma pessoa pode votar (idade >= 16):</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> idade = <span class="number">17</span>;<br><br>
+                        <span class="keyword">if</span> (<input type="text" id="votoCondicao" style="width: 200px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Você pode votar!"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Você ainda não pode votar."</span>);<br>
+                        }
+                    </div>
+                    <button id="checkIfElse" class="btn">Verificar Código</button>
+                    <div id="ifElseFeedback" class="feedback"></div>
+                </div>
             </div>
-        </div>
-    </aside>
-    
-    <!-- Overlay -->
-    <div class="overlay" id="overlay"></div>
-    
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <!-- Tópico 1: if e else -->
-            <section id="if-else" class="topic-section active" role="tabpanel">
-                <div class="custom-card">
-                    <h2>1. Estruturas if e else</h2>
-                    <p>As estruturas <strong>if</strong> e <strong>else</strong> são as estruturas de decisão mais básicas em Java. Elas permitem que um programa execute diferentes blocos de código com base em uma condição booleana (verdadeira ou falsa).</p>
-                    
-                    <h3>Estrutura if</h3>
-                    <p>A estrutura <strong>if</strong> executa um bloco de código apenas se a condição especificada for verdadeira.</p>
-                    
-                    <div class="code-block">
-                        <span class="keyword">if</span> (condição) {<br>
-                        &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for verdadeira</span><br>
-                        }
+        </section>
+        
+        <!-- Tópico 2: else if -->
+        <section id="else-if" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>2. Estrutura else if</h2>
+                <p>A estrutura <strong>else if</strong> é usada quando precisamos testar múltiplas condições em sequência. Ela permite verificar uma nova condição apenas se a condição do <strong>if</strong> anterior for falsa.</p>
+                
+                <h3>Sintaxe do else if</h3>
+                <div class="code-block">
+                    <span class="keyword">if</span> (condição1) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código se condição1 for verdadeira</span><br>
+                    } <span class="keyword">else if</span> (condição2) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código se condição1 for falsa e condição2 for verdadeira</span><br>
+                    } <span class="keyword">else if</span> (condição3) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código se condição1 e condição2 forem falsas e condição3 for verdadeira</span><br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;<span class="comment">// Código se todas as condições anteriores forem falsas</span><br>
+                    }
+                </div>
+                
+                <h3>Exemplo: Classificar a nota de um aluno</h3>
+                <div class="code-block">
+                    <span class="keyword">double</span> nota = <span class="number">7.5</span>;<br><br>
+                    <span class="keyword">if</span> (nota >= <span class="number">9.0</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Conceito A"</span>);<br>
+                    } <span class="keyword">else if</span> (nota >= <span class="number">7.0</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Conceito B"</span>);<br>
+                    } <span class="keyword">else if</span> (nota >= <span class="number">5.0</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Conceito C"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Conceito D"</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Conceito B</div>
                     </div>
-                    
-                    <h3>Exemplo: Verificar se um número é positivo</h3>
-                    <div class="code-block">
-                        <span class="keyword">int</span> numero = <span class="number">10</span>;<br><br>
-                        <span class="keyword">if</span> (numero > <span class="number">0</span>) {<br>
-                        &nbsp;&nbsp;System.out.println(<span class="string">"O número é positivo."</span>);<br>
-                        }
+                </div>
+                
+                <h3>Exemplo: Verificar a faixa etária</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> idade = <span class="number">25</span>;<br><br>
+                    <span class="keyword">if</span> (idade < <span class="number">12</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Criança"</span>);<br>
+                    } <span class="keyword">else if</span> (idade < <span class="number">18</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Adolescente"</span>);<br>
+                    } <span class="keyword">else if</span> (idade < <span class="number">60</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Adulto"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Idoso"</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Adulto</div>
                     </div>
-                    
-                    <div class="example-box">
-                        <h4>Exemplo de Execução:</h4>
-                        <div class="io-terminal">
-                            <div class="output">O número é positivo.</div>
+                </div>
+                
+                <h3>Fluxograma da Estrutura else if</h3>
+                <div class="flowchart">
+                    <div class="flowchart-item">Início</div>
+                    <div class="flowchart-arrow">↓</div>
+                    <div class="flowchart-item diamond"><span>Condição 1?</span></div>
+                    <div class="flowchart-arrow">↓</div>
+                    <div style="display: flex; justify-content: space-around;">
+                        <div>
+                            <div class="flowchart-item">Verdadeiro</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-item">Bloco if</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-item">Fim</div>
                         </div>
-                    </div>
-                    
-                    <h3>Estrutura else</h3>
-                    <p>A estrutura <strong>else</strong> é usada em conjunto com o <strong>if</strong> para executar um bloco de código quando a condição do <strong>if</strong> é falsa.</p>
-                    
-                    <div class="code-block">
-                        <span class="keyword">if</span> (condição) {<br>
-                        &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for verdadeira</span><br>
-                        } <span class="keyword">else</span> {<br>
-                        &nbsp;&nbsp;<span class="comment">// Código a ser executado se a condição for falsa</span><br>
-                        }
-                    </div>
-                    
-                    <h3>Exemplo: Verificar se um número é par ou ímpar</h3>
-                    <div class="code-block">
-                        <span class="keyword">int</span> numero = <span class="number">7</span>;<br><br>
-                        <span class="keyword">if</span> (numero % <span class="number">2</span> == <span class="number">0</span>) {<br>
-                        &nbsp;&nbsp;System.out.println(<span class="string">"O número é par."</span>);<br>
-                        } <span class="keyword">else</span> {<br>
-                        &nbsp;&nbsp;System.out.println(<span class="string">"O número é ímpar."</span>);<br>
-                        }
-                    </div>
-                    
-                    <div class="example-box">
-                        <h4>Exemplo de Execução:</h4>
-                        <div class="io-terminal">
-                            <div class="output">O número é ímpar.</div>
-                        </div>
-                    </div>
-                    
-                    <h3>Fluxograma da Estrutura if-else</h3>
-                    <div class="flowchart">
-                        <div class="flowchart-item">Início</div>
-                        <div class="flowchart-arrow">↓</div>
-                        <div class="flowchart-item diamond"><span>Condição?</span></div>
-                        <div class="flowchart-arrow">↓</div>
-                        <div class="row justify-content-around">
-                            <div class="col-auto">
-                                <div class="flowchart-item">Verdadeiro</div>
-                                <div class="flowchart-arrow">↓</div>
-                                <div class="flowchart-item">Bloco if</div>
+                        <div>
+                            <div class="flowchart-item">Falso</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-item diamond"><span>Condição 2?</span></div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div style="display: flex; justify-content: space-around;">
+                                <div>
+                                    <div class="flowchart-item">Verdadeiro</div>
+                                    <div class="flowchart-arrow">↓</div>
+                                    <div class="flowchart-item">Bloco else if</div>
+                                    <div class="flowchart-arrow">↓</div>
+                                    <div class="flowchart-item">Fim</div>
+                                </div>
+                                <div>
+                                    <div class="flowchart-item">Falso</div>
+                                    <div class="flowchart-arrow">↓</div>
+                                    <div class="flowchart-item">Bloco else</div>
+                                    <div class="flowchart-arrow">↓</div>
+                                    <div class="flowchart-item">Fim</div>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <div class="flowchart-item">Falso</div>
-                                <div class="flowchart-arrow">↓</div>
-                                <div class="flowchart-item">Bloco else</div>
-                            </div>
                         </div>
-                        <div class="flowchart-arrow">↓</div>
-                        <div class="flowchart-item">Fim</div>
                     </div>
-                    
-                    <h3>Boas Práticas</h3>
+                </div>
+                
+                <h3>Importante: Ordem das Condições</h3>
+                <p>A ordem das condições em uma estrutura <strong>else if</strong> é muito importante. As condições são verificadas em sequência, e a primeira que for verdadeira será executada, ignorando as demais.</p>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com a Ordem!</h4>
+                    <p>Considere este exemplo com ordem incorreta:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> idade = <span class="number">10</span>;<br><br>
+                        <span class="comment">// ORDEM INCORRETA</span><br>
+                        <span class="keyword">if</span> (idade > <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Idade válida"</span>);<br>
+                        } <span class="keyword">else if</span> (idade < <span class="number">12</span>) {<br>
+                        &nbsp;&nbsp;<span class="comment">// Este bloco nunca será executado!</span><br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Criança"</span>);<br>
+                        }
+                    </div>
+                    <p>Neste caso, a primeira condição (idade > 0) já é verdadeira para idade = 10, então o programa nunca verificará a segunda condição.</p>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica</h4>
+                    <p>Quando usar múltiplos <strong>else if</strong>, organize as condições da mais específica para a mais geral, ou da mais restritiva para a menos restritiva.</p>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Organize as condições abaixo na ordem correta para classificar a temperatura:</p>
+                    <div class="input-group">
+                        <label for="tempOrder">Arraste as condições na ordem correta:</label>
+                        <div id="tempContainer" style="margin: 1rem 0;">
+                            <div class="draggable" draggable="true" data-order="3" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Temperatura > 30°C: Muito quente</div>
+                            <div class="draggable" draggable="true" data-order="1" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Temperatura < 10°C: Muito frio</div>
+                            <div class="draggable" draggable="true" data-order="2" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Temperatura entre 10°C e 20°C: Frio</div>
+                            <div class="draggable" draggable="true" data-order="4" style="padding: 0.8rem; background: white; border: 2px solid #ddd; border-radius: 5px; margin: 0.5rem 0; cursor: move;">Temperatura entre 20°C e 30°C: Agradável</div>
+                        </div>
+                    </div>
+                    <button id="checkTempOrder" class="btn">Verificar Ordem</button>
+                    <div id="tempOrderFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 3: Operadores Lógicos -->
+        <section id="operadores-logicos" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>3. Operadores Lógicos</h2>
+                <p>Os <strong>operadores lógicos</strong> são usados para combinar múltiplas condições em estruturas de decisão. Eles permitem criar expressões booleanas mais complexas, avaliando duas ou mais condições simultaneamente.</p>
+                
+                <h3>Principais Operadores Lógicos</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">&&</div>
+                        <div class="operator-name">E (AND)</div>
+                        <div class="operator-description">Retorna true apenas se todas as condições forem verdadeiras</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">||</div>
+                        <div class="operator-name">OU (OR)</div>
+                        <div class="operator-description">Retorna true se pelo menos uma condição for verdadeira</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">!</div>
+                        <div class="operator-name">NÃO (NOT)</div>
+                        <div class="operator-description">Inverte o valor lógico da condição</div>
+                    </div>
+                </div>
+                
+                <h3>Operador E (AND) - &&</h3>
+                <p>O operador <strong>&&</strong> (E lógico) retorna <code>true</code> apenas se todas as condições envolvidas forem verdadeiras. Se pelo menos uma condição for falsa, o resultado será <code>false</code>.</p>
+                
+                <h4>Tabela Verdade do AND (&&)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>Condição B</th>
+                                <th>A && B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um número está em um intervalo</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">15</span>;<br><br>
+                    <span class="comment">// Verifica se o número está entre 10 e 20 (inclusive)</span><br>
+                    <span class="keyword">if</span> (numero >= <span class="number">10</span> && numero <= <span class="number">20</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número está entre 10 e 20."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número não está entre 10 e 20."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número está entre 10 e 20.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar condições para empréstimo</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> temRendaComprovada = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temNomeLimpo = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temGarantia = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Para aprovar o empréstimo, precisa ter renda comprovada E nome limpo</span><br>
+                    <span class="keyword">if</span> (temRendaComprovada && temNomeLimpo) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Empréstimo aprovado!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Empréstimo negado."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Empréstimo aprovado!</div>
+                    </div>
+                </div>
+                
+                <h3>Operador OU (OR) - ||</h3>
+                <p>O operador <strong>||</strong> (OU lógico) retorna <code>true</code> se pelo menos uma das condições for verdadeira. Retorna <code>false</code> apenas se todas as condições forem falsas.</p>
+                
+                <h4>Tabela Verdade do OR (||)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>Condição B</th>
+                                <th>A || B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um caractere é vogal</h4>
+                <div class="code-block">
+                    <span class="keyword">char</span> letra = <span class="string">'a'</span>;<br><br>
+                    <span class="comment">// Verifica se a letra é uma vogal (minúscula ou maiúscula)</span><br>
+                    <span class="keyword">if</span> (letra == <span class="string">'a'</span> || letra == <span class="string">'e'</span> || letra == <span class="string">'i'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'o'</span> || letra == <span class="string">'u'</span> || letra == <span class="string">'A'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'E'</span> || letra == <span class="string">'I'</span> || letra == <span class="string">'O'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;letra == <span class="string">'U'</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"A letra é uma vogal."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"A letra é uma consoante."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">A letra é uma vogal.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar condições para desconto</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> ehIdoso = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> ehEstudante = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> ehDeficiente = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Concede desconto se for idoso OU estudante OU deficiente</span><br>
+                    <span class="keyword">if</span> (ehIdoso || ehEstudante || ehDeficiente) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Desconto concedido!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Sem direito a desconto."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Desconto concedido!</div>
+                    </div>
+                </div>
+                
+                <h3>Operador NÃO (NOT) - !</h3>
+                <p>O operador <strong>!</strong> (NÃO lógico) inverte o valor lógico de uma condição. Se a condição for <code>true</code>, ele retorna <code>false</code>, e vice-versa.</p>
+                
+                <h4>Tabela Verdade do NOT (!)</h4>
+                <div class="truth-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condição A</th>
+                                <th>!A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Exemplo: Verificar se um número não é positivo</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> numero = <span class="number">-5</span>;<br><br>
+                    <span class="comment">// Verifica se o número NÃO é positivo</span><br>
+                    <span class="keyword">if</span> (!(numero > <span class="number">0</span>)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número não é positivo."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O número é positivo."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O número não é positivo.</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar se um campo não está vazio</h4>
+                <div class="code-block">
+                    <span class="keyword">String</span> nome = <span class="string">""</span>;<br><br>
+                    <span class="comment">// Verifica se o nome NÃO está vazio</span><br>
+                    <span class="keyword">if</span> (!nome.isEmpty()) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Nome: "</span> + nome);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"O nome não pode ser vazio!"</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O nome não pode ser vazio!</div>
+                    </div>
+                </div>
+                
+                <h3>Combinando Operadores Lógicos</h3>
+                <p>Podemos combinar múltiplos operadores lógicos para criar condições mais complexas. Nesses casos, é importante entender a <strong>precedência dos operadores</strong>:</p>
+                
+                <ol>
+                    <li><strong>!</strong> (NÃO) - Maior precedência</li>
+                    <li><strong>&&</strong> (E)</li>
+                    <li><strong>||</strong> (OU) - Menor precedência</li>
+                </ol>
+                
+                <h4>Exemplo: Sistema de login</h4>
+                <div class="code-block">
+                    <span class="keyword">String</span> usuario = <span class="string">"admin"</span>;<br>
+                    <span class="keyword">String</span> senha = <span class="string">"12345"</span>;<br>
+                    <span class="keyword">boolean</span> contaAtiva = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> contaBloqueada = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Login válido se: usuário E senha corretos E conta ativa E NÃO bloqueada</span><br>
+                    <span class="keyword">if</span> (usuario.equals(<span class="string">"admin"</span>) && senha.equals(<span class="string">"12345"</span>) && <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;contaAtiva && !contaBloqueada) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Login realizado com sucesso!"</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Usuário ou senha incorretos, ou conta inativa/bloqueada."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Login realizado com sucesso!</div>
+                    </div>
+                </div>
+                
+                <h4>Exemplo: Verificar elegibilidade para vaga</h4>
+                <div class="code-block">
+                    <span class="keyword">int</span> idade = <span class="number">22</span>;<br>
+                    <span class="keyword">boolean</span> temEnsinoSuperior = <span class="keyword">true</span>;<br>
+                    <span class="keyword">boolean</span> temExperiencia = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> ehEstagiario = <span class="keyword">true</span>;<br><br>
+                    <span class="comment">// Elegível se: (idade entre 18 e 30) E (tem ensino superior OU é estagiário)</span><br>
+                    <span class="keyword">if</span> (idade >= <span class="number">18</span> && idade <= <span class="number">30</span> && <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(temEnsinoSuperior || ehEstagiario)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Candidato elegível para a vaga."</span>);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Candidato não elegível para a vaga."</span>);<br>
+                    }
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Candidato elegível para a vaga.</div>
+                    </div>
+                </div>
+                
+                <h3>Lei de De Morgan</h3>
+                <p>A <strong>Lei de De Morgan</strong> é um conjunto de regras que relacionam os operadores E e OU através da negação. Ela é útil para simplificar expressões lógicas complexas:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Primeira lei: !(A && B) = !A || !B</span><br>
+                    <span class="comment">// Segunda lei: !(A || B) = !A && !B</span>
+                </div>
+                
+                <h4>Exemplo: Aplicando a Lei de De Morgan</h4>
+                <div class="code-block">
+                    <span class="keyword">boolean</span> temDinheiro = <span class="keyword">false</span>;<br>
+                    <span class="keyword">boolean</span> temCartao = <span class="keyword">true</span>;<br><br>
+                    <span class="comment">// Expressão original</span><br>
+                    <span class="keyword">if</span> (!(temDinheiro && temCartao)) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Não pode comprar"</span>);<br>
+                    }<br><br>
+                    <span class="comment">// Equivalente usando a Lei de De Morgan</span><br>
+                    <span class="keyword">if</span> (!temDinheiro || !temCartao) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Não pode comprar"</span>);<br>
+                    }
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Legibilidade</h4>
+                    <p>Para condições muito complexas, considere usar variáveis booleanas intermediárias para tornar o código mais legível:</p>
+                    <div class="code-block">
+                        <span class="keyword">boolean</span> idadeValida = idade >= <span class="number">18</span> && idade <= <span class="number">30</span>;<br>
+                        <span class="keyword">boolean</span> qualificacaoValida = temEnsinoSuperior || ehEstagiario;<br><br>
+                        <span class="keyword">if</span> (idadeValida && qualificacaoValida) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Candidato elegível para a vaga."</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com Avaliação de Curto-Circuito!</h4>
+                    <p>Os operadores && e || usam avaliação de curto-cuito:</p>
                     <ul>
-                        <li><strong>Indentação:</strong> Use sempre indentação para tornar o código mais legível.</li>
-                        <li><strong>Chaves:</strong> Mesmo para blocos de código com uma única instrução, é recomendado usar chaves {}.</li>
-                        <li><strong>Condições claras:</strong> Escreva condições que sejam fáceis de entender.</li>
+                        <li><strong>&&</strong>: Se a primeira condição for falsa, a segunda não é avaliada</li>
+                        <li><strong>||</strong>: Se a primeira condição for verdadeira, a segunda não é avaliada</li>
                     </ul>
-                    
-                    <div class="tip-box">
-                        <h4>Dica Importante</h4>
-                        <p>Evite condições muito complexas dentro de um único if. Se necessário, divida em múltiplas condições ou use variáveis booleanas para armazenar resultados intermediários.</p>
+                    <p>Isso pode causar problemas se a segunda condição tiver efeitos colaterais:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> x = <span class="number">0</span>;<br>
+                        <span class="keyword">int</span> y = <span class="number">5</span>;<br><br>
+                        <span class="comment">// Cuidado: divisão por zero não ocorre devido ao curto-circuito</span><br>
+                        <span class="keyword">if</span> (x != <span class="number">0</span> && (y / x) > <span class="number">2</span>) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Condição atendida"</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo usando operadores lógicos para verificar se um aluno foi aprovado:</p>
+                    <div class="code-block">
+                        <span class="keyword">double</span> media = <span class="number">7.5</span>;<br>
+                        <span class="keyword">int</span> frequencia = <span class="number">75</span>;<br>
+                        <span class="keyword">boolean</span> entregouTrabalho = <span class="keyword">true</span>;<br><br>
+                        <span class="comment">// Aluno aprovado se: média >= 7.0 E frequência >= 75 E entregou o trabalho</span><br>
+                        <span class="keyword">if</span> (<input type="text" id="logicaCondicao" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Aluno aprovado!"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Aluno reprovado."</span>);<br>
+                        }
+                    </div>
+                    <button id="checkLogica" class="btn">Verificar Código</button>
+                    <div id="logicaFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 4: switch case -->
+        <section id="switch-case" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>4. Estrutura switch case</h2>
+                <p>A estrutura <strong>switch case</strong> é uma alternativa ao <strong>else if</strong> quando precisamos comparar uma única variável com múltiplos valores constantes. Ela torna o código mais limpo e legível em certas situações.</p>
+                
+                <h3>Sintaxe do switch case</h3>
+                <div class="code-block">
+                    <span class="keyword">switch</span> (variável) {<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> valor1:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para valor1</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> valor2:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para valor2</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> valor3:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para valor3</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código padrão (nenhum dos casos acima)</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    }
+                </div>
+                
+                <h3>Exemplo: Dia da semana</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> dia = <span class="number">3</span>;<br>
+                    <span class="keyword">String</span> nomeDia;<br><br>
+                    <span class="keyword">switch</span> (dia) {<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Domingo"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Segunda-feira"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Terça-feira"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">4</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Quarta-feira"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">5</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Quinta-feira"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">6</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Sexta-feira"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">7</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Sábado"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;nomeDia = <span class="string">"Dia inválido"</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    }<br><br>
+                    System.out.println(<span class="string">"Hoje é "</span> + nomeDia);
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Hoje é Terça-feira</div>
+                    </div>
+                </div>
+                
+                <h3>A Importância do break</h3>
+                <p>O comando <strong>break</strong> é essencial em cada <strong>case</strong>. Sem ele, o programa continuaria executando os próximos casos mesmo que a condição não seja verdadeira. Isso é chamado de <strong>fallthrough</strong>.</p>
+                
+                <div class="warning-box">
+                    <h4>Cuidado!</h4>
+                    <p>Se você esquecer o <strong>break</strong>, o código continuará executando os próximos casos:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> opcao = <span class="number">1</span>;<br><br>
+                        <span class="keyword">switch</span> (opcao) {<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção 1 selecionada"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Sem break!</span><br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção 2 selecionada"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        }
+                    </div>
+                    <div class="example-box">
+                        <h4>Saída (incorreta):</h4>
+                        <div class="io-terminal">
+                            <div class="output">Opção 1 selecionada</div>
+                            <div class="output">Opção 2 selecionada</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Switch com Strings (Java 7+)</h3>
+                <p>A partir do Java 7, é possível usar <strong>switch</strong> com variáveis do tipo <strong>String</strong>:</p>
+                
+                <div class="code-block">
+                    <span class="keyword">String</span> mes = <span class="string">"Janeiro"</span>;<br>
+                    <span class="keyword">int</span> dias;<br><br>
+                    <span class="keyword">switch</span> (mes.toLowerCase()) {<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"janeiro"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"março"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"maio"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"julho"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"agosto"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"outubro"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"dezembro"</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;dias = <span class="number">31</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"abril"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"junho"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"setembro"</span>:<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"novembro"</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;dias = <span class="number">30</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"fevereiro"</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;dias = <span class="number">28</span>; <span class="comment">// Simplificado</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;dias = <span class="number">0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    }<br><br>
+                    System.out.println(<span class="string">"O mês de "</span> + mes + <span class="string">" tem "</span> + dias + <span class="string">" dias."</span>);
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O mês de Janeiro tem 31 dias.</div>
+                    </div>
+                </div>
+                
+                <h3>Switch vs if-else</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>switch case</th>
+                            <th>if-else</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tipo de comparação</td>
+                            <td>Apenas igualdade com valores constantes</td>
+                            <td>Qualquer condição booleana</td>
+                        </tr>
+                        <tr>
+                            <td>Variáveis suportadas</td>
+                            <td>int, byte, short, char, String (Java 7+), enum</td>
+                            <td>Qualquer tipo</td>
+                        </tr>
+                        <tr>
+                            <td>Legibilidade</td>
+                            <td>Mais limpo para múltiplos valores</td>
+                            <td>Pode ficar verboso com muitas condições</td>
+                        </tr>
+                        <tr>
+                            <td>Flexibilidade</td>
+                            <td>Menos flexível</td>
+                            <td>Muito flexível</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Geralmente mais rápido para muitos casos</td>
+                            <td>Pode ser mais lento com muitas condições</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="tip-box">
+                    <h4>Quando usar switch case?</h4>
+                    <p>Use <strong>switch case</strong> quando:</p>
+                    <ul>
+                        <li>Você está comparando uma única variável com múltiplos valores constantes</li>
+                        <li>Os valores são conhecidos em tempo de compilação</li>
+                        <li>Você quer um código mais limpo e legível</li>
+                    </ul>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para criar um menu de opções usando switch case:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> opcao = <span class="number">2</span>;<br><br>
+                        <span class="keyword">switch</span> (opcao) {<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Cadastro de clientes"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <input type="text" id="case2" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<input type="text" id="msg2" style="width: 200px; padding: 0.3rem; margin: 0 0.5rem;">);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Relatórios"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<input type="text" id="msgDefault" style="width: 200px; padding: 0.3rem; margin: 0 0.5rem;">);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        }
+                    </div>
+                    <button id="checkSwitch" class="btn">Verificar Código</button>
+                    <div id="switchFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 5: Operador Ternário -->
+        <section id="ternario" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>5. Operador Ternário</h2>
+                <p>O <strong>operador ternário</strong> é uma forma compacta de escrever uma estrutura <strong>if-else</strong> simples. Ele é chamado de "ternário" porque usa três operandos.</p>
+                
+                <h3>Sintaxe do Operador Ternário</h3>
+                <div class="code-block">
+                    variavel = (condição) ? valor_se_verdadeiro : valor_se_falso;
+                </div>
+                
+                <h3>Como Funciona</h3>
+                <ul>
+                    <li><strong>condição:</strong> Uma expressão booleana que retorna verdadeiro ou falso</li>
+                    <li><strong>valor_se_verdadeiro:</strong> Valor retornado se a condição for verdadeira</li>
+                    <li><strong>valor_se_falso:</strong> Valor retornado se a condição for falsa</li>
+                </ul>
+                
+                <h3>Exemplo: Verificar se um número é positivo</h3>
+                <div class="code-block">
+                    <span class="comment">// Usando if-else tradicional</span><br>
+                    <span class="keyword">int</span> numero = <span class="number">10</span>;<br>
+                    <span class="keyword">String</span> mensagem1;<br><br>
+                    <span class="keyword">if</span> (numero > <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;mensagem1 = <span class="string">"Positivo"</span>;<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;mensagem1 = <span class="string">"Negativo ou zero"</span>;<br>
+                    }<br><br>
+                    <span class="comment">// Usando operador ternário</span><br>
+                    <span class="keyword">String</span> mensagem2 = (numero > <span class="number">0</span>) ? <span class="string">"Positivo"</span> : <span class="string">"Negativo ou zero"</span>;
+                </div>
+                
+                <h3>Exemplo: Determinar o maior número</h3>
+                <div class="code-block">
+                    <span class="keyword">int</span> a = <span class="number">15</span>;<br>
+                    <span class="keyword">int</span> b = <span class="number">20</span>;<br><br>
+                    <span class="comment">// Usando if-else tradicional</span><br>
+                    <span class="keyword">int</span> maior1;<br>
+                    <span class="keyword">if</span> (a > b) {<br>
+                    &nbsp;&nbsp;maior1 = a;<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;maior1 = b;<br>
+                    }<br><br>
+                    <span class="comment">// Usando operador ternário</span><br>
+                    <span class="keyword">int</span> maior2 = (a > b) ? a : b;<br><br>
+                    System.out.println(<span class="string">"O maior número é: "</span> + maior2);
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">O maior número é: 20</div>
+                    </div>
+                </div>
+                
+                <h3>Operador Ternário Aninhado</h3>
+                <p>É possível aninhar operadores ternários para criar estruturas mais complexas, semelhantes ao <strong>else if</strong>:</p>
+                
+                <div class="code-block">
+                    <span class="keyword">int</span> nota = <span class="number">7</span>;<br>
+                    <span class="keyword">String</span> conceito = (nota >= <span class="number">9</span>) ? <span class="string">"A"</span> : <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nota >= <span class="number">7</span>) ? <span class="string">"B"</span> : <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nota >= <span class="number">5</span>) ? <span class="string">"C"</span> : <span class="string">"D"</span>;<br><br>
+                    System.out.println(<span class="string">"Conceito: "</span> + conceito);
+                </div>
+                
+                <div class="example-box">
+                    <h4>Exemplo de Execução:</h4>
+                    <div class="io-terminal">
+                        <div class="output">Conceito: B</div>
+                    </div>
+                </div>
+                
+                <h3>Vantagens e Desvantagens</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspecto</th>
+                            <th>Vantagens</th>
+                            <th>Desvantagens</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Concisão</td>
+                            <td>Código mais curto e direto</td>
+                            <td>Pode ficar difícil de ler com lógica complexa</td>
+                        </tr>
+                        <tr>
+                            <td>Legibilidade</td>
+                            <td>Boa para condições simples</td>
+                            <td>Aninhamentos excessivos prejudicam a legibilidade</td>
+                        </tr>
+                        <tr>
+                            <td>Uso</td>
+                            <td>Perfeito para atribuições condicionais simples</td>
+                            <td>Não substitui estruturas if-else complexas</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Geralmente equivalente ao if-else</td>
+                            <td>Não há ganho de performance significativo</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Boas Práticas</h3>
+                <ul>
+                    <li>Use o operador ternário apenas para condições simples e diretas</li>
+                    <li>Avoid aninhamentos muito profundos (mais de 2 níveis)</li>
+                    <li>Se a lógica ficar complexa, prefira o if-else tradicional</li>
+                    <li>O operador ternário é ideal para atribuições condicionais em uma única linha</li>
+                </ul>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com a Legibilidade!</h4>
+                    <p>Operadores ternários muito complexos podem tornar o código difícil de entender:</p>
+                    <div class="code-block">
+                        <span class="comment">// Exemplo de uso inadequado</span><br>
+                        <span class="keyword">String</span> resultado = (x > <span class="number">0</span>) ? ((y > <span class="number">0</span>) ? <span class="string">"Ambos positivos"</span> : <span class="string">"X positivo, Y negativo"</span>) : <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((y > <span class="number">0</span>) ? <span class="string">"X negativo, Y positivo"</span> : <span class="string">"Ambos negativos"</span>);
+                    </div>
+                    <p>Neste caso, um if-else tradicional seria muito mais claro!</p>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica</h4>
+                    <p>O operador ternário é especialmente útil em expressões de retorno de métodos e em inicializações de variáveis que dependem de uma condição simples.</p>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Converta as estruturas if-else abaixo para operadores ternários:</p>
+                    <div class="code-block">
+                        <span class="comment">// Exemplo 1</span><br>
+                        <span class="keyword">int</span> idade = <span class="number">18</span>;<br>
+                        <span class="keyword">String</span> categoria1;<br>
+                        <span class="keyword">if</span> (idade >= <span class="number">18</span>) {<br>
+                        &nbsp;&nbsp;categoria1 = <span class="string">"Adulto"</span>;<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;categoria1 = <span class="string">"Menor de idade"</span>;<br>
+                        }<br><br>
+                        <span class="comment">// Converta para operador ternário:</span><br>
+                        <span class="keyword">String</span> categoria2 = <input type="text" id="ternario1" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        <span class="comment">// Exemplo 2</span><br>
+                        <span class="keyword">double</span> preco = <span class="number">100.0</span>;<br>
+                        <span class="keyword">double</span> desconto1;<br>
+                        <span class="keyword">if</span> (preco > <span class="number">50.0</span>) {<br>
+                        &nbsp;&nbsp;desconto1 = preco * <span class="number">0.1</span>;<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;desconto1 = <span class="number">0</span>;<br>
+                        }<br><br>
+                        <span class="comment">// Converta para operador ternário:</span><br>
+                        <span class="keyword">double</span> desconto2 = <input type="text" id="ternario2" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">;
+                    </div>
+                    <button id="checkTernario" class="btn">Verificar Código</button>
+                    <div id="ternarioFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 6: Exercícios Práticos -->
+        <section id="exercicios" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>6. Exercícios Práticos no NetBeans</h2>
+                <p>Nesta seção, você encontrará exercícios para implementar no NetBeans. Siga as instruções para cada exercício e pratique criando projetos reais!</p>
+                
+                <div class="tip-box">
+                    <h4>Como usar esta seção</h4>
+                    <p>Para cada exercício:</p>
+                    <ol>
+                        <li>Leia atentamente o enunciado e os requisitos</li>
+                        <li>Crie um novo projeto no NetBeans</li>
+                        <li>Implemente o código seguindo as orientações</li>
+                        <li>Teste seu programa com diferentes valores de entrada</li>
+                        <li>Compare com a solução sugerida (se disponível)</li>
+                    </ol>
+                </div>
+                
+                <div class="practice-module">
+                    <h3>Exercício 1: Calculadora IMC</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que calcula o Índice de Massa Corporal (IMC) e classifica o resultado. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar o peso do usuário em kg</li>
+                            <li>Solicitar a altura do usuário em metros</li>
+                            <li>Calcular o IMC: peso / (altura × altura)</li>
+                            <li>Classificar o resultado conforme a tabela:</li>
+                        </ul>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>IMC</th>
+                                    <th>Classificação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Abaixo de 18.5</td>
+                                    <td>Abaixo do peso</td>
+                                </tr>
+                                <tr>
+                                    <td>18.5 - 24.9</td>
+                                    <td>Peso normal</td>
+                                </tr>
+                                <tr>
+                                    <td>25.0 - 29.9</td>
+                                    <td>Sobrepeso</td>
+                                </tr>
+                                <tr>
+                                    <td>30.0 - 34.9</td>
+                                    <td>Obesidade Grau I</td>
+                                </tr>
+                                <tr>
+                                    <td>35.0 - 39.9</td>
+                                    <td>Obesidade Grau II</td>
+                                </tr>
+                                <tr>
+                                    <td>40.0 ou acima</td>
+                                    <td>Obesidade Grau III</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     
-                    <div class="activity">
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Abra o NetBeans e crie um novo projeto: <strong>File → New Project</strong></li>
+                            <li>Selecione a categoria <strong>Java</strong> e o tipo <strong>Java Application</strong></li>
+                            <li>Dê um nome ao projeto: <strong>CalculadoraIMC</strong></li>
+                            <li>Marque a opção <strong>Create Main Class</strong> e clique em <strong>Finish</strong></li>
+                            <li>No método <strong>main</strong>, implemente o código usando estruturas <strong>if-else</strong> ou <strong>switch-case</strong></li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use a classe <strong>Scanner</strong> para ler os dados do usuário</li>
+                            <li>Organize as condições do menor para o maior valor de IMC</li>
+                            <li>Use <strong>System.out.printf()</strong> para formatar o IMC com 2 casas decimais</li>
+                            <li>Teste com valores extremos para verificar todas as condições</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa (F6) e teste com os seguintes valores:</p>
+                        <ul>
+                            <li>Peso: 70kg, Altura: 1.75m → IMC: 22.86 (Peso normal)</li>
+                            <li>Peso: 90kg, Altura: 1.80m → IMC: 27.78 (Sobrepeso)</li>
+                            <li>Peso: 110kg, Altura: 1.65m → IMC: 40.40 (Obesidade Grau III)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Solicitar também o nome do usuário</li>
+                            <li>Mostrar uma mensagem personalizada com o nome e a classificação</li>
+                            <li>Incluir uma recomendação baseada na classificação</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="practice-module">
+                    <h3>Exercício 2: Sistema de Descontos com Operadores Lógicos</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que aplica descontos com base no valor da compra e no tipo de cliente. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar o valor da compra</li>
+                            <li>Solicitar o tipo de cliente (1-VIP, 2-Regular, 3-Novo)</li>
+                            <li>Aplicar os descontos conforme as regras:</li>
+                        </ul>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Cliente</th>
+                                    <th>Condição</th>
+                                    <th>Desconto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>VIP</td>
+                                    <td>Qualquer valor</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td>Regular</td>
+                                    <td>Compra > R$ 100,00</td>
+                                    <td>10%</td>
+                                </tr>
+                                <tr>
+                                    <td>Regular</td>
+                                    <td>Compra ≤ R$ 100,00</td>
+                                    <td>0%</td>
+                                </tr>
+                                <tr>
+                                    <td>Novo</td>
+                                    <td>Compra > R$ 200,00</td>
+                                    <td>5%</td>
+                                </tr>
+                                <tr>
+                                    <td>Novo</td>
+                                    <td>Compra ≤ R$ 200,00</td>
+                                    <td>0%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>SistemaDescontos</strong></li>
+                            <li>Use estruturas <strong>if-else</strong> combinadas com operadores lógicos (<strong>&&</strong> e <strong>||</strong>)</li>
+                            <li>Implemente a lógica de desconto usando variáveis booleanas para melhor legibilidade</li>
+                            <li>Mostre o valor original, o desconto aplicado e o valor final</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use <strong>switch-case</strong> para o tipo de cliente</li>
+                            <li>Dentro de cada case, use <strong>if-else</strong> para verificar o valor da compra</li>
+                            <li>Use <strong>System.out.printf()</strong> para formatar valores monetários</li>
+                            <li>Considere usar variáveis booleanas como <code>ehVIP</code>, <code>ehRegular</code>, etc.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Cliente VIP, compra de R$ 150,00 → Desconto: R$ 30,00 (20%)</li>
+                            <li>Cliente Regular, compra de R$ 250,00 → Desconto: R$ 25,00 (10%)</li>
+                            <li>Cliente Regular, compra de R$ 80,00 → Desconto: R$ 0,00 (0%)</li>
+                            <li>Cliente Novo, compra de R$ 300,00 → Desconto: R$ 15,00 (5%)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir um quarto tipo de cliente: "Funcionário" com 25% de desconto</li>
+                            <li>Adicionar validação para valores negativos</li>
+                            <li>Mostrar uma mensagem especial para compras acima de R$ 500,00</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="practice-module">
+                    <h3>Exercício 3: Menu de Operações Matemáticas</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um programa que apresenta um menu de operações matemáticas e executa a operação escolhida pelo usuário. O programa deve:</p>
+                        <ul>
+                            <li>Exibir um menu com as opções: 1-Adição, 2-Subtração, 3-Multiplicação, 4-Divisão, 5-Sair</li>
+                            <li>Solicitar dois números para a operação escolhida</li>
+                            <li>Executar a operação e mostrar o resultado</li>
+                            <li>Validar entradas (opção inválida, divisão por zero)</li>
+                            <li>Permitir múltiplas operações até o usuário escolher sair</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>MenuOperacoes</strong></li>
+                            <li>Use <strong>switch-case</strong> para o menu de opções</li>
+                            <li>Implemente um laço <strong>while</strong> para manter o programa em execução</li>
+                            <li>Adicione validações para entradas inválidas</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use uma variável <code>int opcao</code> para armazenar a escolha do usuário</li>
+                            <li>Use <code>while (opcao != 5)</code> para controlar o loop</li>
+                            <li>Na divisão, verifique se o segundo número é diferente de zero</li>
+                            <li>Use <code>Scanner.nextDouble()</code> para ler os números</li>
+                            <li>Limpe o buffer do teclado com <code>scanner.nextLine()</code> após ler números</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Escolha opção 1, números 10 e 5 → Resultado: 15</li>
+                            <li>Escolha opção 4, números 10 e 0 → Mensagem de erro</li>
+                            <li>Escolha opção 6 → Mensagem de opção inválida</li>
+                            <li>Escolha opção 5 → Programa encerra</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir operações adicionais: 6-Potência, 7-Raiz Quadrada</li>
+                            <li>Armazenar o histórico das operações realizadas</li>
+                            <li>Permitir ao usuário ver o histórico antes de sair</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="practice-module">
+                    <h3>Exercício 4: Sistema de Login com Validação</h3>
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Enunciado</h4>
+                        <p>Crie um sistema de login que valida usuário e senha com múltiplas condições. O programa deve:</p>
+                        <ul>
+                            <li>Solicitar usuário e senha</li>
+                            <li>Validar as credenciais (usuário: "admin", senha: "12345")</li>
+                            <li>Verificar se a conta está ativa e não bloqueada</li>
+                            <li>Permitir apenas 3 tentativas de login</li>
+                            <li>Bloquear temporariamente após 3 tentativas falhas</li>
+                            <li>Usar operadores lógicos e operador ternário</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Instruções para o NetBeans</h4>
+                        <ol>
+                            <li>Crie um novo projeto no NetBeans chamado <strong>SistemaLogin</strong></li>
+                            <li>Use operadores lógicos (<strong>&&</strong>) para combinar múltiplas condições</li>
+                            <li>Use operador ternário para mensagens de status</li>
+                            <li>Implemente um contador de tentativas com <strong>while</strong></li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Dicas de Implementação</h4>
+                        <ul>
+                            <li>Use <code>String.equals()</code> para comparar usuário e senha</li>
+                            <li>Use variáveis booleanas: <code>contaAtiva = true</code>, <code>contaBloqueada = false</code></li>
+                            <li>Use um contador <code>int tentativas = 0</code></li>
+                            <li>Use operador ternário para mensagens: <code>String mensagem = loginSucesso ? "Bem-vindo!" : "Acesso negado";</code></li>
+                            <li>Limpe o buffer do teclado após ler números</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Teste seu Programa</h4>
+                        <p>Execute seu programa e teste com os seguintes cenários:</p>
+                        <ul>
+                            <li>Usuário: "admin", Senha: "12345" → Login bem-sucedido</li>
+                            <li>Usuário: "admin", Senha: "errada" → Tentativa falha</li>
+                            <li>Três tentativas incorretas → Conta bloqueada</li>
+                            <li>Tentativa após bloqueio → Mensagem de conta bloqueada</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique seu programa para:</p>
+                        <ul>
+                            <li>Incluir um sistema de recuperação de senha</li>
+                            <li>Adicionar um temporizador de 30 segundos para desbloquear a conta</li>
+                            <li>Permitir o cadastro de novos usuários</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dicas para trabalhar no NetBeans</h4>
+                    <ul>
+                        <li><strong>Atalhos úteis:</strong> F6 para executar, Ctrl+Shift+C para comentar/descomentar</li>
+                        <li><strong>Autocompletar:</strong> Pressione Ctrl+Espaço para sugestões de código</li>
+                        <li><strong>Depuração:</strong> Use breakpoints para analisar seu código passo a passo</li>
+                        <li><strong>Organização:</strong> Use Ctrl+Shift+F para formatar automaticamente seu código</li>
+                        <li><strong>Refatoração:</strong> Clique com o botão direito em uma variável para renomeá-la</li>
+                    </ul>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Importante</h4>
+                    <p>Lembre-se de fechar sempre o objeto Scanner ao final do programa com <code>scanner.close()</code> para evitar vazamento de recursos. Além disso, trate possíveis exceções quando trabalhar com entrada de dados do usuário.</p>
+                </div>
+                
+                <div class="checkpoint">
+                    <h4>Parabéns por chegar até aqui!</h4>
+                    <p>Ao completar todos os exercícios, você terá praticado:</p>
+                    <ul>
+                        <li>Estruturas de decisão (if-else, switch-case)</li>
+                        <li>Operadores lógicos (&&, ||, !)</li>
+                        <li>Operador ternário</li>
+                        <li>Entrada e saída de dados</li>
+                        <li>Validação de entrada</li>
+                        <li>Estruturas de repetição</li>
+                        <li>Boas práticas de programação</li>
+                    </ul>
+                    <p>Continue praticando e explorando novos conceitos em Java!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; Estruturas de Decisão em Java - Material educativo</p>
+        </div>
+    </footer>
+    <script>
+        // Navegação entre tópicos
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const topicSections = document.querySelectorAll('.topic-section');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTopic = tab.getAttribute('data-topic');
+                
+                // Remove classe active de todas as abas e seções
+                navTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                topicSections.forEach(section => section.classList.remove('active'));
+                
+                // Adiciona classe active na aba e seção correspondentes
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(targetTopic).classList.add('active');
+            });
+        });
+        
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        
+        // Atividade 1: if-else
+        const checkIfElseBtn = document.getElementById('checkIfElse');
+        if (checkIfElseBtn) {
+            checkIfElseBtn.addEventListener('click', () => {
+                const condicao = document.getElementById('votoCondicao').value.trim();
+                const feedback = document.getElementById('ifElseFeedback');
+                feedback.style.display = 'block';
+                
+                if (condicao === 'idade >= 16') {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! A condição está correta.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A condição incorreta. Use: idade >= 16';
+                }
+            });
+        }
+        
+        // Atividade 2: else if - Arrastar e soltar
+        const tempDraggables = document.querySelectorAll('#tempContainer .draggable');
+        const tempContainer = document.getElementById('tempContainer');
+        let tempDraggedElement = null;
+        
+        if (tempDraggables.length > 0) {
+            tempDraggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    tempDraggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                });
+                draggable.addEventListener('dragend', (e) => {
+                    e.target.style.opacity = '';
+                });
+            });
+            
+            tempContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(tempContainer, e.clientY);
+                if (afterElement == null) {
+                    tempContainer.appendChild(tempDraggedElement);
+                } else {
+                    tempContainer.insertBefore(tempDraggedElement, afterElement);
+                }
+            });
+        }
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        
+        const checkTempOrderBtn = document.getElementById('checkTempOrder');
+        if (checkTempOrderBtn) {
+            checkTempOrderBtn.addEventListener('click', () => {
+                const items = [...document.querySelectorAll('#tempContainer .draggable')];
+                const correctOrder = items.every((item, index) => 
+                    parseInt(item.getAttribute('data-order')) === index + 1
+                );
+                
+                const feedback = document.getElementById('tempOrderFeedback');
+                feedback.style.display = 'block';
+                
+                if (correctOrder) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Parabéns! Você organizou as condições corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A ordem não está correta. Tente novamente!';
+                }
+            });
+        }
+        
+        // Atividade 3: Operadores Lógicos
+        const checkLogicaBtn = document.getElementById('checkLogica');
+        if (checkLogicaBtn) {
+            checkLogicaBtn.addEventListener('click', () => {
+                const condicao = document.getElementById('logicaCondicao').value.trim();
+                const feedback = document.getElementById('logicaFeedback');
+                feedback.style.display = 'block';
+                
+                if (condicao === 'media >= 7.0 && frequencia >= 75 && entregouTrabalho') {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você usou corretamente os operadores lógicos.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A condição incorreta. Use: media >= 7.0 && frequencia >= 75 && entregouTrabalho';
+                }
+            });
+        }
+        
+        // Atividade 4: switch case
+        const checkSwitchBtn = document.getElementById('checkSwitch');
+        if (checkSwitchBtn) {
+            checkSwitchBtn.addEventListener('click', () => {
+                const case2 = document.getElementById('case2').value.trim();
+                const msg2 = document.getElementById('msg2').value.trim();
+                const msgDefault = document.getElementById('msgDefault').value.trim();
+                
+                const feedback = document.getElementById('switchFeedback');
+                feedback.style.display = 'block';
+                
+                const correctCase2 = case2 === '2';
+                const correctMsg2 = msg2 === '"Consulta de produtos"';
+                const correctMsgDefault = msgDefault === '"Opção inválida"';
+                
+                if (correctCase2 && correctMsg2 && correctMsgDefault) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! O código está correto.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija os seguintes itens: ';
+                    if (!correctCase2) message += 'case 2. ';
+                    if (!correctMsg2) message += 'mensagem do case 2 (use: "Consulta de produtos"). ';
+                    if (!correctMsgDefault) message += 'mensagem default (use: "Opção inválida"). ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        
+        // Atividade 5: Operador Ternário
+        const checkTernarioBtn = document.getElementById('checkTernario');
+        if (checkTernarioBtn) {
+            checkTernarioBtn.addEventListener('click', () => {
+                const ternario1 = document.getElementById('ternario1').value.trim();
+                const ternario2 = document.getElementById('ternario2').value.trim();
+                
+                const feedback = document.getElementById('ternarioFeedback');
+                feedback.style.display = 'block';
+                
+                const correctTernario1 = ternario1 === '(idade >= 18) ? "Adulto" : "Menor de idade"';
+                const correctTernario2 = ternario2 === '(preco > 50.0) ? preco * 0.1 : 0';
+                
+                if (correctTernario1 && correctTernario2) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Perfeito! Você converteu corretamente para operadores ternários.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as conversões: ';
+                    if (!correctTernario1) message += 'Exemplo 1: (idade >= 18) ? "Adulto" : "Menor de idade". ';
+                    if (!correctTernario2) message += 'Exemplo 2: (preco > 50.0) ? preco * 0.1 : 0. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
