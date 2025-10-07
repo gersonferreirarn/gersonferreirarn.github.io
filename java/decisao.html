@@ -14,6 +14,8 @@
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
+            --header-height: 70px;
+            --header-bg: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
         }
         * {
             margin: 0;
@@ -32,63 +34,413 @@
             margin: 0 auto;
             padding: 0 20px;
         }
+        
+        /* NOVO CABEÇALHO COMPACTO */
         header {
-            background-color: var(--primary);
+            background: var(--header-bg);
             color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: var(--header-height);
+            transition: height 0.3s ease;
         }
-        .header-content {
+        
+        header.expanded {
+            height: auto;
+        }
+        
+        /* Header Principal Compacto */
+        .main-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .course-badge {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .progress-bar-mini {
+            width: 60px;
+            height: 4px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill-mini {
+            height: 100%;
+            background-color: var(--success);
+            width: 25%; /* 2/8 */
+            border-radius: 2px;
+        }
+        
+        .font-controls {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 0.2rem;
+        }
+        
+        .font-btn {
+            background: none;
+            border: none;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .font-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        /* Botão de Expandir/Recolher */
+        .header-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+        
+        .header-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .header-toggle.expanded {
+            transform: rotate(180deg);
+        }
+        
+        /* Menu Expansível (inicialmente oculto) */
+        .expandable-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        header.expanded .expandable-menu {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        /* Navegação Principal */
+        .nav-container {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+            padding: 0 0.5rem;
+        }
+        
+        .nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .nav-tabs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .nav-tab {
+            padding: 0.7rem 1rem;
+            background-color: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            position: relative;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            flex-shrink: 0;
+        }
+        
+        .nav-tab:hover {
+            color: white;
+            background-color: rgba(255,255,255,0.05);
+        }
+        
+        .nav-tab.active {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border-bottom-color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        /* Menu de Etapas do Curso */
+        .stages-menu {
+            padding: 0.8rem 0;
+        }
+        
+        .stages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            padding: 0 1rem;
+        }
+        
+        .stages-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stages-progress {
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .stages-content {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.8rem;
+            padding: 0 1rem 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .stages-content::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .stages-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        
+        .stages-content::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+        
+        .stage-item {
+            flex-shrink: 0;
+            width: 160px;
+        }
+        
+        .stage-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.8rem;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+            gap: 0.3rem;
+        }
+        
+        .stage-link:hover {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .stage-link.active {
+            background-color: rgba(52, 152, 219, 0.3);
+            border-color: var(--secondary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .stage-link.completed {
+            background-color: rgba(39, 174, 96, 0.2);
+            border-color: var(--success);
+        }
+        
+        .stage-link.locked {
+            background-color: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.4);
+            cursor: not-allowed;
+        }
+        
+        .stage-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .stage-number {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .stage-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .stage-status {
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+        }
+        
+        .stage-link.completed .stage-status::after {
+            content: '✓ Concluído';
+            color: var(--success);
+        }
+        
+        .stage-link.locked .stage-status::after {
+            content: '🔒 Bloqueado';
+        }
+        
+        /* Próxima Aula */
+        .next-class {
+            margin: 0 1rem 0.8rem;
+            background-color: rgba(52, 152, 219, 0.2);
+            border-radius: 8px;
+            padding: 0.8rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 0.8rem;
         }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        
+        .next-class-info h4 {
+            color: var(--light);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
         }
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
+        
+        .next-class-info p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+            margin: 0;
+            line-height: 1.3;
         }
-        .nav-tabs {
-            display: flex;
-            overflow-x: auto;
-            background-color: var(--dark);
-            margin-top: 1rem;
-            border-radius: 8px;
-        }
-        .nav-tab {
-            padding: 1rem 1.5rem;
-            background-color: transparent;
-            border: none;
+        
+        .next-class-btn {
+            background-color: var(--success);
             color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
             white-space: nowrap;
+            font-size: 0.8rem;
         }
-        .nav-tab:hover {
-            background-color: rgba(255,255,255,0.1);
+        
+        .next-class-btn:hover {
+            background-color: #229954;
+            transform: translateY(-1px);
         }
-        .nav-tab.active {
-            background-color: var(--secondary);
-        }
+        
+        /* Conteúdo Principal */
         main {
             padding: 2rem 0;
+            margin-top: var(--header-height);
+            transition: margin-top 0.3s ease;
         }
+        
+        header.expanded + main {
+            margin-top: 320px; /* Altura aproximada do menu expandido */
+        }
+        
         .topic-section {
             display: none;
             animation: fadeIn 0.5s;
         }
+        
         .topic-section.active {
             display: block;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Cards */
         .card {
             background: white;
             border-radius: 10px;
@@ -97,28 +449,35 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--secondary);
         }
+        
         .card h2 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.8rem;
         }
+        
         .card h3 {
             color: var(--dark);
             margin: 1.5rem 0 0.8rem;
             font-size: 1.4rem;
         }
+        
         .card h4 {
             color: var(--secondary);
             margin: 1rem 0 0.5rem;
             font-size: 1.2rem;
         }
+        
         .card p, .card li {
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
+        
         ul {
             padding-left: 2rem;
         }
+        
+        /* Code Blocks */
         .code-block {
             background-color: #2d3748;
             color: #e2e8f0;
@@ -130,19 +489,25 @@
             font-size: 1rem;
             line-height: 1.5;
         }
+        
         .code-block .keyword {
             color: #f687b3;
         }
+        
         .code-block .string {
             color: #68d391;
         }
+        
         .code-block .comment {
             color: #a0aec0;
             font-style: italic;
         }
+        
         .code-block .number {
             color: #fbb6ce;
         }
+        
+        /* Activities */
         .activity {
             background-color: #f7fafc;
             border: 2px dashed var(--secondary);
@@ -150,19 +515,23 @@
             padding: 1.5rem;
             margin: 2rem 0;
         }
+        
         .activity h3 {
             color: var(--secondary);
             margin-bottom: 1rem;
         }
+        
         .input-group {
             margin: 1rem 0;
         }
+        
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: bold;
             color: var(--dark);
         }
+        
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 0.8rem;
@@ -171,10 +540,12 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
+        
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             outline: none;
             border-color: var(--secondary);
         }
+        
         .btn {
             display: inline-block;
             background-color: var(--secondary);
@@ -187,32 +558,40 @@
             transition: all 0.3s;
             margin-top: 1rem;
         }
+        
         .btn:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
         }
+        
         .btn-success {
             background-color: var(--success);
         }
+        
         .btn-success:hover {
             background-color: #229954;
         }
+        
         .feedback {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 5px;
             display: none;
         }
+        
         .feedback.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        
         .feedback.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        
+        /* Visualizações */
         .flowchart {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -220,6 +599,7 @@
             margin: 1.5rem 0;
             text-align: center;
         }
+        
         .flowchart-item {
             background-color: white;
             border: 2px solid var(--secondary);
@@ -229,6 +609,7 @@
             max-width: 300px;
             position: relative;
         }
+        
         .flowchart-item.diamond {
             transform: rotate(45deg);
             width: 150px;
@@ -238,37 +619,45 @@
             justify-content: center;
             margin: 1rem auto;
         }
+        
         .flowchart-item.diamond span {
             transform: rotate(-45deg);
             text-align: center;
             width: 100px;
         }
+        
         .flowchart-arrow {
             font-size: 2rem;
             color: var(--secondary);
             margin: 0.5rem 0;
         }
+        
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
             font-size: 1rem;
         }
+        
         .comparison-table th, .comparison-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        
         .comparison-table th {
             background-color: var(--secondary);
             color: white;
         }
+        
         .comparison-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        
         .comparison-table tr:hover {
             background-color: #e2e2e2;
         }
+        
         .tip-box {
             background-color: #e3f2fd;
             border-left: 4px solid var(--secondary);
@@ -276,10 +665,12 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
+        
         .tip-box h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
+        
         .warning-box {
             background-color: #fff3cd;
             border-left: 4px solid var(--warning);
@@ -287,20 +678,24 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
+        
         .warning-box h4 {
             color: var(--warning);
             margin-bottom: 0.5rem;
         }
+        
         .example-box {
             background-color: #f1f5f9;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
+        
         .example-box h4 {
             color: var(--dark);
             margin-bottom: 1rem;
         }
+        
         .io-terminal {
             background-color: #1e293b;
             color: #e2e8f0;
@@ -309,18 +704,22 @@
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
         }
+        
         .io-terminal .input {
             color: #68d391;
         }
+        
         .io-terminal .output {
             color: #fbb6ce;
         }
+        
         .operator-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
+        
         .operator-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -329,26 +728,31 @@
             text-align: center;
             transition: all 0.3s;
         }
+        
         .operator-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        
         .operator-symbol {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
+        
         .operator-name {
             color: var(--dark);
             margin-bottom: 0.3rem;
             font-size: 1.2rem;
         }
+        
         .operator-description {
             color: #666;
             font-size: 0.9rem;
         }
+        
         .truth-table {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -356,23 +760,28 @@
             margin: 1.5rem 0;
             overflow-x: auto;
         }
+        
         .truth-table table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1rem;
         }
+        
         .truth-table th, .truth-table td {
             padding: 0.8rem;
             text-align: center;
             border: 1px solid #ddd;
         }
+        
         .truth-table th {
             background-color: var(--secondary);
             color: white;
         }
+        
         .truth-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        
         .practice-module {
             background: white;
             border-radius: 10px;
@@ -381,11 +790,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--success);
         }
+        
         .practice-module h3 {
             color: var(--success);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
+        
         .step {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -393,6 +804,7 @@
             margin: 1.5rem 0;
             border-left: 4px solid var(--warning);
         }
+        
         .step-number {
             display: inline-block;
             background-color: var(--warning);
@@ -405,6 +817,7 @@
             font-weight: bold;
             margin-right: 1rem;
         }
+        
         .checkpoint {
             background-color: #e8f5e9;
             border: 2px solid var(--success);
@@ -412,10 +825,12 @@
             padding: 1rem;
             margin: 1.5rem 0;
         }
+        
         .checkpoint h4 {
             color: var(--success);
             margin-bottom: 0.5rem;
         }
+        
         footer {
             background-color: var(--primary);
             color: white;
@@ -423,34 +838,175 @@
             padding: 1.5rem 0;
             margin-top: 3rem;
         }
+        
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .header-controls {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+            
+            .nav-tabs {
+                justify-content: center;
+            }
+            
+            .stages-content {
+                justify-content: center;
+            }
+            
+            .stage-item {
+                width: 140px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .header-content {
+            h1 {
+                font-size: 1.2rem;
+            }
+            
+            .subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-tabs {
+                display: none;
+                flex-direction: column;
+                position: static;
+                background-color: var(--primary);
+                box-shadow: none;
+                max-height: none;
+            }
+            
+            .nav-tabs.active {
+                display: flex;
+            }
+            
+            .nav-tab {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                border-radius: 0;
+                padding: 0.8rem;
+            }
+            
+            .stages-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stage-item {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .next-class {
                 flex-direction: column;
                 text-align: center;
             }
-            .nav-tabs {
-                width: 100%;
-            }
-            .nav-tab {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
+            
             .card {
                 padding: 1.5rem;
             }
-            .comparison-table {
-                font-size: 0.9rem;
-            }
-            .comparison-table th, .comparison-table td {
-                padding: 0.5rem;
-            }
+            
             .operator-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
+            
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .comparison-table th, .comparison-table td {
+                padding: 0.5rem;
+            }
+            
+            header.expanded + main {
+                margin-top: 380px;
+            }
         }
+        
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 0 0.5rem;
+            }
+            
+            .header-left {
+                flex-direction: row;
+                align-items: center;
+                width: 100%;
+            }
+            
+            .header-title {
+                flex: 1;
+            }
+            
+            .header-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .course-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+            
+            .progress-info {
+                font-size: 0.7rem;
+            }
+            
+            .progress-bar-mini {
+                width: 50px;
+            }
+            
+            .stage-item {
+                width: 100%;
+            }
+            
+            .stage-link {
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                text-align: left;
+                padding: 0.6rem;
+                gap: 0.8rem;
+            }
+            
+            .stage-icon {
+                font-size: 1.3rem;
+                margin-bottom: 0;
+            }
+            
+            .stage-content {
+                flex: 1;
+            }
+            
+            .next-class-info h4 {
+                font-size: 0.8rem;
+            }
+            
+            .next-class-info p {
+                font-size: 0.7rem;
+            }
+            
+            .next-class-btn {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            header.expanded + main {
+                margin-top: 420px;
+            }
+        }
+        
         /* Acessibilidade */
         .sr-only {
             position: absolute;
@@ -463,6 +1019,7 @@
             white-space: nowrap;
             border: 0;
         }
+        
         :focus {
             outline: 3px solid var(--secondary);
             outline-offset: 2px;
@@ -470,28 +1027,160 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div>
-                    <h1>Estruturas de Decisão em Java</h1>
-                    <p class="subtitle">Controle de Fluxo com if, else, switch e Operadores Ternários</p>
+    <header id="mainHeader">
+        <!-- Header Principal Compacto -->
+        <div class="main-header">
+            <div class="container" style="display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                <div class="header-left">
+                    <div class="header-title">
+                        <h1>Estruturas de Decisão em Java</h1>
+                        <p class="subtitle">Controle de Fluxo com if, else, switch e Operadores Ternários</p>
+                    </div>
                 </div>
-                <div>
-                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
-                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+                <div class="header-controls">
+                    <div class="course-badge">
+                        <span>📚</span>
+                        <span>Java</span>
+                    </div>
+                    <div class="progress-info">
+                        <span>2/8</span>
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini"></div>
+                        </div>
+                    </div>
+                    <div class="font-controls">
+                        <button id="decreaseFont" class="font-btn" aria-label="Diminuir fonte">A-</button>
+                        <button id="increaseFont" class="font-btn" aria-label="Aumentar fonte">A+</button>
+                    </div>
+                    <button class="header-toggle" id="headerToggle" aria-label="Expandir menu" aria-expanded="false">
+                        ⌄
+                    </button>
                 </div>
             </div>
-            <nav class="nav-tabs" role="tablist">
-                <button class="nav-tab active" data-topic="if-else" role="tab" aria-selected="true">if e else</button>
-                <button class="nav-tab" data-topic="else-if" role="tab" aria-selected="false">else if</button>
-                <button class="nav-tab" data-topic="operadores-logicos" role="tab" aria-selected="false">Operadores Lógicos</button>
-                <button class="nav-tab" data-topic="switch-case" role="tab" aria-selected="false">switch case</button>
-                <button class="nav-tab" data-topic="ternario" role="tab" aria-selected="false">Operador Ternário</button>
-                <button class="nav-tab" data-topic="exercicios" role="tab" aria-selected="false">Exercícios Práticos</button>
-            </nav>
+        </div>
+        
+        <!-- Menu Expansível (inicialmente oculto) -->
+        <div class="expandable-menu">
+            <!-- Navegação Principal - Abas de Tópicos -->
+            <div class="nav-container">
+                <div class="container">
+                    <nav class="nav-tabs" id="navTabs" role="tablist">
+                        <button class="nav-tab active" data-topic="if-else" role="tab" aria-selected="true">if e else</button>
+                        <button class="nav-tab" data-topic="else-if" role="tab" aria-selected="false">else if</button>
+                        <button class="nav-tab" data-topic="operadores-logicos" role="tab" aria-selected="false">Operadores Lógicos</button>
+                        <button class="nav-tab" data-topic="switch-case" role="tab" aria-selected="false">switch case</button>
+                        <button class="nav-tab" data-topic="ternario" role="tab" aria-selected="false">Operador Ternário</button>
+                        <button class="nav-tab" data-topic="exercicios" role="tab" aria-selected="false">Exercícios Práticos</button>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Menu de Etapas do Curso -->
+            <div class="stages-menu">
+                <div class="container">
+                    <div class="stages-header">
+                        <h3 class="stages-title">
+                            <span>📋</span>
+                            <span>Etapas do Curso</span>
+                        </h3>
+                        <span class="stages-progress">2/8 concluídas</span>
+                    </div>
+                    <div class="stages-content">
+                        <div class="stage-item">
+                            <a href="index.html" class="stage-link completed">
+                                <span class="stage-icon">📚</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 1</span>
+                                    <span class="stage-title">Fundamentos do Java</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link active">
+                                <span class="stage-icon">🔄</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 2</span>
+                                    <span class="stage-title">Estrutura de Decisão</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">🔁</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 3</span>
+                                    <span class="stage-title">Estrutura de Repetição</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">📋</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 4</span>
+                                    <span class="stage-title">Vetores e Matrizes</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">⚙️</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 5</span>
+                                    <span class="stage-title">Funções e Métodos</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">📁</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 6</span>
+                                    <span class="stage-title">Manipulação de Arquivos</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">🐞</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 7</span>
+                                    <span class="stage-title">Tratamento de Exceções</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="stage-item">
+                            <a href="#" class="stage-link locked">
+                                <span class="stage-icon">🏆</span>
+                                <div class="stage-content">
+                                    <span class="stage-number">Etapa 8</span>
+                                    <span class="stage-title">Projeto Final</span>
+                                    <span class="stage-status"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Próxima Aula -->
+                    <div class="next-class">
+                        <div class="next-class-info">
+                            <h4>Próxima Aula</h4>
+                            <p>Na próxima aula, você aprenderá sobre estruturas de repetição em Java, que permitem executar blocos de código várias vezes.</p>
+                        </div>
+                        <a href="#" class="next-class-btn">Ir para Próxima Aula</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
+    
     <main class="container">
         <!-- Tópico 1: if e else -->
         <section id="if-else" class="topic-section active" role="tabpanel">
@@ -1844,199 +2533,240 @@
             <p>&copy; Estruturas de Decisão em Java - Material educativo</p>
         </div>
     </footer>
+    
     <script>
-        // Navegação entre tópicos
-        const navTabs = document.querySelectorAll('.nav-tab');
-        const topicSections = document.querySelectorAll('.topic-section');
-        navTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTopic = tab.getAttribute('data-topic');
-                
-                // Remove classe active de todas as abas e seções
-                navTabs.forEach(t => {
-                    t.classList.remove('active');
-                    t.setAttribute('aria-selected', 'false');
+        // Garantir que o DOM esteja completamente carregado antes de executar o JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle do Menu Expansível
+            const headerToggle = document.getElementById('headerToggle');
+            const mainHeader = document.getElementById('mainHeader');
+            
+            if (headerToggle && mainHeader) {
+                headerToggle.addEventListener('click', function() {
+                    mainHeader.classList.toggle('expanded');
+                    headerToggle.classList.toggle('expanded');
+                    
+                    // Atualizar o atributo aria-expanded
+                    const isExpanded = mainHeader.classList.contains('expanded');
+                    headerToggle.setAttribute('aria-expanded', isExpanded);
+                    headerToggle.setAttribute('aria-label', isExpanded ? 'Recolher menu' : 'Expandir menu');
                 });
-                topicSections.forEach(section => section.classList.remove('active'));
-                
-                // Adiciona classe active na aba e seção correspondentes
-                tab.classList.add('active');
-                tab.setAttribute('aria-selected', 'true');
-                document.getElementById(targetTopic).classList.add('active');
-            });
-        });
-        
-        // Controle de tamanho da fonte
-        const increaseFontBtn = document.getElementById('increaseFont');
-        const decreaseFontBtn = document.getElementById('decreaseFont');
-        const root = document.documentElement;
-        let currentFontSize = 18;
-        increaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize < 24) {
-                currentFontSize += 2;
-                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
             }
-        });
-        decreaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize > 14) {
-                currentFontSize -= 2;
-                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
-            }
-        });
-        
-        // Atividade 1: if-else
-        const checkIfElseBtn = document.getElementById('checkIfElse');
-        if (checkIfElseBtn) {
-            checkIfElseBtn.addEventListener('click', () => {
-                const condicao = document.getElementById('votoCondicao').value.trim();
-                const feedback = document.getElementById('ifElseFeedback');
-                feedback.style.display = 'block';
-                
-                if (condicao === 'idade >= 16') {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! A condição está correta.';
-                } else {
-                    feedback.className = 'feedback error';
-                    feedback.textContent = 'A condição incorreta. Use: idade >= 16';
-                }
-            });
-        }
-        
-        // Atividade 2: else if - Arrastar e soltar
-        const tempDraggables = document.querySelectorAll('#tempContainer .draggable');
-        const tempContainer = document.getElementById('tempContainer');
-        let tempDraggedElement = null;
-        
-        if (tempDraggables.length > 0) {
-            tempDraggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', (e) => {
-                    tempDraggedElement = e.target;
-                    e.target.style.opacity = '0.5';
-                });
-                draggable.addEventListener('dragend', (e) => {
-                    e.target.style.opacity = '';
+            
+            // Navegação entre tópicos
+            const tabButtons = document.querySelectorAll('.nav-tab');
+            const topicSections = document.querySelectorAll('.topic-section');
+            
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTopic = tab.getAttribute('data-topic');
+                    
+                    // Remove classe active de todas as abas e seções
+                    tabButtons.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    topicSections.forEach(section => section.classList.remove('active'));
+                    
+                    // Adiciona classe active na aba e seção correspondentes
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    const targetSection = document.getElementById(targetTopic);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
                 });
             });
             
-            tempContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const afterElement = getDragAfterElement(tempContainer, e.clientY);
-                if (afterElement == null) {
-                    tempContainer.appendChild(tempDraggedElement);
-                } else {
-                    tempContainer.insertBefore(tempDraggedElement, afterElement);
-                }
-            });
-        }
-        
-        function getDragAfterElement(container, y) {
-            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            // Controle de tamanho da fonte
+            const increaseFontBtn = document.getElementById('increaseFont');
+            const decreaseFontBtn = document.getElementById('decreaseFont');
+            const root = document.documentElement;
+            let currentFontSize = 18;
             
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
+            if (increaseFontBtn) {
+                increaseFontBtn.addEventListener('click', () => {
+                    if (currentFontSize < 24) {
+                        currentFontSize += 2;
+                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+                    }
+                });
+            }
+            
+            if (decreaseFontBtn) {
+                decreaseFontBtn.addEventListener('click', () => {
+                    if (currentFontSize > 14) {
+                        currentFontSize -= 2;
+                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+                    }
+                });
+            }
+            
+            // Atividade 1: if-else
+            const checkIfElseBtn = document.getElementById('checkIfElse');
+            if (checkIfElseBtn) {
+                checkIfElseBtn.addEventListener('click', () => {
+                    const condicao = document.getElementById('votoCondicao').value.trim();
+                    const feedback = document.getElementById('ifElseFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        if (condicao === 'idade >= 16') {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! A condição está correta.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            feedback.textContent = 'A condição incorreta. Use: idade >= 16';
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 2: else if - Arrastar e soltar
+            const tempDraggables = document.querySelectorAll('#tempContainer .draggable');
+            const tempContainer = document.getElementById('tempContainer');
+            let tempDraggedElement = null;
+            
+            if (tempDraggables.length > 0 && tempContainer) {
+                tempDraggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', (e) => {
+                        tempDraggedElement = e.target;
+                        e.target.style.opacity = '0.5';
+                    });
+                    
+                    draggable.addEventListener('dragend', (e) => {
+                        e.target.style.opacity = '';
+                    });
+                });
                 
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-        
-        const checkTempOrderBtn = document.getElementById('checkTempOrder');
-        if (checkTempOrderBtn) {
-            checkTempOrderBtn.addEventListener('click', () => {
-                const items = [...document.querySelectorAll('#tempContainer .draggable')];
-                const correctOrder = items.every((item, index) => 
-                    parseInt(item.getAttribute('data-order')) === index + 1
-                );
+                tempContainer.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(tempContainer, e.clientY);
+                    if (afterElement == null) {
+                        tempContainer.appendChild(tempDraggedElement);
+                    } else {
+                        tempContainer.insertBefore(tempDraggedElement, afterElement);
+                    }
+                });
+            }
+            
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
                 
-                const feedback = document.getElementById('tempOrderFeedback');
-                feedback.style.display = 'block';
-                
-                if (correctOrder) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Parabéns! Você organizou as condições corretamente.';
-                } else {
-                    feedback.className = 'feedback error';
-                    feedback.textContent = 'A ordem não está correta. Tente novamente!';
-                }
-            });
-        }
-        
-        // Atividade 3: Operadores Lógicos
-        const checkLogicaBtn = document.getElementById('checkLogica');
-        if (checkLogicaBtn) {
-            checkLogicaBtn.addEventListener('click', () => {
-                const condicao = document.getElementById('logicaCondicao').value.trim();
-                const feedback = document.getElementById('logicaFeedback');
-                feedback.style.display = 'block';
-                
-                if (condicao === 'media >= 7.0 && frequencia >= 75 && entregouTrabalho') {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você usou corretamente os operadores lógicos.';
-                } else {
-                    feedback.className = 'feedback error';
-                    feedback.textContent = 'A condição incorreta. Use: media >= 7.0 && frequencia >= 75 && entregouTrabalho';
-                }
-            });
-        }
-        
-        // Atividade 4: switch case
-        const checkSwitchBtn = document.getElementById('checkSwitch');
-        if (checkSwitchBtn) {
-            checkSwitchBtn.addEventListener('click', () => {
-                const case2 = document.getElementById('case2').value.trim();
-                const msg2 = document.getElementById('msg2').value.trim();
-                const msgDefault = document.getElementById('msgDefault').value.trim();
-                
-                const feedback = document.getElementById('switchFeedback');
-                feedback.style.display = 'block';
-                
-                const correctCase2 = case2 === '2';
-                const correctMsg2 = msg2 === '"Consulta de produtos"';
-                const correctMsgDefault = msgDefault === '"Opção inválida"';
-                
-                if (correctCase2 && correctMsg2 && correctMsgDefault) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! O código está correto.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Corrija os seguintes itens: ';
-                    if (!correctCase2) message += 'case 2. ';
-                    if (!correctMsg2) message += 'mensagem do case 2 (use: "Consulta de produtos"). ';
-                    if (!correctMsgDefault) message += 'mensagem default (use: "Opção inválida"). ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Atividade 5: Operador Ternário
-        const checkTernarioBtn = document.getElementById('checkTernario');
-        if (checkTernarioBtn) {
-            checkTernarioBtn.addEventListener('click', () => {
-                const ternario1 = document.getElementById('ternario1').value.trim();
-                const ternario2 = document.getElementById('ternario2').value.trim();
-                
-                const feedback = document.getElementById('ternarioFeedback');
-                feedback.style.display = 'block';
-                
-                const correctTernario1 = ternario1 === '(idade >= 18) ? "Adulto" : "Menor de idade"';
-                const correctTernario2 = ternario2 === '(preco > 50.0) ? preco * 0.1 : 0';
-                
-                if (correctTernario1 && correctTernario2) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Perfeito! Você converteu corretamente para operadores ternários.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Corrija as conversões: ';
-                    if (!correctTernario1) message += 'Exemplo 1: (idade >= 18) ? "Adulto" : "Menor de idade". ';
-                    if (!correctTernario2) message += 'Exemplo 2: (preco > 50.0) ? preco * 0.1 : 0. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+            
+            const checkTempOrderBtn = document.getElementById('checkTempOrder');
+            if (checkTempOrderBtn) {
+                checkTempOrderBtn.addEventListener('click', () => {
+                    const items = [...document.querySelectorAll('#tempContainer .draggable')];
+                    const correctOrder = items.every((item, index) => 
+                        parseInt(item.getAttribute('data-order')) === index + 1
+                    );
+                    
+                    const feedback = document.getElementById('tempOrderFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        if (correctOrder) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Parabéns! Você organizou as condições corretamente.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            feedback.textContent = 'A ordem não está correta. Tente novamente!';
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 3: Operadores Lógicos
+            const checkLogicaBtn = document.getElementById('checkLogica');
+            if (checkLogicaBtn) {
+                checkLogicaBtn.addEventListener('click', () => {
+                    const condicao = document.getElementById('logicaCondicao').value.trim();
+                    const feedback = document.getElementById('logicaFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        if (condicao === 'media >= 7.0 && frequencia >= 75 && entregouTrabalho') {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! Você usou corretamente os operadores lógicos.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            feedback.textContent = 'A condição incorreta. Use: media >= 7.0 && frequencia >= 75 && entregouTrabalho';
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 4: switch case
+            const checkSwitchBtn = document.getElementById('checkSwitch');
+            if (checkSwitchBtn) {
+                checkSwitchBtn.addEventListener('click', () => {
+                    const case2 = document.getElementById('case2').value.trim();
+                    const msg2 = document.getElementById('msg2').value.trim();
+                    const msgDefault = document.getElementById('msgDefault').value.trim();
+                    
+                    const feedback = document.getElementById('switchFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const correctCase2 = case2 === '2';
+                        const correctMsg2 = msg2 === '"Consulta de produtos"';
+                        const correctMsgDefault = msgDefault === '"Opção inválida"';
+                        
+                        if (correctCase2 && correctMsg2 && correctMsgDefault) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! O código está correto.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Corrija os seguintes itens: ';
+                            if (!correctCase2) message += 'case 2. ';
+                            if (!correctMsg2) message += 'mensagem do case 2 (use: "Consulta de produtos"). ';
+                            if (!correctMsgDefault) message += 'mensagem default (use: "Opção inválida"). ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 5: Operador Ternário
+            const checkTernarioBtn = document.getElementById('checkTernario');
+            if (checkTernarioBtn) {
+                checkTernarioBtn.addEventListener('click', () => {
+                    const ternario1 = document.getElementById('ternario1').value.trim();
+                    const ternario2 = document.getElementById('ternario2').value.trim();
+                    
+                    const feedback = document.getElementById('ternarioFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const correctTernario1 = ternario1 === '(idade >= 18) ? "Adulto" : "Menor de idade"';
+                        const correctTernario2 = ternario2 === '(preco > 50.0) ? preco * 0.1 : 0';
+                        
+                        if (correctTernario1 && correctTernario2) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Perfeito! Você converteu corretamente para operadores ternários.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Corrija as conversões: ';
+                            if (!correctTernario1) message += 'Exemplo 1: (idade >= 18) ? "Adulto" : "Menor de idade". ';
+                            if (!correctTernario2) message += 'Exemplo 2: (preco > 50.0) ? preco * 0.1 : 0. ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
