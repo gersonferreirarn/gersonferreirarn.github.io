@@ -14,7 +14,8 @@
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
-            --sidebar-width: 280px;
+            --header-height: auto;
+            --header-bg: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
         }
         * {
             margin: 0;
@@ -33,172 +34,398 @@
             margin: 0 auto;
             padding: 0 20px;
         }
+        
+        /* NOVO CABEÇALHO */
         header {
-            background-color: var(--primary);
+            background: var(--header-bg);
             color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
+            padding: 0;
         }
-        .header-content {
+        
+        /* Top Bar - Informações e Controles */
+        .top-bar {
+            background-color: rgba(0,0,0,0.2);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .top-bar-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
         }
+        
+        .course-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .course-badge {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .progress-info {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .progress-bar-mini {
+            width: 100px;
+            height: 6px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill-mini {
+            height: 100%;
+            background-color: var(--success);
+            width: 12.5%; /* 1/8 */
+            border-radius: 3px;
+        }
+        
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .font-controls {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 0.3rem;
+        }
+        
+        .font-btn {
+            background: none;
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .font-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        /* Main Header - Título e Menu */
+        .main-header {
+            padding: 1.5rem 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .header-title {
+            flex: 1;
+        }
+        
         h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
+        
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
+            font-weight: 300;
         }
+        
+        /* Menu Mobile Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        /* Navegação Principal */
+        .nav-container {
+            background-color: rgba(0,0,0,0.15);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 0;
+        }
+        
         .nav-tabs {
             display: flex;
             overflow-x: auto;
-            background-color: var(--dark);
-            margin-top: 1rem;
-            border-radius: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
         }
+        
+        .nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .nav-tabs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
         .nav-tab {
             padding: 1rem 1.5rem;
             background-color: transparent;
             border: none;
-            color: white;
+            color: rgba(255,255,255,0.8);
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
+            font-size: 0.95rem;
             white-space: nowrap;
-        }
-        .nav-tab:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        .nav-tab.active {
-            background-color: var(--secondary);
+            position: relative;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
         }
         
-        /* Menu Lateral de Etapas do Curso */
-        .sidebar {
-            position: fixed;
-            top: 120px;
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - 120px);
-            background-color: var(--dark);
+        .nav-tab:hover {
             color: white;
-            padding: 1.5rem 0;
-            overflow-y: auto;
-            z-index: 999;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            background-color: rgba(255,255,255,0.05);
         }
-        .sidebar-header {
-            padding: 0 1.5rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        
+        .nav-tab.active {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border-bottom-color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        /* Menu de Etapas do Curso */
+        .stages-menu {
+            background-color: rgba(0,0,0,0.2);
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
         }
-        .sidebar-header h3 {
-            font-size: 1.2rem;
-            color: var(--light);
+        
+        .stages-title {
+            font-size: 1.1rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 0.5rem;
         }
-        .course-progress {
+        
+        .stages-progress {
             font-size: 0.9rem;
             color: var(--success);
             font-weight: bold;
         }
-        .sidebar-menu {
-            list-style-type: none;
-        }
-        .sidebar-item {
-            margin-bottom: 0.3rem;
-        }
-        .sidebar-link {
+        
+        .stages-content {
             display: flex;
+            overflow-x: auto;
+            gap: 0.8rem;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .stages-content::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .stages-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        
+        .stages-content::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+        
+        .stage-item {
+            flex-shrink: 0;
+            width: 200px;
+        }
+        
+        .stage-link {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: 10px;
             color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: all 0.3s;
-            border-left: 3px solid transparent;
-            position: relative;
+            border: 2px solid transparent;
+            text-align: center;
+            gap: 0.5rem;
         }
-        .sidebar-link:hover {
-            background-color: rgba(255,255,255,0.1);
+        
+        .stage-link:hover {
+            background-color: rgba(255,255,255,0.15);
             color: white;
+            transform: translateY(-2px);
         }
-        .sidebar-link.active {
+        
+        .stage-link.active {
             background-color: rgba(52, 152, 219, 0.3);
-            border-left-color: var(--secondary);
+            border-color: var(--secondary);
             color: white;
-            font-weight: bold;
+            font-weight: 600;
         }
-        .sidebar-link.completed {
-            color: rgba(255,255,255,0.6);
+        
+        .stage-link.completed {
+            background-color: rgba(39, 174, 96, 0.2);
+            border-color: var(--success);
         }
-        .sidebar-link.completed::after {
-            content: '✓';
-            position: absolute;
-            right: 1.5rem;
-            color: var(--success);
-            font-weight: bold;
-        }
-        .sidebar-link.locked {
+        
+        .stage-link.locked {
+            background-color: rgba(255,255,255,0.05);
             color: rgba(255,255,255,0.4);
             cursor: not-allowed;
         }
-        .sidebar-link.locked::after {
-            content: '🔒';
-            position: absolute;
-            right: 1.5rem;
-            font-size: 0.9rem;
-        }
-        .sidebar-icon {
-            margin-right: 1rem;
-            font-size: 1.2rem;
-            width: 24px;
-            text-align: center;
-        }
-        .sidebar-toggle {
-            display: none;
-            position: fixed;
-            top: 85px;
-            left: 15px;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        
+        .stage-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
         }
         
+        .stage-number {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .stage-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stage-status {
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+        
+        .stage-link.completed .stage-status::after {
+            content: '✓ Concluído';
+            color: var(--success);
+        }
+        
+        .stage-link.locked .stage-status::after {
+            content: '🔒 Bloqueado';
+        }
+        
+        /* Próxima Aula */
+        .next-class {
+            margin-top: 1rem;
+            background-color: rgba(52, 152, 219, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .next-class-info h4 {
+            color: var(--light);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .next-class-info p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .next-class-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        
+        .next-class-btn:hover {
+            background-color: #229954;
+            transform: translateY(-2px);
+        }
+        
+        /* Conteúdo Principal */
         main {
             padding: 2rem 0;
-            margin-left: var(--sidebar-width);
-            transition: margin-left 0.3s ease;
+            margin-top: var(--header-height);
+            transition: margin-top 0.3s ease;
         }
+        
         .topic-section {
             display: none;
             animation: fadeIn 0.5s;
         }
+        
         .topic-section.active {
             display: block;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Cards */
         .card {
             background: white;
             border-radius: 10px;
@@ -207,28 +434,35 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--secondary);
         }
+        
         .card h2 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.8rem;
         }
+        
         .card h3 {
             color: var(--dark);
             margin: 1.5rem 0 0.8rem;
             font-size: 1.4rem;
         }
+        
         .card h4 {
             color: var(--secondary);
             margin: 1rem 0 0.5rem;
             font-size: 1.2rem;
         }
+        
         .card p, .card li {
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
+        
         ul {
             padding-left: 2rem;
         }
+        
+        /* Code Blocks */
         .code-block {
             background-color: #2d3748;
             color: #e2e8f0;
@@ -240,19 +474,25 @@
             font-size: 1rem;
             line-height: 1.5;
         }
+        
         .code-block .keyword {
             color: #f687b3;
         }
+        
         .code-block .string {
             color: #68d391;
         }
+        
         .code-block .comment {
             color: #a0aec0;
             font-style: italic;
         }
+        
         .code-block .number {
             color: #fbb6ce;
         }
+        
+        /* Activities */
         .activity {
             background-color: #f7fafc;
             border: 2px dashed var(--secondary);
@@ -260,19 +500,23 @@
             padding: 1.5rem;
             margin: 2rem 0;
         }
+        
         .activity h3 {
             color: var(--secondary);
             margin-bottom: 1rem;
         }
+        
         .input-group {
             margin: 1rem 0;
         }
+        
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: bold;
             color: var(--dark);
         }
+        
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 0.8rem;
@@ -281,10 +525,12 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
+        
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             outline: none;
             border-color: var(--secondary);
         }
+        
         .btn {
             display: inline-block;
             background-color: var(--secondary);
@@ -297,38 +543,47 @@
             transition: all 0.3s;
             margin-top: 1rem;
         }
+        
         .btn:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
         }
+        
         .btn-success {
             background-color: var(--success);
         }
+        
         .btn-success:hover {
             background-color: #229954;
         }
+        
         .feedback {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 5px;
             display: none;
         }
+        
         .feedback.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        
         .feedback.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        
+        /* Visualizações */
         .memory-visual {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin: 1.5rem 0;
         }
+        
         .memory-cell {
             background-color: var(--light);
             border: 2px solid var(--secondary);
@@ -338,30 +593,36 @@
             min-width: 120px;
             transition: all 0.3s;
         }
+        
         .memory-cell:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        
         .memory-cell .name {
             font-weight: bold;
             color: var(--dark);
             margin-bottom: 0.5rem;
         }
+        
         .memory-cell .value {
             font-size: 1.2rem;
             color: var(--secondary);
         }
+        
         .memory-cell .type {
             font-size: 0.9rem;
             color: #666;
             margin-top: 0.5rem;
         }
+        
         .operator-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
+        
         .operator-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -370,35 +631,42 @@
             text-align: center;
             transition: all 0.3s;
         }
+        
         .operator-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        
         .operator-symbol {
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
+        
         .operator-name {
             color: var(--dark);
             margin-bottom: 0.3rem;
         }
+        
         .operator-example {
             font-size: 0.9rem;
             color: #666;
         }
+        
         .io-example {
             background-color: #f1f5f9;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
+        
         .io-example h4 {
             color: var(--dark);
             margin-bottom: 1rem;
         }
+        
         .io-terminal {
             background-color: #1e293b;
             color: #e2e8f0;
@@ -407,22 +675,25 @@
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
         }
+        
         .io-terminal .input {
             color: #68d391;
         }
+        
         .io-terminal .output {
             color: #fbb6ce;
         }
+        
+        /* Footer */
         footer {
             background-color: var(--primary);
             color: white;
             text-align: center;
             padding: 1.5rem 0;
             margin-top: 3rem;
-            margin-left: var(--sidebar-width);
-            transition: margin-left 0.3s ease;
         }
-        /* Estilos para seção de prática no NetBeans */
+        
+        /* Prática no NetBeans */
         .practice-module {
             background: white;
             border-radius: 10px;
@@ -431,11 +702,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--success);
         }
+        
         .practice-module h3 {
             color: var(--success);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
+        
         .step {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -443,6 +716,7 @@
             margin: 1.5rem 0;
             border-left: 4px solid var(--warning);
         }
+        
         .step-number {
             display: inline-block;
             background-color: var(--warning);
@@ -455,6 +729,7 @@
             font-weight: bold;
             margin-right: 1rem;
         }
+        
         .netbeans-screenshot {
             background-color: #2b2b2b;
             border-radius: 8px;
@@ -464,6 +739,7 @@
             font-family: 'Courier New', monospace;
             position: relative;
         }
+        
         .netbeans-header {
             background-color: #3c3f41;
             padding: 0.5rem 1rem;
@@ -472,27 +748,32 @@
             display: flex;
             align-items: center;
         }
+        
         .netbeans-title {
             color: #e0e0e0;
             font-size: 0.9rem;
             margin-left: 1rem;
         }
+        
         .netbeans-menu {
             display: flex;
             gap: 0.5rem;
         }
+        
         .netbeans-menu-item {
             background-color: #555;
             padding: 0.2rem 0.5rem;
             border-radius: 3px;
             font-size: 0.8rem;
         }
+        
         .netbeans-code {
             background-color: #1e1e1e;
             padding: 1rem;
             border-radius: 5px;
             margin: 0.5rem 0;
         }
+        
         .netbeans-output {
             background-color: #0d1117;
             padding: 1rem;
@@ -500,6 +781,7 @@
             margin: 0.5rem 0;
             color: #58a6ff;
         }
+        
         .tip-box {
             background-color: #e3f2fd;
             border-left: 4px solid var(--secondary);
@@ -507,10 +789,12 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
+        
         .tip-box h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
+        
         .warning-box {
             background-color: #fff3cd;
             border-left: 4px solid var(--warning);
@@ -518,10 +802,12 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
+        
         .warning-box h4 {
             color: var(--warning);
             margin-bottom: 0.5rem;
         }
+        
         .progress-bar {
             background-color: #e0e0e0;
             height: 20px;
@@ -529,12 +815,14 @@
             overflow: hidden;
             margin: 1rem 0;
         }
+        
         .progress-fill {
             background-color: var(--success);
             height: 100%;
             width: 0%;
             transition: width 0.3s;
         }
+        
         .checkpoint {
             background-color: #e8f5e9;
             border: 2px solid var(--success);
@@ -542,46 +830,46 @@
             padding: 1rem;
             margin: 1.5rem 0;
         }
+        
         .checkpoint h4 {
             color: var(--success);
             margin-bottom: 0.5rem;
         }
-        /* Estilos para a aba de apresentação do NetBeans */
+        
+        /* Outros estilos mantidos */
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
             font-size: 1rem;
         }
+        
         .comparison-table th, .comparison-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        
         .comparison-table th {
             background-color: var(--secondary);
             color: white;
         }
+        
         .comparison-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        
         .comparison-table tr:hover {
             background-color: #e2e2e2;
         }
-        .ide-image {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            border-radius: 8px;
-            margin: 1rem 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
+        
         .feature-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -589,35 +877,42 @@
             padding: 1.5rem;
             transition: all 0.3s;
         }
+        
         .feature-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        
         .feature-icon {
             font-size: 2rem;
             color: var(--secondary);
             margin-bottom: 1rem;
         }
+        
         .feature-title {
             font-size: 1.2rem;
             color: var(--dark);
             margin-bottom: 0.5rem;
         }
+        
         .feature-description {
             color: #666;
         }
+        
         .transition-steps {
             counter-reset: step-counter;
             list-style-type: none;
             padding-left: 0;
         }
+        
         .transition-step {
             position: relative;
             padding-left: 3rem;
             margin-bottom: 2rem;
             counter-increment: step-counter;
         }
+        
         .transition-step::before {
             content: counter(step-counter);
             position: absolute;
@@ -633,37 +928,44 @@
             justify-content: center;
             font-weight: bold;
         }
+        
         .code-comparison {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin: 1.5rem 0;
         }
+        
         .code-column {
             flex: 1;
             min-width: 300px;
         }
+        
         .code-column h4 {
             color: var(--dark);
             margin-bottom: 0.5rem;
             text-align: center;
         }
+        
         .installation-steps {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
+        
         .installation-steps h4 {
             color: var(--primary);
             margin-bottom: 1rem;
         }
+        
         .scanner-methods {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
+        
         .scanner-method {
             background-color: white;
             border-left: 4px solid var(--secondary);
@@ -671,57 +973,144 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
+        
         .scanner-method h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
+        
+        /* Responsividade */
         @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            main, footer {
-                margin-left: 0;
-            }
-            .sidebar-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
             }
+            
             .nav-tabs {
-                width: 100%;
+                justify-content: center;
             }
-            .nav-tab {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
+            
+            .stages-content {
+                justify-content: center;
             }
+            
+            .stage-item {
+                width: 180px;
+            }
+        }
+        
+        @media (max-width: 768px) {
             h1 {
                 font-size: 1.5rem;
             }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .nav-tabs {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--primary);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            
+            .nav-tabs.active {
+                display: flex;
+            }
+            
+            .nav-tab {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                border-radius: 0;
+                padding: 1rem;
+            }
+            
+            .stages-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stage-item {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .next-class {
+                flex-direction: column;
+                text-align: center;
+            }
+            
             .card {
                 padding: 1.5rem;
             }
+            
             .operator-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
+            
             .comparison-table {
                 font-size: 0.9rem;
             }
+            
             .comparison-table th, .comparison-table td {
                 padding: 0.5rem;
             }
+            
             .code-comparison {
                 flex-direction: column;
             }
         }
+        
+        @media (max-width: 480px) {
+            .top-bar-content {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .course-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stage-item {
+                width: 100%;
+            }
+            
+            .stage-link {
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                text-align: left;
+                padding: 0.8rem;
+                gap: 1rem;
+            }
+            
+            .stage-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+            
+            .stage-content {
+                flex: 1;
+            }
+        }
+        
         /* Acessibilidade */
         .sr-only {
             position: absolute;
@@ -734,6 +1123,7 @@
             white-space: nowrap;
             border: 0;
         }
+        
         :focus {
             outline: 3px solid var(--secondary);
             outline-offset: 2px;
@@ -742,105 +1132,167 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="header-content">
-                <div>
-                    <h1>Aprendendo Java Estruturado com NetBeans</h1>
-                    <p class="subtitle">Fundamentos</p>
-                </div>
-                <div>
-                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
-                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+        <!-- Top Bar - Informações do Curso e Controles -->
+        <div class="top-bar">
+            <div class="container">
+                <div class="top-bar-content">
+                    <div class="course-info">
+                        <div class="course-badge">
+                            <span>📚</span>
+                            <span>Java Estruturado</span>
+                        </div>
+                        <div class="progress-info">
+                            <span>Progresso:</span>
+                            <div class="progress-bar-mini">
+                                <div class="progress-fill-mini"></div>
+                            </div>
+                            <span>1/8</span>
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <div class="font-controls">
+                            <button id="decreaseFont" class="font-btn" aria-label="Diminuir fonte">A-</button>
+                            <button id="increaseFont" class="font-btn" aria-label="Aumentar fonte">A+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <nav class="nav-tabs" role="tablist">
-                <button class="nav-tab active" data-topic="algoritmos" role="tab" aria-selected="true">Algoritmos</button>
-                <button class="nav-tab" data-topic="tipos" role="tab" aria-selected="false">Tipos de Dados</button>
-                <button class="nav-tab" data-topic="memoria" role="tab" aria-selected="false">Memória e Variáveis</button>
-                <button class="nav-tab" data-topic="operadores" role="tab" aria-selected="false">Operadores</button>
-                <button class="nav-tab" data-topic="comandos" role="tab" aria-selected="false">Comandos Básicos</button>
-                <button class="nav-tab" data-topic="netbeans" role="tab" aria-selected="false">Apresentando NetBeans</button>
-                <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
-            </nav>
+        </div>
+        
+        <!-- Main Header - Título e Menu Toggle -->
+        <div class="main-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1>Aprendendo Java Estruturado com NetBeans</h1>
+                        <p class="subtitle">Fundamentos da Programação em Java</p>
+                    </div>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navegação Principal - Abas de Tópicos -->
+        <div class="nav-container">
+            <div class="container">
+                <nav class="nav-tabs" id="navTabs" role="tablist">
+                    <button class="nav-tab active" data-topic="algoritmos" role="tab" aria-selected="true">Algoritmos</button>
+                    <button class="nav-tab" data-topic="tipos" role="tab" aria-selected="false">Tipos de Dados</button>
+                    <button class="nav-tab" data-topic="memoria" role="tab" aria-selected="false">Memória e Variáveis</button>
+                    <button class="nav-tab" data-topic="operadores" role="tab" aria-selected="false">Operadores</button>
+                    <button class="nav-tab" data-topic="comandos" role="tab" aria-selected="false">Comandos Básicos</button>
+                    <button class="nav-tab" data-topic="netbeans" role="tab" aria-selected="false">Apresentando NetBeans</button>
+                    <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Menu de Etapas do Curso -->
+        <div class="stages-menu">
+            <div class="container">
+                <div class="stages-header">
+                    <h3 class="stages-title">
+                        <span>📋</span>
+                        <span>Etapas do Curso</span>
+                    </h3>
+                    <span class="stages-progress">1/8 concluídas</span>
+                </div>
+                <div class="stages-content">
+                    <div class="stage-item">
+                        <a href="#" class="stage-link active">
+                            <span class="stage-icon">📚</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 1</span>
+                                <span class="stage-title">Fundamentos do Java</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="decisao.html" class="stage-link">
+                            <span class="stage-icon">🔄</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 2</span>
+                                <span class="stage-title">Estrutura de Decisão</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">🔁</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 3</span>
+                                <span class="stage-title">Estrutura de Repetição</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">📋</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 4</span>
+                                <span class="stage-title">Vetores e Matrizes</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">⚙️</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 5</span>
+                                <span class="stage-title">Funções e Métodos</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">📁</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 6</span>
+                                <span class="stage-title">Manipulação de Arquivos</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">🐞</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 7</span>
+                                <span class="stage-title">Tratamento de Exceções</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="stage-item">
+                        <a href="#" class="stage-link locked">
+                            <span class="stage-icon">🏆</span>
+                            <div class="stage-content">
+                                <span class="stage-number">Etapa 8</span>
+                                <span class="stage-title">Projeto Final</span>
+                                <span class="stage-status"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Próxima Aula -->
+                <div class="next-class">
+                    <div class="next-class-info">
+                        <h4>Próxima Aula</h4>
+                        <p>Na próxima aula, você aprenderá sobre estruturas de decisão em Java, que permitem que seu programa tome diferentes caminhos com base em condições.</p>
+                    </div>
+                    <a href="decisao.html" class="next-class-btn">Ir para Próxima Aula</a>
+                </div>
+            </div>
         </div>
     </header>
-    
-    <!-- Botão para abrir/fechar menu lateral em telas pequenas -->
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Alternar menu">
-        ☰
-    </button>
-    
-    <!-- Menu Lateral de Etapas do Curso -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>
-                Etapas do Curso
-                <span class="course-progress">1/8</span>
-            </h3>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link active">
-                    <span class="sidebar-icon">📚</span>
-                    <span>1. Fundamentos do Java</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="decisao.html" class="sidebar-link">
-                    <span class="sidebar-icon">🔄</span>
-                    <span>2. Estrutura de Decisão</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">🔁</span>
-                    <span>3. Estrutura de Repetição</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">📋</span>
-                    <span>4. Vetores e Matrizes</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">⚙️</span>
-                    <span>5. Funções e Métodos</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">📁</span>
-                    <span>6. Manipulação de Arquivos</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">🐞</span>
-                    <span>7. Tratamento de Exceções</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link locked">
-                    <span class="sidebar-icon">🏆</span>
-                    <span>8. Projeto Final</span>
-                </a>
-            </li>
-        </ul>
-        
-        <div style="padding: 1.5rem; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-            <div style="background-color: rgba(52, 152, 219, 0.2); padding: 1rem; border-radius: 8px;">
-                <h4 style="color: var(--light); margin-bottom: 0.5rem;">Próxima Aula</h4>
-                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0;">
-                    Na próxima aula, você aprenderá sobre estruturas de decisão em Java, que permitem que seu programa tome diferentes caminhos com base em condições.
-                </p>
-                <a href="decisao.html" class="btn btn-success" style="margin-top: 1rem; width: 100%; text-align: center;">
-                    Ir para Próxima Aula
-                </a>
-            </div>
-        </div>
-    </aside>
     
     <main class="container">
         <!-- Tópico 1: Algoritmos -->
@@ -884,6 +1336,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Tópico 2: Tipos de Dados -->
         <section id="tipos" class="topic-section" role="tabpanel">
             <div class="card">
@@ -965,6 +1418,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Tópico 3: Memória e Variáveis -->
         <section id="memoria" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1027,6 +1481,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Tópico 4: Operadores -->
         <section id="operadores" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1131,6 +1586,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Tópico 5: Comandos Básicos -->
         <section id="comandos" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1386,6 +1842,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Nova Seção: Apresentando NetBeans -->
         <section id="netbeans" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1682,6 +2139,7 @@ public class VerificaIdade {
                 </div>
             </div>
         </section>
+        
         <!-- Seção: Prática no NetBeans -->
         <section id="pratica" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1692,6 +2150,7 @@ public class VerificaIdade {
                     <h4>Dica Importante</h4>
                     <p>Antes de começar, certifique-se de que o NetBeans está instalado em seu computador. Se não estiver, peça ajuda ao seu professor para instalá-lo.</p>
                 </div>
+                
                 <!-- Módulo 1: Criando o Primeiro Projeto -->
                 <div class="practice-module">
                     <h3>Módulo 1: Criando seu Primeiro Projeto Java</h3>
@@ -1780,6 +2239,7 @@ public class VerificaIdade {
                         </div>
                     </div>
                 </div>
+                
                 <!-- Módulo 2: Primeiro Programa com Saída -->
                 <div class="practice-module">
                     <h3>Módulo 2: Criando seu Primeiro Programa com Saída</h3>
@@ -1853,6 +2313,7 @@ public class VerificaIdade {
                         <p>Você acabou de criar e executar seu primeiro programa Java! Se você viu a mensagem "Olá, mundo!" na janela de saída, tudo funcionou perfeitamente.</p>
                     </div>
                 </div>
+                
                 <!-- Módulo 3: Trabalhando com Variáveis -->
                 <div class="practice-module">
                     <h3>Módulo 3: Trabalhando com Variáveis e Tipos de Dados</h3>
@@ -1908,10 +2369,6 @@ public class VerificaIdade {
                             System.out.println(<span class="string">"Inicial: "</span> + inicial);<br>
                             System.out.println(<span class="string">"É estudante: "</span> + estudante);
                         </div>
-                        <div class="warning-box">
-                            <h4>Atenção</h4>
-                            <p>Observe que usamos o operador "+" para juntar (concatenar) texto com variáveis. Isso é muito útil para criar mensagens personalizadas.</p>
-                        </div>
                     </div>
                     <div class="step">
                         <span class="step-number">4</span>
@@ -1947,6 +2404,7 @@ public class VerificaIdade {
                         <p>Tente modificar os valores iniciais das variáveis e execute novamente para ver como o resultado muda.</p>
                     </div>
                 </div>
+                
                 <!-- Módulo 4: Entrada de Dados -->
                 <div class="practice-module">
                     <h3>Módulo 4: Recebendo Dados do Usuário</h3>
@@ -2064,6 +2522,7 @@ public class VerificaIdade {
                         <p>Você criou um programa interativo! Agora tente adicionar mais campos, como pedir a altura do usuário e mostrar seu IMC (Índice de Massa Corporal).</p>
                     </div>
                 </div>
+                
                 <!-- Módulo 5: Calculadora Simples -->
                 <div class="practice-module">
                     <h3>Módulo 5: Criando uma Calculadora Simples</h3>
@@ -2183,6 +2642,7 @@ public class VerificaIdade {
                         </ul>
                     </div>
                 </div>
+                
                 <!-- Módulo 6: Projeto Final -->
                 <div class="practice-module">
                     <h3>Módulo 6: Projeto Final - Sistema de Médias</h3>
@@ -2309,22 +2769,34 @@ public class VerificaIdade {
             </div>
         </section>
     </main>
+    
     <footer>
         <div class="container">
             <p>&copy; Aprendendo Java Estruturado - Material educativo adaptado</p>
         </div>
     </footer>
+    
     <script>
+        // Menu Mobile Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navTabs = document.getElementById('navTabs');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            navTabs.classList.toggle('active');
+            // Mudar o ícone do botão
+            mobileMenuToggle.textContent = navTabs.classList.contains('active') ? '✕' : '☰';
+        });
+        
         // Navegação entre tópicos
-        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabButtons = document.querySelectorAll('.nav-tab');
         const topicSections = document.querySelectorAll('.topic-section');
         
-        navTabs.forEach(tab => {
+        tabButtons.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetTopic = tab.getAttribute('data-topic');
                 
                 // Remove classe active de todas as abas e seções
-                navTabs.forEach(t => {
+                tabButtons.forEach(t => {
                     t.classList.remove('active');
                     t.setAttribute('aria-selected', 'false');
                 });
@@ -2334,15 +2806,13 @@ public class VerificaIdade {
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
                 document.getElementById(targetTopic).classList.add('active');
+                
+                // Fecha o menu mobile em telas pequenas
+                if (window.innerWidth <= 768) {
+                    navTabs.classList.remove('active');
+                    mobileMenuToggle.textContent = '☰';
+                }
             });
-        });
-        
-        // Controle do menu lateral em telas pequenas
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
         });
         
         // Controle de tamanho da fonte
