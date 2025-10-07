@@ -14,6 +14,7 @@
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
+            --sidebar-width: 280px;
         }
         * {
             margin: 0;
@@ -37,6 +38,11 @@
             color: white;
             padding: 1.5rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
         .header-content {
             display: flex;
@@ -75,8 +81,112 @@
         .nav-tab.active {
             background-color: var(--secondary);
         }
+        
+        /* Menu Lateral de Etapas do Curso */
+        .sidebar {
+            position: fixed;
+            top: 120px;
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - 120px);
+            background-color: var(--dark);
+            color: white;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            z-index: 999;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .sidebar-header {
+            padding: 0 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+        }
+        .sidebar-header h3 {
+            font-size: 1.2rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .course-progress {
+            font-size: 0.9rem;
+            color: var(--success);
+            font-weight: bold;
+        }
+        .sidebar-menu {
+            list-style-type: none;
+        }
+        .sidebar-item {
+            margin-bottom: 0.3rem;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .sidebar-link.active {
+            background-color: rgba(52, 152, 219, 0.3);
+            border-left-color: var(--secondary);
+            color: white;
+            font-weight: bold;
+        }
+        .sidebar-link.completed {
+            color: rgba(255,255,255,0.6);
+        }
+        .sidebar-link.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 1.5rem;
+            color: var(--success);
+            font-weight: bold;
+        }
+        .sidebar-link.locked {
+            color: rgba(255,255,255,0.4);
+            cursor: not-allowed;
+        }
+        .sidebar-link.locked::after {
+            content: '🔒';
+            position: absolute;
+            right: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .sidebar-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 85px;
+            left: 15px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
         main {
             padding: 2rem 0;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
         }
         .topic-section {
             display: none;
@@ -309,6 +419,8 @@
             text-align: center;
             padding: 1.5rem 0;
             margin-top: 3rem;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
         }
         /* Estilos para seção de prática no NetBeans */
         .practice-module {
@@ -563,6 +675,22 @@
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            main, footer {
+                margin-left: 0;
+            }
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -636,6 +764,84 @@
             </nav>
         </div>
     </header>
+    
+    <!-- Botão para abrir/fechar menu lateral em telas pequenas -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Alternar menu">
+        ☰
+    </button>
+    
+    <!-- Menu Lateral de Etapas do Curso -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>
+                Etapas do Curso
+                <span class="course-progress">1/8</span>
+            </h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link active">
+                    <span class="sidebar-icon">📚</span>
+                    <span>1. Fundamentos do Java</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="decisao.html" class="sidebar-link">
+                    <span class="sidebar-icon">🔄</span>
+                    <span>2. Estrutura de Decisão</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">🔁</span>
+                    <span>3. Estrutura de Repetição</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">📋</span>
+                    <span>4. Vetores e Matrizes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span>5. Funções e Métodos</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">📁</span>
+                    <span>6. Manipulação de Arquivos</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">🐞</span>
+                    <span>7. Tratamento de Exceções</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link locked">
+                    <span class="sidebar-icon">🏆</span>
+                    <span>8. Projeto Final</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div style="padding: 1.5rem; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div style="background-color: rgba(52, 152, 219, 0.2); padding: 1rem; border-radius: 8px;">
+                <h4 style="color: var(--light); margin-bottom: 0.5rem;">Próxima Aula</h4>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0;">
+                    Na próxima aula, você aprenderá sobre estruturas de decisão em Java, que permitem que seu programa tome diferentes caminhos com base em condições.
+                </p>
+                <a href="decisao.html" class="btn btn-success" style="margin-top: 1rem; width: 100%; text-align: center;">
+                    Ir para Próxima Aula
+                </a>
+            </div>
+        </div>
+    </aside>
+    
     <main class="container">
         <!-- Tópico 1: Algoritmos -->
         <section id="algoritmos" class="topic-section active" role="tabpanel">
@@ -1148,6 +1354,12 @@
                 <div class="tip-box">
                     <h4>Boa Prática</h4>
                     <p>Sempre feche o Scanner após usá-lo com o método <code>scanner.close()</code>. Isso libera recursos do sistema e evita possíveis vazamentos de memória.</p>
+                </div>
+                
+                <h3>Próximo Passo: Estruturas de Decisão</h3>
+                <p>Após compreender os comandos básicos, o próximo passo é aprender sobre estruturas de decisão, que permitem que seu programa tome diferentes caminhos com base em condições.</p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <a href="decisao.html" class="btn btn-success" style="font-size: 1.2rem; padding: 1rem 2rem;">Ir para Estrutura de Decisão</a>
                 </div>
                 
                 <div class="activity">
@@ -2106,6 +2318,7 @@ public class VerificaIdade {
         // Navegação entre tópicos
         const navTabs = document.querySelectorAll('.nav-tab');
         const topicSections = document.querySelectorAll('.topic-section');
+        
         navTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetTopic = tab.getAttribute('data-topic');
@@ -2123,37 +2336,52 @@ public class VerificaIdade {
                 document.getElementById(targetTopic).classList.add('active');
             });
         });
+        
+        // Controle do menu lateral em telas pequenas
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
         // Controle de tamanho da fonte
         const increaseFontBtn = document.getElementById('increaseFont');
         const decreaseFontBtn = document.getElementById('decreaseFont');
         const root = document.documentElement;
         let currentFontSize = 18;
+        
         increaseFontBtn.addEventListener('click', () => {
             if (currentFontSize < 24) {
                 currentFontSize += 2;
                 root.style.setProperty('--font-size-base', `${currentFontSize}px`);
             }
         });
+        
         decreaseFontBtn.addEventListener('click', () => {
             if (currentFontSize > 14) {
                 currentFontSize -= 2;
                 root.style.setProperty('--font-size-base', `${currentFontSize}px`);
             }
         });
+        
         // Atividade 1: Ordenar algoritmo
         const draggables = document.querySelectorAll('.draggable');
         const dragContainer = document.getElementById('dragContainer');
         let draggedElement = null;
+        
         if (draggables.length > 0) {
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', (e) => {
                     draggedElement = e.target;
                     e.target.style.opacity = '0.5';
                 });
+                
                 draggable.addEventListener('dragend', (e) => {
                     e.target.style.opacity = '';
                 });
             });
+            
             dragContainer.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 const afterElement = getDragAfterElement(dragContainer, e.clientY);
@@ -2164,6 +2392,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         function getDragAfterElement(container, y) {
             const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
             
@@ -2178,6 +2407,7 @@ public class VerificaIdade {
                 }
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
+        
         // Verificar ordem do algoritmo
         const checkOrderBtn = document.getElementById('checkOrder');
         if (checkOrderBtn) {
@@ -2199,6 +2429,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Atividade 2: Tipos de dados
         const checkTypesBtn = document.getElementById('checkTypes');
         if (checkTypesBtn) {
@@ -2227,6 +2458,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Atividade 3: Memória e variáveis
         const checkVariablesBtn = document.getElementById('checkVariables');
         if (checkVariablesBtn) {
@@ -2259,6 +2491,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Atividade 4: Operadores
         const checkCalculationsBtn = document.getElementById('checkCalculations');
         if (checkCalculationsBtn) {
@@ -2287,6 +2520,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Atividade 5: Comandos básicos
         const checkCodeBtn = document.getElementById('checkCode');
         if (checkCodeBtn) {
@@ -2315,6 +2549,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Atividade de transição: Portugol para Java
         const checkTransitionBtn = document.getElementById('checkTransition');
         if (checkTransitionBtn) {
@@ -2355,6 +2590,7 @@ public class VerificaIdade {
                 }
             });
         }
+        
         // Animação das barras de progresso quando a seção de prática é ativada
         const praticaTab = document.querySelector('[data-topic="pratica"]');
         const netbeansTab = document.querySelector('[data-topic="netbeans"]');
