@@ -162,7 +162,7 @@
             cursor: pointer;
             padding: 0.5rem;
             border-radius: 50%;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2824,307 +2824,334 @@ public class VerificaIdade {
     </footer>
     
     <script>
-        // Toggle do Menu Expansível
-        const headerToggle = document.getElementById('headerToggle');
-        const mainHeader = document.getElementById('mainHeader');
-        const expandableMenu = document.querySelector('.expandable-menu');
-        
-        headerToggle.addEventListener('click', () => {
-            mainHeader.classList.toggle('expanded');
-            expandableMenu.parentElement.classList.toggle('expanded');
-            headerToggle.classList.toggle('expanded');
+        // Garantir que o DOM esteja completamente carregado antes de executar o JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle do Menu Expansível
+            const headerToggle = document.getElementById('headerToggle');
+            const mainHeader = document.getElementById('mainHeader');
             
-            // Atualizar o atributo aria-expanded
-            const isExpanded = mainHeader.classList.contains('expanded');
-            headerToggle.setAttribute('aria-expanded', isExpanded);
-            headerToggle.setAttribute('aria-label', isExpanded ? 'Recolher menu' : 'Expandir menu');
-        });
-        
-        // Navegação entre tópicos
-        const tabButtons = document.querySelectorAll('.nav-tab');
-        const topicSections = document.querySelectorAll('.topic-section');
-        
-        tabButtons.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTopic = tab.getAttribute('data-topic');
-                
-                // Remove classe active de todas as abas e seções
-                tabButtons.forEach(t => {
-                    t.classList.remove('active');
-                    t.setAttribute('aria-selected', 'false');
+            if (headerToggle && mainHeader) {
+                headerToggle.addEventListener('click', function() {
+                    mainHeader.classList.toggle('expanded');
+                    headerToggle.classList.toggle('expanded');
+                    
+                    // Atualizar o atributo aria-expanded
+                    const isExpanded = mainHeader.classList.contains('expanded');
+                    headerToggle.setAttribute('aria-expanded', isExpanded);
+                    headerToggle.setAttribute('aria-label', isExpanded ? 'Recolher menu' : 'Expandir menu');
                 });
-                topicSections.forEach(section => section.classList.remove('active'));
-                
-                // Adiciona classe active na aba e seção correspondentes
-                tab.classList.add('active');
-                tab.setAttribute('aria-selected', 'true');
-                document.getElementById(targetTopic).classList.add('active');
+            }
+            
+            // Navegação entre tópicos
+            const tabButtons = document.querySelectorAll('.nav-tab');
+            const topicSections = document.querySelectorAll('.topic-section');
+            
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTopic = tab.getAttribute('data-topic');
+                    
+                    // Remove classe active de todas as abas e seções
+                    tabButtons.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    topicSections.forEach(section => section.classList.remove('active'));
+                    
+                    // Adiciona classe active na aba e seção correspondentes
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    const targetSection = document.getElementById(targetTopic);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                });
             });
-        });
-        
-        // Controle de tamanho da fonte
-        const increaseFontBtn = document.getElementById('increaseFont');
-        const decreaseFontBtn = document.getElementById('decreaseFont');
-        const root = document.documentElement;
-        let currentFontSize = 18;
-        
-        increaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize < 24) {
-                currentFontSize += 2;
-                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            
+            // Controle de tamanho da fonte
+            const increaseFontBtn = document.getElementById('increaseFont');
+            const decreaseFontBtn = document.getElementById('decreaseFont');
+            const root = document.documentElement;
+            let currentFontSize = 18;
+            
+            if (increaseFontBtn) {
+                increaseFontBtn.addEventListener('click', () => {
+                    if (currentFontSize < 24) {
+                        currentFontSize += 2;
+                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+                    }
+                });
+            }
+            
+            if (decreaseFontBtn) {
+                decreaseFontBtn.addEventListener('click', () => {
+                    if (currentFontSize > 14) {
+                        currentFontSize -= 2;
+                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+                    }
+                });
+            }
+            
+            // Atividade 1: Ordenar algoritmo
+            const draggables = document.querySelectorAll('.draggable');
+            const dragContainer = document.getElementById('dragContainer');
+            let draggedElement = null;
+            
+            if (draggables.length > 0 && dragContainer) {
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', (e) => {
+                        draggedElement = e.target;
+                        e.target.style.opacity = '0.5';
+                    });
+                    
+                    draggable.addEventListener('dragend', (e) => {
+                        e.target.style.opacity = '';
+                    });
+                });
+                
+                dragContainer.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(dragContainer, e.clientY);
+                    if (afterElement == null) {
+                        dragContainer.appendChild(draggedElement);
+                    } else {
+                        dragContainer.insertBefore(draggedElement, afterElement);
+                    }
+                });
+            }
+            
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+                
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+            
+            // Verificar ordem do algoritmo
+            const checkOrderBtn = document.getElementById('checkOrder');
+            if (checkOrderBtn) {
+                checkOrderBtn.addEventListener('click', () => {
+                    const items = [...document.querySelectorAll('.draggable')];
+                    const correctOrder = items.every((item, index) => 
+                        parseInt(item.getAttribute('data-order')) === index + 1
+                    );
+                    
+                    const feedback = document.getElementById('orderFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        if (correctOrder) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Parabéns! Você organizou o algoritmo corretamente.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            feedback.textContent = 'A ordem não está correta. Tente novamente!';
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 2: Tipos de dados
+            const checkTypesBtn = document.getElementById('checkTypes');
+            if (checkTypesBtn) {
+                checkTypesBtn.addEventListener('click', () => {
+                    const valor1 = document.getElementById('valor1').value;
+                    const valor2 = document.getElementById('valor2').value;
+                    const valor3 = document.getElementById('valor3').value;
+                    
+                    const feedback = document.getElementById('typesFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const correct1 = valor1 === 'String';
+                        const correct2 = valor2 === 'boolean';
+                        const correct3 = valor3 === 'char';
+                        
+                        if (correct1 && correct2 && correct3) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Algumas respostas estão incorretas. ';
+                            if (!correct1) message += '"42.5" é uma String. ';
+                            if (!correct2) message += 'true é um boolean. ';
+                            if (!correct3) message += "'X' é um char. ";
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 3: Memória e variáveis
+            const checkVariablesBtn = document.getElementById('checkVariables');
+            if (checkVariablesBtn) {
+                checkVariablesBtn.addEventListener('click', () => {
+                    const nome = document.getElementById('varNome').value.trim();
+                    const idade = document.getElementById('varIdade').value.trim();
+                    const pi = document.getElementById('constPi').value.trim();
+                    
+                    const feedback = document.getElementById('variablesFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const nomeRegex = /^String\s+\w+\s*=\s*"[^"]*";?$/i;
+                        const idadeRegex = /^int\s+\w+\s*=\s*\d+;?$/i;
+                        const piRegex = /^final\s+double\s+\w+\s*=\s*\d+(\.\d+)?;?$/i;
+                        
+                        const correctNome = nomeRegex.test(nome);
+                        const correctIdade = idadeRegex.test(idade);
+                        const correctPi = piRegex.test(pi);
+                        
+                        if (correctNome && correctIdade && correctPi) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Perfeito! Todas as declarações estão corretas.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Corrija as seguintes declarações: ';
+                            if (!correctNome) message += 'Nome (ex: String nome = "Ana";). ';
+                            if (!correctIdade) message += 'Idade (ex: int idade = 25;). ';
+                            if (!correctPi) message += 'PI (ex: final double PI = 3.14;). ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 4: Operadores
+            const checkCalculationsBtn = document.getElementById('checkCalculations');
+            if (checkCalculationsBtn) {
+                checkCalculationsBtn.addEventListener('click', () => {
+                    const calc1 = parseInt(document.getElementById('calc1').value);
+                    const calc2 = parseInt(document.getElementById('calc2').value);
+                    const calc3 = parseInt(document.getElementById('calc3').value);
+                    
+                    const feedback = document.getElementById('calculationsFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const correct1 = calc1 === 20; // 10 + 5 * 2 = 10 + 10 = 20
+                        const correct2 = calc2 === 8;  // (20 / 4) + 3 = 5 + 3 = 8
+                        const correct3 = calc3 === 3;  // 15 % 4 = 3
+                        
+                        if (correct1 && correct2 && correct3) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Ótimo! Você acertou todos os cálculos.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Revise os cálculos: ';
+                            if (!correct1) message += '10 + 5 * 2 = 20. ';
+                            if (!correct2) message += '(20 / 4) + 3 = 8. ';
+                            if (!correct3) message += '15 % 4 = 3. ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Atividade 5: Comandos básicos
+            const checkCodeBtn = document.getElementById('checkCode');
+            if (checkCodeBtn) {
+                checkCodeBtn.addEventListener('click', () => {
+                    const nota3 = document.getElementById('nota3').value.trim();
+                    const mediaCalc = document.getElementById('mediaCalc').value.trim();
+                    const mediaPrint = document.getElementById('mediaPrint').value.trim();
+                    
+                    const feedback = document.getElementById('codeFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        const correctNota3 = nota3 === 'scanner.nextDouble()';
+                        const correctMediaCalc = mediaCalc === '(nota1 + nota2 + nota3) / 3';
+                        const correctMediaPrint = mediaPrint === 'media';
+                        
+                        if (correctNota3 && correctMediaCalc && correctMediaPrint) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Corrija as seguintes partes: ';
+                            if (!correctNota3) message += 'Leitura da nota3: scanner.nextDouble(). ';
+                            if (!correctMediaCalc) message += 'Cálculo da média: (nota1 + nota2 + nota3) / 3. ';
+                            if (!correctMediaPrint) message += 'Impressão: media. ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Atividade de transição: Portugol para Java
+            const checkTransitionBtn = document.getElementById('checkTransition');
+            if (checkTransitionBtn) {
+                checkTransitionBtn.addEventListener('click', () => {
+                    const javaCode = document.getElementById('javaCode').value.trim();
+                    const feedback = document.getElementById('transitionFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        
+                        // Verificar se o código contém os elementos essenciais
+                        const hasScannerImport = javaCode.includes('import java.util.Scanner');
+                        const hasClassDeclaration = javaCode.includes('public class') && javaCode.includes('{');
+                        const hasMainMethod = javaCode.includes('public static void main(String[] args)');
+                        const hasScannerCreation = javaCode.includes('Scanner scanner = new Scanner(System.in)');
+                        const hasVariableDeclaration = javaCode.includes('int idade');
+                        const hasInputReading = javaCode.includes('scanner.nextInt()');
+                        const hasCondition = javaCode.includes('if (idade >= 18)');
+                        const hasOutput = javaCode.includes('System.out.println');
+                        
+                        const allElementsPresent = hasScannerImport && hasClassDeclaration && hasMainMethod && 
+                                                 hasScannerCreation && hasVariableDeclaration && hasInputReading && 
+                                                 hasCondition && hasOutput;
+                        
+                        if (allElementsPresent) {
+                            feedback.className = 'feedback success';
+                            feedback.textContent = 'Excelente! Você fez a transição do Portugol para Java corretamente.';
+                        } else {
+                            feedback.className = 'feedback error';
+                            let message = 'Seu código está incompleto. Verifique se incluiu: ';
+                            if (!hasScannerImport) message += 'import java.util.Scanner. ';
+                            if (!hasClassDeclaration) message += 'declaração da classe. ';
+                            if (!hasMainMethod) message += 'método main. ';
+                            if (!hasScannerCreation) message += 'criação do Scanner. ';
+                            if (!hasVariableDeclaration) message += 'declaração da variável idade. ';
+                            if (!hasInputReading) message += 'leitura da idade. ';
+                            if (!hasCondition) message += 'estrutura condicional. ';
+                            if (!hasOutput) message += 'comando de saída. ';
+                            feedback.textContent = message;
+                        }
+                    }
+                });
+            }
+            
+            // Animação das barras de progresso quando a seção de prática é ativada
+            const praticaTab = document.querySelector('[data-topic="pratica"]');
+            const netbeansTab = document.querySelector('[data-topic="netbeans"]');
+            const activateProgressBars = () => {
+                setTimeout(() => {
+                    // Anima as barras de progresso
+                    const progressBars = document.querySelectorAll('.progress-fill');
+                    progressBars.forEach((bar, index) => {
+                        setTimeout(() => {
+                            bar.style.width = '100%';
+                        }, index * 200);
+                    });
+                }, 500);
+            };
+            
+            if (praticaTab) {
+                praticaTab.addEventListener('click', activateProgressBars);
+            }
+            
+            if (netbeansTab) {
+                netbeansTab.addEventListener('click', activateProgressBars);
             }
         });
-        
-        decreaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize > 14) {
-                currentFontSize -= 2;
-                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
-            }
-        });
-        
-        // Atividade 1: Ordenar algoritmo
-        const draggables = document.querySelectorAll('.draggable');
-        const dragContainer = document.getElementById('dragContainer');
-        let draggedElement = null;
-        
-        if (draggables.length > 0) {
-            draggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', (e) => {
-                    draggedElement = e.target;
-                    e.target.style.opacity = '0.5';
-                });
-                
-                draggable.addEventListener('dragend', (e) => {
-                    e.target.style.opacity = '';
-                });
-            });
-            
-            dragContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const afterElement = getDragAfterElement(dragContainer, e.clientY);
-                if (afterElement == null) {
-                    dragContainer.appendChild(draggedElement);
-                } else {
-                    dragContainer.insertBefore(draggedElement, afterElement);
-                }
-            });
-        }
-        
-        function getDragAfterElement(container, y) {
-            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
-            
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-        
-        // Verificar ordem do algoritmo
-        const checkOrderBtn = document.getElementById('checkOrder');
-        if (checkOrderBtn) {
-            checkOrderBtn.addEventListener('click', () => {
-                const items = [...document.querySelectorAll('.draggable')];
-                const correctOrder = items.every((item, index) => 
-                    parseInt(item.getAttribute('data-order')) === index + 1
-                );
-                
-                const feedback = document.getElementById('orderFeedback');
-                feedback.style.display = 'block';
-                
-                if (correctOrder) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Parabéns! Você organizou o algoritmo corretamente.';
-                } else {
-                    feedback.className = 'feedback error';
-                    feedback.textContent = 'A ordem não está correta. Tente novamente!';
-                }
-            });
-        }
-        
-        // Atividade 2: Tipos de dados
-        const checkTypesBtn = document.getElementById('checkTypes');
-        if (checkTypesBtn) {
-            checkTypesBtn.addEventListener('click', () => {
-                const valor1 = document.getElementById('valor1').value;
-                const valor2 = document.getElementById('valor2').value;
-                const valor3 = document.getElementById('valor3').value;
-                
-                const feedback = document.getElementById('typesFeedback');
-                feedback.style.display = 'block';
-                
-                const correct1 = valor1 === 'String';
-                const correct2 = valor2 === 'boolean';
-                const correct3 = valor3 === 'char';
-                
-                if (correct1 && correct2 && correct3) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Algumas respostas estão incorretas. ';
-                    if (!correct1) message += '"42.5" é uma String. ';
-                    if (!correct2) message += 'true é um boolean. ';
-                    if (!correct3) message += "'X' é um char. ";
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Atividade 3: Memória e variáveis
-        const checkVariablesBtn = document.getElementById('checkVariables');
-        if (checkVariablesBtn) {
-            checkVariablesBtn.addEventListener('click', () => {
-                const nome = document.getElementById('varNome').value.trim();
-                const idade = document.getElementById('varIdade').value.trim();
-                const pi = document.getElementById('constPi').value.trim();
-                
-                const feedback = document.getElementById('variablesFeedback');
-                feedback.style.display = 'block';
-                
-                const nomeRegex = /^String\s+\w+\s*=\s*"[^"]*";?$/i;
-                const idadeRegex = /^int\s+\w+\s*=\s*\d+;?$/i;
-                const piRegex = /^final\s+double\s+\w+\s*=\s*\d+(\.\d+)?;?$/i;
-                
-                const correctNome = nomeRegex.test(nome);
-                const correctIdade = idadeRegex.test(idade);
-                const correctPi = piRegex.test(pi);
-                
-                if (correctNome && correctIdade && correctPi) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Perfeito! Todas as declarações estão corretas.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Corrija as seguintes declarações: ';
-                    if (!correctNome) message += 'Nome (ex: String nome = "Ana";). ';
-                    if (!correctIdade) message += 'Idade (ex: int idade = 25;). ';
-                    if (!correctPi) message += 'PI (ex: final double PI = 3.14;). ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Atividade 4: Operadores
-        const checkCalculationsBtn = document.getElementById('checkCalculations');
-        if (checkCalculationsBtn) {
-            checkCalculationsBtn.addEventListener('click', () => {
-                const calc1 = parseInt(document.getElementById('calc1').value);
-                const calc2 = parseInt(document.getElementById('calc2').value);
-                const calc3 = parseInt(document.getElementById('calc3').value);
-                
-                const feedback = document.getElementById('calculationsFeedback');
-                feedback.style.display = 'block';
-                
-                const correct1 = calc1 === 20; // 10 + 5 * 2 = 10 + 10 = 20
-                const correct2 = calc2 === 8;  // (20 / 4) + 3 = 5 + 3 = 8
-                const correct3 = calc3 === 3;  // 15 % 4 = 3
-                
-                if (correct1 && correct2 && correct3) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Ótimo! Você acertou todos os cálculos.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Revise os cálculos: ';
-                    if (!correct1) message += '10 + 5 * 2 = 20. ';
-                    if (!correct2) message += '(20 / 4) + 3 = 8. ';
-                    if (!correct3) message += '15 % 4 = 3. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Atividade 5: Comandos básicos
-        const checkCodeBtn = document.getElementById('checkCode');
-        if (checkCodeBtn) {
-            checkCodeBtn.addEventListener('click', () => {
-                const nota3 = document.getElementById('nota3').value.trim();
-                const mediaCalc = document.getElementById('mediaCalc').value.trim();
-                const mediaPrint = document.getElementById('mediaPrint').value.trim();
-                
-                const feedback = document.getElementById('codeFeedback');
-                feedback.style.display = 'block';
-                
-                const correctNota3 = nota3 === 'scanner.nextDouble()';
-                const correctMediaCalc = mediaCalc === '(nota1 + nota2 + nota3) / 3';
-                const correctMediaPrint = mediaPrint === 'media';
-                
-                if (correctNota3 && correctMediaCalc && correctMediaPrint) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Corrija as seguintes partes: ';
-                    if (!correctNota3) message += 'Leitura da nota3: scanner.nextDouble(). ';
-                    if (!correctMediaCalc) message += 'Cálculo da média: (nota1 + nota2 + nota3) / 3. ';
-                    if (!correctMediaPrint) message += 'Impressão: media. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Atividade de transição: Portugol para Java
-        const checkTransitionBtn = document.getElementById('checkTransition');
-        if (checkTransitionBtn) {
-            checkTransitionBtn.addEventListener('click', () => {
-                const javaCode = document.getElementById('javaCode').value.trim();
-                const feedback = document.getElementById('transitionFeedback');
-                feedback.style.display = 'block';
-                
-                // Verificar se o código contém os elementos essenciais
-                const hasScannerImport = javaCode.includes('import java.util.Scanner');
-                const hasClassDeclaration = javaCode.includes('public class') && javaCode.includes('{');
-                const hasMainMethod = javaCode.includes('public static void main(String[] args)');
-                const hasScannerCreation = javaCode.includes('Scanner scanner = new Scanner(System.in)');
-                const hasVariableDeclaration = javaCode.includes('int idade');
-                const hasInputReading = javaCode.includes('scanner.nextInt()');
-                const hasCondition = javaCode.includes('if (idade >= 18)');
-                const hasOutput = javaCode.includes('System.out.println');
-                
-                const allElementsPresent = hasScannerImport && hasClassDeclaration && hasMainMethod && 
-                                         hasScannerCreation && hasVariableDeclaration && hasInputReading && 
-                                         hasCondition && hasOutput;
-                
-                if (allElementsPresent) {
-                    feedback.className = 'feedback success';
-                    feedback.textContent = 'Excelente! Você fez a transição do Portugol para Java corretamente.';
-                } else {
-                    feedback.className = 'feedback error';
-                    let message = 'Seu código está incompleto. Verifique se incluiu: ';
-                    if (!hasScannerImport) message += 'import java.util.Scanner. ';
-                    if (!hasClassDeclaration) message += 'declaração da classe. ';
-                    if (!hasMainMethod) message += 'método main. ';
-                    if (!hasScannerCreation) message += 'criação do Scanner. ';
-                    if (!hasVariableDeclaration) message += 'declaração da variável idade. ';
-                    if (!hasInputReading) message += 'leitura da idade. ';
-                    if (!hasCondition) message += 'estrutura condicional. ';
-                    if (!hasOutput) message += 'comando de saída. ';
-                    feedback.textContent = message;
-                }
-            });
-        }
-        
-        // Animação das barras de progresso quando a seção de prática é ativada
-        const praticaTab = document.querySelector('[data-topic="pratica"]');
-        const netbeansTab = document.querySelector('[data-topic="netbeans"]');
-        const activateProgressBars = () => {
-            setTimeout(() => {
-                // Anima as barras de progresso
-                const progressBars = document.querySelectorAll('.progress-fill');
-                progressBars.forEach((bar, index) => {
-                    setTimeout(() => {
-                        bar.style.width = '100%';
-                    }, index * 200);
-                });
-            }, 500);
-        };
-        
-        praticaTab.addEventListener('click', activateProgressBars);
-        netbeansTab.addEventListener('click', activateProgressBars);
     </script>
 </body>
 </html>
