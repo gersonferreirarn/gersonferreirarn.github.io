@@ -14,8 +14,6 @@
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
-            --header-height: 70px;
-            --header-bg: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
         }
         * {
             margin: 0;
@@ -34,413 +32,63 @@
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        /* NOVO CABEÇALHO COMPACTO */
         header {
-            background: var(--header-bg);
+            background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            height: var(--header-height);
-            transition: height 0.3s ease;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
-        header.expanded {
-            height: auto;
-        }
-        
-        /* Header Principal Compacto */
-        .main-header {
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            padding: 0 1rem;
-        }
-        
-        .header-left {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-        
-        .header-title {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        h1 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
-        
-        .subtitle {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-        
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .course-badge {
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .progress-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-        }
-        
-        .progress-bar-mini {
-            width: 60px;
-            height: 4px;
-            background-color: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress-fill-mini {
-            height: 100%;
-            background-color: var(--success);
-            width: 12.5%; /* 1/8 */
-            border-radius: 2px;
-        }
-        
-        .font-controls {
-            display: flex;
-            align-items: center;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 0.2rem;
-        }
-        
-        .font-btn {
-            background: none;
-            border: none;
-            color: white;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        
-        .font-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-        
-        /* Botão de Expandir/Recolher */
-        .header-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-        }
-        
-        .header-toggle:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        
-        .header-toggle.expanded {
-            transform: rotate(180deg);
-        }
-        
-        /* Menu Expansível (inicialmente oculto) */
-        .expandable-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background-color: rgba(0,0,0,0.1);
-        }
-        
-        header.expanded .expandable-menu {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        /* Navegação Principal */
-        .nav-container {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .nav-tabs {
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.3) transparent;
-            padding: 0 0.5rem;
-        }
-        
-        .nav-tabs::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .nav-tabs::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .nav-tabs::-webkit-scrollbar-thumb {
-            background-color: rgba(255,255,255,0.3);
-            border-radius: 2px;
-        }
-        
-        .nav-tab {
-            padding: 0.7rem 1rem;
-            background-color: transparent;
-            border: none;
-            color: rgba(255,255,255,0.8);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            position: relative;
-            font-weight: 500;
-            border-bottom: 3px solid transparent;
-            flex-shrink: 0;
-        }
-        
-        .nav-tab:hover {
-            color: white;
-            background-color: rgba(255,255,255,0.05);
-        }
-        
-        .nav-tab.active {
-            color: white;
-            background-color: rgba(255,255,255,0.1);
-            border-bottom-color: var(--secondary);
-            font-weight: 600;
-        }
-        
-        /* Menu de Etapas do Curso */
-        .stages-menu {
-            padding: 0.8rem 0;
-        }
-        
-        .stages-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            padding: 0 1rem;
-        }
-        
-        .stages-title {
-            font-size: 1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .stages-progress {
-            font-size: 0.8rem;
-            color: var(--success);
-            font-weight: bold;
-        }
-        
-        .stages-content {
-            display: flex;
-            overflow-x: auto;
-            gap: 0.8rem;
-            padding: 0 1rem 0.5rem;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.3) transparent;
-        }
-        
-        .stages-content::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .stages-content::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-        }
-        
-        .stages-content::-webkit-scrollbar-thumb {
-            background-color: rgba(255,255,255,0.3);
-            border-radius: 3px;
-        }
-        
-        .stage-item {
-            flex-shrink: 0;
-            width: 160px;
-        }
-        
-        .stage-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0.8rem;
-            background-color: rgba(255,255,255,0.08);
-            border-radius: 8px;
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            text-align: center;
-            gap: 0.3rem;
-        }
-        
-        .stage-link:hover {
-            background-color: rgba(255,255,255,0.15);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .stage-link.active {
-            background-color: rgba(52, 152, 219, 0.3);
-            border-color: var(--secondary);
-            color: white;
-            font-weight: 600;
-        }
-        
-        .stage-link.completed {
-            background-color: rgba(39, 174, 96, 0.2);
-            border-color: var(--success);
-        }
-        
-        .stage-link.locked {
-            background-color: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.4);
-            cursor: not-allowed;
-        }
-        
-        .stage-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.2rem;
-        }
-        
-        .stage-number {
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: rgba(255,255,255,0.6);
-        }
-        
-        .stage-title {
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .stage-status {
-            font-size: 0.7rem;
-            margin-top: 0.2rem;
-        }
-        
-        .stage-link.completed .stage-status::after {
-            content: '✓ Concluído';
-            color: var(--success);
-        }
-        
-        .stage-link.locked .stage-status::after {
-            content: '🔒 Bloqueado';
-        }
-        
-        /* Próxima Aula */
-        .next-class {
-            margin: 0 1rem 0.8rem;
-            background-color: rgba(52, 152, 219, 0.2);
-            border-radius: 8px;
-            padding: 0.8rem;
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.8rem;
         }
-        
-        .next-class-info h4 {
-            color: var(--light);
-            font-size: 0.9rem;
-            margin-bottom: 0.2rem;
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .next-class-info p {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.8rem;
-            margin: 0;
-            line-height: 1.3;
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
-        
-        .next-class-btn {
-            background-color: var(--success);
-            color: white;
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: var(--dark);
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-weight: 600;
+            color: white;
             cursor: pointer;
             transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
+            font-size: 1rem;
             white-space: nowrap;
-            font-size: 0.8rem;
         }
-        
-        .next-class-btn:hover {
-            background-color: #229954;
-            transform: translateY(-1px);
+        .nav-tab:hover {
+            background-color: rgba(255,255,255,0.1);
         }
-        
-        /* Conteúdo Principal */
+        .nav-tab.active {
+            background-color: var(--secondary);
+        }
         main {
             padding: 2rem 0;
-            margin-top: var(--header-height);
-            transition: margin-top 0.3s ease;
         }
-        
-        header.expanded + main {
-            margin-top: 320px; /* Altura aproximada do menu expandido */
-        }
-        
         .topic-section {
             display: none;
             animation: fadeIn 0.5s;
         }
-        
         .topic-section.active {
             display: block;
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Cards */
         .card {
             background: white;
             border-radius: 10px;
@@ -449,35 +97,28 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--secondary);
         }
-        
         .card h2 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.8rem;
         }
-        
         .card h3 {
             color: var(--dark);
             margin: 1.5rem 0 0.8rem;
             font-size: 1.4rem;
         }
-        
         .card h4 {
             color: var(--secondary);
             margin: 1rem 0 0.5rem;
             font-size: 1.2rem;
         }
-        
         .card p, .card li {
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
-        
         ul {
             padding-left: 2rem;
         }
-        
-        /* Code Blocks */
         .code-block {
             background-color: #2d3748;
             color: #e2e8f0;
@@ -489,25 +130,19 @@
             font-size: 1rem;
             line-height: 1.5;
         }
-        
         .code-block .keyword {
             color: #f687b3;
         }
-        
         .code-block .string {
             color: #68d391;
         }
-        
         .code-block .comment {
             color: #a0aec0;
             font-style: italic;
         }
-        
         .code-block .number {
             color: #fbb6ce;
         }
-        
-        /* Activities */
         .activity {
             background-color: #f7fafc;
             border: 2px dashed var(--secondary);
@@ -515,23 +150,19 @@
             padding: 1.5rem;
             margin: 2rem 0;
         }
-        
         .activity h3 {
             color: var(--secondary);
             margin-bottom: 1rem;
         }
-        
         .input-group {
             margin: 1rem 0;
         }
-        
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: bold;
             color: var(--dark);
         }
-        
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 0.8rem;
@@ -540,12 +171,10 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             outline: none;
             border-color: var(--secondary);
         }
-        
         .btn {
             display: inline-block;
             background-color: var(--secondary);
@@ -558,47 +187,38 @@
             transition: all 0.3s;
             margin-top: 1rem;
         }
-        
         .btn:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
         }
-        
         .btn-success {
             background-color: var(--success);
         }
-        
         .btn-success:hover {
             background-color: #229954;
         }
-        
         .feedback {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 5px;
             display: none;
         }
-        
         .feedback.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
         .feedback.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
-        /* Visualizações */
         .memory-visual {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        
         .memory-cell {
             background-color: var(--light);
             border: 2px solid var(--secondary);
@@ -608,36 +228,30 @@
             min-width: 120px;
             transition: all 0.3s;
         }
-        
         .memory-cell:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
         .memory-cell .name {
             font-weight: bold;
             color: var(--dark);
             margin-bottom: 0.5rem;
         }
-        
         .memory-cell .value {
             font-size: 1.2rem;
             color: var(--secondary);
         }
-        
         .memory-cell .type {
             font-size: 0.9rem;
             color: #666;
             margin-top: 0.5rem;
         }
-        
         .operator-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        
         .operator-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -646,42 +260,35 @@
             text-align: center;
             transition: all 0.3s;
         }
-        
         .operator-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
         .operator-symbol {
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-        
         .operator-name {
             color: var(--dark);
             margin-bottom: 0.3rem;
         }
-        
         .operator-example {
             font-size: 0.9rem;
             color: #666;
         }
-        
         .io-example {
             background-color: #f1f5f9;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
-        
         .io-example h4 {
             color: var(--dark);
             margin-bottom: 1rem;
         }
-        
         .io-terminal {
             background-color: #1e293b;
             color: #e2e8f0;
@@ -690,16 +297,12 @@
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
         }
-        
         .io-terminal .input {
             color: #68d391;
         }
-        
         .io-terminal .output {
             color: #fbb6ce;
         }
-        
-        /* Footer */
         footer {
             background-color: var(--primary);
             color: white;
@@ -707,8 +310,7 @@
             padding: 1.5rem 0;
             margin-top: 3rem;
         }
-        
-        /* Prática no NetBeans */
+        /* Estilos para seção de prática no NetBeans */
         .practice-module {
             background: white;
             border-radius: 10px;
@@ -717,13 +319,11 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--success);
         }
-        
         .practice-module h3 {
             color: var(--success);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
-        
         .step {
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -731,7 +331,6 @@
             margin: 1.5rem 0;
             border-left: 4px solid var(--warning);
         }
-        
         .step-number {
             display: inline-block;
             background-color: var(--warning);
@@ -744,7 +343,6 @@
             font-weight: bold;
             margin-right: 1rem;
         }
-        
         .netbeans-screenshot {
             background-color: #2b2b2b;
             border-radius: 8px;
@@ -754,7 +352,6 @@
             font-family: 'Courier New', monospace;
             position: relative;
         }
-        
         .netbeans-header {
             background-color: #3c3f41;
             padding: 0.5rem 1rem;
@@ -763,32 +360,27 @@
             display: flex;
             align-items: center;
         }
-        
         .netbeans-title {
             color: #e0e0e0;
             font-size: 0.9rem;
             margin-left: 1rem;
         }
-        
         .netbeans-menu {
             display: flex;
             gap: 0.5rem;
         }
-        
         .netbeans-menu-item {
             background-color: #555;
             padding: 0.2rem 0.5rem;
             border-radius: 3px;
             font-size: 0.8rem;
         }
-        
         .netbeans-code {
             background-color: #1e1e1e;
             padding: 1rem;
             border-radius: 5px;
             margin: 0.5rem 0;
         }
-        
         .netbeans-output {
             background-color: #0d1117;
             padding: 1rem;
@@ -796,7 +388,6 @@
             margin: 0.5rem 0;
             color: #58a6ff;
         }
-        
         .tip-box {
             background-color: #e3f2fd;
             border-left: 4px solid var(--secondary);
@@ -804,12 +395,10 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
-        
         .tip-box h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
-        
         .warning-box {
             background-color: #fff3cd;
             border-left: 4px solid var(--warning);
@@ -817,12 +406,10 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
-        
         .warning-box h4 {
             color: var(--warning);
             margin-bottom: 0.5rem;
         }
-        
         .progress-bar {
             background-color: #e0e0e0;
             height: 20px;
@@ -830,14 +417,12 @@
             overflow: hidden;
             margin: 1rem 0;
         }
-        
         .progress-fill {
             background-color: var(--success);
             height: 100%;
             width: 0%;
             transition: width 0.3s;
         }
-        
         .checkpoint {
             background-color: #e8f5e9;
             border: 2px solid var(--success);
@@ -845,46 +430,46 @@
             padding: 1rem;
             margin: 1.5rem 0;
         }
-        
         .checkpoint h4 {
             color: var(--success);
             margin-bottom: 0.5rem;
         }
-        
-        /* Outros estilos mantidos */
+        /* Estilos para a aba de apresentação do NetBeans */
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
             font-size: 1rem;
         }
-        
         .comparison-table th, .comparison-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
         .comparison-table th {
             background-color: var(--secondary);
             color: white;
         }
-        
         .comparison-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        
         .comparison-table tr:hover {
             background-color: #e2e2e2;
         }
-        
+        .ide-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        
         .feature-card {
             background-color: white;
             border: 2px solid #ddd;
@@ -892,42 +477,35 @@
             padding: 1.5rem;
             transition: all 0.3s;
         }
-        
         .feature-card:hover {
             border-color: var(--secondary);
             transform: translateY(-3px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
         .feature-icon {
             font-size: 2rem;
             color: var(--secondary);
             margin-bottom: 1rem;
         }
-        
         .feature-title {
             font-size: 1.2rem;
             color: var(--dark);
             margin-bottom: 0.5rem;
         }
-        
         .feature-description {
             color: #666;
         }
-        
         .transition-steps {
             counter-reset: step-counter;
             list-style-type: none;
             padding-left: 0;
         }
-        
         .transition-step {
             position: relative;
             padding-left: 3rem;
             margin-bottom: 2rem;
             counter-increment: step-counter;
         }
-        
         .transition-step::before {
             content: counter(step-counter);
             position: absolute;
@@ -943,44 +521,37 @@
             justify-content: center;
             font-weight: bold;
         }
-        
         .code-comparison {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        
         .code-column {
             flex: 1;
             min-width: 300px;
         }
-        
         .code-column h4 {
             color: var(--dark);
             margin-bottom: 0.5rem;
             text-align: center;
         }
-        
         .installation-steps {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
-        
         .installation-steps h4 {
             color: var(--primary);
             margin-bottom: 1rem;
         }
-        
         .scanner-methods {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
-        
         .scanner-method {
             background-color: white;
             border-left: 4px solid var(--secondary);
@@ -988,184 +559,41 @@
             margin: 1rem 0;
             border-radius: 5px;
         }
-        
         .scanner-method h4 {
             color: var(--secondary);
             margin-bottom: 0.5rem;
         }
-        
-        /* Responsividade */
-        @media (max-width: 1024px) {
-            .header-left {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-            
-            .header-controls {
-                flex-wrap: wrap;
-                justify-content: flex-end;
-            }
-            
-            .nav-tabs {
-                justify-content: center;
-            }
-            
-            .stages-content {
-                justify-content: center;
-            }
-            
-            .stage-item {
-                width: 140px;
-            }
-        }
-        
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.2rem;
-            }
-            
-            .subtitle {
-                font-size: 0.8rem;
-            }
-            
-            .header-controls {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .nav-tabs {
-                display: none;
-                flex-direction: column;
-                position: static;
-                background-color: var(--primary);
-                box-shadow: none;
-                max-height: none;
-            }
-            
-            .nav-tabs.active {
-                display: flex;
-            }
-            
-            .nav-tab {
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                border-radius: 0;
-                padding: 0.8rem;
-            }
-            
-            .stages-content {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .stage-item {
-                width: 100%;
-                max-width: 280px;
-            }
-            
-            .next-class {
+            .header-content {
                 flex-direction: column;
                 text-align: center;
             }
-            
+            .nav-tabs {
+                width: 100%;
+            }
+            .nav-tab {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
             .card {
                 padding: 1.5rem;
             }
-            
             .operator-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
-            
             .comparison-table {
                 font-size: 0.9rem;
             }
-            
             .comparison-table th, .comparison-table td {
                 padding: 0.5rem;
             }
-            
             .code-comparison {
                 flex-direction: column;
             }
-            
-            header.expanded + main {
-                margin-top: 380px;
-            }
         }
-        
-        @media (max-width: 480px) {
-            .main-header {
-                padding: 0 0.5rem;
-            }
-            
-            .header-left {
-                flex-direction: row;
-                align-items: center;
-                width: 100%;
-            }
-            
-            .header-title {
-                flex: 1;
-            }
-            
-            .header-controls {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .course-badge {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.6rem;
-            }
-            
-            .progress-info {
-                font-size: 0.7rem;
-            }
-            
-            .progress-bar-mini {
-                width: 50px;
-            }
-            
-            .stage-item {
-                width: 100%;
-            }
-            
-            .stage-link {
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                text-align: left;
-                padding: 0.6rem;
-                gap: 0.8rem;
-            }
-            
-            .stage-icon {
-                font-size: 1.3rem;
-                margin-bottom: 0;
-            }
-            
-            .stage-content {
-                flex: 1;
-            }
-            
-            .next-class-info h4 {
-                font-size: 0.8rem;
-            }
-            
-            .next-class-info p {
-                font-size: 0.7rem;
-            }
-            
-            .next-class-btn {
-                font-size: 0.7rem;
-                padding: 0.4rem 0.8rem;
-            }
-            
-            header.expanded + main {
-                margin-top: 420px;
-            }
-        }
-        
         /* Acessibilidade */
         .sr-only {
             position: absolute;
@@ -1178,7 +606,6 @@
             white-space: nowrap;
             border: 0;
         }
-        
         :focus {
             outline: 3px solid var(--secondary);
             outline-offset: 2px;
@@ -1186,161 +613,29 @@
     </style>
 </head>
 <body>
-    <header id="mainHeader">
-        <!-- Header Principal Compacto -->
-        <div class="main-header">
-            <div class="container" style="display: flex; align-items: center; justify-content: space-between; height: 100%;">
-                <div class="header-left">
-                    <div class="header-title">
-                        <h1>Aprendendo Java Estruturado</h1>
-                        <p class="subtitle">Fundamentos com NetBeans</p>
-                    </div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Aprendendo Java Estruturado com NetBeans</h1>
+                    <p class="subtitle">Fundamentos</p>
                 </div>
-                <div class="header-controls">
-                    <div class="course-badge">
-                        <span>📚</span>
-                        <span>Java</span>
-                    </div>
-                    <div class="progress-info">
-                        <span>1/8</span>
-                        <div class="progress-bar-mini">
-                            <div class="progress-fill-mini"></div>
-                        </div>
-                    </div>
-                    <div class="font-controls">
-                        <button id="decreaseFont" class="font-btn" aria-label="Diminuir fonte">A-</button>
-                        <button id="increaseFont" class="font-btn" aria-label="Aumentar fonte">A+</button>
-                    </div>
-                    <button class="header-toggle" id="headerToggle" aria-label="Expandir menu" aria-expanded="false">
-                        ⌄
-                    </button>
+                <div>
+                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
                 </div>
             </div>
-        </div>
-        
-        <!-- Menu Expansível (inicialmente oculto) -->
-        <div class="expandable-menu">
-            <!-- Navegação Principal - Abas de Tópicos -->
-            <div class="nav-container">
-                <div class="container">
-                    <nav class="nav-tabs" id="navTabs" role="tablist">
-                        <button class="nav-tab active" data-topic="algoritmos" role="tab" aria-selected="true">Algoritmos</button>
-                        <button class="nav-tab" data-topic="tipos" role="tab" aria-selected="false">Tipos de Dados</button>
-                        <button class="nav-tab" data-topic="memoria" role="tab" aria-selected="false">Memória e Variáveis</button>
-                        <button class="nav-tab" data-topic="operadores" role="tab" aria-selected="false">Operadores</button>
-                        <button class="nav-tab" data-topic="comandos" role="tab" aria-selected="false">Comandos Básicos</button>
-                        <button class="nav-tab" data-topic="netbeans" role="tab" aria-selected="false">Apresentando NetBeans</button>
-                        <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
-                    </nav>
-                </div>
-            </div>
-            
-            <!-- Menu de Etapas do Curso -->
-            <div class="stages-menu">
-                <div class="container">
-                    <div class="stages-header">
-                        <h3 class="stages-title">
-                            <span>📋</span>
-                            <span>Etapas do Curso</span>
-                        </h3>
-                        <span class="stages-progress">1/8 concluídas</span>
-                    </div>
-                    <div class="stages-content">
-                        <div class="stage-item">
-                            <a href="#" class="stage-link active">
-                                <span class="stage-icon">📚</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 1</span>
-                                    <span class="stage-title">Fundamentos do Java</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="decisao.html" class="stage-link">
-                                <span class="stage-icon">🔄</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 2</span>
-                                    <span class="stage-title">Estrutura de Decisão</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">🔁</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 3</span>
-                                    <span class="stage-title">Estrutura de Repetição</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">📋</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 4</span>
-                                    <span class="stage-title">Vetores e Matrizes</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">⚙️</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 5</span>
-                                    <span class="stage-title">Funções e Métodos</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">📁</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 6</span>
-                                    <span class="stage-title">Manipulação de Arquivos</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">🐞</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 7</span>
-                                    <span class="stage-title">Tratamento de Exceções</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="stage-item">
-                            <a href="#" class="stage-link locked">
-                                <span class="stage-icon">🏆</span>
-                                <div class="stage-content">
-                                    <span class="stage-number">Etapa 8</span>
-                                    <span class="stage-title">Projeto Final</span>
-                                    <span class="stage-status"></span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Próxima Aula -->
-                    <div class="next-class">
-                        <div class="next-class-info">
-                            <h4>Próxima Aula</h4>
-                            <p>Na próxima aula, você aprenderá sobre estruturas de decisão em Java, que permitem que seu programa tome diferentes caminhos com base em condições.</p>
-                        </div>
-                        <a href="decisao.html" class="next-class-btn">Ir para Próxima Aula</a>
-                    </div>
-                </div>
-            </div>
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" data-topic="algoritmos" role="tab" aria-selected="true">Algoritmos</button>
+                <button class="nav-tab" data-topic="tipos" role="tab" aria-selected="false">Tipos de Dados</button>
+                <button class="nav-tab" data-topic="memoria" role="tab" aria-selected="false">Memória e Variáveis</button>
+                <button class="nav-tab" data-topic="operadores" role="tab" aria-selected="false">Operadores</button>
+                <button class="nav-tab" data-topic="comandos" role="tab" aria-selected="false">Comandos Básicos</button>
+                <button class="nav-tab" data-topic="netbeans" role="tab" aria-selected="false">Apresentando NetBeans</button>
+                <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
+            </nav>
         </div>
     </header>
-    
     <main class="container">
         <!-- Tópico 1: Algoritmos -->
         <section id="algoritmos" class="topic-section active" role="tabpanel">
@@ -1383,7 +678,6 @@
                 </div>
             </div>
         </section>
-        
         <!-- Tópico 2: Tipos de Dados -->
         <section id="tipos" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1465,7 +759,6 @@
                 </div>
             </div>
         </section>
-        
         <!-- Tópico 3: Memória e Variáveis -->
         <section id="memoria" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1528,7 +821,6 @@
                 </div>
             </div>
         </section>
-        
         <!-- Tópico 4: Operadores -->
         <section id="operadores" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1633,7 +925,6 @@
                 </div>
             </div>
         </section>
-        
         <!-- Tópico 5: Comandos Básicos -->
         <section id="comandos" class="topic-section" role="tabpanel">
             <div class="card">
@@ -1859,12 +1150,6 @@
                     <p>Sempre feche o Scanner após usá-lo com o método <code>scanner.close()</code>. Isso libera recursos do sistema e evita possíveis vazamentos de memória.</p>
                 </div>
                 
-                <h3>Próximo Passo: Estruturas de Decisão</h3>
-                <p>Após compreender os comandos básicos, o próximo passo é aprender sobre estruturas de decisão, que permitem que seu programa tome diferentes caminhos com base em condições.</p>
-                <div style="text-align: center; margin: 2rem 0;">
-                    <a href="decisao.html" class="btn btn-success" style="font-size: 1.2rem; padding: 1rem 2rem;">Ir para Estrutura de Decisão</a>
-                </div>
-                
                 <div class="activity">
                     <h3>Atividade Prática</h3>
                     <p>Complete o código abaixo para criar um programa que calcula a média de três notas:</p>
@@ -1889,7 +1174,6 @@
                 </div>
             </div>
         </section>
-        
         <!-- Nova Seção: Apresentando NetBeans -->
         <section id="netbeans" class="topic-section" role="tabpanel">
             <div class="card">
@@ -2186,7 +1470,6 @@ public class VerificaIdade {
                 </div>
             </div>
         </section>
-        
         <!-- Seção: Prática no NetBeans -->
         <section id="pratica" class="topic-section" role="tabpanel">
             <div class="card">
@@ -2197,7 +1480,6 @@ public class VerificaIdade {
                     <h4>Dica Importante</h4>
                     <p>Antes de começar, certifique-se de que o NetBeans está instalado em seu computador. Se não estiver, peça ajuda ao seu professor para instalá-lo.</p>
                 </div>
-                
                 <!-- Módulo 1: Criando o Primeiro Projeto -->
                 <div class="practice-module">
                     <h3>Módulo 1: Criando seu Primeiro Projeto Java</h3>
@@ -2286,7 +1568,6 @@ public class VerificaIdade {
                         </div>
                     </div>
                 </div>
-                
                 <!-- Módulo 2: Primeiro Programa com Saída -->
                 <div class="practice-module">
                     <h3>Módulo 2: Criando seu Primeiro Programa com Saída</h3>
@@ -2360,7 +1641,6 @@ public class VerificaIdade {
                         <p>Você acabou de criar e executar seu primeiro programa Java! Se você viu a mensagem "Olá, mundo!" na janela de saída, tudo funcionou perfeitamente.</p>
                     </div>
                 </div>
-                
                 <!-- Módulo 3: Trabalhando com Variáveis -->
                 <div class="practice-module">
                     <h3>Módulo 3: Trabalhando com Variáveis e Tipos de Dados</h3>
@@ -2416,6 +1696,10 @@ public class VerificaIdade {
                             System.out.println(<span class="string">"Inicial: "</span> + inicial);<br>
                             System.out.println(<span class="string">"É estudante: "</span> + estudante);
                         </div>
+                        <div class="warning-box">
+                            <h4>Atenção</h4>
+                            <p>Observe que usamos o operador "+" para juntar (concatenar) texto com variáveis. Isso é muito útil para criar mensagens personalizadas.</p>
+                        </div>
                     </div>
                     <div class="step">
                         <span class="step-number">4</span>
@@ -2451,7 +1735,6 @@ public class VerificaIdade {
                         <p>Tente modificar os valores iniciais das variáveis e execute novamente para ver como o resultado muda.</p>
                     </div>
                 </div>
-                
                 <!-- Módulo 4: Entrada de Dados -->
                 <div class="practice-module">
                     <h3>Módulo 4: Recebendo Dados do Usuário</h3>
@@ -2569,7 +1852,6 @@ public class VerificaIdade {
                         <p>Você criou um programa interativo! Agora tente adicionar mais campos, como pedir a altura do usuário e mostrar seu IMC (Índice de Massa Corporal).</p>
                     </div>
                 </div>
-                
                 <!-- Módulo 5: Calculadora Simples -->
                 <div class="practice-module">
                     <h3>Módulo 5: Criando uma Calculadora Simples</h3>
@@ -2689,7 +1971,6 @@ public class VerificaIdade {
                         </ul>
                     </div>
                 </div>
-                
                 <!-- Módulo 6: Projeto Final -->
                 <div class="practice-module">
                     <h3>Módulo 6: Projeto Final - Sistema de Médias</h3>
@@ -2816,342 +2097,281 @@ public class VerificaIdade {
             </div>
         </section>
     </main>
-    
     <footer>
         <div class="container">
             <p>&copy; Aprendendo Java Estruturado - Material educativo adaptado</p>
         </div>
     </footer>
-    
     <script>
-        // Garantir que o DOM esteja completamente carregado antes de executar o JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle do Menu Expansível
-            const headerToggle = document.getElementById('headerToggle');
-            const mainHeader = document.getElementById('mainHeader');
-            
-            if (headerToggle && mainHeader) {
-                headerToggle.addEventListener('click', function() {
-                    mainHeader.classList.toggle('expanded');
-                    headerToggle.classList.toggle('expanded');
-                    
-                    // Atualizar o atributo aria-expanded
-                    const isExpanded = mainHeader.classList.contains('expanded');
-                    headerToggle.setAttribute('aria-expanded', isExpanded);
-                    headerToggle.setAttribute('aria-label', isExpanded ? 'Recolher menu' : 'Expandir menu');
+        // Navegação entre tópicos
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const topicSections = document.querySelectorAll('.topic-section');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTopic = tab.getAttribute('data-topic');
+                
+                // Remove classe active de todas as abas e seções
+                navTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
                 });
-            }
-            
-            // Navegação entre tópicos
-            const tabButtons = document.querySelectorAll('.nav-tab');
-            const topicSections = document.querySelectorAll('.topic-section');
-            
-            tabButtons.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const targetTopic = tab.getAttribute('data-topic');
-                    
-                    // Remove classe active de todas as abas e seções
-                    tabButtons.forEach(t => {
-                        t.classList.remove('active');
-                        t.setAttribute('aria-selected', 'false');
-                    });
-                    topicSections.forEach(section => section.classList.remove('active'));
-                    
-                    // Adiciona classe active na aba e seção correspondentes
-                    tab.classList.add('active');
-                    tab.setAttribute('aria-selected', 'true');
-                    const targetSection = document.getElementById(targetTopic);
-                    if (targetSection) {
-                        targetSection.classList.add('active');
-                    }
-                });
+                topicSections.forEach(section => section.classList.remove('active'));
+                
+                // Adiciona classe active na aba e seção correspondentes
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(targetTopic).classList.add('active');
             });
-            
-            // Controle de tamanho da fonte
-            const increaseFontBtn = document.getElementById('increaseFont');
-            const decreaseFontBtn = document.getElementById('decreaseFont');
-            const root = document.documentElement;
-            let currentFontSize = 18;
-            
-            if (increaseFontBtn) {
-                increaseFontBtn.addEventListener('click', () => {
-                    if (currentFontSize < 24) {
-                        currentFontSize += 2;
-                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
-                    }
-                });
-            }
-            
-            if (decreaseFontBtn) {
-                decreaseFontBtn.addEventListener('click', () => {
-                    if (currentFontSize > 14) {
-                        currentFontSize -= 2;
-                        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
-                    }
-                });
-            }
-            
-            // Atividade 1: Ordenar algoritmo
-            const draggables = document.querySelectorAll('.draggable');
-            const dragContainer = document.getElementById('dragContainer');
-            let draggedElement = null;
-            
-            if (draggables.length > 0 && dragContainer) {
-                draggables.forEach(draggable => {
-                    draggable.addEventListener('dragstart', (e) => {
-                        draggedElement = e.target;
-                        e.target.style.opacity = '0.5';
-                    });
-                    
-                    draggable.addEventListener('dragend', (e) => {
-                        e.target.style.opacity = '';
-                    });
-                });
-                
-                dragContainer.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    const afterElement = getDragAfterElement(dragContainer, e.clientY);
-                    if (afterElement == null) {
-                        dragContainer.appendChild(draggedElement);
-                    } else {
-                        dragContainer.insertBefore(draggedElement, afterElement);
-                    }
-                });
-            }
-            
-            function getDragAfterElement(container, y) {
-                const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
-                
-                return draggableElements.reduce((closest, child) => {
-                    const box = child.getBoundingClientRect();
-                    const offset = y - box.top - box.height / 2;
-                    
-                    if (offset < 0 && offset > closest.offset) {
-                        return { offset: offset, element: child };
-                    } else {
-                        return closest;
-                    }
-                }, { offset: Number.NEGATIVE_INFINITY }).element;
-            }
-            
-            // Verificar ordem do algoritmo
-            const checkOrderBtn = document.getElementById('checkOrder');
-            if (checkOrderBtn) {
-                checkOrderBtn.addEventListener('click', () => {
-                    const items = [...document.querySelectorAll('.draggable')];
-                    const correctOrder = items.every((item, index) => 
-                        parseInt(item.getAttribute('data-order')) === index + 1
-                    );
-                    
-                    const feedback = document.getElementById('orderFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        if (correctOrder) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Parabéns! Você organizou o algoritmo corretamente.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            feedback.textContent = 'A ordem não está correta. Tente novamente!';
-                        }
-                    }
-                });
-            }
-            
-            // Atividade 2: Tipos de dados
-            const checkTypesBtn = document.getElementById('checkTypes');
-            if (checkTypesBtn) {
-                checkTypesBtn.addEventListener('click', () => {
-                    const valor1 = document.getElementById('valor1').value;
-                    const valor2 = document.getElementById('valor2').value;
-                    const valor3 = document.getElementById('valor3').value;
-                    
-                    const feedback = document.getElementById('typesFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        const correct1 = valor1 === 'String';
-                        const correct2 = valor2 === 'boolean';
-                        const correct3 = valor3 === 'char';
-                        
-                        if (correct1 && correct2 && correct3) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            let message = 'Algumas respostas estão incorretas. ';
-                            if (!correct1) message += '"42.5" é uma String. ';
-                            if (!correct2) message += 'true é um boolean. ';
-                            if (!correct3) message += "'X' é um char. ";
-                            feedback.textContent = message;
-                        }
-                    }
-                });
-            }
-            
-            // Atividade 3: Memória e variáveis
-            const checkVariablesBtn = document.getElementById('checkVariables');
-            if (checkVariablesBtn) {
-                checkVariablesBtn.addEventListener('click', () => {
-                    const nome = document.getElementById('varNome').value.trim();
-                    const idade = document.getElementById('varIdade').value.trim();
-                    const pi = document.getElementById('constPi').value.trim();
-                    
-                    const feedback = document.getElementById('variablesFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        const nomeRegex = /^String\s+\w+\s*=\s*"[^"]*";?$/i;
-                        const idadeRegex = /^int\s+\w+\s*=\s*\d+;?$/i;
-                        const piRegex = /^final\s+double\s+\w+\s*=\s*\d+(\.\d+)?;?$/i;
-                        
-                        const correctNome = nomeRegex.test(nome);
-                        const correctIdade = idadeRegex.test(idade);
-                        const correctPi = piRegex.test(pi);
-                        
-                        if (correctNome && correctIdade && correctPi) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Perfeito! Todas as declarações estão corretas.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            let message = 'Corrija as seguintes declarações: ';
-                            if (!correctNome) message += 'Nome (ex: String nome = "Ana";). ';
-                            if (!correctIdade) message += 'Idade (ex: int idade = 25;). ';
-                            if (!correctPi) message += 'PI (ex: final double PI = 3.14;). ';
-                            feedback.textContent = message;
-                        }
-                    }
-                });
-            }
-            
-            // Atividade 4: Operadores
-            const checkCalculationsBtn = document.getElementById('checkCalculations');
-            if (checkCalculationsBtn) {
-                checkCalculationsBtn.addEventListener('click', () => {
-                    const calc1 = parseInt(document.getElementById('calc1').value);
-                    const calc2 = parseInt(document.getElementById('calc2').value);
-                    const calc3 = parseInt(document.getElementById('calc3').value);
-                    
-                    const feedback = document.getElementById('calculationsFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        const correct1 = calc1 === 20; // 10 + 5 * 2 = 10 + 10 = 20
-                        const correct2 = calc2 === 8;  // (20 / 4) + 3 = 5 + 3 = 8
-                        const correct3 = calc3 === 3;  // 15 % 4 = 3
-                        
-                        if (correct1 && correct2 && correct3) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Ótimo! Você acertou todos os cálculos.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            let message = 'Revise os cálculos: ';
-                            if (!correct1) message += '10 + 5 * 2 = 20. ';
-                            if (!correct2) message += '(20 / 4) + 3 = 8. ';
-                            if (!correct3) message += '15 % 4 = 3. ';
-                            feedback.textContent = message;
-                        }
-                    }
-                });
-            }
-            
-            // Atividade 5: Comandos básicos
-            const checkCodeBtn = document.getElementById('checkCode');
-            if (checkCodeBtn) {
-                checkCodeBtn.addEventListener('click', () => {
-                    const nota3 = document.getElementById('nota3').value.trim();
-                    const mediaCalc = document.getElementById('mediaCalc').value.trim();
-                    const mediaPrint = document.getElementById('mediaPrint').value.trim();
-                    
-                    const feedback = document.getElementById('codeFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        const correctNota3 = nota3 === 'scanner.nextDouble()';
-                        const correctMediaCalc = mediaCalc === '(nota1 + nota2 + nota3) / 3';
-                        const correctMediaPrint = mediaPrint === 'media';
-                        
-                        if (correctNota3 && correctMediaCalc && correctMediaPrint) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Excelente! Você completou o código corretamente.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            let message = 'Corrija as seguintes partes: ';
-                            if (!correctNota3) message += 'Leitura da nota3: scanner.nextDouble(). ';
-                            if (!correctMediaCalc) message += 'Cálculo da média: (nota1 + nota2 + nota3) / 3. ';
-                            if (!correctMediaPrint) message += 'Impressão: media. ';
-                            feedback.textContent = message;
-                        }
-                    }
-                });
-            }
-            
-            // Atividade de transição: Portugol para Java
-            const checkTransitionBtn = document.getElementById('checkTransition');
-            if (checkTransitionBtn) {
-                checkTransitionBtn.addEventListener('click', () => {
-                    const javaCode = document.getElementById('javaCode').value.trim();
-                    const feedback = document.getElementById('transitionFeedback');
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        
-                        // Verificar se o código contém os elementos essenciais
-                        const hasScannerImport = javaCode.includes('import java.util.Scanner');
-                        const hasClassDeclaration = javaCode.includes('public class') && javaCode.includes('{');
-                        const hasMainMethod = javaCode.includes('public static void main(String[] args)');
-                        const hasScannerCreation = javaCode.includes('Scanner scanner = new Scanner(System.in)');
-                        const hasVariableDeclaration = javaCode.includes('int idade');
-                        const hasInputReading = javaCode.includes('scanner.nextInt()');
-                        const hasCondition = javaCode.includes('if (idade >= 18)');
-                        const hasOutput = javaCode.includes('System.out.println');
-                        
-                        const allElementsPresent = hasScannerImport && hasClassDeclaration && hasMainMethod && 
-                                                 hasScannerCreation && hasVariableDeclaration && hasInputReading && 
-                                                 hasCondition && hasOutput;
-                        
-                        if (allElementsPresent) {
-                            feedback.className = 'feedback success';
-                            feedback.textContent = 'Excelente! Você fez a transição do Portugol para Java corretamente.';
-                        } else {
-                            feedback.className = 'feedback error';
-                            let message = 'Seu código está incompleto. Verifique se incluiu: ';
-                            if (!hasScannerImport) message += 'import java.util.Scanner. ';
-                            if (!hasClassDeclaration) message += 'declaração da classe. ';
-                            if (!hasMainMethod) message += 'método main. ';
-                            if (!hasScannerCreation) message += 'criação do Scanner. ';
-                            if (!hasVariableDeclaration) message += 'declaração da variável idade. ';
-                            if (!hasInputReading) message += 'leitura da idade. ';
-                            if (!hasCondition) message += 'estrutura condicional. ';
-                            if (!hasOutput) message += 'comando de saída. ';
-                            feedback.textContent = message;
-                        }
-                    }
-                });
-            }
-            
-            // Animação das barras de progresso quando a seção de prática é ativada
-            const praticaTab = document.querySelector('[data-topic="pratica"]');
-            const netbeansTab = document.querySelector('[data-topic="netbeans"]');
-            const activateProgressBars = () => {
-                setTimeout(() => {
-                    // Anima as barras de progresso
-                    const progressBars = document.querySelectorAll('.progress-fill');
-                    progressBars.forEach((bar, index) => {
-                        setTimeout(() => {
-                            bar.style.width = '100%';
-                        }, index * 200);
-                    });
-                }, 500);
-            };
-            
-            if (praticaTab) {
-                praticaTab.addEventListener('click', activateProgressBars);
-            }
-            
-            if (netbeansTab) {
-                netbeansTab.addEventListener('click', activateProgressBars);
+        });
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
             }
         });
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        // Atividade 1: Ordenar algoritmo
+        const draggables = document.querySelectorAll('.draggable');
+        const dragContainer = document.getElementById('dragContainer');
+        let draggedElement = null;
+        if (draggables.length > 0) {
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    draggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                });
+                draggable.addEventListener('dragend', (e) => {
+                    e.target.style.opacity = '';
+                });
+            });
+            dragContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(dragContainer, e.clientY);
+                if (afterElement == null) {
+                    dragContainer.appendChild(draggedElement);
+                } else {
+                    dragContainer.insertBefore(draggedElement, afterElement);
+                }
+            });
+        }
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        // Verificar ordem do algoritmo
+        const checkOrderBtn = document.getElementById('checkOrder');
+        if (checkOrderBtn) {
+            checkOrderBtn.addEventListener('click', () => {
+                const items = [...document.querySelectorAll('.draggable')];
+                const correctOrder = items.every((item, index) => 
+                    parseInt(item.getAttribute('data-order')) === index + 1
+                );
+                
+                const feedback = document.getElementById('orderFeedback');
+                feedback.style.display = 'block';
+                
+                if (correctOrder) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Parabéns! Você organizou o algoritmo corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'A ordem não está correta. Tente novamente!';
+                }
+            });
+        }
+        // Atividade 2: Tipos de dados
+        const checkTypesBtn = document.getElementById('checkTypes');
+        if (checkTypesBtn) {
+            checkTypesBtn.addEventListener('click', () => {
+                const valor1 = document.getElementById('valor1').value;
+                const valor2 = document.getElementById('valor2').value;
+                const valor3 = document.getElementById('valor3').value;
+                
+                const feedback = document.getElementById('typesFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = valor1 === 'String';
+                const correct2 = valor2 === 'boolean';
+                const correct3 = valor3 === 'char';
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Algumas respostas estão incorretas. ';
+                    if (!correct1) message += '"42.5" é uma String. ';
+                    if (!correct2) message += 'true é um boolean. ';
+                    if (!correct3) message += "'X' é um char. ";
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 3: Memória e variáveis
+        const checkVariablesBtn = document.getElementById('checkVariables');
+        if (checkVariablesBtn) {
+            checkVariablesBtn.addEventListener('click', () => {
+                const nome = document.getElementById('varNome').value.trim();
+                const idade = document.getElementById('varIdade').value.trim();
+                const pi = document.getElementById('constPi').value.trim();
+                
+                const feedback = document.getElementById('variablesFeedback');
+                feedback.style.display = 'block';
+                
+                const nomeRegex = /^String\s+\w+\s*=\s*"[^"]*";?$/i;
+                const idadeRegex = /^int\s+\w+\s*=\s*\d+;?$/i;
+                const piRegex = /^final\s+double\s+\w+\s*=\s*\d+(\.\d+)?;?$/i;
+                
+                const correctNome = nomeRegex.test(nome);
+                const correctIdade = idadeRegex.test(idade);
+                const correctPi = piRegex.test(pi);
+                
+                if (correctNome && correctIdade && correctPi) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Perfeito! Todas as declarações estão corretas.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes declarações: ';
+                    if (!correctNome) message += 'Nome (ex: String nome = "Ana";). ';
+                    if (!correctIdade) message += 'Idade (ex: int idade = 25;). ';
+                    if (!correctPi) message += 'PI (ex: final double PI = 3.14;). ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 4: Operadores
+        const checkCalculationsBtn = document.getElementById('checkCalculations');
+        if (checkCalculationsBtn) {
+            checkCalculationsBtn.addEventListener('click', () => {
+                const calc1 = parseInt(document.getElementById('calc1').value);
+                const calc2 = parseInt(document.getElementById('calc2').value);
+                const calc3 = parseInt(document.getElementById('calc3').value);
+                
+                const feedback = document.getElementById('calculationsFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = calc1 === 20; // 10 + 5 * 2 = 10 + 10 = 20
+                const correct2 = calc2 === 8;  // (20 / 4) + 3 = 5 + 3 = 8
+                const correct3 = calc3 === 3;  // 15 % 4 = 3
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Ótimo! Você acertou todos os cálculos.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Revise os cálculos: ';
+                    if (!correct1) message += '10 + 5 * 2 = 20. ';
+                    if (!correct2) message += '(20 / 4) + 3 = 8. ';
+                    if (!correct3) message += '15 % 4 = 3. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 5: Comandos básicos
+        const checkCodeBtn = document.getElementById('checkCode');
+        if (checkCodeBtn) {
+            checkCodeBtn.addEventListener('click', () => {
+                const nota3 = document.getElementById('nota3').value.trim();
+                const mediaCalc = document.getElementById('mediaCalc').value.trim();
+                const mediaPrint = document.getElementById('mediaPrint').value.trim();
+                
+                const feedback = document.getElementById('codeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctNota3 = nota3 === 'scanner.nextDouble()';
+                const correctMediaCalc = mediaCalc === '(nota1 + nota2 + nota3) / 3';
+                const correctMediaPrint = mediaPrint === 'media';
+                
+                if (correctNota3 && correctMediaCalc && correctMediaPrint) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctNota3) message += 'Leitura da nota3: scanner.nextDouble(). ';
+                    if (!correctMediaCalc) message += 'Cálculo da média: (nota1 + nota2 + nota3) / 3. ';
+                    if (!correctMediaPrint) message += 'Impressão: media. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade de transição: Portugol para Java
+        const checkTransitionBtn = document.getElementById('checkTransition');
+        if (checkTransitionBtn) {
+            checkTransitionBtn.addEventListener('click', () => {
+                const javaCode = document.getElementById('javaCode').value.trim();
+                const feedback = document.getElementById('transitionFeedback');
+                feedback.style.display = 'block';
+                
+                // Verificar se o código contém os elementos essenciais
+                const hasScannerImport = javaCode.includes('import java.util.Scanner');
+                const hasClassDeclaration = javaCode.includes('public class') && javaCode.includes('{');
+                const hasMainMethod = javaCode.includes('public static void main(String[] args)');
+                const hasScannerCreation = javaCode.includes('Scanner scanner = new Scanner(System.in)');
+                const hasVariableDeclaration = javaCode.includes('int idade');
+                const hasInputReading = javaCode.includes('scanner.nextInt()');
+                const hasCondition = javaCode.includes('if (idade >= 18)');
+                const hasOutput = javaCode.includes('System.out.println');
+                
+                const allElementsPresent = hasScannerImport && hasClassDeclaration && hasMainMethod && 
+                                         hasScannerCreation && hasVariableDeclaration && hasInputReading && 
+                                         hasCondition && hasOutput;
+                
+                if (allElementsPresent) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você fez a transição do Portugol para Java corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Seu código está incompleto. Verifique se incluiu: ';
+                    if (!hasScannerImport) message += 'import java.util.Scanner. ';
+                    if (!hasClassDeclaration) message += 'declaração da classe. ';
+                    if (!hasMainMethod) message += 'método main. ';
+                    if (!hasScannerCreation) message += 'criação do Scanner. ';
+                    if (!hasVariableDeclaration) message += 'declaração da variável idade. ';
+                    if (!hasInputReading) message += 'leitura da idade. ';
+                    if (!hasCondition) message += 'estrutura condicional. ';
+                    if (!hasOutput) message += 'comando de saída. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Animação das barras de progresso quando a seção de prática é ativada
+        const praticaTab = document.querySelector('[data-topic="pratica"]');
+        const netbeansTab = document.querySelector('[data-topic="netbeans"]');
+        const activateProgressBars = () => {
+            setTimeout(() => {
+                // Anima as barras de progresso
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach((bar, index) => {
+                    setTimeout(() => {
+                        bar.style.width = '100%';
+                    }, index * 200);
+                });
+            }, 500);
+        };
+        
+        praticaTab.addEventListener('click', activateProgressBars);
+        netbeansTab.addEventListener('click', activateProgressBars);
     </script>
 </body>
 </html>
