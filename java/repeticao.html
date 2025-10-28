@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estruturas de Repetição em Java</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --font-size-base: 18px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            font-size: var(--font-size-base);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: var(--dark);
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .nav-tab.active {
+            background-color: var(--secondary);
+        }
+        main {
+            padding: 2rem 0;
+        }
+        .topic-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .topic-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+        }
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        .card h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.4rem;
+        }
+        .card h4 {
+            color: var(--secondary);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+        }
+        .card p, .card li {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        ul {
+            padding-left: 2rem;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .code-block .keyword {
+            color: #f687b3;
+        }
+        .code-block .string {
+            color: #68d391;
+        }
+        .code-block .comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+        .code-block .number {
+            color: #fbb6ce;
+        }
+        .activity {
+            background-color: #f7fafc;
+            border: 2px dashed var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .activity h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .input-group {
+            margin: 1rem 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background-color: var(--success);
+        }
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .feedback.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .memory-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .memory-cell {
+            background-color: var(--light);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+        .memory-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .memory-cell .name {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .memory-cell .value {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        .memory-cell .type {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .operator-card {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .operator-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .operator-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .operator-name {
+            color: var(--dark);
+            margin-bottom: 0.3rem;
+        }
+        .operator-example {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .io-example {
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .io-example h4 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        .io-terminal {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+        .io-terminal .input {
+            color: #68d391;
+        }
+        .io-terminal .output {
+            color: #fbb6ce;
+        }
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+        /* Estilos para seção de prática no NetBeans */
+        .practice-module {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--success);
+        }
+        .practice-module h3 {
+            color: var(--success);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .step {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--warning);
+        }
+        .step-number {
+            display: inline-block;
+            background-color: var(--warning);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        .netbeans-screenshot {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+        .netbeans-header {
+            background-color: #3c3f41;
+            padding: 0.5rem 1rem;
+            border-radius: 5px 5px 0 0;
+            margin: -1rem -1rem 1rem -1rem;
+            display: flex;
+            align-items: center;
+        }
+        .netbeans-title {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+        .netbeans-menu {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .netbeans-menu-item {
+            background-color: #555;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        .netbeans-code {
+            background-color: #1e1e1e;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+        }
+        .netbeans-output {
+            background-color: #0d1117;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            color: #58a6ff;
+        }
+        .tip-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        .tip-box h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        .warning-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-fill {
+            background-color: var(--success);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .checkpoint {
+            background-color: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        .checkpoint h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        .flowchart-element {
+            background-color: white;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+            position: relative;
+        }
+        .flowchart-element.decision {
+            width: 80%;
+            max-width: 300px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            border-radius: 0;
+        }
+        .flowchart-element.decision span {
+            transform: rotate(-45deg);
+            font-weight: bold;
+        }
+        .flowchart-arrow {
+            height: 30px;
+            width: 2px;
+            background-color: var(--secondary);
+            position: relative;
+        }
+        .flowchart-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid var(--secondary);
+        }
+        .loop-visual {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+        .loop-visual h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .loop-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .loop-step {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .step-icon {
+            background-color: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .comparison-table th {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .comparison-table tr:hover {
+            background-color: #e2e2e2;
+        }
+        .ide-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .feature-card {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .feature-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .feature-description {
+            color: #666;
+        }
+        .transition-steps {
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .transition-step {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+            counter-increment: step-counter;
+        }
+        .transition-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .code-comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .code-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        .code-column h4 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .installation-steps {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .installation-steps h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .scanner-methods {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .scanner-method {
+            background-color: white;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        .scanner-method h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-tabs {
+                width: 100%;
+            }
+            .nav-tab {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            .operator-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            .comparison-table th, .comparison-table td {
+                padding: 0.5rem;
+            }
+            .code-comparison {
+                flex-direction: column;
+            }
+        }
+        /* Acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        :focus {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Estruturas de Repetição em Java</h1>
+                    <p class="subtitle">For, While e Do While</p>
+                </div>
+                <div>
+                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+                </div>
+            </div>
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" data-topic="introducao" role="tab" aria-selected="true">Introdução</button>
+                <button class="nav-tab" data-topic="for" role="tab" aria-selected="false">Estrutura For</button>
+                <button class="nav-tab" data-topic="while" role="tab" aria-selected="false">Estrutura While</button>
+                <button class="nav-tab" data-topic="dowhile" role="tab" aria-selected="false">Estrutura Do While</button>
+                <button class="nav-tab" data-topic="breakcontinue" role="tab" aria-selected="false">Break e Continue</button>
+                <button class="nav-tab" data-topic="pratica" role="tab" aria-selected="false">Prática no NetBeans</button>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        <!-- Tópico 1: Introdução -->
+        <section id="introducao" class="topic-section active" role="tabpanel">
+            <div class="card">
+                <h2>1. Introdução às Estruturas de Repetição</h2>
+                <p>As <strong>estruturas de repetição</strong> (também conhecidas como <strong>laços</strong> ou <strong>loops</strong>) são recursos fundamentais em programação que permitem executar um bloco de código repetidamente enquanto uma determinada condição for verdadeira.</p>
+                
+                <h3>Por que usar estruturas de repetição?</h3>
+                <p>Imagine que você precisa imprimir os números de 1 a 100. Sem estruturas de repetição, você teria que escrever 100 linhas de código! Com um laço, você pode fazer isso em apenas algumas linhas.</p>
+                
+                <h3>Tipos de Estruturas de Repetição em Java</h3>
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <div class="operator-symbol">for</div>
+                        <div class="operator-name">Para</div>
+                        <div class="operator-example">Ideal quando sabemos quantas vezes o loop deve executar</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">while</div>
+                        <div class="operator-name">Enquanto</div>
+                        <div class="operator-example">Executa enquanto uma condição for verdadeira</div>
+                    </div>
+                    <div class="operator-card">
+                        <div class="operator-symbol">do-while</div>
+                        <div class="operator-name">Faça-Enquanto</div>
+                        <div class="operator-example">Executa pelo menos uma vez, depois verifica a condição</div>
+                    </div>
+                </div>
+                
+                <h3>Fluxograma de uma Estrutura de Repetição</h3>
+                <div class="flowchart">
+                    <div class="flowchart-element">
+                        <strong>Início do Loop</strong>
+                    </div>
+                    <div class="flowchart-arrow"></div>
+                    <div class="flowchart-element decision">
+                        <span>Condição<br>verdadeira?</span>
+                    </div>
+                    <div class="flowchart-arrow"></div>
+                    <div class="flowchart-element">
+                        <strong>Executar Bloco de Código</strong>
+                    </div>
+                    <div class="flowchart-arrow"></div>
+                    <div class="flowchart-element">
+                        <strong>Atualizar Variáveis</strong>
+                    </div>
+                    <div class="flowchart-arrow"></div>
+                    <div class="flowchart-element decision">
+                        <span>Condição<br>verdadeira?</span>
+                    </div>
+                    <div class="flowchart-arrow"></div>
+                    <div class="flowchart-element">
+                        <strong>Fim do Loop</strong>
+                    </div>
+                </div>
+                
+                <h3>Componentes de uma Estrutura de Repetição</h3>
+                <p>Todas as estruturas de repetição possuem componentes essenciais:</p>
+                <ul>
+                    <li><strong>Inicialização:</strong> Onde definimos o valor inicial da variável de controle</li>
+                    <li><strong>Condição:</strong> Uma expressão lógica que determina quando o loop deve continuar ou parar</li>
+                    <li><strong>Atualização:</strong> Modificação do valor da variável de controle a cada iteração</li>
+                    <li><strong>Corpo do Loop:</strong> O bloco de código que será repetido</li>
+                </ul>
+                
+                <h3>Exemplo Comparativo</h3>
+                <p>Vamos ver como cada estrutura de repetição pode ser usada para imprimir os números de 1 a 5:</p>
+                
+                <div class="code-comparison">
+                    <div class="code-column">
+                        <h4>Com FOR</h4>
+                        <div class="code-block">
+                            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">5</span>; i++) {<br>
+                            &nbsp;&nbsp;System.out.println(i);<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="code-column">
+                        <h4>Com WHILE</h4>
+                        <div class="code-block">
+                            <span class="keyword">int</span> i = <span class="number">1</span>;<br>
+                            <span class="keyword">while</span> (i <= <span class="number">5</span>) {<br>
+                            &nbsp;&nbsp;System.out.println(i);<br>
+                            &nbsp;&nbsp;i++;<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="code-column">
+                        <h4>Com DO-WHILE</h4>
+                        <div class="code-block">
+                            <span class="keyword">int</span> i = <span class="number">1</span>;<br>
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;System.out.println(i);<br>
+                            &nbsp;&nbsp;i++;<br>
+                            } <span class="keyword">while</span> (i <= <span class="number">5</span>);
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Identifique qual estrutura de repetição seria mais adequada para cada situação:</p>
+                    <div class="input-group">
+                        <label for="sit1">Imprimir os números pares de 0 a 100:</label>
+                        <select id="sit1">
+                            <option value="">Selecione...</option>
+                            <option value="for">for</option>
+                            <option value="while">while</option>
+                            <option value="dowhile">do-while</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="sit2">Ler senhas até que o usuário digite a correta:</label>
+                        <select id="sit2">
+                            <option value="">Selecione...</option>
+                            <option value="for">for</option>
+                            <option value="while">while</option>
+                            <option value="dowhile">do-while</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="sit3">Mostrar um menu de opções até que o usuário escolha sair:</label>
+                        <select id="sit3">
+                            <option value="">Selecione...</option>
+                            <option value="for">for</option>
+                            <option value="while">while</option>
+                            <option value="dowhile">do-while</option>
+                        </select>
+                    </div>
+                    <button id="checkSituations" class="btn">Verificar Respostas</button>
+                    <div id="situationsFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 2: Estrutura For -->
+        <section id="for" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>2. Estrutura de Repetição FOR</h2>
+                <p>A estrutura <strong>for</strong> é uma das mais utilizadas em programação. Ela é ideal quando sabemos exatamente quantas vezes o loop deve ser executado.</p>
+                
+                <h3>Sintaxe do FOR</h3>
+                <div class="code-block">
+                    <span class="keyword">for</span> (inicialização; condição; atualização) {<br>
+                    &nbsp;&nbsp;<span class="comment">// bloco de código a ser repetido</span><br>
+                    }
+                </div>
+                
+                <h3>Componentes do FOR</h3>
+                <ul>
+                    <li><strong>Inicialização:</strong> Executada apenas uma vez, no início do loop. Geralmente usada para declarar e inicializar a variável de controle.</li>
+                    <li><strong>Condição:</strong> Verificada antes de cada iteração. Se for verdadeira, o loop continua; se for falsa, o loop termina.</li>
+                    <li><strong>Atualização:</strong> Executada após cada iteração. Geralmente usada para modificar a variável de controle.</li>
+                </ul>
+                
+                <h3>Fluxo de Execução do FOR</h3>
+                <div class="loop-visual">
+                    <h4>Passo a Passo do Funcionamento</h4>
+                    <div class="loop-steps">
+                        <div class="loop-step">
+                            <div class="step-icon">1</div>
+                            <div>A inicialização é executada (apenas uma vez)</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">2</div>
+                            <div>A condição é avaliada</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">3</div>
+                            <div>Se a condição for verdadeira, o bloco de código é executado</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">4</div>
+                            <div>A atualização é executada</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">5</div>
+                            <div>Volta para o passo 2 (avaliação da condição)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Exemplo 1: Contagem Simples</h3>
+                <p>Um exemplo básico que imprime os números de 1 a 10:</p>
+                <div class="code-block">
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;System.out.println(i);<br>
+                    }
+                </div>
+                
+                <h3>Exemplo 2: Contagem Regressiva</h3>
+                <p>Um exemplo que faz uma contagem regressiva de 10 a 1:</p>
+                <div class="code-block">
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">10</span>; i >= <span class="number">1</span>; i--) {<br>
+                    &nbsp;&nbsp;System.out.println(i);<br>
+                    }<br>
+                    System.out.println(<span class="string">"Feliz Ano Novo!"</span>);
+                </div>
+                
+                <h3>Exemplo 3: Percorrendo Arrays</h3>
+                <p>O for é muito utilizado para percorrer elementos de um array:</p>
+                <div class="code-block">
+                    <span class="keyword">String</span>[] nomes = {<span class="string">"Ana"</span>, <span class="string">"Carlos"</span>, <span class="string">"Mariana"</span>, <span class="string">"Pedro"</span>};<br><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < nomes.length; i++) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Nome "</span> + (i + <span class="number">1</span>) + <span class="string">": "</span> + nomes[i]);<br>
+                    }
+                </div>
+                
+                <h3>Exemplo 4: For Aprimorado (For-Each)</h3>
+                <p>Java oferece uma versão simplificada do for para percorrer coleções e arrays:</p>
+                <div class="code-block">
+                    <span class="keyword">String</span>[] nomes = {<span class="string">"Ana"</span>, <span class="string">"Carlos"</span>, <span class="string">"Mariana"</span>, <span class="string">"Pedro"</span>};<br><br>
+                    <span class="keyword">for</span> (String nome : nomes) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Olá, "</span> + nome + <span class="string">"!"</span>);<br>
+                    }
+                </div>
+                
+                <h3>Exemplo 5: Loops Aninhados</h3>
+                <p>Podemos usar um for dentro de outro for. Isso é muito útil para trabalhar com matrizes ou para criar padrões:</p>
+                <div class="code-block">
+                    <span class="comment">// Imprimindo uma tabuada</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Tabuada do "</span> + i + <span class="string">":"</span>);<br>
+                    &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j <= <span class="number">10</span>; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i + <span class="string">" x "</span> + j + <span class="string">" = "</span> + (i * j));<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;System.out.println(); <span class="comment">// linha em branco</span><br>
+                    }
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Boa Prática</h4>
+                    <p>Use nomes significativos para as variáveis de controle do loop. Em vez de usar sempre "i", "j", "k", tente usar nomes que indiquem o propósito da variável, como "linha", "coluna", "indice", etc.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com Loops Infinitos!</h4>
+                    <p>Se a condição nunca se tornar falsa, o loop continuará executando indefinidamente. Por exemplo:</p>
+                    <div class="code-block">
+                        <span class="comment">// Loop infinito - não faça isso!</span><br>
+                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i > <span class="number">0</span>; i++) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Isso nunca vai parar!"</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para calcular a soma dos números ímpares de 1 a 100:</p>
+                    <div class="code-block">
+                        <span class="keyword">int</span> soma = <input type="text" id="somaInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <input type="text" id="forInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; i <= <input type="text" id="forCondicao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; <input type="text" id="forAtualizacao" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;<span class="keyword">if</span> (i % <input type="text" id="ifResto" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> != <input type="text" id="ifComparacao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;soma <input type="text" id="somaOperacao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> i;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        System.out.println(<span class="string">"A soma dos ímpares é: "</span> + <input type="text" id="somaFinal" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">);
+                    </div>
+                    <button id="checkForCode" class="btn">Verificar Código</button>
+                    <div id="forCodeFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 3: Estrutura While -->
+        <section id="while" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>3. Estrutura de Repetição WHILE</h2>
+                <p>A estrutura <strong>while</strong> (enquanto) executa um bloco de código repetidamente enquanto uma determinada condição for verdadeira. Diferente do for, o while não tem uma contagem explícita de iterações.</p>
+                
+                <h3>Sintaxe do WHILE</h3>
+                <div class="code-block">
+                    <span class="keyword">while</span> (condição) {<br>
+                    &nbsp;&nbsp;<span class="comment">// bloco de código a ser repetido</span><br>
+                    &nbsp;&nbsp;<span class="comment">// (geralmente inclui a atualização da variável de controle)</span><br>
+                    }
+                </div>
+                
+                <h3>Fluxo de Execução do WHILE</h3>
+                <div class="loop-visual">
+                    <h4>Passo a Passo do Funcionamento</h4>
+                    <div class="loop-steps">
+                        <div class="loop-step">
+                            <div class="step-icon">1</div>
+                            <div>A condição é avaliada</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">2</div>
+                            <div>Se a condição for verdadeira, o bloco de código é executado</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">3</div>
+                            <div>Volta para o passo 1 (avaliação da condição)</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">4</div>
+                            <div>Se a condição for falsa, o loop termina</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Exemplo 1: Contagem Simples</h3>
+                <p>Um exemplo que imprime os números de 1 a 10 usando while:</p>
+                <div class="code-block">
+                    <span class="keyword">int</span> contador = <span class="number">1</span>;<br><br>
+                    <span class="keyword">while</span> (contador <= <span class="number">10</span>) {<br>
+                    &nbsp;&nbsp;System.out.println(contador);<br>
+                    &nbsp;&nbsp;contador++; <span class="comment">// incrementa o contador</span><br>
+                    }
+                </div>
+                
+                <h3>Exemplo 2: Validação de Entrada</h3>
+                <p>O while é muito útil para validar entradas do usuário:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">int</span> idade;<br><br>
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite sua idade (entre 1 e 120): "</span>);<br>
+                    &nbsp;&nbsp;idade = scanner.nextInt();<br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (idade < <span class="number">1</span> || idade > <span class="number">120</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Idade inválida! Tente novamente."</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    } <span class="keyword">while</span> (idade < <span class="number">1</span> || idade > <span class="number">120</span>);<br><br>
+                    System.out.println(<span class="string">"Idade registrada: "</span> + idade);
+                </div>
+                
+                <h3>Exemplo 3: Soma de Valores</h3>
+                <p>Um programa que soma valores digitados pelo usuário até que ele digite 0:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">double</span> soma = <span class="number">0</span>;<br>
+                    <span class="keyword">double</span> valor;<br><br>
+                    System.out.println(<span class="string">"Digite valores para somar (0 para sair):"</span>);<br><br>
+                    <span class="keyword">while</span> (<span class="keyword">true</span>) { <span class="comment">// loop infinito</span><br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Valor: "</span>);<br>
+                    &nbsp;&nbsp;valor = scanner.nextDouble();<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (valor == <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// sai do loop</span><br>
+                    &nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;soma += valor; <span class="comment">// mesmo que soma = soma + valor</span><br>
+                    }<br><br>
+                    System.out.println(<span class="string">"A soma dos valores é: "</span> + soma);
+                </div>
+                
+                <h3>Exemplo 4: Jogo de Adivinhação</h3>
+                <p>Um jogo simples onde o usuário tenta adivinhar um número:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br>
+                    <span class="keyword">import</span> java.util.Random;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    Random random = <span class="keyword">new</span> Random();<br><br>
+                    <span class="keyword">int</span> numeroSecreto = random.nextInt(<span class="number">100</span>) + <span class="number">1</span>; <span class="comment">// número entre 1 e 100</span><br>
+                    <span class="keyword">int</span> tentativa;<br>
+                    <span class="keyword">int</span> contagem = <span class="number">0</span>;<br><br>
+                    System.out.println(<span class="string">"Tente adivinhar o número entre 1 e 100:"</span>);<br><br>
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite seu palpite: "</span>);<br>
+                    &nbsp;&nbsp;tentativa = scanner.nextInt();<br>
+                    &nbsp;&nbsp;contagem++;<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (tentativa < numeroSecreto) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito baixo! Tente novamente."</span>);<br>
+                    &nbsp;&nbsp;} <span class="keyword">else if</span> (tentativa > numeroSecreto) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito alto! Tente novamente."</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    } <span class="keyword">while</span> (tentativa != numeroSecreto);<br><br>
+                    System.out.println(<span class="string">"Parabéns! Você acertou em "</span> + contagem + <span class="string">" tentativas!"</span>);
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com Loops Infinitos!</h4>
+                    <p>Como a condição é verificada apenas no início, se a condição nunca se tornar falsa, o loop continuará para sempre. Por exemplo:</p>
+                    <div class="code-block">
+                        <span class="comment">// Loop infinito - não faça isso!</span><br>
+                        <span class="keyword">int</span> x = <span class="number">5</span>;<br>
+                        <span class="keyword">while</span> (x > <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;System.out.println(<span class="string">"Isso nunca vai parar!"</span>);<br>
+                        &nbsp;&nbsp;<span class="comment">// esquecemos de decrementar x</span><br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Boa Prática</h4>
+                    <p>Em loops while, certifique-se de que a condição eventualmente se tornará falsa. Isso geralmente significa que você precisa modificar alguma variável dentro do loop que afeta a condição.</p>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Escreva um programa usando while que leia números do usuário e conte quantos números pares foram digitados. O programa deve parar quando o usuário digitar um número negativo.</p>
+                    <div class="input-group">
+                        <label for="whileCode">Código do programa:</label>
+                        <textarea id="whileCode" rows="15" placeholder="import java.util.Scanner;
+
+public class ContaPares {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int numero;
+        int contadorPares = 0;
+        
+        System.out.println(&quot;Digite números (negativo para sair):&quot;);
+        
+        // Seu código aqui
+        
+        System.out.println(&quot;Quantidade de números pares: &quot; + contadorPares);
+        scanner.close();
+    }
+}"></textarea>
+                    </div>
+                    <button id="checkWhileCode" class="btn">Verificar Código</button>
+                    <div id="whileCodeFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 4: Estrutura Do While -->
+        <section id="dowhile" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>4. Estrutura de Repetição DO-WHILE</h2>
+                <p>A estrutura <strong>do-while</strong> (faça-enquanto) é semelhante ao while, mas com uma diferença crucial: o bloco de código é executado pelo menos uma vez, antes mesmo de verificar a condição.</p>
+                
+                <h3>Sintaxe do DO-WHILE</h3>
+                <div class="code-block">
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;<span class="comment">// bloco de código a ser repetido</span><br>
+                    &nbsp;&nbsp;<span class="comment">// (geralmente inclui a atualização da variável de controle)</span><br>
+                    } <span class="keyword">while</span> (condição);
+                </div>
+                
+                <h3>Fluxo de Execução do DO-WHILE</h3>
+                <div class="loop-visual">
+                    <h4>Passo a Passo do Funcionamento</h4>
+                    <div class="loop-steps">
+                        <div class="loop-step">
+                            <div class="step-icon">1</div>
+                            <div>O bloco de código é executado (pelo menos uma vez)</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">2</div>
+                            <div>A condição é avaliada</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">3</div>
+                            <div>Se a condição for verdadeira, volta para o passo 1</div>
+                        </div>
+                        <div class="loop-step">
+                            <div class="step-icon">4</div>
+                            <div>Se a condição for falsa, o loop termina</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Diferença entre WHILE e DO-WHILE</h3>
+                <p>A principal diferença é que o do-while executa o bloco de código pelo menos uma vez, enquanto o while pode não executar nenhuma vez se a condição for falsa inicialmente.</p>
+                
+                <div class="code-comparison">
+                    <div class="code-column">
+                        <h4>WHILE</h4>
+                        <div class="code-block">
+                            <span class="keyword">int</span> x = <span class="number">10</span>;<br>
+                            <span class="keyword">while</span> (x < <span class="number">5</span>) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Isso não será impresso"</span>);<br>
+                            &nbsp;&nbsp;x++;<br>
+                            }<br>
+                            <span class="comment">// Nada é impresso, pois a condição é falsa desde o início</span>
+                        </div>
+                    </div>
+                    <div class="code-column">
+                        <h4>DO-WHILE</h4>
+                        <div class="code-block">
+                            <span class="keyword">int</span> x = <span class="number">10</span>;<br>
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Isso será impresso uma vez"</span>);<br>
+                            &nbsp;&nbsp;x++;<br>
+                            } <span class="keyword">while</span> (x < <span class="number">5</span>);<br>
+                            <span class="comment">// A mensagem é impressa uma vez, mesmo com a condição falsa</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Exemplo 1: Menu de Opções</h3>
+                <p>O do-while é perfeito para menus, onde queremos mostrar as opções pelo menos uma vez:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">int</span> opcao;<br><br>
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"\n=== MENU PRINCIPAL ==="</span>);<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"1. Cadastrar usuário"</span>);<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"2. Listar usuários"</span>);<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"3. Buscar usuário"</span>);<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"4. Sair"</span>);<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Escolha uma opção: "</span>);<br>
+                    &nbsp;&nbsp;opcao = scanner.nextInt();<br><br>
+                    &nbsp;&nbsp;<span class="keyword">switch</span> (opcao) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção de cadastro selecionada"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção de listagem selecionada"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção de busca selecionada"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">4</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Saindo do sistema..."</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção inválida!"</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    } <span class="keyword">while</span> (opcao != <span class="number">4</span>);
+                </div>
+                
+                <h3>Exemplo 2: Validação de Entrada</h3>
+                <p>O do-while também é útil para validar entradas, garantindo que o usuário digite um valor válido:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">int</span> idade;<br><br>
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite sua idade (entre 18 e 65): "</span>);<br>
+                    &nbsp;&nbsp;idade = scanner.nextInt();<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (idade < <span class="number">18</span> || idade > <span class="number">65</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Idade fora do intervalo permitido!"</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    } <span class="keyword">while</span> (idade < <span class="number">18</span> || idade > <span class="number">65</span>);<br><br>
+                    System.out.println(<span class="string">"Idade válida: "</span> + idade);
+                </div>
+                
+                <h3>Exemplo 3: Jogo de Adivinhação</h3>
+                <p>Vamos recriar o jogo de adivinhação usando do-while:</p>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br>
+                    <span class="keyword">import</span> java.util.Random;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    Random random = <span class="keyword">new</span> Random();<br><br>
+                    <span class="keyword">int</span> numeroSecreto = random.nextInt(<span class="number">100</span>) + <span class="number">1</span>; <span class="comment">// número entre 1 e 100</span><br>
+                    <span class="keyword">int</span> tentativa;<br>
+                    <span class="keyword">int</span> contagem = <span class="number">0</span>;<br>
+                    <span class="keyword">boolean</span> acertou = <span class="keyword">false</span>;<br><br>
+                    System.out.println(<span class="string">"Tente adivinhar o número entre 1 e 100:"</span>);<br><br>
+                    <span class="keyword">do</span> {<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite seu palpite: "</span>);<br>
+                    &nbsp;&nbsp;tentativa = scanner.nextInt();<br>
+                    &nbsp;&nbsp;contagem++;<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (tentativa == numeroSecreto) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Parabéns! Você acertou em "</span> + contagem + <span class="string">" tentativas!"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;acertou = <span class="keyword">true</span>;<br>
+                    &nbsp;&nbsp;} <span class="keyword">else if</span> (tentativa < numeroSecreto) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito baixo! Tente novamente."</span>);<br>
+                    &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito alto! Tente novamente."</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    } <span class="keyword">while</span> (!acertou);
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Boa Prática</h4>
+                    <p>Use o do-when quando você precisa que um bloco de código seja executado pelo menos uma vez, independentemente da condição. É especialmente útil para menus e validação de entrada.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com o Ponto e Vírgula!</h4>
+                    <p>No do-while, é fácil esquecer o ponto e vírgula no final da condição. Isso causará um erro de compilação:</p>
+                    <div class="code-block">
+                        <span class="comment">// Errado - falta o ponto e vírgula</span><br>
+                        <span class="keyword">do</span> {<br>
+                        &nbsp;&nbsp;<span class="comment">// código</span><br>
+                        } <span class="keyword">while</span> (condição) <span class="comment">// Erro de compilação aqui</span><br><br>
+                        <span class="comment">// Correto</span><br>
+                        <span class="keyword">do</span> {<br>
+                        &nbsp;&nbsp;<span class="comment">// código</span><br>
+                        } <span class="keyword">while</span> (condição); <span class="comment">// Ponto e vírgula necessário</span>
+                    </div>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para criar um programa que calcula a média de notas digitadas pelo usuário. O programa deve perguntar se o usuário deseja continuar digitando notas após cada entrada:</p>
+                    <div class="code-block">
+                        <span class="keyword">import</span> java.util.Scanner;<br><br>
+                        <span class="keyword">public class</span> CalculaMedia {<br>
+                        &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> soma = <input type="text" id="somaInicialDo" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> contador = <input type="text" id="contadorInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">char</span> resposta;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">do</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite uma nota: "</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> nota = scanner.nextDouble();<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma <input type="text" id="somaOperacao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> nota;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contador<input type="text" id="contadorOperacao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Deseja continuar? (S/N): "</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resposta = scanner.next().<input type="text" id="respostaMetodo" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">while</span> (resposta == <input type="text" id="respostaComparacao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> || resposta == <input type="text" id="respostaComparacao2" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">);<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = soma / contador;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"A média das notas é: "</span> + media);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <button id="checkDoWhileCode" class="btn">Verificar Código</button>
+                    <div id="doWhileCodeFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 5: Break e Continue -->
+        <section id="breakcontinue" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>5. Comandos BREAK e CONTINUE</h2>
+                <p>Os comandos <strong>break</strong> e <strong>continue</strong> são usados para controlar o fluxo de execução dentro de estruturas de repetição, permitindo interromper ou pular iterações.</p>
+                
+                <h3>O Comando BREAK</h3>
+                <p>O comando <strong>break</strong> é usado para sair imediatamente de uma estrutura de repetição (for, while ou do-while), transferindo o controle para a primeira linha após o loop.</p>
+                
+                <h3>Exemplo 1: BREAK em um FOR</h3>
+                <div class="code-block">
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Número: "</span> + i);<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (i == <span class="number">5</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Interrompendo o loop..."</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// sai do loop</span><br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    System.out.println(<span class="string">"Loop encerrado"</span>);
+                </div>
+                
+                <h3>Exemplo 2: BREAK em um WHILE</h3>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">int</span> soma = <span class="number">0</span>;<br><br>
+                    <span class="keyword">while</span> (<span class="keyword">true</span>) { <span class="comment">// loop infinito</span><br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite um número (0 para sair): "</span>);<br>
+                    &nbsp;&nbsp;<span class="keyword">int</span> numero = scanner.nextInt();<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (numero == <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// sai do loop quando o usuário digita 0</span><br>
+                    &nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;soma += numero;<br>
+                    }<br><br>
+                    System.out.println(<span class="string">"A soma dos números é: "</span> + soma);
+                </div>
+                
+                <h3>O Comando CONTINUE</h3>
+                <p>O comando <strong>continue</strong> é usado para pular a iteração atual de um loop e continuar com a próxima iteração. Quando o continue é executado, o código restante da iteração atual é ignorado.</p>
+                
+                <h3>Exemplo 3: CONTINUE em um FOR</h3>
+                <div class="code-block">
+                    <span class="comment">// Imprimindo apenas números ímpares de 1 a 10</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) { <span class="comment">// se o número for par</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// pula para a próxima iteração</span><br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Número ímpar: "</span> + i);<br>
+                    }
+                </div>
+                
+                <h3>Exemplo 4: CONTINUE em um WHILE</h3>
+                <div class="code-block">
+                    <span class="keyword">import</span> java.util.Scanner;<br><br>
+                    Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                    <span class="keyword">int</span> contadorPositivos = <span class="number">0</span>;<br>
+                    <span class="keyword">int</span> contadorNegativos = <span class="number">0</span>;<br><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;System.out.print(<span class="string">"Digite o número "</span> + i + <span class="string">": "</span>);<br>
+                    &nbsp;&nbsp;<span class="keyword">int</span> numero = scanner.nextInt();<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (numero == <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// pula zeros</span><br>
+                    &nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (numero > <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;contadorPositivos++;<br>
+                    &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;contadorNegativos++;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    System.out.println(<span class="string">"Quantidade de números positivos: "</span> + contadorPositivos);<br>
+                    System.out.println(<span class="string">"Quantidade de números negativos: "</span> + contadorNegativos);
+                </div>
+                
+                <h3>BREAK com Rótulos (Labels)</h3>
+                <p>Java permite o uso de rótulos com o comando break para sair de loops aninhados. O rótulo é um identificador seguido de dois pontos (:).</p>
+                
+                <h3>Exemplo 5: BREAK com Rótulos</h3>
+                <div class="code-block">
+                    <span class="comment">// Procurando um valor em uma matriz</span><br>
+                    <span class="keyword">int</span>[][] matriz = {<br>
+                    &nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+                    &nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+                    &nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+                    };<br><br>
+                    <span class="keyword">int</span> valorProcurado = <span class="number">5</span>;<br>
+                    <span class="keyword">boolean</span> encontrado = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Rótulo para o loop externo</span><br>
+                    loopExterno: <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+                    &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (matriz[i][j] == valorProcurado) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encontrado = <span class="keyword">true</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorProcurado + <span class="string">" encontrado na posição ["</span> + i + <span class="string">"]["</span> + j + <span class="string">"]"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span> loopExterno; <span class="comment">// sai de ambos os loops</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <span class="keyword">if</span> (!encontrado) {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorProcurado + <span class="string">" não encontrado na matriz"</span>);<br>
+                    }
+                </div>
+                
+                <h3>CONTINUE com Rótulos</h3>
+                <p>Assim como o break, o continue também pode ser usado com rótulos para pular iterações de loops externos.</p>
+                
+                <h3>Exemplo 6: CONTINUE com Rótulos</h3>
+                <div class="code-block">
+                    <span class="comment">// Imprimindo números de 1 a 30, exceto múltiplos de 2 e 3</span><br>
+                    loopExterno: <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">30</span>; i++) {<br>
+                    &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">2</span>; j <= <span class="number">3</span>; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i % j == <span class="number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span> loopExterno; <span class="comment">// pula para a próxima iteração do loop externo</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;System.out.print(i + <span class="string">" "</span>);<br>
+                    }<br>
+                    System.out.println();
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica de Boa Prática</h4>
+                    <p>Embora break e continue sejam úteis, o uso excessivo pode tornar o código difícil de entender. Tente estruturar seu código para minimizar a necessidade desses comandos.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Cuidado com BREAK e CONTINUE!</h4>
+                    <p>O uso incorreto de break e continue pode levar a comportamentos inesperados. Certifique-se de entender exatamente como eles afetam o fluxo do seu programa.</p>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Complete o código abaixo para encontrar o primeiro número primo entre 50 e 100. O programa deve parar assim que encontrar o primeiro número primo:</p>
+                    <div class="code-block">
+                        <span class="keyword">public class</span> EncontraPrimo {<br>
+                        &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> primo = <input type="text" id="primoInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> num = <input type="text" id="numInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; num <= <input type="text" id="numFinal" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; num++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">boolean</span> ehPrimo = <input type="text" id="ehPrimoInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <input type="text" id="iInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; i < num; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (num % i == <input type="text" id="restoComparacao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ehPrimo = <input type="text" id="ehPrimoFalso" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (ehPrimo) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;primo = num;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"O primeiro número primo entre 50 e 100 é: "</span> + primo);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <button id="checkBreakContinueCode" class="btn">Verificar Código</button>
+                    <div id="breakContinueCodeFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tópico 6: Prática no NetBeans -->
+        <section id="pratica" class="topic-section" role="tabpanel">
+            <div class="card">
+                <h2>Prática Guiada no NetBeans</h2>
+                <p>Nesta seção, vamos criar programas Java passo a passo usando o NetBeans, aplicando os conceitos de estruturas de repetição que aprendemos.</p>
+                
+                <div class="tip-box">
+                    <h4>Dica Importante</h4>
+                    <p>Antes de começar, certifique-se de que o NetBeans está instalado em seu computador. Se não estiver, peça ajuda ao seu professor para instalá-lo.</p>
+                </div>
+                
+                <!-- Módulo 1: Criando um Projeto com FOR -->
+                <div class="practice-module">
+                    <h3>Módulo 1: Tabuada com FOR</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress1"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto no NetBeans chamado "TabuadaFor". Siga os mesmos passos que aprendemos anteriormente para criar um projeto Java.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Dentro do método main, vamos criar um programa que gera a tabuada de um número digitado pelo usuário:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br><br>
+                            <span class="keyword">public class</span> TabuadaFor {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código da tabuada virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Solicitando o Número</h4>
+                        <p>Vamos pedir ao usuário para digitar um número:</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite um número para gerar a tabuada: "</span>);<br>
+                            <span class="keyword">int</span> numero = scanner.nextInt();
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Criando a Tabuada com FOR</h4>
+                        <p>Agora vamos usar um loop for para gerar a tabuada:</p>
+                        <div class="code-block">
+                            System.out.println(<span class="string">"\nTabuada do "</span> + numero + <span class="string">":"</span>);<br><br>
+                            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+                            &nbsp;&nbsp;System.out.println(numero + <span class="string">" x "</span> + i + <span class="string">" = "</span> + (numero * i));<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Executando o Programa</h4>
+                        <p>Pressione F6 para executar o programa. Você deverá ver algo assim:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - TabuadaFor (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Digite um número para gerar a tabuada: 7<br><br>
+                                Tabuada do 7:<br>
+                                7 x 1 = 7<br>
+                                7 x 2 = 14<br>
+                                7 x 3 = 21<br>
+                                7 x 4 = 28<br>
+                                7 x 5 = 35<br>
+                                7 x 6 = 42<br>
+                                7 x 7 = 49<br>
+                                7 x 8 = 56<br>
+                                7 x 9 = 63<br>
+                                7 x 10 = 70<br>
+                                BUILD SUCCESSFUL (total time: 5 seconds)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkpoint">
+                        <h4>Experimente!</h4>
+                        <p>Modifique o programa para:</p>
+                        <ul>
+                            <li>Permitir que o usuário escolha até qual número a tabuada deve ir (em vez de ir até 10)</li>
+                            <li>Mostrar apenas os resultados pares da tabuada</li>
+                            <li>Adicionar um cabeçalho mais elaborado</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Módulo 2: Criando um Projeto com WHILE -->
+                <div class="practice-module">
+                    <h3>Módulo 2: Adivinhação com WHILE</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress2"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto no NetBeans chamado "JogoAdivinhacao".</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Importando as Classes Necessárias</h4>
+                        <p>Precisamos das classes Scanner e Random para nosso jogo:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br>
+                            <span class="keyword">import</span> java.util.Random;
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Dentro do método main, vamos configurar nosso jogo:</p>
+                        <div class="code-block">
+                            <span class="keyword">public class</span> JogoAdivinhacao {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Random random = <span class="keyword">new</span> Random();<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código do jogo virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Configurando o Jogo</h4>
+                        <p>Vamos definir o número secreto e as variáveis de controle:</p>
+                        <div class="code-block">
+                            <span class="keyword">int</span> numeroSecreto = random.nextInt(<span class="number">100</span>) + <span class="number">1</span>; <span class="comment">// número entre 1 e 100</span><br>
+                            <span class="keyword">int</span> tentativa;<br>
+                            <span class="keyword">int</span> contagem = <span class="number">0</span>;<br>
+                            <span class="keyword">boolean</span> acertou = <span class="keyword">false</span>;<br><br>
+                            System.out.println(<span class="string">"Tente adivinhar o número entre 1 e 100:"</span>);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Implementando o Loop WHILE</h4>
+                        <p>Agora vamos usar um loop while para o jogo:</p>
+                        <div class="code-block">
+                            <span class="keyword">while</span> (!acertou) {<br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Digite seu palpite: "</span>);<br>
+                            &nbsp;&nbsp;tentativa = scanner.nextInt();<br>
+                            &nbsp;&nbsp;contagem++;<br><br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (tentativa == numeroSecreto) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Parabéns! Você acertou em "</span> + contagem + <span class="string">" tentativas!"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;acertou = <span class="keyword">true</span>;<br>
+                            &nbsp;&nbsp;} <span class="keyword">else if</span> (tentativa < numeroSecreto) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito baixo! Tente novamente."</span>);<br>
+                            &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Muito alto! Tente novamente."</span>);<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Executando o Jogo</h4>
+                        <p>Pressione F6 para executar o programa. Tente adivinhar o número:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - JogoAdivinhacao (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Tente adivinhar o número entre 1 e 100:<br>
+                                Digite seu palpite: 50<br>
+                                Muito alto! Tente novamente.<br>
+                                Digite seu palpite: 25<br>
+                                Muito baixo! Tente novamente.<br>
+                                Digite seu palpite: 37<br>
+                                Muito alto! Tente novamente.<br>
+                                Digite seu palpite: 31<br>
+                                Parabéns! Você acertou em 4 tentativas!<br>
+                                BUILD SUCCESSFUL (total time: 12 seconds)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkpoint">
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique o jogo para:</p>
+                        <ul>
+                            <li>Limitar o número de tentativas (ex: 10 tentativas)</li>
+                            <li>Dar dicas mais precisas (ex: "muito perto", "longe", etc.)</li>
+                            <li>Permitir que o usuário escolha o intervalo de números (ex: 1 a 500)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Módulo 3: Criando um Projeto com DO-WHILE -->
+                <div class="practice-module">
+                    <h3>Módulo 3: Calculadora de Médias com DO-WHILE</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress3"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto no NetBeans chamado "CalculadoraMedias".</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Dentro do método main, vamos configurar nossa calculadora:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br><br>
+                            <span class="keyword">public class</span> CalculadoraMedias {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código da calculadora virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Configurando as Variáveis</h4>
+                        <p>Vamos definir as variáveis necessárias:</p>
+                        <div class="code-block">
+                            <span class="keyword">double</span> soma = <span class="number">0</span>;<br>
+                            <span class="keyword">int</span> contador = <span class="number">0</span>;<br>
+                            <span class="keyword">char</span> resposta;
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Implementando o Loop DO-WHILE</h4>
+                        <p>Agora vamos usar um loop do-while para ler as notas:</p>
+                        <div class="code-block">
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Digite uma nota: "</span>);<br>
+                            &nbsp;&nbsp;<span class="keyword">double</span> nota = scanner.nextDouble();<br><br>
+                            &nbsp;&nbsp;soma += nota;<br>
+                            &nbsp;&nbsp;contador++;<br><br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Deseja continuar? (S/N): "</span>);<br>
+                            &nbsp;&nbsp;resposta = scanner.next().charAt(<span class="number">0</span>);<br>
+                            } <span class="keyword">while</span> (resposta == <span class="string">'S'</span> || resposta == <span class="string">'s'</span>);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Calculando e Exibindo a Média</h4>
+                        <p>Após o loop, vamos calcular e exibir a média:</p>
+                        <div class="code-block">
+                            <span class="keyword">if</span> (contador > <span class="number">0</span>) {<br>
+                            &nbsp;&nbsp;<span class="keyword">double</span> media = soma / contador;<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"\n--- Resultado ---"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Quantidade de notas: "</span> + contador);<br>
+                            &nbsp;&nbsp;System.out.printf(<span class="string">"Média: %.2f\n"</span>, media);<br><br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (media >= <span class="number">7</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Situação: APROVADO"</span>);<br>
+                            &nbsp;&nbsp;} <span class="keyword">else if</span> (media >= <span class="number">5</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Situação: RECUPERAÇÃO"</span>);<br>
+                            &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Situação: REPROVADO"</span>);<br>
+                            &nbsp;&nbsp;}<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Nenhuma nota foi digitada."</span>);<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Executando o Programa</h4>
+                        <p>Pressione F6 para executar o programa. Digite algumas notas:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - CalculadoraMedias (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Digite uma nota: 8.5<br>
+                                Deseja continuar? (S/N): s<br>
+                                Digite uma nota: 7.0<br>
+                                Deseja continuar? (S/N): s<br>
+                                Digite uma nota: 9.0<br>
+                                Deseja continuar? (S/N): n<br><br>
+                                --- Resultado ---<br>
+                                Quantidade de notas: 3<br>
+                                Média: 8.17<br>
+                                Situação: APROVADO<br>
+                                BUILD SUCCESSFUL (total time: 10 seconds)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkpoint">
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique o programa para:</p>
+                        <ul>
+                            <li>Validar as notas (devem estar entre 0 e 10)</li>
+                            <li>Calcular também a maior e a menor nota digitada</li>
+                            <li>Mostrar um relatório completo com todas as notas digitadas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Módulo 4: Criando um Projeto com BREAK e CONTINUE -->
+                <div class="practice-module">
+                    <h3>Módulo 4: Busca em Vetor com BREAK e CONTINUE</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress4"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto no NetBeans chamado "BuscaVetor".</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Dentro do método main, vamos configurar nosso programa de busca:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br><br>
+                            <span class="keyword">public class</span> BuscaVetor {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código de busca virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Criando o Vetor</h4>
+                        <p>Vamos criar um vetor com alguns números:</p>
+                        <div class="code-block">
+                            <span class="keyword">int</span>[] numeros = {<span class="number">12</span>, <span class="number">5</span>, <span class="number">23</span>, <span class="number">8</span>, <span class="number">17</span>, <span class="number">30</span>, <span class="number">4</span>, <span class="number">15</span>, <span class="number">9</span>, <span class="number">27</span>};<br>
+                            System.out.println(<span class="string">"Vetor: [12, 5, 23, 8, 17, 30, 4, 15, 9, 27]"</span>);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Solicitando o Valor de Busca</h4>
+                        <p>Vamos pedir ao usuário para digitar um número para buscar:</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"\nDigite um número para buscar: "</span>);<br>
+                            <span class="keyword">int</span> valorBusca = scanner.nextInt();
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Implementando a Busca com BREAK</h4>
+                        <p>Agora vamos usar um loop for com break para encontrar o valor:</p>
+                        <div class="code-block">
+                            <span class="keyword">boolean</span> encontrado = <span class="keyword">false</span>;<br>
+                            <span class="keyword">int</span> posicao = -<span class="number">1</span>;<br><br>
+                            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < numeros.length; i++) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (numeros[i] == valorBusca) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;encontrado = <span class="keyword">true</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;posicao = i;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// interrompe o loop quando encontra o valor</span><br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Exibindo o Resultado</h4>
+                        <p>Vamos mostrar se o valor foi encontrado e em qual posição:</p>
+                        <div class="code-block">
+                            <span class="keyword">if</span> (encontrado) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorBusca + <span class="string">" encontrado na posição "</span> + posicao + <span class="string">" do vetor."</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorBusca + <span class="string">" não encontrado no vetor."</span>);<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">7</span>
+                        <h4>Contando Ocorrências com CONTINUE</h4>
+                        <p>Agora vamos adicionar um código que conta quantos números pares existem no vetor usando continue:</p>
+                        <div class="code-block">
+                            <span class="keyword">int</span> contadorPares = <span class="number">0</span>;<br><br>
+                            System.out.println(<span class="string">"\nNúmeros pares no vetor:"</span>);<br><br>
+                            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < numeros.length; i++) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (numeros[i] % <span class="number">2</span> != <span class="number">0</span>) { <span class="comment">// se o número for ímpar</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// pula para a próxima iteração</span><br>
+                            &nbsp;&nbsp;}<br><br>
+                            &nbsp;&nbsp;System.out.print(numeros[i] + <span class="string">" "</span>);<br>
+                            &nbsp;&nbsp;contadorPares++;<br>
+                            }<br><br>
+                            System.out.println(<span class="string">"\nTotal de números pares: "</span> + contadorPares);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">8</span>
+                        <h4>Executando o Programa</h4>
+                        <p>Pressione F6 para executar o programa. Digite um número para buscar:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - BuscaVetor (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br>
+                                Vetor: [12, 5, 23, 8, 17, 30, 4, 15, 9, 27]<br><br>
+                                Digite um número para buscar: 17<br>
+                                Valor 17 encontrado na posição 4 do vetor.<br><br>
+                                Números pares no vetor:<br>
+                                12 8 30 4 <br>
+                                Total de números pares: 4<br>
+                                BUILD SUCCESSFUL (total time: 8 seconds)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkpoint">
+                        <h4>Desafio Extra</h4>
+                        <p>Modifique o programa para:</p>
+                        <ul>
+                            <li>Contar todas as ocorrências de um valor (não apenas a primeira)</li>
+                            <li>Encontrar o maior e o menor valor do vetor</li>
+                            <li>Ordenar o vetor em ordem crescente</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Módulo 5: Projeto Final -->
+                <div class="practice-module">
+                    <h3>Módulo 5: Projeto Final - Sistema de Cadastro com Menu</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress5"></div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <h4>Objetivo do Projeto</h4>
+                        <p>Vamos criar um sistema de cadastro de produtos com menu interativo, utilizando todos os conceitos aprendidos: for, while, do-while, break e continue.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <h4>Criando o Projeto</h4>
+                        <p>Crie um novo projeto no NetBeans chamado "SistemaCadastroProdutos".</p>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <h4>Estrutura Básica</h4>
+                        <p>Dentro do método main, vamos configurar nosso sistema:</p>
+                        <div class="code-block">
+                            <span class="keyword">import</span> java.util.Scanner;<br>
+                            <span class="keyword">import</span> java.util.ArrayList;<br><br>
+                            <span class="keyword">public class</span> SistemaCadastroProdutos {<br>
+                            &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ArrayList<String> produtos = <span class="keyword">new</span> ArrayList<>();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ArrayList<Double> precos = <span class="keyword">new</span> ArrayList<>();<br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// O código do sistema virá aqui</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <h4>Implementando o Menu com DO-WHILE</h4>
+                        <p>Vamos criar um menu de opções usando do-while:</p>
+                        <div class="code-block">
+                            <span class="keyword">int</span> opcao;<br><br>
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"\n=== SISTEMA DE CADASTRO DE PRODUTOS ==="</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"1. Cadastrar produto"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"2. Listar produtos"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"3. Buscar produto"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"4. Remover produto"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"5. Sair"</span>);<br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Escolha uma opção: "</span>);<br>
+                            &nbsp;&nbsp;opcao = scanner.nextInt();<br>
+                            &nbsp;&nbsp;scanner.nextLine(); <span class="comment">// limpar o buffer</span><br><br>
+                            &nbsp;&nbsp;<span class="keyword">switch</span> (opcao) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para cadastrar produto</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para listar produtos</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para buscar produto</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">4</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Código para remover produto</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">5</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Saindo do sistema..."</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Opção inválida!"</span>);<br>
+                            &nbsp;&nbsp;}<br>
+                            } <span class="keyword">while</span> (opcao != <span class="number">5</span>);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <h4>Implementando o Cadastro de Produtos</h4>
+                        <p>Vamos implementar a opção 1 (cadastrar produto):</p>
+                        <div class="code-block">
+                            System.out.print(<span class="string">"Digite o nome do produto: "</span>);<br>
+                            <span class="keyword">String</span> nome = scanner.nextLine();<br><br>
+                            System.out.print(<span class="string">"Digite o preço do produto: "</span>);<br>
+                            <span class="keyword">double</span> preco = scanner.nextDouble();<br>
+                            scanner.nextLine(); <span class="comment">// limpar o buffer</span><br><br>
+                            produtos.add(nome);<br>
+                            precos.add(preco);<br><br>
+                            System.out.println(<span class="string">"Produto cadastrado com sucesso!"</span>);
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <h4>Implementando a Listagem de Produtos com FOR</h4>
+                        <p>Vamos implementar a opção 2 (listar produtos) usando um loop for:</p>
+                        <div class="code-block">
+                            <span class="keyword">if</span> (produtos.isEmpty()) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Nenhum produto cadastrado."</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"\n=== LISTA DE PRODUTOS ==="</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"ID\tNome\t\tPreço"</span>);<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"--------------------------------"</span>);<br><br>
+                            &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < produtos.size(); i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i + <span class="string">"\t"</span> + produtos.get(i) + <span class="string">"\t\t"</span> + precos.get(i));<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">7</span>
+                        <h4>Implementando a Busca de Produtos com BREAK</h4>
+                        <p>Vamos implementar a opção 3 (buscar produto) usando break:</p>
+                        <div class="code-block">
+                            <span class="keyword">if</span> (produtos.isEmpty()) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Nenhum produto cadastrado."</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Digite o nome do produto para buscar: "</span>);<br>
+                            &nbsp;&nbsp;<span class="keyword">String</span> busca = scanner.nextLine();<br><br>
+                            &nbsp;&nbsp;<span class="keyword">boolean</span> encontrado = <span class="keyword">false</span>;<br><br>
+                            &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < produtos.size(); i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (produtos.get(i).equalsIgnoreCase(busca)) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Produto encontrado:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"ID: "</span> + i);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nome: "</span> + produtos.get(i));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Preço: "</span> + precos.get(i));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encontrado = <span class="keyword">true</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;}<br><br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (!encontrado) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Produto não encontrado."</span>);<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">8</span>
+                        <h4>Implementando a Remoção de Produtos</h4>
+                        <p>Vamos implementar a opção 4 (remover produto):</p>
+                        <div class="code-block">
+                            <span class="keyword">if</span> (produtos.isEmpty()) {<br>
+                            &nbsp;&nbsp;System.out.println(<span class="string">"Nenhum produto cadastrado."</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;System.out.print(<span class="string">"Digite o ID do produto para remover: "</span>);<br>
+                            &nbsp;&nbsp;<span class="keyword">int</span> id = scanner.nextInt();<br>
+                            &nbsp;&nbsp;scanner.nextLine(); <span class="comment">// limpar o buffer</span><br><br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (id >= <span class="number">0</span> && id < produtos.size()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> produtoRemovido = produtos.remove(id);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> precoRemovido = precos.remove(id);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Produto removido: "</span> + produtoRemovido + <span class="string">" (R$ "</span> + precoRemovido + <span class="string">")"</span>);<br>
+                            &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"ID inválido!"</span>);<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">9</span>
+                        <h4>Executando o Sistema Completo</h4>
+                        <p>Pressione F6 para executar o programa. Experimente todas as opções do menu:</p>
+                        <div class="netbeans-screenshot">
+                            <div class="netbeans-header">
+                                <div class="netbeans-title">Output - SistemaCadastroProdutos (run)</div>
+                            </div>
+                            <div class="netbeans-output">
+                                run:<br><br>
+                                === SISTEMA DE CADASTRO DE PRODUTOS ===<br>
+                                1. Cadastrar produto<br>
+                                2. Listar produtos<br>
+                                3. Buscar produto<br>
+                                4. Remover produto<br>
+                                5. Sair<br>
+                                Escolha uma opção: 1<br>
+                                Digite o nome do produto: Notebook<br>
+                                Digite o preço do produto: 3500.00<br>
+                                Produto cadastrado com sucesso!<br><br>
+                                === SISTEMA DE CADASTRO DE PRODUTOS ===<br>
+                                1. Cadastrar produto<br>
+                                2. Listar produtos<br>
+                                3. Buscar produto<br>
+                                4. Remover produto<br>
+                                5. Sair<br>
+                                Escolha uma opção: 1<br>
+                                Digite o nome do produto: Mouse<br>
+                                Digite o preço do produto: 50.00<br>
+                                Produto cadastrado com sucesso!<br><br>
+                                === SISTEMA DE CADASTRO DE PRODUTOS ===<br>
+                                1. Cadastrar produto<br>
+                                2. Listar produtos<br>
+                                3. Buscar produto<br>
+                                4. Remover produto<br>
+                                5. Sair<br>
+                                Escolha uma opção: 2<br><br>
+                                === LISTA DE PRODUTOS ===<br>
+                                ID      Nome            Preço<br>
+                                --------------------------------<br>
+                                0       Notebook         3500.0<br>
+                                1       Mouse            50.0<br><br>
+                                === SISTEMA DE CADASTRO DE PRODUTOS ===<br>
+                                1. Cadastrar produto<br>
+                                2. Listar produtos<br>
+                                3. Buscar produto<br>
+                                4. Remover produto<br>
+                                5. Sair<br>
+                                Escolha uma opção: 5<br>
+                                Saindo do sistema...<br>
+                                BUILD SUCCESSFUL (total time: 25 seconds)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkpoint">
+                        <h4>Parabéns! Você Concluiu Todos os Módulos!</h4>
+                        <p>Você agora sabe:</p>
+                        <ul>
+                            <li>Usar a estrutura for para repetições com contagem definida</li>
+                            <li>Usar a estrutura while para repetições com condição</li>
+                            <li>Usar a estrutura do-while para repetições que executam pelo menos uma vez</li>
+                            <li>Controlar o fluxo dos loops com break e continue</li>
+                            <li>Aplicar todos esses conceitos em projetos práticos no NetBeans</li>
+                        </ul>
+                        <p>Continue praticando e explorando novos conceitos em Java!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; Estruturas de Repetição em Java - Material educativo</p>
+        </div>
+    </footer>
+    <script>
+        // Navegação entre tópicos
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const topicSections = document.querySelectorAll('.topic-section');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTopic = tab.getAttribute('data-topic');
+                
+                // Remove classe active de todas as abas e seções
+                navTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                topicSections.forEach(section => section.classList.remove('active'));
+                
+                // Adiciona classe active na aba e seção correspondentes
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(targetTopic).classList.add('active');
+            });
+        });
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        // Atividade 1: Situações para estruturas de repetição
+        const checkSituationsBtn = document.getElementById('checkSituations');
+        if (checkSituationsBtn) {
+            checkSituationsBtn.addEventListener('click', () => {
+                const sit1 = document.getElementById('sit1').value;
+                const sit2 = document.getElementById('sit2').value;
+                const sit3 = document.getElementById('sit3').value;
+                
+                const feedback = document.getElementById('situationsFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = sit1 === 'for';
+                const correct2 = sit2 === 'while';
+                const correct3 = sit3 === 'dowhile';
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você identificou todas as estruturas corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Algumas respostas estão incorretas. ';
+                    if (!correct1) message += 'Para imprimir números pares de 0 a 100, o for é mais adequado. ';
+                    if (!correct2) message += 'Para ler senhas até que o usuário digite a correta, o while é mais adequado. ';
+                    if (!correct3) message += 'Para mostrar um menu de opções até que o usuário escolha sair, o do-while é mais adequado. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 2: Código FOR
+        const checkForCodeBtn = document.getElementById('checkForCode');
+        if (checkForCodeBtn) {
+            checkForCodeBtn.addEventListener('click', () => {
+                const somaInicial = document.getElementById('somaInicial').value.trim();
+                const forInicial = document.getElementById('forInicial').value.trim();
+                const forCondicao = document.getElementById('forCondicao').value.trim();
+                const forAtualizacao = document.getElementById('forAtualizacao').value.trim();
+                const ifResto = document.getElementById('ifResto').value.trim();
+                const ifComparacao = document.getElementById('ifComparacao').value.trim();
+                const somaOperacao = document.getElementById('somaOperacao').value.trim();
+                const somaFinal = document.getElementById('somaFinal').value.trim();
+                
+                const feedback = document.getElementById('forCodeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctSomaInicial = somaInicial === '0';
+                const correctForInicial = forInicial === '1';
+                const correctForCondicao = forCondicao === '100';
+                const correctForAtualizacao = forAtualizacao === 'i++';
+                const correctIfResto = ifResto === '2';
+                const correctIfComparacao = ifComparacao === '0';
+                const correctSomaOperacao = somaOperacao === '+=';
+                const correctSomaFinal = somaFinal === 'soma';
+                
+                if (correctSomaInicial && correctForInicial && correctForCondicao && correctForAtualizacao &&
+                    correctIfResto && correctIfComparacao && correctSomaOperacao && correctSomaFinal) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctSomaInicial) message += 'Inicialização da soma: 0. ';
+                    if (!correctForInicial) message += 'Inicialização do for: 1. ';
+                    if (!correctForCondicao) message += 'Condição do for: 100. ';
+                    if (!correctForAtualizacao) message += 'Atualização do for: i++. ';
+                    if (!correctIfResto) message += 'Resto na condição: 2. ';
+                    if (!correctIfComparacao) message += 'Comparação na condição: 0. ';
+                    if (!correctSomaOperacao) message += 'Operação de soma: +=. ';
+                    if (!correctSomaFinal) message += 'Variável final: soma. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 3: Código WHILE
+        const checkWhileCodeBtn = document.getElementById('checkWhileCode');
+        if (checkWhileCodeBtn) {
+            checkWhileCodeBtn.addEventListener('click', () => {
+                const whileCode = document.getElementById('whileCode').value.trim();
+                const feedback = document.getElementById('whileCodeFeedback');
+                feedback.style.display = 'block';
+                
+                // Verificar se o código contém os elementos essenciais
+                const hasWhile = whileCode.includes('while');
+                const hasScannerNextInt = whileCode.includes('scanner.nextInt()');
+                const hasNegativeCheck = whileCode.includes('< 0') || whileCode.includes('negativo');
+                const hasEvenCheck = whileCode.includes('% 2 == 0');
+                const hasCounterIncrement = whileCode.includes('contador++');
+                
+                const allElementsPresent = hasWhile && hasScannerNextInt && hasNegativeCheck && 
+                                         hasEvenCheck && hasCounterIncrement;
+                
+                if (allElementsPresent) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você implementou corretamente o programa com while.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Seu código está incompleto. Verifique se incluiu: ';
+                    if (!hasWhile) message += 'estrutura while. ';
+                    if (!hasScannerNextInt) message += 'leitura dos números com scanner.nextInt(). ';
+                    if (!hasNegativeCheck) message += 'verificação de número negativo para sair do loop. ';
+                    if (!hasEvenCheck) message += 'verificação de números pares. ';
+                    if (!hasCounterIncrement) message += 'incremento do contador de pares. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 4: Código DO-WHILE
+        const checkDoWhileCodeBtn = document.getElementById('checkDoWhileCode');
+        if (checkDoWhileCodeBtn) {
+            checkDoWhileCodeBtn.addEventListener('click', () => {
+                const somaInicialDo = document.getElementById('somaInicialDo').value.trim();
+                const contadorInicial = document.getElementById('contadorInicial').value.trim();
+                const somaOperacao = document.getElementById('somaOperacao').value.trim();
+                const contadorOperacao = document.getElementById('contadorOperacao').value.trim();
+                const respostaMetodo = document.getElementById('respostaMetodo').value.trim();
+                const respostaComparacao = document.getElementById('respostaComparacao').value.trim();
+                const respostaComparacao2 = document.getElementById('respostaComparacao2').value.trim();
+                
+                const feedback = document.getElementById('doWhileCodeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctSomaInicialDo = somaInicialDo === '0';
+                const correctContadorInicial = contadorInicial === '0';
+                const correctSomaOperacao = somaOperacao === '+=';
+                const correctContadorOperacao = contadorOperacao === '++';
+                const correctRespostaMetodo = respostaMetodo === 'charAt(0)';
+                const correctRespostaComparacao = respostaComparacao === "'S'";
+                const correctRespostaComparacao2 = respostaComparacao2 === "'s'";
+                
+                if (correctSomaInicialDo && correctContadorInicial && correctSomaOperacao && correctContadorOperacao &&
+                    correctRespostaMetodo && correctRespostaComparacao && correctRespostaComparacao2) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctSomaInicialDo) message += 'Inicialização da soma: 0. ';
+                    if (!correctContadorInicial) message += 'Inicialização do contador: 0. ';
+                    if (!correctSomaOperacao) message += 'Operação de soma: +=. ';
+                    if (!correctContadorOperacao) message += 'Operação do contador: ++. ';
+                    if (!correctRespostaMetodo) message += 'Método para obter o caractere: charAt(0). ';
+                    if (!correctRespostaComparacao) message += 'Primeira comparação: \'S\'. ';
+                    if (!correctRespostaComparacao2) message += 'Segunda comparação: \'s\'. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Atividade 5: Código BREAK e CONTINUE
+        const checkBreakContinueCodeBtn = document.getElementById('checkBreakContinueCode');
+        if (checkBreakContinueCodeBtn) {
+            checkBreakContinueCodeBtn.addEventListener('click', () => {
+                const primoInicial = document.getElementById('primoInicial').value.trim();
+                const numInicial = document.getElementById('numInicial').value.trim();
+                const numFinal = document.getElementById('numFinal').value.trim();
+                const ehPrimoInicial = document.getElementById('ehPrimoInicial').value.trim();
+                const iInicial = document.getElementById('iInicial').value.trim();
+                const restoComparacao = document.getElementById('restoComparacao').value.trim();
+                const ehPrimoFalso = document.getElementById('ehPrimoFalso').value.trim();
+                
+                const feedback = document.getElementById('breakContinueCodeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctPrimoInicial = primoInicial === '0';
+                const correctNumInicial = numInicial === '50';
+                const correctNumFinal = numFinal === '100';
+                const correctEhPrimoInicial = ehPrimoInicial === 'true';
+                const correctIInicial = iInicial === '2';
+                const correctRestoComparacao = restoComparacao === '0';
+                const correctEhPrimoFalso = ehPrimoFalso === 'false';
+                
+                if (correctPrimoInicial && correctNumInicial && correctNumFinal && correctEhPrimoInicial &&
+                    correctIInicial && correctRestoComparacao && correctEhPrimoFalso) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctPrimoInicial) message += 'Inicialização de primo: 0. ';
+                    if (!correctNumInicial) message += 'Inicialização do número: 50. ';
+                    if (!correctNumFinal) message += 'Final do número: 100. ';
+                    if (!correctEhPrimoInicial) message += 'Inicialização de ehPrimo: true. ';
+                    if (!correctIInicial) message += 'Inicialização de i: 2. ';
+                    if (!correctRestoComparacao) message += 'Comparação de resto: 0. ';
+                    if (!correctEhPrimoFalso) message += 'Atribuição quando não é primo: false. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        // Animação das barras de progresso quando a seção de prática é ativada
+        const praticaTab = document.querySelector('[data-topic="pratica"]');
+        const activateProgressBars = () => {
+            setTimeout(() => {
+                // Anima as barras de progresso
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach((bar, index) => {
+                    setTimeout(() => {
+                        bar.style.width = '100%';
+                    }, index * 200);
+                });
+            }, 500);
+        };
+        
+        praticaTab.addEventListener('click', activateProgressBars);
+    </script>
+</body>
+</html>
