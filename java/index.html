@@ -11,6 +11,8 @@
             --success: #27ae60;
             --warning: #f39c12;
             --danger: #e74c3c;
+            --modular: #9b59b6; /* Nova cor para modularidade */
+            --sequence: #16a085; /* Nova cor para estrutura de sequência */
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
@@ -151,6 +153,24 @@
         }
         .topic-card.loop .btn:hover {
             background-color: #d68910;
+        }
+        .topic-card.modular {
+            border-top-color: var(--modular);
+        }
+        .topic-card.modular .btn {
+            background-color: var(--modular);
+        }
+        .topic-card.modular .btn:hover {
+            background-color: #8e44ad;
+        }
+        .topic-card.sequence {
+            border-top-color: var(--sequence);
+        }
+        .topic-card.sequence .btn {
+            background-color: var(--sequence);
+        }
+        .topic-card.sequence .btn:hover {
+            background-color: #138d75;
         }
         .features-section {
             background-color: white;
@@ -374,6 +394,18 @@
                 <h3><span class="icon">🔄</span> Estruturas de Repetição</h3>
                 <p>Aprenda a usar for, while e do-while para criar loops eficientes. Domine o controle de fluxo com break e continue.</p>
                 <a href="repeticao.html" class="btn">Acessar Módulo</a>
+            </div>
+            
+            <div class="topic-card modular">
+                <h3><span class="icon">🧩</span> Modularidade</h3>
+                <p>Aprenda a organizar seu código através de funções e procedimentos. Entenda os conceitos de modularidade, reutilização de código e boas práticas de programação.</p>
+                <a href="modularidade.html" class="btn">Acessar Módulo</a>
+            </div>
+            
+            <div class="topic-card sequence">
+                <h3><span class="icon">📊</span> Estrutura de Sequência</h3>
+                <p>Domine o uso de vetores e matrizes em Java. Aprenda a declarar, inicializar e manipular estruturas de dados sequenciais para armazenar múltiplos valores.</p>
+                <a href="sequencia.html" class="btn">Acessar Módulo</a>
             </div>
         </section>
         
