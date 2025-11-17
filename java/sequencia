@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estruturas Sequenciais em Java</title>
+<style>
+:root {
+--primary: #2c3e50;
+--secondary: #3498db;
+--success: #27ae60;
+--warning: #f39c12;
+--danger: #e74c3c;
+--light: #ecf0f1;
+--dark: #34495e;
+--font-size-base: 18px;
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+line-height: 1.6;
+color: #333;
+background-color: #f8f9fa;
+font-size: var(--font-size-base);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+header {
+background-color: var(--primary);
+color: white;
+padding: 1.5rem 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+}
+h1 {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+}
+.subtitle {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+.nav-tabs {
+display: flex;
+overflow-x: auto;
+background-color: var(--dark);
+margin-top: 1rem;
+border-radius: 8px;
+}
+.nav-tab {
+padding: 1rem 1.5rem;
+background-color: transparent;
+border: none;
+color: white;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 1rem;
+white-space: nowrap;
+}
+.nav-tab:hover {
+background-color: rgba(255,255,255,0.1);
+}
+.nav-tab.active {
+background-color: var(--secondary);
+}
+main {
+padding: 2rem 0;
+}
+.topic-section {
+display: none;
+animation: fadeIn 0.5s;
+}
+.topic-section.active {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.card {
+background: white;
+border-radius: 10px;
+padding: 2rem;
+margin-bottom: 2rem;
+box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+border-left: 5px solid var(--secondary);
+}
+.card h2 {
+color: var(--primary);
+margin-bottom: 1rem;
+font-size: 1.8rem;
+}
+.card h3 {
+color: var(--dark);
+margin: 1.5rem 0 0.8rem;
+font-size: 1.4rem;
+}
+.card h4 {
+color: var(--secondary);
+margin: 1rem 0 0.5rem;
+font-size: 1.2rem;
+}
+.card p, .card li {
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+ul {
+padding-left: 2rem;
+}
+.code-block {
+background-color: #2d3748;
+color: #e2e8f0;
+padding: 1.5rem;
+border-radius: 8px;
+margin: 1.5rem 0;
+overflow-x: auto;
+font-family: 'Courier New', monospace;
+font-size: 1rem;
+line-height: 1.5;
+}
+.code-block .keyword {
+color: #f687b3;
+}
+.code-block .string {
+color: #68d391;
+}
+.code-block .comment {
+color: #a0aec0;
+font-style: italic;
+}
+.code-block .number {
+color: #fbb6ce;
+}
+.activity {
+background-color: #f7fafc;
+border: 2px dashed var(--secondary);
+border-radius: 8px;
+padding: 1.5rem;
+margin: 2rem 0;
+}
+.activity h3 {
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.input-group {
+margin: 1rem 0;
+}
+.input-group label {
+display: block;
+margin-bottom: 0.5rem;
+font-weight: bold;
+color: var(--dark);
+}
+.input-group input, .input-group select, .input-group textarea {
+width: 100%;
+padding: 0.8rem;
+border: 2px solid #ddd;
+border-radius: 5px;
+font-size: 1rem;
+transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+outline: none;
+border-color: var(--secondary);
+}
+.btn {
+display: inline-block;
+background-color: var(--secondary);
+color: white;
+padding: 0.8rem 1.5rem;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.3s;
+margin-top: 1rem;
+}
+.btn:hover {
+background-color: #2980b9;
+transform: translateY(-2px);
+}
+.btn-success {
+background-color: var(--success);
+}
+.btn-success:hover {
+background-color: #229954;
+}
+.feedback {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 5px;
+display: none;
+}
+.feedback.success {
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
+}
+.feedback.error {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+}
+.memory-visual {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.memory-cell {
+background-color: var(--light);
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+min-width: 120px;
+transition: all 0.3s;
+}
+.memory-cell:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.memory-cell .name {
+font-weight: bold;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+.memory-cell .value {
+font-size: 1.2rem;
+color: var(--secondary);
+}
+.memory-cell .type {
+font-size: 0.9rem;
+color: #666;
+margin-top: 0.5rem;
+}
+.operator-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.operator-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+transition: all 0.3s;
+}
+.operator-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.operator-symbol {
+font-size: 1.5rem;
+font-weight: bold;
+color: var(--primary);
+margin-bottom: 0.5rem;
+}
+.operator-name {
+color: var(--dark);
+margin-bottom: 0.3rem;
+}
+.operator-example {
+font-size: 0.9rem;
+color: #666;
+}
+.io-example {
+background-color: #f1f5f9;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+}
+.io-example h4 {
+color: var(--dark);
+margin-bottom: 1rem;
+}
+.io-terminal {
+background-color: #1e293b;
+color: #e2e8f0;
+padding: 1rem;
+border-radius: 5px;
+font-family: 'Courier New', monospace;
+margin: 1rem 0;
+}
+.io-terminal .input {
+color: #68d391;
+}
+.io-terminal .output {
+color: #fbb6ce;
+}
+footer {
+background-color: var(--primary);
+color: white;
+text-align: center;
+padding: 1.5rem 0;
+margin-top: 3rem;
+}
+/* Estilos para seção de prática no NetBeans */
+.practice-module {
+background: white;
+border-radius: 10px;
+padding: 2rem;
+margin-bottom: 2rem;
+box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+border-left: 5px solid var(--success);
+}
+.practice-module h3 {
+color: var(--success);
+margin-bottom: 1rem;
+font-size: 1.5rem;
+}
+.step {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+border-left: 4px solid var(--warning);
+}
+.step-number {
+display: inline-block;
+background-color: var(--warning);
+color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+text-align: center;
+line-height: 30px;
+font-weight: bold;
+margin-right: 1rem;
+}
+.netbeans-screenshot {
+background-color: #2b2b2b;
+border-radius: 8px;
+padding: 1rem;
+margin: 1rem 0;
+color: #e0e0e0;
+font-family: 'Courier New', monospace;
+position: relative;
+}
+.netbeans-header {
+background-color: #3c3f41;
+padding: 0.5rem 1rem;
+border-radius: 5px 5px 0 0;
+margin: -1rem -1rem 1rem -1rem;
+display: flex;
+align-items: center;
+}
+.netbeans-title {
+color: #e0e0e0;
+font-size: 0.9rem;
+margin-left: 1rem;
+}
+.netbeans-menu {
+display: flex;
+gap: 0.5rem;
+}
+.netbeans-menu-item {
+background-color: #555;
+padding: 0.2rem 0.5rem;
+border-radius: 3px;
+font-size: 0.8rem;
+}
+.netbeans-code {
+background-color: #1e1e1e;
+padding: 1rem;
+border-radius: 5px;
+margin: 0.5rem 0;
+}
+.netbeans-output {
+background-color: #0d1117;
+padding: 1rem;
+border-radius: 5px;
+margin: 0.5rem 0;
+color: #58a6ff;
+}
+.tip-box {
+background-color: #e3f2fd;
+border-left: 4px solid var(--secondary);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.tip-box h4 {
+color: var(--secondary);
+margin-bottom: 0.5rem;
+}
+.warning-box {
+background-color: #fff3cd;
+border-left: 4px solid var(--warning);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.warning-box h4 {
+color: var(--warning);
+margin-bottom: 0.5rem;
+}
+.progress-bar {
+background-color: #e0e0e0;
+height: 20px;
+border-radius: 10px;
+overflow: hidden;
+margin: 1rem 0;
+}
+.progress-fill {
+background-color: var(--success);
+height: 100%;
+width: 0%;
+transition: width 0.3s;
+}
+.checkpoint {
+background-color: #e8f5e9;
+border: 2px solid var(--success);
+border-radius: 8px;
+padding: 1rem;
+margin: 1.5rem 0;
+}
+.checkpoint h4 {
+color: var(--success);
+margin-bottom: 0.5rem;
+}
+.flowchart {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 2rem 0;
+}
+.flowchart-element {
+background-color: white;
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+margin: 0.5rem 0;
+text-align: center;
+width: 80%;
+max-width: 400px;
+position: relative;
+}
+.flowchart-element.decision {
+width: 80%;
+max-width: 300px;
+height: 80px;
+display: flex;
+align-items: center;
+justify-content: center;
+transform: rotate(45deg);
+border-radius: 0;
+}
+.flowchart-element.decision span {
+transform: rotate(-45deg);
+font-weight: bold;
+}
+.flowchart-arrow {
+height: 30px;
+width: 2px;
+background-color: var(--secondary);
+position: relative;
+}
+.flowchart-arrow::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: -4px;
+width: 0;
+height: 0;
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+border-top: 8px solid var(--secondary);
+}
+.loop-visual {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+border-left: 4px solid var(--secondary);
+}
+.loop-visual h4 {
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.loop-steps {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+.loop-step {
+background-color: white;
+border-radius: 8px;
+padding: 1rem;
+display: flex;
+align-items: center;
+}
+.step-icon {
+background-color: var(--secondary);
+color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 1rem;
+font-weight: bold;
+}
+.comparison-table {
+width: 100%;
+border-collapse: collapse;
+margin: 1.5rem 0;
+font-size: 1rem;
+}
+.comparison-table th, .comparison-table td {
+padding: 1rem;
+text-align: left;
+border-bottom: 1px solid #ddd;
+}
+.comparison-table th {
+background-color: var(--secondary);
+color: white;
+}
+.comparison-table tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+.comparison-table tr:hover {
+background-color: #e2e2e2;
+}
+.ide-image {
+width: 100%;
+max-width: 600px;
+height: auto;
+border-radius: 8px;
+margin: 1rem 0;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.feature-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.feature-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1.5rem;
+transition: all 0.3s;
+}
+.feature-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.feature-icon {
+font-size: 2rem;
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.feature-title {
+font-size: 1.2rem;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+.feature-description {
+color: #666;
+}
+.transition-steps {
+counter-reset: step-counter;
+list-style-type: none;
+padding-left: 0;
+}
+.transition-step {
+position: relative;
+padding-left: 3rem;
+margin-bottom: 2rem;
+counter-increment: step-counter;
+}
+.transition-step::before {
+content: counter(step-counter);
+position: absolute;
+left: 0;
+top: 0;
+width: 2rem;
+height: 2rem;
+background-color: var(--secondary);
+color: white;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+}
+.code-comparison {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.code-column {
+flex: 1;
+min-width: 300px;
+}
+.code-column h4 {
+color: var(--dark);
+margin-bottom: 0.5rem;
+text-align: center;
+}
+.installation-steps {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+}
+.installation-steps h4 {
+color: var(--primary);
+margin-bottom: 1rem;
+}
+.scanner-methods {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+}
+.scanner-method {
+background-color: white;
+border-left: 4px solid var(--secondary);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.scanner-method h4 {
+color: var(--secondary);
+margin-bottom: 0.5rem;
+}
+@media (max-width: 768px) {
+.header-content {
+flex-direction: column;
+text-align: center;
+}
+.nav-tabs {
+width: 100%;
+}
+.nav-tab {
+padding: 0.8rem 1rem;
+font-size: 0.9rem;
+}
+h1 {
+font-size: 1.5rem;
+}
+.card {
+padding: 1.5rem;
+}
+.operator-grid {
+grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.comparison-table {
+font-size: 0.9rem;
+}
+.comparison-table th, .comparison-table td {
+padding: 0.5rem;
+}
+.code-comparison {
+flex-direction: column;
+}
+}
+/* Acessibilidade */
+.sr-only {
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border: 0;
+}
+:focus {
+outline: 3px solid var(--secondary);
+outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="header-content">
+<div>
+<h1>Estruturas Sequenciais em Java</h1>
+<p class="subtitle">Vetores e Matrizes</p>
+</div>
+<div>
+<button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+<button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+</div>
+</div>
+<nav class="nav-tabs" role="tablist">
+<button class="nav-tab active" data-topic="conceitos" role="tab" aria-selected="true">Conceitos Gerais</button>
+<button class="nav-tab" data-topic="vetores" role="tab" aria-selected="false">Vetores</button>
+<button class="nav-tab" data-topic="matrizes" role="tab" aria-selected="false">Matrizes</button>
+<button class="nav-tab" data-topic="comparacao" role="tab" aria-selected="false">Comparação 1D e 2D</button>
+<button class="nav-tab" data-topic="boaspraticas" role="tab" aria-selected="false">Boas Práticas</button>
+</nav>
+</div>
+</header>
+<main class="container">
+<!-- Tópico 1: Conceitos Gerais -->
+<section id="conceitos" class="topic-section active" role="tabpanel">
+<div class="card">
+<h2>1. Conceitos Gerais de Estruturas Sequenciais</h2>
+<p>As <strong>estruturas sequenciais</strong> (ou arrays) são coleções de dados do mesmo tipo, armazenados de forma contígua na memória. Elas permitem armazenar múltiplos valores em uma única variável, acessados através de índices.</p>
+
+<h3>O que são estruturas sequenciais?</h3>
+<p>Em Java, arrays são objetos que contêm um número fixo de valores de um único tipo. O comprimento de um array é estabelecido quando o array é criado e não pode ser alterado posteriormente.</p>
+
+<div class="operator-grid">
+<div class="operator-card">
+<div class="operator-symbol">[ ]</div>
+<div class="operator-name">Array</div>
+<div class="operator-example">Coleção de elementos do mesmo tipo</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">índice</div>
+<div class="operator-name">Posição</div>
+<div class="operator-example">Acesso aos elementos (começa em 0)</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">.length</div>
+<div class="operator-name">Tamanho</div>
+<div class="operator-example">Propriedade que retorna o tamanho do array</div>
+</div>
+</div>
+
+<h3>Tipagem Uniforme</h3>
+<p>Um dos princípios fundamentais dos arrays em Java é a <strong>tipagem uniforme</strong>: todos os elementos em um array devem ser do mesmo tipo de dado. Isso garante consistência e eficiência no armazenamento e manipulação dos dados.</p>
+
+<div class="code-block">
+<span class="comment">// Exemplo de arrays com diferentes tipos</span><br>
+<span class="keyword">int</span>[] numeros = <span class="keyword">new int</span>[<span class="number">5</span>]; <span class="comment">// Array de inteiros</span><br>
+<span class="keyword">String</span>[] nomes = <span class="keyword">new String</span>[<span class="number">3</span>]; <span class="comment">// Array de strings</span><br>
+<span class="keyword">double</span>[] valores = <span class="keyword">new double</span>[<span class="number">10</span>]; <span class="comment">// Array de decimais</span><br>
+<span class="keyword">boolean</span>[] flags = <span class="keyword">new boolean</span>[<span class="number">2</span>]; <span class="comment">// Array de booleanos</span>
+</div>
+
+<h3>Endereçamento por Índice</h3>
+<p>Os elementos em um array são acessados através de <strong>índices</strong>, que são números inteiros que representam a posição do elemento no array. Em Java, os índices começam em 0 e vão até (tamanho - 1).</p>
+
+<div class="memory-visual">
+<div class="memory-cell">
+<div class="name">nomes[0]</div>
+<div class="value">"Ana"</div>
+<div class="type">String</div>
+</div>
+<div class="memory-cell">
+<div class="name">nomes[1]</div>
+<div class="value">"Carlos"</div>
+<div class="type">String</div>
+</div>
+<div class="memory-cell">
+<div class="name">nomes[2]</div>
+<div class="value">"Mariana"</div>
+<div class="type">String</div>
+</div>
+<div class="memory-cell">
+<div class="name">nomes[3]</div>
+<div class="value">"Pedro"</div>
+<div class="type">String</div>
+</div>
+</div>
+
+<h3>Vantagens das Estruturas Sequenciais</h3>
+<ul>
+<li><strong>Acesso rápido:</strong> O acesso a qualquer elemento é feito em tempo constante O(1) através do índice.</li>
+<li><strong>Memória contígua:</strong> Os elementos são armazenados em posições consecutivas de memória, o que otimiza o cache.</li>
+<li><strong>Simplicidade:</strong> São fáceis de entender e implementar.</li>
+<li><strong>Previsibilidade:</strong> O tamanho é fixo e conhecido antecipadamente.</li>
+</ul>
+
+<h3>Desvantagens das Estruturas Sequenciais</h3>
+<ul>
+<li><strong>Tamanho fixo:</strong> Não é possível alterar o tamanho de um array após sua criação.</li>
+<li><strong>Inserção e remoção:</strong> São operações custosas, pois exigem deslocamento de elementos.</li>
+<li><strong>Alocação contígua:</strong> Pode ser difícil encontrar grandes blocos contíguos de memória.</li>
+</ul>
+
+<h3>Representação Visual de um Array</h3>
+<div class="flowchart">
+<div class="flowchart-element">
+<strong>Array de Nomes</strong>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="memory-visual" style="justify-content: center;">
+<div class="memory-cell">
+<div class="name">[0]</div>
+<div class="value">"Ana"</div>
+</div>
+<div class="memory-cell">
+<div class="name">[1]</div>
+<div class="value">"Carlos"</div>
+</div>
+<div class="memory-cell">
+<div class="name">[2]</div>
+<div class="value">"Mariana"</div>
+</div>
+<div class="memory-cell">
+<div class="name">[3]</div>
+<div class="value">"Pedro"</div>
+</div>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element">
+<strong>Tamanho: 4</strong>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique qual tipo de array seria mais adequado para cada situação:</p>
+<div class="input-group">
+<label for="sit1">Armazenar as notas de 10 alunos em uma disciplina:</label>
+<select id="sit1">
+<option value="">Selecione...</option>
+<option value="int">int[]</option>
+<option value="double">double[]</option>
+<option value="String">String[]</option>
+<option value="boolean">boolean[]</option>
+</select>
+</div>
+<div class="input-group">
+<label for="sit2">Armazenar os nomes dos alunos de uma turma:</label>
+<select id="sit2">
+<option value="">Selecione...</option>
+<option value="int">int[]</option>
+<option value="double">double[]</option>
+<option value="String">String[]</option>
+<option value="boolean">boolean[]</option>
+</select>
+</div>
+<div class="input-group">
+<label for="sit3">Armazenar a presença (presente/ausente) dos alunos:</label>
+<select id="sit3">
+<option value="">Selecione...</option>
+<option value="int">int[]</option>
+<option value="double">double[]</option>
+<option value="String">String[]</option>
+<option value="boolean">boolean[]</option>
+</select>
+</div>
+<button id="checkSituations" class="btn">Verificar Respostas</button>
+<div id="situationsFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 2: Vetores -->
+<section id="vetores" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>2. Vetores (Arrays Unidimensionais)</h2>
+<p><strong>Vetores</strong> (ou arrays unidimensionais) são estruturas sequenciais que organizam os elementos em uma única dimensão, como uma lista. Cada elemento é acessado através de um único índice.</p>
+
+<h3>Declaração de Vetores</h3>
+<p>Em Java, existem duas formas principais de declarar um vetor:</p>
+
+<div class="code-block">
+<span class="comment">// Forma 1: Declaração e criação separadas</span><br>
+<span class="keyword">int</span>[] numeros; <span class="comment">// Declaração</span><br>
+numeros = <span class="keyword">new int</span>[<span class="number">5</span>]; <span class="comment">// Criação com tamanho 5</span><br><br>
+<span class="comment">// Forma 2: Declaração e criação juntas</span><br>
+<span class="keyword">String</span>[] nomes = <span class="keyword">new String</span>[<span class="number">3</span>]; <span class="comment">// Array de strings com tamanho 3</span><br><br>
+<span class="comment">// Forma 3: Inicialização com valores</span><br>
+<span class="keyword">double</span>[] valores = {<span class="number">3.5</span>, <span class="number">7.2</span>, <span class="number">4.8</span>, <span class="number">9.1</span>}; <span class="comment">// Array com valores predefinidos</span>
+</div>
+
+<h3>Inicialização de Vetores</h3>
+<p>Após a declaração, os vetores precisam ser inicializados. Se não forem inicializados explicitamente, receberão valores padrão conforme o tipo:</p>
+
+<div class="comparison-table">
+<table>
+<tr>
+<th>Tipo</th>
+<th>Valor Padrão</th>
+<th>Exemplo</th>
+</tr>
+<tr>
+<td>int, byte, short, long</td>
+<td>0</td>
+<td>int[] v = new int[3]; // [0, 0, 0]</td>
+</tr>
+<tr>
+<td>double, float</td>
+<td>0.0</td>
+<td>double[] v = new double[2]; // [0.0, 0.0]</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>false</td>
+<td>boolean[] v = new boolean[4]; // [false, false, false, false]</td>
+</tr>
+<tr>
+<td>char</td>
+<td>'\u0000'</td>
+<td>char[] v = new char[2]; // ['\u0000', '\u0000']</td>
+</tr>
+<tr>
+<td>Objetos (String, etc.)</td>
+<td>null</td>
+<td>String[] v = new String[3]; // [null, null, null]</td>
+</tr>
+</table>
+</div>
+
+<h3>Acesso por Índice</h3>
+<p>Os elementos de um vetor são acessados através do índice, que começa em 0 e vai até (tamanho - 1):</p>
+
+<div class="code-block">
+<span class="keyword">String</span>[] nomes = {<span class="string">"Ana"</span>, <span class="string">"Carlos"</span>, <span class="string">"Mariana"</span>, <span class="string">"Pedro"</span>};<br><br>
+<span class="comment">// Acesso aos elementos</span><br>
+System.out.println(nomes[<span class="number">0</span>]); <span class="comment">// Imprime "Ana"</span><br>
+System.out.println(nomes[<span class="number">2</span>]); <span class="comment">// Imprime "Mariana"</span><br><br>
+<span class="comment">// Modificação de elementos</span><br>
+nomes[<span class="number">1</span>] = <span class="string">"Carolina"</span>; <span class="comment">// Altera o segundo elemento</span><br>
+System.out.println(nomes[<span class="number">1</span>]); <span class="comment">// Imprime "Carolina"</span>
+</div>
+
+<h3>Percurso com FOR e FOR-EACH</h3>
+<p>Existem duas formas principais de percorrer todos os elementos de um vetor:</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>FOR Tradicional</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] numeros = {<span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">25</span>};<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < numeros.length; i++) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Elemento "</span> + i + <span class="string">": "</span> + numeros[i]);<br>
+}
+</div>
+</div>
+<div class="code-column">
+<h4>FOR-EACH</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] numeros = {<span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">25</span>};<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> numero : numeros) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Elemento: "</span> + numero);<br>
+}
+</div>
+</div>
+</div>
+
+<h3>Operações Comuns com Vetores</h3>
+
+<h4>Soma e Média</h4>
+<div class="code-block">
+<span class="keyword">double</span>[] notas = {<span class="number">7.5</span>, <span class="number">8.0</span>, <span class="number">6.5</span>, <span class="number">9.0</span>, <span class="number">7.0</span>};<br>
+<span class="keyword">double</span> soma = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">double</span> nota : notas) {<br>
+&nbsp;&nbsp;soma += nota;<br>
+}<br><br>
+<span class="keyword">double</span> media = soma / notas.length;<br>
+System.out.println(<span class="string">"Soma: "</span> + soma);<br>
+System.out.println(<span class="string">"Média: "</span> + media);
+</div>
+
+<h4>Maior e Menor Elemento</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] valores = {<span class="number">42</span>, <span class="number">17</span>, <span class="number">93</span>, <span class="number">8</span>, <span class="number">56</span>};<br>
+<span class="keyword">int</span> maior = valores[<span class="number">0</span>]; <span class="comment">// Assume o primeiro como maior</span><br>
+<span class="keyword">int</span> menor = valores[<span class="number">0</span>]; <span class="comment">// Assume o primeiro como menor</span><br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i < valores.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (valores[i] > maior) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maior = valores[i];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (valores[i] < menor) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;menor = valores[i];<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Maior valor: "</span> + maior);<br>
+System.out.println(<span class="string">"Menor valor: "</span> + menor);
+</div>
+
+<h4>Contagem por Condição</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] numeros = {<span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">8</span>};<br>
+<span class="keyword">int</span> pares = <span class="number">0</span>;<br>
+<span class="keyword">int</span> impares = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> num : numeros) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (num % <span class="number">2</span> == <span class="number">0</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pares++;<br>
+&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;impares++;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Quantidade de pares: "</span> + pares);<br>
+System.out.println(<span class="string">"Quantidade de ímpares: "</span> + impares);
+</div>
+
+<h4>Busca Linear</h4>
+<div class="code-block">
+<span class="keyword">String</span>[] nomes = {<span class="string">"Ana"</span>, <span class="string">"Carlos"</span>, <span class="string">"Mariana"</span>, <span class="string">"Pedro"</span>};<br>
+<span class="keyword">String</span> busca = <span class="string">"Mariana"</span>;<br>
+<span class="keyword">boolean</span> encontrado = <span class="keyword">false</span>;<br>
+<span class="keyword">int</span> posicao = -<span class="number">1</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < nomes.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (nomes[i].equals(busca)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;encontrado = <span class="keyword">true</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;posicao = i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Interrompe a busca quando encontra</span><br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="keyword">if</span> (encontrado) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Nome encontrado na posição: "</span> + posicao);<br>
+} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Nome não encontrado"</span>);<br>
+}
+</div>
+
+<h3>Erros Comuns com Vetores</h3>
+
+<h4>ArrayIndexOutOfBoundsException</h4>
+<p>Este é o erro mais comum ao trabalhar com arrays em Java. Ocorre quando tentamos acessar um índice que não existe no array:</p>
+
+<div class="code-block">
+<span class="keyword">int</span>[] numeros = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>}; <span class="comment">// Array com 3 elementos (índices 0, 1, 2)</span><br><br>
+<span class="comment">// Acessos válidos</span><br>
+System.out.println(numeros[<span class="number">0</span>]); <span class="comment">// 10</span><br>
+System.out.println(numeros[<span class="number">2</span>]); <span class="comment">// 30</span><br><br>
+<span class="comment">// Acesso inválido - gera ArrayIndexOutOfBoundsException</span><br>
+System.out.println(numeros[<span class="number">3</span>]); <span class="comment">// Erro! O índice máximo é 2</span>
+</div>
+
+<div class="warning-box">
+<h4>Cuidado com os Índices!</h4>
+<p>Lembre-se sempre que os índices em Java começam em 0 e vão até (tamanho - 1). Um array com 5 elementos tem índices de 0 a 4.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para encontrar a média dos valores positivos em um vetor:</p>
+<div class="code-block">
+<span class="keyword">public class</span> MediaPositivos {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span>[] valores = {<input type="text" id="valores" style="width: 200px; padding: 0.3rem; margin: 0 0.5rem;">};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> soma = <input type="text" id="soma" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> contador = <input type="text" id="contador" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> valor : valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (valor <input type="text" id="condicao" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma <input type="text" id="operacaoSoma" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> valor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contador<input type="text" id="operacaoContador" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = <input type="text" id="calculoMedia" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Média dos valores positivos: "</span> + media);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkVetorCode" class="btn">Verificar Código</button>
+<div id="vetorCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 3: Matrizes -->
+<section id="matrizes" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>3. Matrizes (Arrays Bidimensionais)</h2>
+<p><strong>Matrizes</strong> (ou arrays bidimensionais) são estruturas sequenciais que organizam os elementos em duas dimensões, como uma tabela ou grade. Cada elemento é acessado através de dois índices: um para a linha e outro para a coluna.</p>
+
+<h3>Declaração de Matrizes</h3>
+<p>Em Java, as matrizes são declaradas de forma semelhante aos vetores, mas com dois pares de colchetes:</p>
+
+<div class="code-block">
+<span class="comment">// Forma 1: Declaração e criação separadas</span><br>
+<span class="keyword">int</span>[][] matriz; <span class="comment">// Declaração</span><br>
+matriz = <span class="keyword">new int</span>[<span class="number">3</span>][<span class="number">4</span>]; <span class="comment">// Criação: 3 linhas e 4 colunas</span><br><br>
+<span class="comment">// Forma 2: Declaração e criação juntas</span><br>
+<span class="keyword">double</span>[][] notas = <span class="keyword">new double</span>[<span class="number">5</span>][<span class="number">3</span>]; <span class="comment">// 5 linhas e 3 colunas</span><br><br>
+<span class="comment">// Forma 3: Inicialização com valores</span><br>
+<span class="keyword">String</span>[][] nomes = {<br>
+&nbsp;&nbsp;{<span class="string">"Ana"</span>, <span class="string">"Carlos"</span>},<br>
+&nbsp;&nbsp;{<span class="string">"Mariana"</span>, <span class="string">"Pedro"</span>},<br>
+&nbsp;&nbsp;{<span class="string">"João"</span>, <span class="string">"Maria"</span>}<br>
+};
+</div>
+
+<h3>Inicialização de Matrizes</h3>
+<p>Assim como os vetores, as matrizes podem ser inicializadas de várias formas:</p>
+
+<div class="code-block">
+<span class="comment">// Inicialização com valores padrão</span><br>
+<span class="keyword">int</span>[][] matriz = <span class="keyword">new int</span>[<span class="number">3</span>][<span class="number">4</span>]; <span class="comment">// Todos os elementos serão 0</span><br><br>
+<span class="comment">// Inicialização com valores explícitos</span><br>
+<span class="keyword">int</span>[][] numeros = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br><br>
+<span class="comment">// Inicialização linha por linha</span><br>
+<span class="keyword">int</span>[][] matriz2 = <span class="keyword">new int</span>[<span class="number">3</span>][];<br>
+matriz2[<span class="number">0</span>] = <span class="keyword">new int</span>[<span class="number">2</span>]; <span class="comment">// Primeira linha com 2 colunas</span><br>
+matriz2[<span class="number">1</span>] = <span class="keyword">new int</span>[<span class="number">3</span>]; <span class="comment">// Segunda linha com 3 colunas</span><br>
+matriz2[<span class="number">2</span>] = <span class="keyword">new int</span>[<span class="number">2</span>]; <span class="comment">// Terceira linha com 2 colunas</span>
+</div>
+
+<h3>Acesso com Dois Índices</h3>
+<p>Os elementos de uma matriz são acessados através de dois índices: o primeiro para a linha e o segundo para a coluna:</p>
+
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br><br>
+<span class="comment">// Acesso aos elementos</span><br>
+System.out.println(matriz[<span class="number">0</span>][<span class="number">0</span>]); <span class="comment">// Imprime 1 (primeira linha, primeira coluna)</span><br>
+System.out.println(matriz[<span class="number">1</span>][<span class="number">2</span>]); <span class="comment">// Imprime 6 (segunda linha, terceira coluna)</span><br>
+System.out.println(matriz[<span class="number">2</span>][<span class="number">1</span>]); <span class="comment">// Imprime 8 (terceira linha, segunda coluna)</span><br><br>
+<span class="comment">// Modificação de elementos</span><br>
+matriz[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">10</span>; <span class="comment">// Altera o elemento da primeira linha, segunda coluna</span><br>
+System.out.println(matriz[<span class="number">0</span>][<span class="number">1</span>]); <span class="comment">// Imprime 10</span>
+</div>
+
+<h3>Representação Visual de uma Matriz</h3>
+<div class="memory-visual" style="justify-content: center;">
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; width: fit-content;">
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[0][0]</div>
+<div class="value">1</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[0][1]</div>
+<div class="value">2</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[0][2]</div>
+<div class="value">3</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[0][3]</div>
+<div class="value">4</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[1][0]</div>
+<div class="value">5</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[1][1]</div>
+<div class="value">6</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[1][2]</div>
+<div class="value">7</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[1][3]</div>
+<div class="value">8</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[2][0]</div>
+<div class="value">9</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[2][1]</div>
+<div class="value">10</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[2][2]</div>
+<div class="value">11</div>
+</div>
+<div class="memory-cell" style="min-width: 80px;">
+<div class="name">[2][3]</div>
+<div class="value">12</div>
+</div>
+</div>
+</div>
+
+<h3>Percurso com Loops Aninhados</h3>
+<p>Para percorrer todos os elementos de uma matriz, precisamos de loops aninhados: um para as linhas e outro para as colunas:</p>
+
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br><br>
+<span class="comment">// Percurso com loops for tradicionais</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) { <span class="comment">// Para cada linha</span><br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) { <span class="comment">// Para cada coluna</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(matriz[i][j] + <span class="string">" "</span>);<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;System.out.println(); <span class="comment">// Nova linha após cada linha da matriz</span><br>
+}
+</div>
+
+<h3>Operações Comuns com Matrizes</h3>
+
+<h4>Soma Total</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br>
+<span class="keyword">int</span> soma = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;soma += matriz[i][j];<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Soma total: "</span> + soma);
+</div>
+
+<h4>Soma por Linha e Coluna</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br><br>
+<span class="comment">// Soma por linha</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> somaLinha = <span class="number">0</span>;<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;somaLinha += matriz[i][j];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Soma da linha "</span> + i + <span class="string">": "</span> + somaLinha);<br>
+}<br><br>
+<span class="comment">// Soma por coluna</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[<span class="number">0</span>].length; j++) {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> somaColuna = <span class="number">0</span>;<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;somaColuna += matriz[i][j];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Soma da coluna "</span> + j + <span class="string">": "</span> + somaColuna);<br>
+}
+</div>
+
+<h4>Diagonais</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br>
+<span class="keyword">int</span> somaPrincipal = <span class="number">0</span>;<br>
+<span class="keyword">int</span> somaSecundaria = <span class="number">0</span>;<br><br>
+<span class="comment">// Diagonal principal (i == j)</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;somaPrincipal += matriz[i][i];<br>
+}<br><br>
+<span class="comment">// Diagonal secundária (i + j == n - 1)</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;somaSecundaria += matriz[i][matriz.length - <span class="number">1</span> - i];<br>
+}<br><br>
+System.out.println(<span class="string">"Soma da diagonal principal: "</span> + somaPrincipal);<br>
+System.out.println(<span class="string">"Soma da diagonal secundária: "</span> + somaSecundaria);
+</div>
+
+<h4>Busca de Elementos</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br>
+<span class="keyword">int</span> valorBusca = <span class="number">5</span>;<br>
+<span class="keyword">boolean</span> encontrado = <span class="keyword">false</span>;<br>
+<span class="keyword">int</span> linha = -<span class="number">1</span>;<br>
+<span class="keyword">int</span> coluna = -<span class="number">1</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (matriz[i][j] == valorBusca) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encontrado = <span class="keyword">true</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linha = i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coluna = j;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Sai do loop interno</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (encontrado) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Sai do loop externo</span><br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="keyword">if</span> (encontrado) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorBusca + <span class="string">" encontrado na posição ["</span> + linha + <span class="string">"]["</span> + coluna + <span class="string">"]"</span>);<br>
+} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Valor "</span> + valorBusca + <span class="string">" não encontrado na matriz"</span>);<br>
+}
+</div>
+
+<h3>Erros Comuns com Matrizes</h3>
+
+<h4>Confusão entre Linha e Coluna</h4>
+<p>Um erro comum é inverter a ordem dos índices, acessando matriz[coluna][linha] em vez de matriz[linha][coluna]:</p>
+
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},<br>
+&nbsp;&nbsp;{<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}<br>
+};<br><br>
+<span class="comment">// Acesso correto</span><br>
+System.out.println(matriz[<span class="number">1</span>][<span class="number">2</span>]); <span class="comment">// Imprime 6 (linha 1, coluna 2)</span><br><br>
+<span class="comment">// Acesso incorreto (pode gerar erro ou valor inesperado)</span><br>
+System.out.println(matriz[<span class="number">2</span>][<span class="number">1</span>]); <span class="comment">// Imprime 8 (linha 2, coluna 1)</span>
+</div>
+
+<h4>Tamanhos Irregulares (Arrays Aninhados)</h4>
+<p>Em Java, é possível criar matrizes onde cada linha tem um número diferente de colunas. Isso pode causar erros se não for tratado corretamente:</p>
+
+<div class="code-block">
+<span class="comment">// Matriz irregular</span><br>
+<span class="keyword">int</span>[][] matrizIrregular = <span class="keyword">new int</span>[<span class="number">3</span>][];<br>
+matrizIrregular[<span class="number">0</span>] = <span class="keyword">new int</span>[<span class="number">2</span>]; <span class="comment">// 2 colunas</span><br>
+matrizIrregular[<span class="number">1</span>] = <span class="keyword">new int</span>[<span class="number">3</span>]; <span class="comment">// 3 colunas</span><br>
+matrizIrregular[<span class="number">2</span>] = <span class="keyword">new int</span>[<span class="number">1</span>]; <span class="comment">// 1 coluna</span><br><br>
+<span class="comment">// Preenchendo a matriz</span><br>
+matrizIrregular[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;<br>
+matrizIrregular[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">2</span>;<br>
+matrizIrregular[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">3</span>;<br>
+matrizIrregular[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">4</span>;<br>
+matrizIrregular[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">5</span>;<br>
+matrizIrregular[<span class="number">2</span>][<span class="number">0</span>] = <span class="number">6</span>;<br><br>
+<span class="comment">// Tentativa de acesso inválido (gera ArrayIndexOutOfBoundsException)</span><br>
+matrizIrregular[<span class="number">2</span>][<span class="number">1</span>] = <span class="number">7</span>; <span class="comment">// Erro! A terceira linha tem apenas 1 coluna</span>
+</div>
+
+<div class="warning-box">
+<h4>Cuidado com os Índices!</h4>
+<p>Lembre-se sempre que o primeiro índice representa a linha e o segundo a coluna. Além disso, em matrizes irregulares, cada linha pode ter um número diferente de colunas.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para calcular a soma dos elementos da diagonal principal de uma matriz quadrada:</p>
+<div class="code-block">
+<span class="keyword">public class</span> SomaDiagonal {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<input type="text" id="m00" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m01" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m02" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<input type="text" id="m10" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m11" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m12" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<input type="text" id="m20" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m21" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="m22" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> soma = <input type="text" id="soma" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <input type="text" id="iInicial" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">; i < matriz.<input type="text" id="length" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;">; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma <input type="text" id="operacao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> matriz[<input type="text" id="indice1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">][<input type="text" id="indice2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Soma da diagonal principal: "</span> + soma);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkMatrizCode" class="btn">Verificar Código</button>
+<div id="matrizCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 4: Comparação entre 1D e 2D -->
+<section id="comparacao" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>4. Comparação entre Arrays Unidimensionais e Bidimensionais</h2>
+<p>Arrays unidimensionais (vetores) e bidimensionais (matrizes) têm características distintas que os tornam adequados para diferentes tipos de problemas. Vamos comparar essas estruturas em vários aspectos.</p>
+
+<h3>Quantidade de Índices</h3>
+<p>A diferença mais óbvia entre vetores e matrizes é a quantidade de índices necessários para acessar seus elementos:</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>Vetor (1D)</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] vetor = <span class="keyword">new int</span>[<span class="number">5</span>];<br><br>
+<span class="comment">// Acesso com um índice</span><br>
+vetor[<span class="number">0</span>] = <span class="number">10</span>;<br>
+<span class="keyword">int</span> valor = vetor[<span class="number">3</span>];
+</div>
+</div>
+<div class="code-column">
+<h4>Matriz (2D)</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = <span class="keyword">new int</span>[<span class="number">3</span>][<span class="number">4</span>];<br><br>
+<span class="comment">// Acesso com dois índices</span><br>
+matriz[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">20</span>;<br>
+<span class="keyword">int</span> valor = matriz[<span class="number">2</span>][<span class="number">3</span>];
+</div>
+</div>
+</div>
+
+<h3>Complexidade do Percurso</h3>
+<p>A complexidade para percorrer todos os elementos também difere significativamente:</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>Vetor (1D)</h4>
+<div class="code-block">
+<span class="keyword">int</span>[] vetor = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};<br><br>
+<span class="comment">// Percurso com um loop</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < vetor.length; i++) {<br>
+&nbsp;&nbsp;System.out.println(vetor[i]);<br>
+}
+</div>
+</div>
+<div class="code-column">
+<h4>Matriz (2D)</h4>
+<div class="code-block">
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>}<br>
+};<br><br>
+<span class="comment">// Percurso com loops aninhados</span><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(matriz[i][j] + <span class="string">" "</span>);<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;System.out.println();<br>
+}
+</div>
+</div>
+</div>
+
+<h3>Uso Típico: Listas vs Tabelas</h3>
+<p>A escolha entre vetores e matrizes geralmente depende da natureza dos dados que estamos representando:</p>
+
+<div class="operator-grid">
+<div class="operator-card">
+<div class="operator-symbol">1D</div>
+<div class="operator-name">Listas</div>
+<div class="operator-example">Ideal para representar listas de elementos, como notas de alunos, nomes, temperaturas, etc.</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">2D</div>
+<div class="operator-name">Tabelas</div>
+<div class="operator-example">Ideal para representar tabelas, como planilhas, matrizes matemáticas, imagens, etc.</div>
+</div>
+</div>
+
+<h3>Exemplos de Aplicação</h3>
+
+<h4>Vetores (1D)</h4>
+<ul>
+<li><strong>Lista de notas:</strong> Armazenar as notas de um aluno em diferentes disciplinas.</li>
+<li><strong>Temperaturas diárias:</strong> Registrar a temperatura máxima de cada dia do mês.</li>
+<li><strong>Nomes de produtos:</strong> Manter uma lista de produtos em estoque.</li>
+<li><strong>Resultados de pesquisa:</strong> Armazenar as respostas de um questionário.</li>
+</ul>
+
+<h4>Matrizes (2D)</h4>
+<ul>
+<li><strong>Notas de turma:</strong> Armazenar as notas de vários alunos em várias disciplinas.</li>
+<li><strong>Imagens digitais:</strong> Representar pixels de uma imagem (linha x coluna x cor).</li>
+<li><strong>Matrizes matemáticas:</strong> Realizar operações de álgebra linear.</li>
+<li><strong>Mapas de assentos:</strong> Organizar os assentos de um cinema ou teatro.</li>
+</ul>
+
+<h3>Comparação Detalhada</h3>
+
+<div class="comparison-table">
+<table>
+<tr>
+<th>Aspecto</th>
+<th>Vetores (1D)</th>
+<th>Matrizes (2D)</th>
+</tr>
+<tr>
+<td>Declaração</td>
+<td>tipo[] nome = new tipo[tamanho];</td>
+<td>tipo[][] nome = new tipo[linhas][colunas];</td>
+</tr>
+<tr>
+<td>Acesso a elementos</td>
+<td>nome[índice]</td>
+<td>nome[linha][coluna]</td>
+</tr>
+<tr>
+<td>Percurso completo</td>
+<td>Um único loop</td>
+<td>Loops aninhados</td>
+</tr>
+<tr>
+<td>Uso de memória</td>
+<td>Menor (tamanho × tamanho do tipo)</td>
+<td>Maior (linhas × colunas × tamanho do tipo)</td>
+</tr>
+<tr>
+<td>Complexidade de acesso</td>
+<td>O(1) - tempo constante</td>
+<td>O(1) - tempo constante</td>
+</tr>
+<tr>
+<td>Complexidade de percurso</td>
+<td>O(n) - linear</td>
+<td>O(m×n) - quadrática</td>
+</tr>
+<tr>
+<td>Representação mental</td>
+<td>Lista linear</td>
+<td>Tabela ou grade</td>
+</tr>
+</table>
+</div>
+
+<h3>Transformação entre 1D e 2D</h3>
+<p>É possível converter entre representações 1D e 2D. Por exemplo, uma matriz pode ser "achatada" em um vetor:</p>
+
+<div class="code-block">
+<span class="comment">// Matriz para vetor (achatamento)</span><br>
+<span class="keyword">int</span>[][] matriz = {<br>
+&nbsp;&nbsp;{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},<br>
+&nbsp;&nbsp;{<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>}<br>
+};<br><br>
+<span class="keyword">int</span>[] vetor = <span class="keyword">new int</span>[matriz.length * matriz[<span class="number">0</span>].length];<br>
+<span class="keyword">int</span> index = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;vetor[index++] = matriz[i][j];<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="comment">// Resultado: [1, 2, 3, 4, 5, 6]</span>
+</div>
+
+<p>E também é possível fazer o inverso, transformando um vetor em uma matriz:</p>
+
+<div class="code-block">
+<span class="comment">// Vetor para matriz</span><br>
+<span class="keyword">int</span>[] vetor = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>};<br>
+<span class="keyword">int</span> linhas = <span class="number">2</span>;<br>
+<span class="keyword">int</span> colunas = <span class="number">3</span>;<br><br>
+<span class="keyword">int</span>[][] matriz = <span class="keyword">new int</span>[linhas][colunas];<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < linhas; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < colunas; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;matriz[i][j] = vetor[i * colunas + j];<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="comment">// Resultado: [[1, 2, 3], [4, 5, 6]]</span>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique qual estrutura de dados (vetor ou matriz) seria mais adequada para cada situação:</p>
+<div class="input-group">
+<label for="sit1">Armazenar as notas de 30 alunos em uma única prova:</label>
+<select id="sit1">
+<option value="">Selecione...</option>
+<option value="vetor">Vetor (1D)</option>
+<option value="matriz">Matriz (2D)</option>
+</select>
+</div>
+<div class="input-group">
+<label for="sit2">Armazenar as notas de 30 alunos em 5 provas diferentes:</label>
+<select id="sit2">
+<option value="">Selecione...</option>
+<option value="vetor">Vetor (1D)</option>
+<option value="matriz">Matriz (2D)</option>
+</select>
+</div>
+<div class="input-group">
+<label for="sit3">Representar um tabuleiro de jogo da velha (3x3):</label>
+<select id="sit3">
+<option value="">Selecione...</option>
+<option value="vetor">Vetor (1D)</option>
+<option value="matriz">Matriz (2D)</option>
+</select>
+</div>
+<div class="input-group">
+<label for="sit4">Armazenar os resultados de uma pesquisa com 10 perguntas:</label>
+<select id="sit4">
+<option value="">Selecione...</option>
+<option value="vetor">Vetor (1D)</option>
+<option value="matriz">Matriz (2D)</option>
+</select>
+</div>
+<button id="checkComparacao" class="btn">Verificar Respostas</button>
+<div id="comparacaoFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 5: Boas Práticas -->
+<section id="boaspraticas" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>5. Boas Práticas com Estruturas Sequenciais</h2>
+                <p>Trabalhar com arrays em Java requer atenção a alguns detalhes para garantir código limpo, eficiente e livre de erros. Vamos explorar as melhores práticas ao utilizar estruturas sequenciais.</p>
+                
+                <h3>Verificar Tamanho com .length</h3>
+                <p>A propriedade <code>.length</code> é fundamental para trabalhar com arrays em Java. Ela retorna o tamanho do array e deve ser usada sempre que precisarmos percorrer ou verificar os limites do array:</p>
+                
+                <div class="code-block">
+                    <span class="keyword">int</span>[] numeros = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};<br><br>
+                    <span class="comment">// Boa prática: usar .length para determinar o limite</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < numeros.length; i++) {<br>
+                    &nbsp;&nbsp;System.out.println(numeros[i]);<br>
+                    }<br><br>
+                    <span class="comment">// Evitar: usar valores fixos (hardcoded)</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) { <span class="comment">// Ruim se o tamanho mudar</span><br>
+                    &nbsp;&nbsp;System.out.println(numeros[i]);<br>
+                    }
+                </div>
+                
+                <div class="tip-box">
+                    <h4>Dica Importante</h4>
+                    <p>Use sempre <code>.length</code> em vez de valores fixos. Isso torna seu código mais flexível e menos propenso a erros quando o tamanho do array mudar.</p>
+                </div>
+                
+                <h3>Usar Nomes Claros para Índices</h3>
+                <p>Embora seja comum usar <code>i</code>, <code>j</code>, <code>k</code> como nomes para índices, em loops complexos ou com propósito específico, é melhor usar nomes mais descritivos:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Menos claro</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < matriz.length; i++) {<br>
+                    &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < matriz[i].length; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;matriz[i][j] = <span class="number">0</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <span class="comment">// Mais claro</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> linha = <span class="number">0</span>; linha < matriz.length; linha++) {<br>
+                    &nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> coluna = <span class="number">0</span>; coluna < matriz[linha].length; coluna++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;matriz[linha][coluna] = <span class="number">0</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+                
+                <h3>Inicialização Explícita</h3>
+                <p>Sempre inicialize seus arrays explicitamente, mesmo que Java atribua valores padrão. Isso torna o código mais legível e evita surpresas:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Boa prática: inicialização explícita</span><br>
+                    <span class="keyword">int</span>[] contadores = <span class="keyword">new int</span>[<span class="number">10</span>];<br>
+                    Arrays.fill(contadores, <span class="number">0</span>); <span class="comment">// Preenche todos com 0</span><br><br>
+                    <span class="comment">// Para matrizes</span><br>
+                    <span class="keyword">int</span>[][] matriz = <span class="keyword">new int</span>[<span class="number">5</span>][<span class="number">5</span>];<br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span>[] linha : matriz) {<br>
+                    &nbsp;&nbsp;Arrays.fill(linha, <span class="number">0</span>);<br>
+                    }
+                </div>
+                
+                <h3>Evitar Valores Mágicos (Usar Constantes)</h3>
+                <p>Valores mágicos são números literais no código sem explicação. É melhor usar constantes com nomes significativos:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Ruim: valores mágicos</span><br>
+                    <span class="keyword">int</span>[][] tabuleiro = <span class="keyword">new int</span>[<span class="number">8</span>][<span class="number">8</span>];<br>
+                    <span class="keyword">if</span> (posicaoX >= <span class="number">0</span> && posicaoX < <span class="number">8</span> && posicaoY >= <span class="number">0</span> && posicaoY < <span class="number">8</span>) {<br>
+                    &nbsp;&nbsp;<span class="comment">// ...</span><br>
+                    }<br><br>
+                    <span class="comment">// Bom: usando constantes</span><br>
+                    <span class="keyword">public static final int</span> TAMANHO_TABULEIRO = <span class="number">8</span>;<br><br>
+                    <span class="keyword">int</span>[][] tabuleiro = <span class="keyword">new int</span>[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];<br>
+                    <span class="keyword">if</span> (posicaoX >= <span class="number">0</span> && posicaoX < TAMANHO_TABULEIRO && <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;posicaoY >= <span class="number">0</span> && posicaoY < TAMANHO_TABULEIRO) {<br>
+                    &nbsp;&nbsp;<span class="comment">// ...</span><br>
+                    }
+                </div>
+                
+                <h3>Validar Índices Antes do Acesso</h3>
+                <p>Para evitar <code>ArrayIndexOutOfBoundsException</code>, sempre valide os índices antes de acessar os elementos, especialmente quando os índices vêm de entrada do usuário ou cálculos:</p>
+                
+                <div class="code-block">
+                    <span class="keyword">int</span>[] vetor = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>};<br>
+                    <span class="keyword">int</span> indice = <span class="number">5</span>; <span class="comment">// Índice inválido</span><br><br>
+                    <span class="comment">// Boa prática: validar antes de acessar</span><br>
+                    <span class="keyword">if</span> (indice >= <span class="number">0</span> && indice < vetor.length) {<br>
+                    &nbsp;&nbsp;System.out.println(vetor[indice]);<br>
+                    } <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;System.out.println(<span class="string">"Índice inválido!"</span>);<br>
+                    }
+                </div>
+                
+                <h3>Usar Enhanced For-Loop Quando Possível</h3>
+                <p>Quando você só precisa percorrer os elementos sem precisar do índice, use o enhanced for-loop (for-each) para código mais limpo:</p>
+                
+                <div class="code-block">
+                    <span class="keyword">int</span>[] numeros = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};<br>
+                    <span class="keyword">int</span> soma = <span class="number">0</span>;<br><br>
+                    <span class="comment">// Mais limpo com for-each</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> numero : numeros) {<br>
+                    &nbsp;&nbsp;soma += numero;<br>
+                    }<br><br>
+                    <span class="comment">// Menos limpo com for tradicional</span><br>
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < numeros.length; i++) {<br>
+                    &nbsp;&nbsp;soma += numeros[i];<br>
+                    }
+                </div>
+                
+                <h3>Documentar Arrays Complexos</h3>
+                <p>Para arrays multidimensionais ou com significado específico, documente a estrutura e o propósito de cada dimensão:</p>
+                
+                <div class="code-block">
+                    <span class="comment">/**</span><br>
+                    <span class="comment"> * Matriz de notas onde:</span><br>
+                    <span class="comment"> * - Primeira dimensão: índice do aluno (0 a 29)</span><br>
+                    <span class="comment"> * - Segunda dimensão: índice da disciplina (0 a 4)</span><br>
+                    <span class="comment"> */</span><br>
+                    <span class="keyword">double</span>[][] notasAlunos = <span class="keyword">new double</span>[<span class="number">30</span>][<span class="number">5</span>];
+                </div>
+                
+                <h3>Considerar o Uso de Collections para Tamanhos Dinâmicos</h3>
+                <p>Se você precisa de uma estrutura que possa crescer dinamicamente, considere usar Collections como ArrayList em vez de arrays:</p>
+                
+                <div class="code-block">
+                    <span class="comment">// Com array (tamanho fixo)</span><br>
+                    <span class="keyword">int</span>[] numeros = <span class="keyword">new int</span>[<span class="number">10</span>]; <span class="comment">// Tamanho fixo</span><br><br>
+                    <span class="comment">// Com ArrayList (tamanho dinâmico)</span><br>
+                    ArrayList<Integer> numeros = <span class="keyword">new</span> ArrayList<>();<br>
+                    numeros.add(<span class="number">10</span>); <span class="comment">// Adiciona elementos dinamicamente</span><br>
+                    numeros.add(<span class="number">20</span>);<br>
+                    numeros.add(<span class="number">30</span>);
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Atenção</h4>
+                    <p>Arrays são mais eficientes em termos de memória e performance para tamanhos fixos, mas Collections são mais flexíveis para tamanhos variáveis.</p>
+                </div>
+                
+                <div class="activity">
+                    <h3>Atividade Prática</h3>
+                    <p>Reescreva o código abaixo aplicando as boas práticas que aprendemos:</p>
+                    <div class="code-block">
+                        <span class="keyword">public class</span> ExemploRuim {<br>
+                        &nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] v = <span class="keyword">new int</span>[<span class="number">10</span>];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10</span>; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v[i] = i * <span class="number">2</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> soma = <span class="number">0</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10</span>; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma += v[i];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Soma: "</span> + soma);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <div class="input-group">
+                        <label for="melhorCodigo">Código melhorado:</label>
+                        <textarea id="melhorCodigo" rows="20" placeholder="Reescreva o código aplicando as boas práticas..."></textarea>
+                    </div>
+                    <button id="checkBoasPraticas" class="btn">Verificar Código</button>
+                    <div id="boasPraticasFeedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; Estruturas Sequenciais em Java - Material educativo</p>
+        </div>
+    </footer>
+    <script>
+        // Navegação entre tópicos
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const topicSections = document.querySelectorAll('.topic-section');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTopic = tab.getAttribute('data-topic');
+                
+                // Remove classe active de todas as abas e seções
+                navTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                topicSections.forEach(section => section.classList.remove('active'));
+                
+                // Adiciona classe active na aba e seção correspondentes
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(targetTopic).classList.add('active');
+            });
+        });
+        
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+        
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        
+        // Atividade 1: Situações para estruturas sequenciais
+        const checkSituationsBtn = document.getElementById('checkSituations');
+        if (checkSituationsBtn) {
+            checkSituationsBtn.addEventListener('click', () => {
+                const sit1 = document.getElementById('sit1').value;
+                const sit2 = document.getElementById('sit2').value;
+                const sit3 = document.getElementById('sit3').value;
+                
+                const feedback = document.getElementById('situationsFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = sit1 === 'double';
+                const correct2 = sit2 === 'String';
+                const correct3 = sit3 === 'boolean';
+                
+                if (correct1 && correct2 && correct3) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você identificou todos os tipos corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Algumas respostas estão incorretas. ';
+                    if (!correct1) message += 'Para notas de alunos, use double[]. ';
+                    if (!correct2) message += 'Para nomes de alunos, use String[]. ';
+                    if (!correct3) message += 'Para presença, use boolean[]. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        
+        // Atividade 2: Código Vetor
+        const checkVetorCodeBtn = document.getElementById('checkVetorCode');
+        if (checkVetorCodeBtn) {
+            checkVetorCodeBtn.addEventListener('click', () => {
+                const valores = document.getElementById('valores').value.trim();
+                const soma = document.getElementById('soma').value.trim();
+                const contador = document.getElementById('contador').value.trim();
+                const condicao = document.getElementById('condicao').value.trim();
+                const operacaoSoma = document.getElementById('operacaoSoma').value.trim();
+                const operacaoContador = document.getElementById('operacaoContador').value.trim();
+                const calculoMedia = document.getElementById('calculoMedia').value.trim();
+                
+                const feedback = document.getElementById('vetorCodeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctValores = valores.includes('2.5') && valores.includes('-1.5') && valores.includes('3.0') && valores.includes('4.2');
+                const correctSoma = soma === '0';
+                const correctContador = contador === '0';
+                const correctCondicao = condicao === '> 0';
+                const correctOperacaoSoma = operacaoSoma === '+=';
+                const correctOperacaoContador = operacaoContador === '++';
+                const correctCalculoMedia = calculoMedia === 'soma / contador';
+                
+                if (correctValores && correctSoma && correctContador && correctCondicao && 
+                    correctOperacaoSoma && correctOperacaoContador && correctCalculoMedia) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctValores) message += 'Valores do array devem incluir positivos e negativos. ';
+                    if (!correctSoma) message += 'Inicialização da soma: 0. ';
+                    if (!correctContador) message += 'Inicialização do contador: 0. ';
+                    if (!correctCondicao) message += 'Condição: > 0. ';
+                    if (!correctOperacaoSoma) message += 'Operação de soma: +=. ';
+                    if (!correctOperacaoContador) message += 'Operação do contador: ++. ';
+                    if (!correctCalculoMedia) message += 'Cálculo da média: soma / contador. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        
+        // Atividade 3: Código Matriz
+        const checkMatrizCodeBtn = document.getElementById('checkMatrizCode');
+        if (checkMatrizCodeBtn) {
+            checkMatrizCodeBtn.addEventListener('click', () => {
+                const m00 = document.getElementById('m00').value.trim();
+                const m01 = document.getElementById('m01').value.trim();
+                const m02 = document.getElementById('m02').value.trim();
+                const m10 = document.getElementById('m10').value.trim();
+                const m11 = document.getElementById('m11').value.trim();
+                const m12 = document.getElementById('m12').value.trim();
+                const m20 = document.getElementById('m20').value.trim();
+                const m21 = document.getElementById('m21').value.trim();
+                const m22 = document.getElementById('m22').value.trim();
+                const soma = document.getElementById('soma').value.trim();
+                const iInicial = document.getElementById('iInicial').value.trim();
+                const length = document.getElementById('length').value.trim();
+                const operacao = document.getElementById('operacao').value.trim();
+                const indice1 = document.getElementById('indice1').value.trim();
+                const indice2 = document.getElementById('indice2').value.trim();
+                
+                const feedback = document.getElementById('matrizCodeFeedback');
+                feedback.style.display = 'block';
+                
+                const correctMatriz = m00 === '1' && m01 === '2' && m02 === '3' &&
+                                    m10 === '4' && m11 === '5' && m12 === '6' &&
+                                    m20 === '7' && m21 === '8' && m22 === '9';
+                const correctSoma = soma === '0';
+                const correctIInicial = iInicial === '0';
+                const correctLength = length === 'length';
+                const correctOperacao = operacao === '+=';
+                const correctIndice1 = indice1 === 'i';
+                const correctIndice2 = indice2 === 'i';
+                
+                if (correctMatriz && correctSoma && correctIInicial && correctLength &&
+                    correctOperacao && correctIndice1 && correctIndice2) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você completou o código corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Corrija as seguintes partes: ';
+                    if (!correctMatriz) message += 'Valores da matriz incorretos. ';
+                    if (!correctSoma) message += 'Inicialização da soma: 0. ';
+                    if (!correctIInicial) message += 'Inicialização de i: 0. ';
+                    if (!correctLength) message += 'Propriedade: length. ';
+                    if (!correctOperacao) message += 'Operação: +=. ';
+                    if (!correctIndice1 || !correctIndice2) message += 'Índices da diagonal: i e i. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        
+        // Atividade 4: Comparação
+        const checkComparacaoBtn = document.getElementById('checkComparacao');
+        if (checkComparacaoBtn) {
+            checkComparacaoBtn.addEventListener('click', () => {
+                const sit1 = document.getElementById('sit1').value;
+                const sit2 = document.getElementById('sit2').value;
+                const sit3 = document.getElementById('sit3').value;
+                const sit4 = document.getElementById('sit4').value;
+                
+                const feedback = document.getElementById('comparacaoFeedback');
+                feedback.style.display = 'block';
+                
+                const correct1 = sit1 === 'vetor';
+                const correct2 = sit2 === 'matriz';
+                const correct3 = sit3 === 'matriz';
+                const correct4 = sit4 === 'vetor';
+                
+                if (correct1 && correct2 && correct3 && correct4) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você identificou todas as estruturas corretamente.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Algumas respostas estão incorretas. ';
+                    if (!correct1) message += 'Notas de 30 alunos em uma prova: vetor. ';
+                    if (!correct2) message += 'Notas de 30 alunos em 5 provas: matriz. ';
+                    if (!correct3) message += 'Tabuleiro de jogo da velha: matriz. ';
+                    if (!correct4) message += 'Resultados de pesquisa: vetor. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+        
+        // Atividade 5: Boas Práticas
+        const checkBoasPraticasBtn = document.getElementById('checkBoasPraticas');
+        if (checkBoasPraticasBtn) {
+            checkBoasPraticasBtn.addEventListener('click', () => {
+                const melhorCodigo = document.getElementById('melhorCodigo').value.trim();
+                const feedback = document.getElementById('boasPraticasFeedback');
+                feedback.style.display = 'block';
+                
+                // Verificar se o código aplicou as boas práticas
+                const hasConstant = melhorCodigo.includes('final') || melhorCodigo.includes('TAMANHO');
+                const hasLength = melhorCodigo.includes('.length');
+                const hasForEach = melhorCodigo.includes('for (int numero :');
+                const hasClearNames = melhorCodigo.includes('numeros') || melhorCodigo.includes('valores');
+                const hasComments = melhorCodigo.includes('//') || melhorCodigo.includes('/*');
+                
+                const allPracticesApplied = hasConstant && hasLength && (hasForEach || hasClearNames) && hasComments;
+                
+                if (allPracticesApplied) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Excelente! Você aplicou várias boas práticas no seu código.';
+                } else {
+                    feedback.className = 'feedback error';
+                    let message = 'Seu código pode ser melhorado aplicando: ';
+                    if (!hasConstant) message += 'constantes para valores fixos. ';
+                    if (!hasLength) message += 'uso de .length. ';
+                    if (!hasForEach && !hasClearNames) message += 'for-each ou nomes claros. ';
+                    if (!hasComments) message += 'comentários explicativos. ';
+                    feedback.textContent = message;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
