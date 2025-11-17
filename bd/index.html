@@ -3,1337 +3,1489 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 1 - Conceitos Básicos de Banco de Dados</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Portal Completo de Aprendizagem SQL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
     <style>
-        :root {
-            --primary-color: #3B82F6;
-            --secondary-color: #10B981;
-            --accent-color: #F59E0B;
-            --dark-bg: #1F2937;
-            --light-bg: #F3F4F6;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        * {
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #9b59b6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
             scroll-behavior: smooth;
         }
 
-        .dark {
-            --light-bg: #111827;
-            --dark-bg: #374151;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .card-hover {
-            transition: all 0.3s ease;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--warning);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-menu button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .progress-bar {
-            transition: width 0.3s ease;
-        }
-
-        .sidebar-item {
-            transition: all 0.2s ease;
-        }
-
-        .sidebar-item:hover {
-            padding-left: 1.5rem;
-        }
-
-        .code-example {
-            border-radius: 0.5rem;
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .table-animation {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .quiz-option {
-            transition: all 0.2s ease;
-        }
-
-        .quiz-option:hover {
-            transform: scale(1.02);
-        }
-
-        .quiz-option.correct {
-            background-color: #10B981 !important;
-            color: white !important;
-        }
-
-        .quiz-option.incorrect {
-            background-color: #EF4444 !important;
-            color: white !important;
-        }
-
-        .highlight {
-            background-color: #FEF3C7;
-            padding: 2px 4px;
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
             border-radius: 4px;
-        }
-
-        .dark .highlight {
-            background-color: #451A03;
-        }
-
-        .module-badge {
-            background: linear-gradient(45deg, #3B82F6, #8B5CF6);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .objective-card {
-            border-left: 4px solid #3B82F6;
-        }
-
-        .activity-card {
-            border-left: 4px solid #10B981;
-        }
-
-        .material-card {
-            border-left: 4px solid #F59E0B;
-        }
-
-        /* Ajustes para o menu lateral */
-        .sidebar-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 16rem;
-            z-index: 30;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        }
-
-        .sidebar-container.open {
-            transform: translateX(0);
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 20;
-            display: none;
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-        }
-
-        @media (min-width: 1024px) {
-            .sidebar-container {
-                transform: translateX(0);
-                z-index: 10;
-            }
-            
-            .sidebar-overlay {
-                display: none !important;
-            }
+            transition: width 0.5s ease;
         }
 
         .main-content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease;
-            padding-top: 5rem;
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
         }
 
-        @media (min-width: 1024px) {
-            .main-content {
-                margin-left: 16rem;
-            }
-        }
-
-        /* Header ajustado */
-        .header-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 40;
+        .sidebar {
+            width: 280px;
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
         }
 
-        .sidebar-header {
-            display: none;
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            background: #f9fafb;
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
         }
 
-        @media (min-width: 1024px) {
-            .sidebar-header {
-                display: block;
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+        }
+
+        .module-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            background: var(--light);
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .module-link.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .module-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .module-status {
+            margin-left: auto;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        .module-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+            scroll-margin-top: 100px;
+        }
+
+        .module-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .module-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .module-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lesson {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .lesson h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .lesson p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .lesson ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .lesson li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: var(--dark);
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "SQL";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .code-block code {
+            display: block;
+            line-height: 1.5;
+        }
+
+        .key-point {
+            background: #e8f4fc;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .key-point h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .key-point.warning {
+            background: #fef5e7;
+            border-left-color: var(--warning);
+        }
+
+        .key-point.warning h4 {
+            color: var(--warning);
+        }
+
+        .key-point.success {
+            background: #eafaf1;
+            border-left-color: var(--success);
+        }
+
+        .key-point.success h4 {
+            color: var(--success);
+        }
+
+        .quiz-section {
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-header h3 {
+            color: var(--primary);
+        }
+
+        .quiz-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #27ae60;
+        }
+
+        .resources {
+            margin-top: 30px;
+        }
+
+        .resources h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .resource-card p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .resource-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        .module-completion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light);
+        }
+
+        .completion-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .completion-btn:hover {
+            background: #27ae60;
+        }
+
+        .completion-btn.completed {
+            background: var(--info);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
             }
         }
 
-        /* Ajuste para o conteúdo não ficar atrás do header */
-        .content-section {
-            scroll-margin-top: 6rem;
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .module-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .resource-list {
+                grid-template-columns: 1fr;
+            }
         }
+
+        /* Module specific colors */
+        .module-1 { border-left: 5px solid #3498db; }
+        .module-2 { border-left: 5px solid #e74c3c; }
+        .module-3 { border-left: 5px solid #2ecc71; }
+        .module-4 { border-left: 5px solid #f39c12; }
+        .module-5 { border-left: 5px solid #9b59b6; }
+        .module-6 { border-left: 5px solid #1abc9c; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Barra de Progresso -->
-    <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 z-50">
-        <div id="progressBar" class="progress-bar h-full bg-blue-500" style="width: 0%"></div>
-    </div>
-
-    <!-- Header -->
-    <div class="header-wrapper">
-        <div class="bg-white dark:bg-gray-800 transition-colors duration-300">
-            <div class="container mx-auto px-4 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <button id="menuToggle" class="text-gray-600 dark:text-gray-300 lg:hidden">
-                            <i class="fas fa-bars text-2xl"></i>
-                        </button>
-                        <div>
-                            <span class="module-badge">Módulo 1</span>
-                            <h1 class="text-xl font-bold text-gray-800 dark:text-white mt-1">Conceitos Básicos de Banco de Dados</h1>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <h1>Portal Completo de Aprendizagem SQL</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="progress-container">
+                        <span>Seu progresso:</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="mainProgress"></div>
                         </div>
+                        <span id="progressText">0%</span>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <button id="searchToggle" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
-                            <i class="fas fa-search text-xl"></i>
-                        </button>
-                        <button id="darkModeToggle" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
-                            <i class="fas fa-moon text-xl"></i>
-                        </button>
-                    </div>
+                    <button><i class="fas fa-user"></i> Perfil</button>
                 </div>
             </div>
         </div>
+    </header>
 
-        <!-- Barra de Busca -->
-        <div id="searchBar" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 hidden">
-            <div class="container mx-auto px-4 py-3">
-                <input type="text" id="searchInput" placeholder="Buscar no conteúdo..." 
-                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-        </div>
-    </div>
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Módulos do Curso</h2>
+                <ul class="module-list">
+                    <li class="module-item">
+                        <a href="#modulo1" class="module-link" data-module="1">
+                            <i class="fas fa-book-open"></i>
+                            <span>Módulo 1 – Fundamentos</span>
+                            <span class="module-status" id="status1">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo2" class="module-link" data-module="2">
+                            <i class="fas fa-cogs"></i>
+                            <span>Módulo 2 – DDL</span>
+                            <span class="module-status" id="status2">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo3" class="module-link" data-module="3">
+                            <i class="fas fa-table"></i>
+                            <span>Módulo 3 – Tabelas</span>
+                            <span class="module-status" id="status3">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo4" class="module-link" data-module="4">
+                            <i class="fas fa-database"></i>
+                            <span>Módulo 4 – Tipos de Dados</span>
+                            <span class="module-status" id="status4">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo5" class="module-link" data-module="5">
+                            <i class="fas fa-lock"></i>
+                            <span>Módulo 5 – Restrições</span>
+                            <span class="module-status" id="status5">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo6" class="module-link" data-module="6">
+                            <i class="fas fa-search"></i>
+                            <span>Módulo 6 – Índices</span>
+                            <span class="module-status" id="status6">Pendente</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
 
-    <!-- Overlay para mobile -->
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
-
-    <!-- Sidebar Container -->
-    <div id="sidebarContainer" class="sidebar-container dark:bg-gray-800">
-        <div class="sidebar-header">
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Navegação</h2>
-        </div>
-        <nav class="p-4">
-            <ul class="space-y-2">
-                <li><a href="#objetivos" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-bullseye mr-2"></i>Objetivos de Aprendizagem
-                </a></li>
-                <li><a href="#conteudo" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-book mr-2"></i>Conteúdo do Módulo
-                </a></li>
-                <li><a href="#atividades" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-tasks mr-2"></i>Atividades
-                </a></li>
-                <li><a href="#materiais" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-folder-open mr-2"></i>Materiais de Apoio
-                </a></li>
-                <li><a href="#quiz" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-question-circle mr-2"></i>Mini Quiz
-                </a></li>
-                <li><a href="#glossario" class="sidebar-item block px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                    <i class="fas fa-bookmark mr-2"></i>Glossário
-                </a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container mx-auto max-w-6xl px-6">
-            <!-- Hero Section -->
-            <section class="gradient-bg rounded-2xl p-8 mb-8 text-white">
-                <h2 class="text-4xl font-bold mb-4">Módulo 1 - Conceitos Básicos</h2>
-                <p class="text-xl mb-6">Fundamentos essenciais para entender o mundo dos bancos de dados</p>
-            </section>
-
-            <!-- Objetivos de Aprendizagem -->
-            <section id="objetivos" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-bullseye mr-3 text-blue-500"></i>
-                    Objetivos de Aprendizagem
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 objective-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-lightbulb text-blue-600 dark:text-blue-300 text-xl"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Compreensão</h3>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            Compreender o que é banco de dados e como ele se relaciona com sistemas de informação.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 objective-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-search text-green-600 dark:text-green-300 text-xl"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Identificação</h3>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            Identificar os elementos fundamentais que compõem um banco de dados.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 objective-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-chart-line text-purple-600 dark:text-purple-300 text-xl"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Reconhecimento</h3>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            Reconhecer as vantagens do uso de um SGBD em comparação a arquivos tradicionais.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Conteúdo do Módulo -->
-            <section id="conteudo" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-book mr-3 text-green-500"></i>
-                    Conteúdo do Módulo
-                </h2>
-
-                <!-- 1.1 Banco de dados, SGBD e sistema de banco de dados -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                        1.1 Banco de dados, SGBD e sistema de banco de dados
-                    </h3>
-                    
-                    <div class="grid md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-lg p-6">
-                            <h4 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-3">
-                                <i class="fas fa-database mr-2"></i>Banco de Dados (BD)
-                            </h4>
-                            <p class="text-blue-700 dark:text-blue-300 mb-3">
-                                Uma coleção organizada de dados inter-relacionados, representando informações sobre um domínio específico.
-                            </p>
-                            <div class="bg-blue-100 dark:bg-blue-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplo:</strong> Lista de clientes de uma empresa</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-lg p-6">
-                            <h4 class="text-xl font-semibold text-green-800 dark:text-green-200 mb-3">
-                                <i class="fas fa-cogs mr-2"></i>SGBD
-                            </h4>
-                            <p class="text-green-700 dark:text-green-300 mb-3">
-                                <span class="highlight">Sistema de Gerenciamento de Banco de Dados</span> - Software que permite criar, manipular e administrar o BD.
-                            </p>
-                            <div class="bg-green-100 dark:bg-green-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplos:</strong> MySQL, PostgreSQL, Oracle</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-lg p-6">
-                            <h4 class="text-xl font-semibold text-purple-800 dark:text-purple-200 mb-3">
-                                <i class="fas fa-project-diagram mr-2"></i>Sistema de BD
-                            </h4>
-                            <p class="text-purple-700 dark:text-purple-300 mb-3">
-                                Conjunto completo incluindo BD, SGBD, usuários, aplicações e procedimentos.
-                            </p>
-                            <div class="bg-purple-100 dark:bg-purple-800 p-3 rounded">
-                                <p class="text-sm"><strong>Componentes:</strong> Dados + Software + Hardware + Usuários</p>
-                            </div>
+            <main class="content-area">
+                <!-- Módulo 1 -->
+                <section id="modulo1" class="module-section module-1">
+                    <div class="module-header">
+                        <h2>Módulo 1 – Fundamentos de SQL</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
                         </div>
                     </div>
 
-                    <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-6">
-                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Relação entre os Componentes</h4>
-                        <div class="flex flex-col items-center space-y-4">
-                            <div class="w-full max-w-md bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
-                                <p class="font-semibold text-blue-600 dark:text-blue-400">Aplicações / Usuários</p>
-                            </div>
-                            <i class="fas fa-arrow-down text-2xl text-gray-400"></i>
-                            <div class="w-full max-w-md bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
-                                <p class="font-semibold text-green-600 dark:text-green-400">SGBD (Software)</p>
-                            </div>
-                            <i class="fas fa-arrow-down text-2xl text-gray-400"></i>
-                            <div class="w-full max-w-md bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
-                                <p class="font-semibold text-purple-600 dark:text-purple-400">Banco de Dados (Dados)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 1.2 Vantagens de usar um SGBD -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                        1.2 Vantagens de usar um SGBD
-                    </h3>
-
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-6">
-                            <h4 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
-                                <i class="fas fa-compress-alt mr-2"></i>Controle de Redundância
-                            </h4>
-                            <p class="text-blue-700 dark:text-blue-300 mb-3">
-                                Evita duplicação desnecessária de dados, economizando espaço e garantindo consistência.
-                            </p>
-                            <div class="bg-blue-100 dark:bg-blue-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplo:</strong> Dados do cliente armazenados uma única vez</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-green-50 dark:bg-green-900 rounded-lg p-6">
-                            <h4 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
-                                <i class="fas fa-shield-alt mr-2"></i>Segurança
-                            </h4>
-                            <p class="text-green-700 dark:text-green-300 mb-3">
-                                Controle de acesso granular com diferentes níveis de permissão para usuários.
-                            </p>
-                            <div class="bg-green-100 dark:bg-green-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplo:</strong> Apenas RH pode ver salários</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-purple-50 dark:bg-purple-900 rounded-lg p-6">
-                            <h4 class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-3">
-                                <i class="fas fa-check-double mr-2"></i>Integridade
-                            </h4>
-                            <p class="text-purple-700 dark:text-purple-300 mb-3">
-                                Garante que os dados sigam regras de negócio e restrições definidas.
-                            </p>
-                            <div class="bg-purple-100 dark:bg-purple-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplo:</strong> Impedir idade negativa</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-red-50 dark:bg-red-900 rounded-lg p-6">
-                            <h4 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-3">
-                                <i class="fas fa-undo mr-2"></i>Recuperação
-                            </h4>
-                            <p class="text-red-700 dark:text-red-300 mb-3">
-                                Mecanismos de backup e recuperação automáticos em caso de falhas.
-                            </p>
-                            <div class="bg-red-100 dark:bg-red-800 p-3 rounded">
-                                <p class="text-sm"><strong>Exemplo:</strong> Restaurar após queda de energia</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 bg-yellow-50 dark:bg-yellow-900 rounded-lg p-6">
-                        <h4 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-3">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>Comparação: Arquivos Tradicionais vs SGBD
-                        </h4>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead>
-                                    <tr class="bg-yellow-100 dark:bg-yellow-800">
-                                        <th class="p-3 text-left">Aspecto</th>
-                                        <th class="p-3 text-left">Arquivos Tradicionais</th>
-                                        <th class="p-3 text-left">SGBD</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b dark:border-yellow-800">
-                                        <td class="p-3 font-semibold">Redundância</td>
-                                        <td class="p-3 text-red-600">Alta</td>
-                                        <td class="p-3 text-green-600">Controlada</td>
-                                    </tr>
-                                    <tr class="border-b dark:border-yellow-800">
-                                        <td class="p-3 font-semibold">Acesso</td>
-                                        <td class="p-3 text-red-600">Sequencial</td>
-                                        <td class="p-3 text-green-600">Aleatório/Otimizado</td>
-                                    </tr>
-                                    <tr class="border-b dark:border-yellow-800">
-                                        <td class="p-3 font-semibold">Segurança</td>
-                                        <td class="p-3 text-red-600">Limitada</td>
-                                        <td class="p-3 text-green-600">Avançada</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-3 font-semibold">Concorrência</td>
-                                        <td class="p-3 text-red-600">Não suportada</td>
-                                        <td class="p-3 text-green-600">Suportada</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 1.3 Elementos Fundamentais -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                        1.3 Elementos Fundamentais
-                    </h3>
-
-                    <!-- Campos, Registros, Tabelas -->
-                    <div class="mb-8">
-                        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Campos, Registros e Tabelas</h4>
-                        <div class="grid md:grid-cols-3 gap-4 mb-6">
-                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                <h5 class="font-semibold mb-2 text-blue-600 dark:text-blue-400">
-                                    <i class="fas fa-th mr-2"></i>Campos (Colunas)
-                                </h5>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">
-                                    Unidades básicas de informação que representam características específicas.
-                                </p>
-                            </div>
-                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                <h5 class="font-semibold mb-2 text-green-600 dark:text-green-400">
-                                    <i class="fas fa-list mr-2"></i>Registros (Linhas)
-                                </h5>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">
-                                    Conjunto de valores que representam uma instância completa de dados.
-                                </p>
-                            </div>
-                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                <h5 class="font-semibold mb-2 text-purple-600 dark:text-purple-400">
-                                    <i class="fas fa-border-all mr-2"></i>Tabelas
-                                </h5>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">
-                                    Estrutura que organiza dados em linhas e colunas.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-auto border-collapse table-animation">
-                                <thead>
-                                    <tr class="bg-gray-200 dark:bg-gray-700">
-                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                                            <i class="fas fa-key text-yellow-500 mr-1"></i>ID
-                                        </th>
-                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Nome</th>
-                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Email</th>
-                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Idade</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold">1</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">João Silva</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">joao@email.com</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">28</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold">2</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Maria Santos</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">maria@email.com</td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">32</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Índices -->
-                    <div class="mb-8">
-                        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Índices</h4>
-                        <div class="bg-orange-50 dark:bg-orange-900 rounded-lg p-6">
-                            <p class="text-orange-700 dark:text-orange-300 mb-4">
-                                Estruturas que melhoram a velocidade de operações de recuperação de dados, funcionando como o índice de um livro.
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <h5 class="font-semibold mb-2">Benefícios</h5>
-                                    <ul class="text-sm space-y-1 text-orange-600 dark:text-orange-400">
-                                        <li>• Buscas mais rápidas</li>
-                                        <li>• Ordenação eficiente</li>
-                                        <li>• Melhora performance de JOINs</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold mb-2">Desvantagens</h5>
-                                    <ul class="text-sm space-y-1 text-orange-600 dark:text-orange-400">
-                                        <li>• Consome espaço extra</li>
-                                        <li>• Lentidão em inserções</li>
-                                        <li>• Requer manutenção</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tipos de Chaves -->
-                    <div class="mb-8">
-                        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Tipos de Chaves</h4>
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <div class="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-yellow-800 dark:text-yellow-200">
-                                    <i class="fas fa-crown mr-2"></i>Chave Primária (PK)
-                                </h5>
-                                <p class="text-sm text-yellow-700 dark:text-yellow-300">
-                                    Identifica exclusivamente cada registro. Única e não nula.
-                                </p>
-                            </div>
-                            <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-blue-800 dark:text-blue-200">
-                                    <i class="fas fa-link mr-2"></i>Chave Estrangeira (FK)
-                                </h5>
-                                <p class="text-sm text-blue-700 dark:text-blue-300">
-                                    Referencia PK de outra tabela. Estabelece relacionamentos.
-                                </p>
-                            </div>
-                            <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-green-800 dark:text-green-200">
-                                    <i class="fas fa-star mr-2"></i>Chave Candidata
-                                </h5>
-                                <p class="text-sm text-green-700 dark:text-green-300">
-                                    Qualquer coluna que poderia servir como PK.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Integridade -->
-                    <div>
-                        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Tipos de Integridade</h4>
-                        <div class="space-y-4">
-                            <div class="bg-red-50 dark:bg-red-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-red-800 dark:text-red-200">
-                                    <i class="fas fa-ban mr-2"></i>Integridade de Entidade
-                                </h5>
-                                <p class="text-sm text-red-700 dark:text-red-300">
-                                    Garante que cada tabela tenha uma PK única e não nula. Nenhum registro duplicado.
-                                </p>
-                            </div>
-                            <div class="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-blue-800 dark:text-blue-200">
-                                    <i class="fas fa-link mr-2"></i>Integridade Referencial
-                                </h5>
-                                <p class="text-sm text-blue-700 dark:text-blue-300">
-                                    Assegura que FKs sempre referenciem PKs válidas existentes.
-                                </p>
-                            </div>
-                            <div class="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-                                <h5 class="font-semibold mb-2 text-green-800 dark:text-green-200">
-                                    <i class="fas fa-check-double mr-2"></i>Integridade de Domínio
-                                </h5>
-                                <p class="text-sm text-green-700 dark:text-green-300">
-                                    Especifica que valores em uma coluna pertençam a um domínio definido (tipo, formato, intervalo).
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Atividades -->
-            <section id="atividades" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-tasks mr-3 text-green-500"></i>
-                    Atividades
-                </h2>
-
-                <div class="space-y-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 activity-card">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-                            <i class="fas fa-book-reader mr-2"></i>Leitura Introdutória
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Leia os seguintes artigos introdutórios sobre banco de dados para ampliar seu entendimento:
-                        </p>
-                        <div class="space-y-3">
-                            <div class="flex items-start">
-                                <i class="fas fa-file-alt text-blue-500 mt-1 mr-3"></i>
-                                <div>
-                                    <p class="font-semibold">"Introdução a Bancos de Dados"</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Artigo cobrindo conceitos fundamentais e evolução histórica</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <i class="fas fa-file-alt text-blue-500 mt-1 mr-3"></i>
-                                <div>
-                                    <p class="font-semibold">"SGBDs: O Coração dos Sistemas Modernos"</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Análise da importância dos sistemas de gerenciamento</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                            <i class="fas fa-external-link-alt mr-2"></i>Acessar Materiais
-                        </button>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 activity-card">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-                            <i class="fas fa-search mr-2"></i>Exercício Prático: Identificando Bancos de Dados
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Identifique e liste pelo menos 5 exemplos de bancos de dados que você utiliza no seu cotidiano. Para cada exemplo, descreva:
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 mb-4 space-y-1">
-                            <li>Onde o banco de dados é utilizado</li>
-                            <li>Que tipo de informações ele armazena</li>
-                            <li>Qual o SGBD provável por trás (se souber)</li>
+                    <div class="lesson">
+                        <h3>Conceito de Linguagem de Consulta Estruturada (SQL)</h3>
+                        <p>SQL (Structured Query Language) é uma linguagem padrão para gerenciar e manipular bancos de dados relacionais. Desenvolvida na década de 1970 pela IBM, tornou-se o padrão ISO para sistemas de gerenciamento de banco de dados.</p>
+                        <p>SQL permite que você:</p>
+                        <ul>
+                            <li>Consultar dados de um banco de dados</li>
+                            <li>Inserir, atualizar e excluir registros</li>
+                            <li>Criar e modificar estruturas de banco de dados</li>
+                            <li>Controlar o acesso aos dados</li>
                         </ul>
-                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                            <p class="font-semibold mb-2">Exemplos para inspiração:</p>
-                            <div class="grid md:grid-cols-2 gap-4 text-sm">
-                                <div>
-                                    <p><strong>• Redes Sociais:</strong> Facebook, Instagram</p>
-                                    <p><strong>• E-commerce:</strong> Amazon, Mercado Livre</p>
-                                </div>
-                                <div>
-                                    <p><strong>• Bancos:</strong> Aplicativos bancários</p>
-                                    <p><strong>• Streaming:</strong> Netflix, Spotify</p>
-                                </div>
-                            </div>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>SQL é declarativa, não procedural. Você especifica o que deseja, não como obtê-lo.</p>
                         </div>
-                        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                            <i class="fas fa-download mr-2"></i>Baixar Template
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Categorias de comandos SQL</h3>
+                        <p>Os comandos SQL são divididos em várias categorias funcionais:</p>
+                        <ul>
+                            <li><strong>DQL (Data Query Language)</strong> - SELECT: para consultar dados</li>
+                            <li><strong>DML (Data Manipulation Language)</strong> - INSERT, UPDATE, DELETE: para manipular dados</li>
+                            <li><strong>DDL (Data Definition Language)</strong> - CREATE, ALTER, DROP: para definir estruturas</li>
+                            <li><strong>DCL (Data Control Language)</strong> - GRANT, REVOKE: para controlar acessos</li>
+                            <li><strong>TCL (Transaction Control Language)</strong> - COMMIT, ROLLBACK: para gerenciar transações</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo de DQL
+SELECT nome, email FROM clientes WHERE status = 'ativo';
+
+-- Exemplo de DML
+UPDATE produtos SET preco = preco * 1.1 WHERE categoria = 'eletrônicos';</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Estrutura básica de instruções</h3>
+                        <p>A maioria das instruções SQL segue uma estrutura padrão:</p>
+                        <div class="code-block">
+                            <code>SELECT coluna1, coluna2
+FROM tabela
+WHERE condição
+GROUP BY coluna
+HAVING condição_grupo
+ORDER BY coluna
+LIMIT número;</code>
+                        </div>
+                        <p>Componentes principais:</p>
+                        <ul>
+                            <li><strong>SELECT</strong> - Especifica as colunas a serem retornadas</li>
+                            <li><strong>FROM</strong> - Especifica a tabela de origem</li>
+                            <li><strong>WHERE</strong> - Filtra registros baseados em condições</li>
+                            <li><strong>GROUP BY</strong> - Agrupa registros por colunas</li>
+                            <li><strong>ORDER BY</strong> - Ordena os resultados</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Primeiros passos com SQL</h3>
+                        <p>Para começar a usar SQL, você precisa:</p>
+                        <ul>
+                            <li>Instalar um sistema de gerenciamento de banco de dados (MySQL, PostgreSQL, SQL Server, etc.)</li>
+                            <li>Conectar-se ao banco de dados usando uma ferramenta cliente</li>
+                            <li>Criar um banco de dados e tabelas</li>
+                            <li>Inserir dados e começar a fazer consultas</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Criando um banco de dados
+CREATE DATABASE meu_banco;
+
+-- Usando o banco de dados
+USE meu_banco;
+
+-- Criando uma tabela simples
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(1)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre fundamentos de SQL para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(1)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
                         </button>
                     </div>
+                </section>
 
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 activity-card">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-                            <i class="fas fa-question-circle mr-2"></i>Mini Quiz de Termos Básicos
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Teste seu conhecimento sobre os termos básicos apresentados neste módulo. O quiz contém 10 questões de múltipla escolha.
-                        </p>
-                        <div class="grid md:grid-cols-2 gap-4 mb-4">
-                            <div class="bg-blue-50 dark:bg-blue-900 p-3 rounded-lg">
-                                <p class="text-sm"><i class="fas fa-clock mr-2"></i>Duração: 15 minutos</p>
-                            </div>
-                            <div class="bg-green-50 dark:bg-green-900 p-3 rounded-lg">
-                                <p class="text-sm"><i class="fas fa-trophy mr-2"></i>Pontuação mínima: 70%</p>
-                            </div>
+                <!-- Módulo 2 -->
+                <section id="modulo2" class="module-section module-2">
+                    <div class="module-header">
+                        <h2>Módulo 2 – Definição de Dados (DDL)</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 45 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
                         </div>
-                        <button onclick="scrollToSection('quiz')" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                            <i class="fas fa-play mr-2"></i>Iniciar Quiz
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução ao DDL</h3>
+                        <p>A Linguagem de Definição de Dados (DDL) é um subconjunto do SQL usado para definir e modificar estruturas de banco de dados. Comandos DDL permitem criar, alterar e excluir objetos como tabelas, índices e esquemas.</p>
+                        <p>Os principais comandos DDL são:</p>
+                        <ul>
+                            <li><strong>CREATE</strong> - Para criar novos objetos</li>
+                            <li><strong>ALTER</strong> - Para modificar objetos existentes</li>
+                            <li><strong>DROP</strong> - Para remover objetos</li>
+                            <li><strong>TRUNCATE</strong> - Para remover todos os dados de uma tabela</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Comandos DDL são autoconfirmáveis - não é possível desfazer suas operações através de ROLLBACK na maioria dos sistemas de banco de dados.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>CREATE: criação de estruturas</h3>
+                        <p>O comando CREATE é usado para criar novos objetos no banco de dados. O objeto mais comum criado com DDL é a tabela.</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE clientes (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    data_cadastro DATE DEFAULT CURRENT_DATE
+);</code>
+                        </div>
+                        <p>Outros objetos que podem ser criados com CREATE:</p>
+                        <ul>
+                            <li><strong>CREATE INDEX</strong> - Para criar índices</li>
+                            <li><strong>CREATE VIEW</strong> - Para criar visualizações</li>
+                            <li><strong>CREATE PROCEDURE</strong> - Para criar procedimentos armazenados</li>
+                            <li><strong>CREATE TRIGGER</strong> - Para criar gatilhos</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>ALTER: modificação de estruturas</h3>
+                        <p>O comando ALTER permite modificar a estrutura de objetos existentes. Com ele, você pode adicionar, modificar ou excluir colunas de uma tabela.</p>
+                        <div class="code-block">
+                            <code>-- Adicionar uma nova coluna
+ALTER TABLE clientes ADD COLUMN telefone VARCHAR(20);
+
+-- Modificar tipo de dados de uma coluna
+ALTER TABLE clientes MODIFY COLUMN nome VARCHAR(150);
+
+-- Excluir uma coluna
+ALTER TABLE clientes DROP COLUMN telefone;</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Alterações em tabelas com grandes volumes de dados podem causar bloqueios e lentidão. Planeje cuidadosamente essas operações.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>DROP: remoção de estruturas</h3>
+                        <p>O comando DROP remove permanentemente objetos do banco de dados. Esta operação é irreversível na maioria dos sistemas.</p>
+                        <div class="code-block">
+                            <code>-- Remover uma tabela
+DROP TABLE clientes;
+
+-- Remover um índice
+DROP INDEX idx_clientes_nome;
+
+-- Remover uma view
+DROP VIEW vw_clientes_ativos;</code>
+                        </div>
+                        <p>Para remover apenas os dados de uma tabela mantendo sua estrutura, use TRUNCATE:</p>
+                        <div class="code-block">
+                            <code>TRUNCATE TABLE log_acessos;</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Cuidado!</h4>
+                            <p>O comando DROP remove permanentemente o objeto e todos os seus dados. Use com extrema cautela.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(2)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre DDL para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(2)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
                         </button>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Materiais de Apoio -->
-            <section id="materiais" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-folder-open mr-3 text-yellow-500"></i>
-                    Materiais de Apoio
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 material-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-red-100 dark:bg-red-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-play-circle text-red-600 dark:text-red-300 text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Vídeo: "O que é um Banco de Dados?"</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Duração: 12 minutos</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Vídeo explicativo que apresenta de forma visual e intuitiva os conceitos fundamentais de bancos de dados, SGBDs e sua importância no mundo atual.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                <i class="fas fa-eye mr-1"></i>2.5k visualizações
-                            </span>
-                            <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                                <i class="fas fa-play mr-2"></i>Assistir
-                            </button>
+                <!-- Módulo 3 -->
+                <section id="modulo3" class="module-section module-3">
+                    <div class="module-header">
+                        <h2>Módulo 3 – Criação e Manipulação de Tabelas</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 50 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 material-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-file-alt text-blue-600 dark:text-blue-300 text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Glossário de Termos Básicos</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">PDF • 15 páginas</p>
-                            </div>
+                    <div class="lesson">
+                        <h3>Sintaxe do CREATE TABLE</h3>
+                        <p>O comando CREATE TABLE é usado para criar novas tabelas no banco de dados. A sintaxe básica inclui o nome da tabela e a definição de suas colunas.</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE nome_tabela (
+    coluna1 tipo_dado [restrições],
+    coluna2 tipo_dado [restrições],
+    ...
+    [restrições_de_tabela]
+);</code>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Documento completo com definições claras e exemplos práticos dos principais termos e conceitos abordados neste módulo.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                <i class="fas fa-download mr-1"></i>1.2k downloads
-                            </span>
-                            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                                <i class="fas fa-download mr-2"></i>Baixar PDF
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 material-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-images text-green-600 dark:text-green-300 text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Infográficos Interativos</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">5 infográficos</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Coleção de infográficos visuais que ilustram conceitos como estrutura de tabelas, relacionamentos e tipos de chaves.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                <i class="fas fa-expand mr-1"></i>Interativo
-                            </span>
-                            <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                                <i class="fas fa-eye mr-2"></i>Visualizar
-                            </button>
+                        <p>Exemplo completo:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE funcionarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    data_nascimento DATE,
+    salario DECIMAL(10,2) CHECK (salario > 0),
+    departamento_id INT,
+    data_contratacao DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
+);</code>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 material-card card-hover">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-full mr-4">
-                                <i class="fas fa-headphones text-purple-600 dark:text-purple-300 text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Podcast: BD para Iniciantes</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">3 episódios • 45 min total</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Série de podcasts em formato de conversa que explica conceitos de banco de dados de forma descontraída e acessível.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                <i class="fas fa-podcast mr-1"></i>Áudio
-                            </span>
-                            <button class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                                <i class="fas fa-play mr-2"></i>Ouvir
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quiz Interativo -->
-            <section id="quiz" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-question-circle mr-3 text-purple-500"></i>
-                    Mini Quiz - Termos Básicos
-                </h2>
-
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    <div class="mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                Questão <span id="currentQuestion">1</span> de <span id="totalQuestions">10</span>
-                            </span>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                Pontuação: <span id="score">0</span>
-                            </span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div id="quizProgress" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+                    <div class="lesson">
+                        <h3>Definição de colunas</h3>
+                        <p>Cada coluna em uma tabela deve ter um nome e um tipo de dados. Além disso, podem ser aplicadas restrições e valores padrão.</p>
+                        <p>Elementos na definição de colunas:</p>
+                        <ul>
+                            <li><strong>Nome da coluna</strong> - Identificador único na tabela</li>
+                            <li><strong>Tipo de dados</strong> - Define o tipo de informação armazenada</li>
+                            <li><strong>Restrições</strong> - Regras que os dados devem seguir</li>
+                            <li><strong>Valor padrão</strong> - Valor usado quando nenhum é especificado</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE produtos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
+    estoque INT DEFAULT 0,
+    ativo BOOLEAN DEFAULT TRUE
+);</code>
                         </div>
                     </div>
 
-                    <div id="quizContainer">
-                        <!-- Questões serão inseridas aqui via JavaScript -->
+                    <div class="lesson">
+                        <h3>Tipos de dados mais comuns</h3>
+                        <p>Os tipos de dados definem que tipo de informação pode ser armazenada em cada coluna:</p>
+                        <ul>
+                            <li><strong>Numéricos</strong>: INT, DECIMAL, FLOAT</li>
+                            <li><strong>Texto</strong>: VARCHAR, CHAR, TEXT</li>
+                            <li><strong>Data/Hora</strong>: DATE, TIME, DATETIME</li>
+                            <li><strong>Booleanos</strong>: BOOLEAN, BIT</li>
+                            <li><strong>Binários</strong>: BLOB, BINARY</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE exemplos (
+    id INT,
+    nome VARCHAR(50),
+    descricao TEXT,
+    preco DECIMAL(10,2),
+    data_criacao DATE,
+    ativo BOOLEAN,
+    imagem BLOB
+);</code>
+                        </div>
                     </div>
 
-                    <div class="mt-6 flex justify-between">
-                        <button id="prevQuestion" class="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition disabled:opacity-50" disabled>
-                            <i class="fas fa-arrow-left mr-2"></i>Anterior
-                        </button>
-                        <button id="nextQuestion" class="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                            Próxima<i class="fas fa-arrow-right ml-2"></i>
+                    <div class="lesson">
+                        <h3>Boas práticas de modelagem física</h3>
+                        <p>Ao criar tabelas, siga estas boas práticas:</p>
+                        <ul>
+                            <li><strong>Use nomes descritivos</strong> - Seja claro e consistente</li>
+                            <li><strong>Defina chaves primárias</strong> - Cada tabela deve ter uma</li>
+                            <li><strong>Normalize dados</strong> - Evite redundância</li>
+                            <li><strong>Use restrições apropriadas</strong> - Garanta integridade dos dados</li>
+                            <li><strong>Documente suas tabelas</strong> - Use comentários quando necessário</li>
+                        </ul>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Use ferramentas de modelagem como ERD (Entity-Relationship Diagram) para planejar suas tabelas antes de implementá-las.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(3)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre criação de tabelas para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(3)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
                         </button>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Glossário -->
-            <section id="glossario" class="mb-12 content-section">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-                    <i class="fas fa-bookmark mr-3 text-indigo-500"></i>
-                    Glossário de Termos
-                </h2>
-
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">A - D</h3>
-                            <div class="space-y-4">
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Banco de Dados (BD)</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Coleção organizada de dados inter-relacionados.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Campo</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Unidade básica de informação em uma tabela.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Chave Candidata</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Atributo que pode servir como chave primária.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Chave Estrangeira (FK)</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Referencia chave primária de outra tabela.</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Chave Primária (PK)</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Identifica exclusivamente cada registro.</p>
-                                </div>
-                            </div>
+                <!-- Módulo 4 -->
+                <section id="modulo4" class="module-section module-4">
+                    <div class="module-header">
+                        <h2>Módulo 4 – Tipos de Dados</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 5 lições</span>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">I - S</h3>
-                            <div class="space-y-4">
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Índice</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Estrutura que otimiza buscas em tabelas.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Integridade de Domínio</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Valores pertencem a um domínio definido.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Integridade de Entidade</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">PK única e não nula para cada registro.</p>
-                                </div>
-                                <div class="border-b dark:border-gray-700 pb-3">
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Integridade Referencial</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">FKs referenciam PKs válidas existentes.</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">SGBD</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Sistema de Gerenciamento de Banco de Dados.</p>
-                                </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Tipos numéricos</h3>
+                        <p>Tipos numéricos são usados para armazenar valores numéricos, sejam inteiros ou decimais:</p>
+                        <ul>
+                            <li><strong>INT</strong> - Números inteiros (-2.147.483.648 a 2.147.483.647)</li>
+                            <li><strong>BIGINT</strong> - Inteiros grandes (-9.223.372.036.854.775.808 a 9.223.372.036.854.775.807)</li>
+                            <li><strong>DECIMAL(p,s)</strong> - Números decimais exatos (p = precisão, s = escala)</li>
+                            <li><strong>FLOAT</strong> - Números de ponto flutuante de precisão simples</li>
+                            <li><strong>DOUBLE</strong> - Números de ponto flutuante de precisão dupla</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    preco DECIMAL(10,2),  -- 10 dígitos totais, 2 decimais
+    peso FLOAT,
+    estoque INT DEFAULT 0
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Tipos de texto</h3>
+                        <p>Tipos de texto armazenam caracteres e strings:</p>
+                        <ul>
+                            <li><strong>CHAR(n)</strong> - String de comprimento fixo (até 255 caracteres)</li>
+                            <li><strong>VARCHAR(n)</strong> - String de comprimento variável (até 65.535 caracteres)</li>
+                            <li><strong>TEXT</strong> - Texto longo (até 65.535 caracteres)</li>
+                            <li><strong>MEDIUMTEXT</strong> - Texto muito longo (até 16.777.215 caracteres)</li>
+                            <li><strong>LONGTEXT</strong> - Texto extremamente longo (até 4.294.967.295 caracteres)</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE artigos (
+    id INT PRIMARY KEY,
+    titulo VARCHAR(200),
+    resumo VARCHAR(500),
+    conteudo TEXT,
+    autor VARCHAR(100)
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Tipos de data e hora</h3>
+                        <p>Esses tipos armazenam informações temporais:</p>
+                        <ul>
+                            <li><strong>DATE</strong> - Data no formato YYYY-MM-DD</li>
+                            <li><strong>TIME</strong> - Hora no formato HH:MM:SS</li>
+                            <li><strong>DATETIME</strong> - Data e hora combinadas</li>
+                            <li><strong>TIMESTAMP</strong> - Data e hora com fuso horário</li>
+                            <li><strong>YEAR</strong> - Ano no formato YYYY</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE eventos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    data_evento DATE,
+    hora_inicio TIME,
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Tipos especiais</h3>
+                        <p>Alguns tipos de dados especiais incluem:</p>
+                        <ul>
+                            <li><strong>BOOLEAN/BOOL</strong> - Valores lógicos (TRUE/FALSE)</li>
+                            <li><strong>ENUM</strong> - Enumeração de valores pré-definidos</li>
+                            <li><strong>SET</strong> - Conjunto de valores pré-definidos</li>
+                            <li><strong>BLOB</strong> - Dados binários grandes</li>
+                            <li><strong>JSON</strong> - Dados no formato JSON</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE usuarios (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    ativo BOOLEAN DEFAULT TRUE,
+    tipo ENUM('admin', 'editor', 'visitante'),
+    preferencias JSON,
+    foto BLOB
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Escolha adequada de tipos de dados</h3>
+                        <p>A escolha correta dos tipos de dados é crucial para:</p>
+                        <ul>
+                            <li><strong>Otimizar espaço</strong> - Use o menor tipo que atenda às necessidades</li>
+                            <li><strong>Garantir integridade</strong> - Tipos adequados previnem erros</li>
+                            <li><strong>Melhorar performance</strong> - Tipos corretos otimizam consultas</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Recomendações</h4>
+                            <p>Use INT para IDs, VARCHAR para textos variáveis, DECIMAL para valores monetários e DATETIME para registros temporais.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(4)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre tipos de dados para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(4)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 5 -->
+                <section id="modulo5" class="module-section module-5">
+                    <div class="module-header">
+                        <h2>Módulo 5 – Restrições (Constraints)</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 45 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 6 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Finalidade das restrições</h3>
+                        <p>Restrições são regras aplicadas a colunas ou tabelas para garantir a integridade dos dados. Elas asseguram que os dados inseridos atendam a critérios específicos.</p>
+                        <p>Principais benefícios das restrições:</p>
+                        <ul>
+                            <li>Garantem consistência dos dados</li>
+                            <li>Previnem inserção de dados inválidos</li>
+                            <li>Definem relacionamentos entre tabelas</li>
+                            <li>Impõem regras de negócio no nível do banco</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Restrições são implementadas no nível do banco de dados, garantindo integridade independentemente da aplicação.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>PRIMARY KEY</h3>
+                        <p>A chave primária identifica exclusivamente cada registro em uma tabela:</p>
+                        <ul>
+                            <li>Deve ser única para cada registro</li>
+                            <li>Não pode conter valores NULL</li>
+                            <li>Uma tabela só pode ter uma chave primária</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Definindo chave primária na criação
+CREATE TABLE clientes (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100)
+);
+
+-- Ou após a criação
+ALTER TABLE clientes ADD PRIMARY KEY (id);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>FOREIGN KEY</h3>
+                        <p>A chave estrangeira estabelece um relacionamento entre duas tabelas:</p>
+                        <ul>
+                            <li>Referencia uma chave primária em outra tabela</li>
+                            <li>Garante integridade referencial</li>
+                            <li>Pode ter ações ON DELETE e ON UPDATE</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE pedidos (
+    id INT PRIMARY KEY,
+    cliente_id INT,
+    data_pedido DATE,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>UNIQUE</h3>
+                        <p>A restrição UNIQUE garante que todos os valores em uma coluna sejam diferentes:</p>
+                        <ul>
+                            <li>Permite valores NULL (diferente de PRIMARY KEY)</li>
+                            <li>Pode ser aplicada a múltiplas colunas</li>
+                            <li>Uma tabela pode ter múltiplas restrições UNIQUE</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>CREATE TABLE usuarios (
+    id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE,
+    cpf VARCHAR(14) UNIQUE
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>NOT NULL e DEFAULT</h3>
+                        <p><strong>NOT NULL</strong> garante que uma coluna não possa conter valores NULL:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT
+);</code>
+                        </div>
+                        <p><strong>DEFAULT</strong> define um valor padrão quando nenhum é especificado:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE pedidos (
+    id INT PRIMARY KEY,
+    status VARCHAR(20) DEFAULT 'pendente',
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>CHECK</h3>
+                        <p>A restrição CHECK garante que os valores em uma coluna atendam a uma condição específica:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE funcionarios (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    salario DECIMAL(10,2) CHECK (salario > 0),
+    idade INT CHECK (idade >= 18)
+);</code>
+                        </div>
+                        <p>Condições complexas também são possíveis:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    preco DECIMAL(10,2),
+    estoque INT,
+    CHECK (preco > 0 AND estoque >= 0)
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(5)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre restrições para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(5)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 6 -->
+                <section id="modulo6" class="module-section module-6">
+                    <div class="module-header">
+                        <h2>Módulo 6 – Índices</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Avançado</span>
+                            <span><i class="fas fa-file-alt"></i> 5 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Conceito de índices</h3>
+                        <p>Índices são estruturas de dados que melhoram a velocidade de operações de recuperação de dados em uma tabela. Funcionam como o índice de um livro, permitindo encontrar informações rapidamente.</p>
+                        <p>Características principais:</p>
+                        <ul>
+                            <li>Estruturas de dados especiais</li>
+                            <li>Armazenam ponteiros para os dados reais</li>
+                            <li>São mantidos automaticamente pelo banco de dados</li>
+                            <li>Ocupam espaço adicional em disco</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Como funcionam</h4>
+                            <p>Índices usam estruturas como B-trees para organizar dados de forma ordenada, permitindo buscas binárias eficientes.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Benefícios e impacto no desempenho</h3>
+                        <p><strong>Benefícios dos índices:</strong></p>
+                        <ul>
+                            <li>Aceleram consultas SELECT</li>
+                            <li>Melhoram performance de JOINs</li>
+                            <li>Otimizam cláusulas WHERE e ORDER BY</li>
+                            <li>Agilizam buscas por valores específicos</li>
+                        </ul>
+                        <p><strong>Impactos negativos:</strong></p>
+                        <ul>
+                            <li>Consomem espaço em disco</li>
+                            <li>Desaceleram operações de INSERT, UPDATE e DELETE</li>
+                            <li>Requerem manutenção adicional</li>
+                        </ul>
+                        <div class="key-point warning">
+                            <h4>Trade-off</h4>
+                            <p>Índices melhoram a leitura mas pioram a escrita. É preciso encontrar o equilíbrio correto.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Criação de índices (CREATE INDEX)</h3>
+                        <p>Para criar um índice, use o comando CREATE INDEX:</p>
+                        <div class="code-block">
+                            <code>-- Criar índice simples
+CREATE INDEX idx_clientes_nome ON clientes(nome);
+
+-- Criar índice composto
+CREATE INDEX idx_pedidos_cliente_data ON pedidos(cliente_id, data_pedido);
+
+-- Criar índice único
+CREATE UNIQUE INDEX idx_emails ON usuarios(email);</code>
+                        </div>
+                        <p>Você também pode criar índices durante a criação da tabela:</p>
+                        <div class="code-block">
+                            <code>CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    categoria VARCHAR(50),
+    INDEX idx_produtos_categoria (categoria)
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Índices únicos</h3>
+                        <p>Índices únicos garantem que não haja valores duplicados nas colunas indexadas:</p>
+                        <ul>
+                            <li>Impõem restrição de unicidade</li>
+                            <li>São automaticamente criados para PRIMARY KEY e UNIQUE</li>
+                            <li>Podem ser criados manualmente</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Criando índice único
+CREATE UNIQUE INDEX idx_cpf ON funcionarios(cpf);
+
+-- Tentativa de inserir duplicata falhará
+INSERT INTO funcionarios (cpf) VALUES ('123.456.789-00');
+INSERT INTO funcionarios (cpf) VALUES ('123.456.789-00'); -- Erro!</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Quando usar e quando evitar índices</h3>
+                        <p><strong>Use índices para:</strong></p>
+                        <ul>
+                            <li>Colunas frequentemente usadas em WHERE</li>
+                            <li>Colunas em cláusulas ORDER BY</li>
+                            <li>Colunas em JOINs</li>
+                            <li>Colunas com alta seletividade (muitos valores distintos)</li>
+                        </ul>
+                        <p><strong>Evite índices para:</strong></p>
+                        <ul>
+                            <li>Tabelas pequenas</li>
+                            <li>Colunas raramente consultadas</li>
+                            <li>Colunas com muitos valores NULL</li>
+                            <li>Tabelas com muitas operações de escrita</li>
+                        </ul>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Use EXPLAIN para analisar o plano de execução das consultas e identificar onde os índices estão sendo utilizados.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(6)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre índices para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(6)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recursos Adicionais -->
+                <section class="module-section">
+                    <div class="module-header">
+                        <h2>Recursos Adicionais</h2>
+                    </div>
+                    <div class="resources">
+                        <div class="resource-list">
+                            <div class="resource-card">
+                                <h4>Documentação Oficial</h4>
+                                <p>Referência completa de comandos SQL</p>
+                                <a href="#">Acessar documentação</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Exercícios Práticos</h4>
+                                <p>Desafios para praticar todos os conceitos</p>
+                                <a href="#">Ver exercícios</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Projetos Completos</h4>
+                                <p>Aplicações reais usando SQL</p>
+                                <a href="#">Explorar projetos</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Certificação</h4>
+                                <p>Obtenha seu certificado de conclusão</p>
+                                <a href="#">Solicitar certificado</a>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </main>
         </div>
-    </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-6">
-            <div class="text-center">
-                <h3 class="text-lg font-semibold mb-2">Módulo 1 - Conceitos Básicos de Banco de Dados</h3>
-                <p class="text-gray-400 mb-4">
-                    Continue sua jornada de aprendizado com os próximos módulos!
-                </p>
-                <div class="flex justify-center space-x-4">
-                    <button class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                        <i class="fas fa-arrow-left mr-2"></i>Módulo Anterior
-                    </button>
-                    <button class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                        Próximo Módulo<i class="fas fa-arrow-right ml-2"></i>
-                    </button>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Portal SQL</h3>
+                    <p>Aprenda SQL de forma estruturada e prática com nosso portal de aprendizagem completo.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Página Inicial</a></li>
+                        <li><a href="#">Todos os Módulos</a></li>
+                        <li><a href="#">Certificações</a></li>
+                        <li><a href="#">Fórum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recursos</h3>
+                    <ul>
+                        <li><a href="#">Documentação</a></li>
+                        <li><a href="#">Exercícios</a></li>
+                        <li><a href="#">Projetos Práticos</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Suporte</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Portal de Ensino de Banco de Dados. Todos os direitos reservados.</p>
+            <div class="copyright">
+                <p>&copy; 2025 Portal de Aprendizagem SQL. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const html = document.documentElement;
-        
-        darkModeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            const icon = darkModeToggle.querySelector('i');
-            icon.classList.toggle('fa-moon');
-            icon.classList.toggle('fa-sun');
-            localStorage.setItem('darkMode', html.classList.contains('dark'));
-        });
+        // Sistema de progresso
+        let completedModules = new Set();
+        const totalModules = 6;
 
-        // Check saved dark mode preference
-        if (localStorage.getItem('darkMode') === 'true') {
-            html.classList.add('dark');
-            darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+        function updateProgress() {
+            const progress = (completedModules.size / totalModules) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
         }
 
-        // Sidebar Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebarContainer = document.getElementById('sidebarContainer');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        
-        menuToggle.addEventListener('click', () => {
-            sidebarContainer.classList.toggle('open');
-            sidebarOverlay.classList.toggle('show');
-        });
+        function completeModule(moduleNumber) {
+            completedModules.add(moduleNumber);
+            document.getElementById(`status${moduleNumber}`).textContent = 'Concluído';
+            document.getElementById(`status${moduleNumber}`).style.background = 'var(--success)';
+            
+            const button = event.target.closest('.completion-btn');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Concluído';
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            updateProgress();
+            
+            // Mostrar mensagem de sucesso
+            showNotification(`Módulo ${moduleNumber} concluído com sucesso!`);
+        }
 
-        // Close sidebar when clicking overlay
-        sidebarOverlay.addEventListener('click', () => {
-            sidebarContainer.classList.remove('open');
-            sidebarOverlay.classList.remove('show');
-        });
+        function startQuiz(moduleNumber) {
+            showNotification(`Iniciando quiz do Módulo ${moduleNumber}. Boa sorte!`);
+        }
 
-        // Close sidebar when clicking a link (mobile)
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', () => {
-                if (window.innerWidth < 1024) {
-                    sidebarContainer.classList.remove('open');
-                    sidebarOverlay.classList.remove('show');
-                }
+        function showNotification(message) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Adicionar ao corpo
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Navegação suave e destaque do módulo ativo
+        document.querySelectorAll('.module-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover active class de todos os links
+                document.querySelectorAll('.module-link').forEach(l => l.classList.remove('active'));
+                
+                // Adicionar active class ao link clicado
+                this.classList.add('active');
+                
+                // Scroll suave até a seção
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
             });
         });
 
-        // Search Toggle
-        const searchToggle = document.getElementById('searchToggle');
-        const searchBar = document.getElementById('searchBar');
-        const searchInput = document.getElementById('searchInput');
-        
-        searchToggle.addEventListener('click', () => {
-            searchBar.classList.toggle('hidden');
-            if (!searchBar.classList.contains('hidden')) {
-                searchInput.focus();
-            }
-        });
-
-        // Search Functionality
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const sections = document.querySelectorAll('section[id]');
+        // Detectar qual módulo está visível durante o scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.module-section');
+            const scrollPosition = window.scrollY + 200;
             
             sections.forEach(section => {
-                const text = section.textContent.toLowerCase();
-                if (text.includes(searchTerm) || searchTerm === '') {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-            });
-        });
-
-        // Progress Bar
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset;
-            const docHeight = document.body.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            document.getElementById('progressBar').style.width = scrollPercent + '%';
-        });
-
-        // Smooth Scroll for Sidebar Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Scroll to section function
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        // Quiz Data
-        const quizData = [
-            {
-                question: "O que é um Banco de Dados?",
-                options: [
-                    "Um software para gerenciar dados",
-                    "Uma coleção organizada de dados",
-                    "Uma linguagem de programação",
-                    "Um tipo de computador"
-                ],
-                correct: 1,
-                explanation: "Um banco de dados é uma coleção organizada de dados que podem ser facilmente acessados, gerenciados e atualizados."
-            },
-            {
-                question: "Qual é a função principal de um SGBD?",
-                options: [
-                    "Apenas armazenar dados",
-                    "Gerenciar e controlar o acesso aos dados",
-                    "Criar interfaces gráficas",
-                    "Desenvolver aplicações web"
-                ],
-                correct: 1,
-                explanation: "O SGBD (Sistema de Gerenciamento de Banco de Dados) é responsável por gerenciar e controlar o acesso aos dados."
-            },
-            {
-                question: "O que diferencia uma chave primária de uma chave estrangeira?",
-                options: [
-                    "A chave primária pode ser nula",
-                    "A chave estrangeira identifica registros na própria tabela",
-                    "A chave primária identifica exclusivamente registros, enquanto a estrangeira referencia outra tabela",
-                    "Não há diferença entre elas"
-                ],
-                correct: 2,
-                explanation: "A chave primária identifica exclusivamente cada registro em sua tabela, enquanto a chave estrangeira referencia a chave primária de outra tabela."
-            },
-            {
-                question: "Qual o principal benefício de usar índices?",
-                options: [
-                    "Aumentar o espaço de armazenamento",
-                    "Diminuir a segurança dos dados",
-                    "Melhorar a performance de consultas",
-                    "Tornar os dados mais complexos"
-                ],
-                correct: 2,
-                explanation: "Índices melhoram significativamente a performance de consultas, permitindo buscas rápidas."
-            },
-            {
-                question: "O que garante a Integridade Referencial?",
-                options: [
-                    "Que todos os dados sejam numéricos",
-                    "Que chaves estrangeiras sempre referenciem chaves primárias válidas",
-                    "Que as tabelas tenham no máximo 10 colunas",
-                    "Que os usuários tenham permissão para tudo"
-                ],
-                correct: 1,
-                explanation: "A Integridade Referencial garante que chaves estrangeiras sempre referenciem chaves primárias existentes."
-            },
-            {
-                question: "O que é um registro em um banco de dados?",
-                options: [
-                    "Uma coluna na tabela",
-                    "Uma linha na tabela representando uma instância completa",
-                    "O nome da tabela",
-                    "Um tipo de dado"
-                ],
-                correct: 1,
-                explanation: "Um registro (ou linha) representa uma instância completa de dados em uma tabela, contendo valores para todos os campos."
-            },
-            {
-                question: "Qual é a vantagem do controle de redundância em um SGBD?",
-                options: [
-                    "Aumentar a duplicação de dados",
-                    "Economizar espaço e garantir consistência",
-                    "Tornar os dados mais complexos",
-                    "Diminuir a segurança"
-                ],
-                correct: 1,
-                explanation: "O controle de redundância evita duplicação desnecessária, economizando espaço de armazenamento e garantindo consistência dos dados."
-            },
-            {
-                question: "O que é Integridade de Domínio?",
-                options: [
-                    "Garantir que FKs referenciem PKs válidas",
-                    "Especificar que valores pertençam a um domínio definido",
-                    "Garantir PK única e não nula",
-                    "Controlar o acesso dos usuários"
-                ],
-                correct: 1,
-                explanation: "A Integridade de Domínio especifica que todos os valores em uma coluna devem pertencer a um domínio definido (tipo, formato, intervalo)."
-            },
-            {
-                question: "Qual componente NÃO faz parte de um Sistema de Banco de Dados?",
-                options: [
-                    "Banco de Dados (dados)",
-                    "SGBD (software)",
-                    "Usuários e aplicações",
-                    "Hardware exclusivo"
-                ],
-                correct: 3,
-                explanation: "Um Sistema de Banco de Dados inclui BD, SGBD, usuários, aplicações e procedimentos, mas não requer hardware exclusivo."
-            },
-            {
-                question: "O que é uma Chave Candidata?",
-                options: [
-                    "Uma chave que sempre é nula",
-                    "Qualquer atributo ou conjunto que poderia servir como chave primária",
-                    "Uma chave que referencia outra tabela",
-                    "Uma chave composta apenas"
-                ],
-                correct: 1,
-                explanation: "Uma Chave Candidata é qualquer atributo ou conjunto de atributos que possui as propriedades necessárias para servir como chave primária."
-            }
-        ];
-
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let userAnswers = [];
-
-        // Initialize Quiz
-        function initQuiz() {
-            document.getElementById('totalQuestions').textContent = quizData.length;
-            showQuestion(0);
-        }
-
-        // Show Question
-        function showQuestion(index) {
-            const question = quizData[index];
-            const container = document.getElementById('quizContainer');
-            
-            container.innerHTML = `
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-                        ${question.question}
-                    </h3>
-                    <div class="space-y-3">
-                        ${question.options.map((option, i) => `
-                            <button onclick="selectAnswer(${i})" 
-                                    class="quiz-option w-full text-left p-4 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                                <span class="font-semibold">${String.fromCharCode(65 + i)}.</span> ${option}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-                <div id="explanation" class="hidden bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
-                    <p class="text-blue-800 dark:text-blue-200"></p>
-                </div>
-            `;
-            
-            // Restore previous answer if exists
-            if (userAnswers[index] !== undefined) {
-                selectAnswer(userAnswers[index], true);
-            }
-            
-            updateQuizControls();
-        }
-
-        // Select Answer
-        function selectAnswer(optionIndex, isRestoring = false) {
-            const question = quizData[currentQuestionIndex];
-            const buttons = document.querySelectorAll('.quiz-option');
-            const explanation = document.getElementById('explanation');
-            
-            // Clear previous selections
-            buttons.forEach(btn => {
-                btn.classList.remove('correct', 'incorrect');
-            });
-            
-            // Mark selected answer
-            buttons[optionIndex].classList.add(optionIndex === question.correct ? 'correct' : 'incorrect');
-            
-            // Show explanation
-            explanation.classList.remove('hidden');
-            explanation.querySelector('p').textContent = question.explanation;
-            
-            // Save answer
-            if (!isRestoring) {
-                userAnswers[currentQuestionIndex] = optionIndex;
-                if (optionIndex === question.correct) {
-                    score++;
-                    document.getElementById('score').textContent = score;
-                }
-            }
-            
-            // Disable all buttons
-            buttons.forEach(btn => btn.disabled = true);
-        }
-
-        // Update Quiz Controls
-        function updateQuizControls() {
-            const prevBtn = document.getElementById('prevQuestion');
-            const nextBtn = document.getElementById('nextQuestion');
-            const progress = document.getElementById('quizProgress');
-            
-            prevBtn.disabled = currentQuestionIndex === 0;
-            
-            if (currentQuestionIndex === quizData.length - 1) {
-                nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Finalizar';
-            } else {
-                nextBtn.innerHTML = 'Próxima<i class="fas fa-arrow-right ml-2"></i>';
-            }
-            
-            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
-            progress.style.width = ((currentQuestionIndex + 1) / quizData.length * 100) + '%';
-        }
-
-        // Navigation
-        document.getElementById('prevQuestion').addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion(currentQuestionIndex);
-            }
-        });
-
-        document.getElementById('nextQuestion').addEventListener('click', () => {
-            if (currentQuestionIndex < quizData.length - 1) {
-                currentQuestionIndex++;
-                showQuestion(currentQuestionIndex);
-            } else {
-                showQuizResults();
-            }
-        });
-
-        // Show Quiz Results
-        function showQuizResults() {
-            const container = document.getElementById('quizContainer');
-            const percentage = Math.round((score / quizData.length) * 100);
-            
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <i class="fas fa-trophy text-6xl ${percentage >= 70 ? 'text-yellow-500' : 'text-gray-400'} mb-4"></i>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                        Quiz Concluído!
-                    </h3>
-                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-4">
-                        Você acertou ${score} de ${quizData.length} questões (${percentage}%)
-                    </p>
-                    <div class="mb-6">
-                        ${percentage >= 70 ? 
-                            '<p class="text-green-600 dark:text-green-400 font-semibold">Parabéns! Você dominou os conceitos básicos!</p>' :
-                            '<p class="text-orange-600 dark:text-orange-400 font-semibold">Revise o conteúdo e tente novamente!</p>'
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    document.querySelectorAll('.module-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
                         }
-                    </div>
-                    <button onclick="restartQuiz()" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                        <i class="fas fa-redo mr-2"></i>Refazer Quiz
-                    </button>
-                </div>
-            `;
+                    });
+                }
+            });
+        });
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
             
-            document.getElementById('prevQuestion').style.display = 'none';
-            document.getElementById('nextQuestion').style.display = 'none';
-        }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
 
-        // Restart Quiz
-        function restartQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            userAnswers = [];
-            document.getElementById('score').textContent = '0';
-            document.getElementById('prevQuestion').style.display = 'block';
-            document.getElementById('nextQuestion').style.display = 'block';
-            initQuiz();
-        }
-
-        // Initialize quiz on page load
-        initQuiz();
-
-        // Add syntax highlighting to code blocks
-        Prism.highlightAll();
+        // Inicializar
+        updateProgress();
     </script>
 </body>
-</html> 
+</html>
