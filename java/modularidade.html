@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modularidade, Funções, Procedimentos, Escopo e Parâmetros em Java</title>
+<style>
+:root {
+--primary: #2c3e50;
+--secondary: #3498db;
+--success: #27ae60;
+--warning: #f39c12;
+--danger: #e74c3c;
+--light: #ecf0f1;
+--dark: #34495e;
+--font-size-base: 18px;
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+line-height: 1.6;
+color: #333;
+background-color: #f8f9fa;
+font-size: var(--font-size-base);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+header {
+background-color: var(--primary);
+color: white;
+padding: 1.5rem 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+}
+h1 {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+}
+.subtitle {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+.nav-tabs {
+display: flex;
+overflow-x: auto;
+background-color: var(--dark);
+margin-top: 1rem;
+border-radius: 8px;
+}
+.nav-tab {
+padding: 1rem 1.5rem;
+background-color: transparent;
+border: none;
+color: white;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 1rem;
+white-space: nowrap;
+}
+.nav-tab:hover {
+background-color: rgba(255,255,255,0.1);
+}
+.nav-tab.active {
+background-color: var(--secondary);
+}
+main {
+padding: 2rem 0;
+}
+.topic-section {
+display: none;
+animation: fadeIn 0.5s;
+}
+.topic-section.active {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.card {
+background: white;
+border-radius: 10px;
+padding: 2rem;
+margin-bottom: 2rem;
+box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+border-left: 5px solid var(--secondary);
+}
+.card h2 {
+color: var(--primary);
+margin-bottom: 1rem;
+font-size: 1.8rem;
+}
+.card h3 {
+color: var(--dark);
+margin: 1.5rem 0 0.8rem;
+font-size: 1.4rem;
+}
+.card h4 {
+color: var(--secondary);
+margin: 1rem 0 0.5rem;
+font-size: 1.2rem;
+}
+.card p, .card li {
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+ul {
+padding-left: 2rem;
+}
+.code-block {
+background-color: #2d3748;
+color: #e2e8f0;
+padding: 1.5rem;
+border-radius: 8px;
+margin: 1.5rem 0;
+overflow-x: auto;
+font-family: 'Courier New', monospace;
+font-size: 1rem;
+line-height: 1.5;
+}
+.code-block .keyword {
+color: #f687b3;
+}
+.code-block .string {
+color: #68d391;
+}
+.code-block .comment {
+color: #a0aec0;
+font-style: italic;
+}
+.code-block .number {
+color: #fbb6ce;
+}
+.activity {
+background-color: #f7fafc;
+border: 2px dashed var(--secondary);
+border-radius: 8px;
+padding: 1.5rem;
+margin: 2rem 0;
+}
+.activity h3 {
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.input-group {
+margin: 1rem 0;
+}
+.input-group label {
+display: block;
+margin-bottom: 0.5rem;
+font-weight: bold;
+color: var(--dark);
+}
+.input-group input, .input-group select, .input-group textarea {
+width: 100%;
+padding: 0.8rem;
+border: 2px solid #ddd;
+border-radius: 5px;
+font-size: 1rem;
+transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+outline: none;
+border-color: var(--secondary);
+}
+.btn {
+display: inline-block;
+background-color: var(--secondary);
+color: white;
+padding: 0.8rem 1.5rem;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.3s;
+margin-top: 1rem;
+}
+.btn:hover {
+background-color: #2980b9;
+transform: translateY(-2px);
+}
+.btn-success {
+background-color: var(--success);
+}
+.btn-success:hover {
+background-color: #229954;
+}
+.feedback {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 5px;
+display: none;
+}
+.feedback.success {
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
+}
+.feedback.error {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+}
+.memory-visual {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.memory-cell {
+background-color: var(--light);
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+min-width: 120px;
+transition: all 0.3s;
+}
+.memory-cell:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.memory-cell .name {
+font-weight: bold;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+.memory-cell .value {
+font-size: 1.2rem;
+color: var(--secondary);
+}
+.memory-cell .type {
+font-size: 0.9rem;
+color: #666;
+margin-top: 0.5rem;
+}
+.operator-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.operator-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+transition: all 0.3s;
+}
+.operator-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.operator-symbol {
+font-size: 1.5rem;
+font-weight: bold;
+color: var(--primary);
+margin-bottom: 0.5rem;
+}
+.operator-name {
+color: var(--dark);
+margin-bottom: 0.3rem;
+}
+.operator-example {
+font-size: 0.9rem;
+color: #666;
+}
+.io-example {
+background-color: #f1f5f9;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+}
+.io-example h4 {
+color: var(--dark);
+margin-bottom: 1rem;
+}
+.io-terminal {
+background-color: #1e293b;
+color: #e2e8f0;
+padding: 1rem;
+border-radius: 5px;
+font-family: 'Courier New', monospace;
+margin: 1rem 0;
+}
+.io-terminal .input {
+color: #68d391;
+}
+.io-terminal .output {
+color: #fbb6ce;
+}
+footer {
+background-color: var(--primary);
+color: white;
+text-align: center;
+padding: 1.5rem 0;
+margin-top: 3rem;
+}
+.tip-box {
+background-color: #e3f2fd;
+border-left: 4px solid var(--secondary);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.tip-box h4 {
+color: var(--secondary);
+margin-bottom: 0.5rem;
+}
+.warning-box {
+background-color: #fff3cd;
+border-left: 4px solid var(--warning);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.warning-box h4 {
+color: var(--warning);
+margin-bottom: 0.5rem;
+}
+.comparison-table {
+width: 100%;
+border-collapse: collapse;
+margin: 1.5rem 0;
+font-size: 1rem;
+}
+.comparison-table th, .comparison-table td {
+padding: 1rem;
+text-align: left;
+border-bottom: 1px solid #ddd;
+}
+.comparison-table th {
+background-color: var(--secondary);
+color: white;
+}
+.comparison-table tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+.comparison-table tr:hover {
+background-color: #e2e2e2;
+}
+.flowchart {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 2rem 0;
+}
+.flowchart-element {
+background-color: white;
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+margin: 0.5rem 0;
+text-align: center;
+width: 80%;
+max-width: 400px;
+position: relative;
+}
+.flowchart-arrow {
+height: 30px;
+width: 2px;
+background-color: var(--secondary);
+position: relative;
+}
+.flowchart-arrow::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: -4px;
+width: 0;
+height: 0;
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+border-top: 8px solid var(--secondary);
+}
+.code-comparison {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.code-column {
+flex: 1;
+min-width: 300px;
+}
+.code-column h4 {
+color: var(--dark);
+margin-bottom: 0.5rem;
+text-align: center;
+}
+@media (max-width: 768px) {
+.header-content {
+flex-direction: column;
+text-align: center;
+}
+.nav-tabs {
+width: 100%;
+}
+.nav-tab {
+padding: 0.8rem 1rem;
+font-size: 0.9rem;
+}
+h1 {
+font-size: 1.5rem;
+}
+.card {
+padding: 1.5rem;
+}
+.operator-grid {
+grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.comparison-table {
+font-size: 0.9rem;
+}
+.comparison-table th, .comparison-table td {
+padding: 0.5rem;
+}
+.code-comparison {
+flex-direction: column;
+}
+}
+.sr-only {
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border: 0;
+}
+:focus {
+outline: 3px solid var(--secondary);
+outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="header-content">
+<div>
+<h1>Modularidade, Funções, Procedimentos, Escopo e Parâmetros</h1>
+<p class="subtitle">Programação em Java</p>
+</div>
+<div>
+<button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+<button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+</div>
+</div>
+<nav class="nav-tabs" role="tablist">
+<button class="nav-tab active" data-topic="modularidade" role="tab" aria-selected="true">Modularidade</button>
+<button class="nav-tab" data-topic="funcoes" role="tab" aria-selected="false">Funções e Procedimentos</button>
+<button class="nav-tab" data-topic="escopo" role="tab" aria-selected="false">Escopo de Variáveis</button>
+<button class="nav-tab" data-topic="parametros" role="tab" aria-selected="false">Passagem de Parâmetros</button>
+</nav>
+</div>
+</header>
+<main class="container">
+<!-- Tópico 1: Modularidade -->
+<section id="modularidade" class="topic-section active" role="tabpanel">
+<div class="card">
+<h2>1. Modularidade</h2>
+<p><strong>Modularidade</strong> é um princípio fundamental da programação que consiste em dividir um programa complexo em partes menores e mais gerenciáveis, chamadas de módulos. Em Java, esses módulos são implementados principalmente através de métodos e classes.</p>
+
+<h3>Divisão do Programa em Partes Menores</h3>
+<p>A modularidade permite que um programa seja dividido em unidades lógicas que realizam tarefas específicas. Cada módulo deve ter uma única responsabilidade bem definida, o que facilita o desenvolvimento, teste e manutenção do código.</p>
+
+<div class="flowchart">
+<div class="flowchart-element">
+<strong>Programa Principal</strong>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="operator-grid" style="width: 100%; max-width: 600px;">
+<div class="operator-card">
+<div class="operator-symbol">M1</div>
+<div class="operator-name">Módulo 1</div>
+<div class="operator-example">Entrada de dados</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">M2</div>
+<div class="operator-name">Módulo 2</div>
+<div class="operator-example">Processamento</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">M3</div>
+<div class="operator-name">Módulo 3</div>
+<div class="operator-example">Saída de dados</div>
+</div>
+</div>
+</div>
+
+<h3>Uso de Métodos public static como Módulos</h3>
+<p>Em Java, especialmente em programas inicias, utilizamos métodos estáticos (<code>public static</code>) como módulos para organizar o código. Cada método pode ser visto como um módulo independente que realiza uma tarefa específica.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> ProgramaModular {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Módulo principal que coordena outros módulos</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;double[] notas = obterNotas(); <span class="comment">// Módulo de entrada</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;double media = calcularMedia(notas); <span class="comment">// Módulo de processamento</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;exibirResultado(media); <span class="comment">// Módulo de saída</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// Módulo para obter notas</span><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span>[] obterNotas() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// Módulo para calcular média</span><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> calcularMedia(double[] notas) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// Módulo para exibir resultado</span><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> exibirResultado(double media) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Vantagens da Modularidade</h3>
+
+<div class="operator-grid">
+<div class="operator-card">
+<div class="operator-symbol">✓</div>
+<div class="operator-name">Organização</div>
+<div class="operator-example">Código mais estruturado e legível</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">✓</div>
+<div class="operator-name">Reutilização</div>
+<div class="operator-example">Mesmo módulo pode ser usado várias vezes</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">✓</div>
+<div class="operator-name">Manutenção</div>
+<div class="operator-example">Facilita correção de erros e melhorias</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">✓</div>
+<div class="operator-name">Colaboração</div>
+<div class="operator-example">Vários desenvolvedores podem trabalhar em módulos diferentes</div>
+</div>
+</div>
+
+<h3>Princípios da Boa Modularização</h3>
+<ul>
+<li><strong>Alta coesão:</strong> Cada módulo deve ter uma única responsabilidade bem definida.</li>
+<li><strong>Baixo acoplamento:</strong> Módulos devem ser o mais independentes possível uns dos outros.</li>
+<li><strong>Interface clara:</strong> Cada módulo deve ter uma interface bem definida para interação com outros módulos.</li>
+<li><strong>Tamanho adequado:</strong> Módulos não devem ser nem muito grandes (difíceis de entender) nem muito pequenos (excesso de fragmentação).</li>
+</ul>
+
+<h3>Exemplo Prático de Modularização</h3>
+<p>Vamos considerar um programa que calcula estatísticas básicas de um conjunto de números:</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>Programa Não Modular</h4>
+<div class="code-block">
+<span class="keyword">public class</span> Estatisticas {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span>[] numeros = {<span class="number">5.5</span>, <span class="number">8.2</span>, <span class="number">3.7</span>, <span class="number">9.1</span>, <span class="number">6.3</span>};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> soma = <span class="number">0</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> num : numeros) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma += num;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = soma / numeros.length;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> maior = numeros[<span class="number">0</span>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> num : numeros) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (num > maior) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maior = num;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Média: "</span> + media);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Maior: "</span> + maior);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+</div>
+<div class="code-column">
+<h4>Programa Modular</h4>
+<div class="code-block">
+<span class="keyword">public class</span> EstatisticasModular {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span>[] numeros = {<span class="number">5.5</span>, <span class="number">8.2</span>, <span class="number">3.7</span>, <span class="number">9.1</span>, <span class="number">6.3</span>};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = calcularMedia(numeros);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> maior = encontrarMaior(numeros);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exibirResultados(media, maior);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> calcularMedia(<span class="keyword">double</span>[] nums) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> encontrarMaior(<span class="keyword">double</span>[] nums) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> exibirResultados(<span class="keyword">double</span> media, <span class="keyword">double</span> maior) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+</div>
+</div>
+
+<div class="tip-box">
+<h4>Dica de Modularização</h4>
+<p>Uma boa prática é identificar as operações principais do seu programa e transformar cada uma delas em um método separado. O método main deve servir apenas como um coordenador, chamando os outros métodos na ordem adequada.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique quais partes do código abaixo poderiam ser transformadas em módulos separados:</p>
+<div class="code-block">
+<span class="keyword">public class</span> ConversorTemperatura {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(<span class="string">"Digite a temperatura em Celsius: "</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> celsius = scanner.nextDouble();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> fahrenheit = celsius * <span class="number">1.8</span> + <span class="number">32</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Temperatura em Fahrenheit: "</span> + fahrenheit);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;scanner.close();<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<div class="input-group">
+<label for="modulo1">Módulo 1:</label>
+<select id="modulo1">
+<option value="">Selecione...</option>
+<option value="entrada">Entrada de dados</option>
+<option value="conversao">Conversão de temperatura</option>
+<option value="saida">Saída de dados</option>
+</select>
+</div>
+<div class="input-group">
+<label for="modulo2">Módulo 2:</label>
+<select id="modulo2">
+<option value="">Selecione...</option>
+<option value="entrada">Entrada de dados</option>
+<option value="conversao">Conversão de temperatura</option>
+<option value="saida">Saída de dados</option>
+</select>
+</div>
+<div class="input-group">
+<label for="modulo3">Módulo 3:</label>
+<select id="modulo3">
+<option value="">Selecione...</option>
+<option value="entrada">Entrada de dados</option>
+<option value="conversao">Conversão de temperatura</option>
+<option value="saida">Saída de dados</option>
+</select>
+</div>
+<button id="checkModularidade" class="btn">Verificar Respostas</button>
+<div id="modularidadeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 2: Funções e Procedimentos -->
+<section id="funcoes" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>2. Funções e Procedimentos (Métodos public static)</h2>
+<p>Em Java, <strong>funções</strong> e <strong>procedimentos</strong> são implementados como métodos. A principal diferença entre eles é que funções retornam um valor, enquanto procedimentos não (retornam void). Vamos explorar a estrutura e o uso desses métodos.</p>
+
+<h3>Estrutura Básica de um Método</h3>
+<p>Um método em Java tem a seguinte estrutura básica:</p>
+
+<div class="code-block">
+<span class="comment">// Modificador de acesso + Modificador estático + Tipo de retorno + Nome + Parâmetros</span><br>
+<span class="keyword">public static</span> tipoRetorno nomeMetodo(tipoParametro1 param1, tipoParametro2 param2) {<br>
+&nbsp;&nbsp;<span class="comment">// Corpo do método</span><br>
+&nbsp;&nbsp;<span class="comment">// Declarações e instruções</span><br>
+&nbsp;&nbsp;<span class="keyword">return</span> valor; <span class="comment">// Opcional, dependendo do tipo de retorno</span><br>
+}
+</div>
+
+<h3>Procedimentos (void)</h3>
+<p>Procedimentos são métodos que não retornam nenhum valor. Eles são identificados pelo uso da palavra-chave <code>void</code> como tipo de retorno. Geralmente são usados para executar ações, como exibir informações na tela ou modificar o estado de variáveis.</p>
+
+<div class="code-block">
+<span class="comment">// Exemplo de procedimento</span><br>
+<span class="keyword">public static void</span> exibirMensagem(String mensagem) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"**********"</span>);<br>
+&nbsp;&nbsp;System.out.println(mensagem);<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"**********"</span>);<br>
+}<br><br>
+<span class="comment">// Chamada do procedimento</span><br>
+exibirMensagem(<span class="string">"Olá, mundo!"</span>);
+</div>
+
+<h3>Funções (retornam valor via return)</h3>
+<p>Funções são métodos que retornam um valor após sua execução. O tipo de retorno deve ser especificado na declaração do método, e o valor deve ser retornado usando a palavra-chave <code>return</code>.</p>
+
+<div class="code-block">
+<span class="comment">// Exemplo de função</span><br>
+<span class="keyword">public static int</span> somar(int a, int b) {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> resultado = a + b;<br>
+&nbsp;&nbsp;<span class="keyword">return</span> resultado;<br>
+}<br><br>
+<span class="comment">// Chamada da função</span><br>
+<span class="keyword">int</span> soma = somar(<span class="number">5</span>, <span class="number">3</span>); <span class="comment">// soma recebe 8</span><br>
+System.out.println(<span class="string">"Resultado: "</span> + soma);
+</div>
+
+<h3>Chamadas de Métodos</h3>
+<p>Para utilizar um método, precisamos fazer uma chamada a ele. A forma de chamada depende se o método retorna um valor ou não:</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>Chamada de Procedimento</h4>
+<div class="code-block">
+<span class="comment">// Procedimento que não retorna valor</span><br>
+<span class="keyword">public static void</span> exibirTabuada(<span class="keyword">int</span> numero) {<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= <span class="number">10</span>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(numero + <span class="string">" x "</span> + i + <span class="string">" = "</span> + (numero * i));<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="comment">// Chamada do procedimento</span><br>
+exibirTabuada(<span class="number">7</span>);
+</div>
+</div>
+<div class="code-column">
+<h4>Chamada de Função</h4>
+<div class="code-block">
+<span class="comment">// Função que retorna um valor</span><br>
+<span class="keyword">public static double</span> calcularMedia(<span class="keyword">double</span>[] valores) {<br>
+&nbsp;&nbsp;<span class="keyword">double</span> soma = <span class="number">0</span>;<br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> valor : valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;soma += valor;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">return</span> soma / valores.length;<br>
+}<br><br>
+<span class="comment">// Chamada da função</span><br>
+<span class="keyword">double</span>[] notas = {<span class="number">8.5</span>, <span class="number">7.2</span>, <span class="number">9.0</span>};<br>
+<span class="keyword">double</span> media = calcularMedia(notas);
+</div>
+</div>
+</div>
+
+<h3>Modularização do main</h3>
+<p>Uma boa prática é manter o método main o mais simples possível, usando-o apenas para coordenar as chamadas a outros métodos. Isso torna o código mais organizado e fácil de entender.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> CalculadoraIMC {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Coleta de dados</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> peso = obterPeso();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> altura = obterAltura();<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cálculo</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> imc = calcularIMC(peso, altura);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Exibição de resultados</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;exibirResultado(imc);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// Métodos auxiliares...</span><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> obterPeso() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> obterAltura() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> calcularIMC(<span class="keyword">double</span> peso, <span class="keyword">double</span> altura) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> exibirResultado(<span class="keyword">double</span> imc) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implementação...</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Assinatura de Métodos</h3>
+<p>A <strong>assinatura</strong> de um método é composta pelo seu nome e pela lista de parâmetros (tipos e ordem). Java permite que múltiplos métodos tenham o mesmo nome, desde que tenham assinaturas diferentes. Isso é chamado de <strong>sobrecarga de métodos</strong>.</p>
+
+<div class="code-block">
+<span class="comment">// Sobrecarga de métodos</span><br>
+<span class="keyword">public static int</span> somar(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+&nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+}<br><br>
+<span class="keyword">public static double</span> somar(<span class="keyword">double</span> a, <span class="keyword">double</span> b) {<br>
+&nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+}<br><br>
+<span class="keyword">public static int</span> somar(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c) {<br>
+&nbsp;&nbsp;<span class="keyword">return</span> a + b + c;<br>
+}<br><br>
+<span class="comment">// Chamadas</span><br>
+<span class="keyword">int</span> resultado1 = somar(<span class="number">5</span>, <span class="number">3</span>); <span class="comment">// Chama o primeiro método</span><br>
+<span class="keyword">double</span> resultado2 = somar(<span class="number">2.5</span>, <span class="number">3.7</span>); <span class="comment">// Chama o segundo método</span><br>
+<span class="keyword">int</span> resultado3 = somar(<span class="number">4</span>, <span class="number">2</span>, <span class="number">6</span>); <span class="comment">// Chama o terceiro método</span>
+</div>
+
+<div class="tip-box">
+<h4>Dica sobre Métodos</h4>
+<p>Cada método deve ter uma única responsabilidade. Se um método está fazendo muitas coisas, considere dividi-lo em métodos menores e mais específicos.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para criar um método que calcula o fatorial de um número:</p>
+<div class="code-block">
+<span class="keyword">public class</span> CalculoFatorial {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> numero = <input type="text" id="numero" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">long</span> resultado = calcularFatorial(numero);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"O fatorial de "</span> + numero + <span class="string">" é "</span> + resultado);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<input type="text" id="modificador" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;"> <input type="text" id="tipoRetorno" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> calcularFatorial(<input type="text" id="tipoParametro" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;"> n) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n == <input type="text" id="condicao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> || n == <input type="text" id="condicao2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <input type="text" id="retorno1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">long</span> fatorial = <input type="text" id="inicializacao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <input type="text" id="iInicial" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">; i <= n; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fatorial <input type="text" id="operacao" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <input type="text" id="retorno2" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkFuncoes" class="btn">Verificar Código</button>
+<div id="funcoesFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 3: Escopo de Variáveis -->
+<section id="escopo" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>3. Escopo de Variáveis</h2>
+<p>O <strong>escopo</strong> de uma variável determina onde ela pode ser acessada e modificada no código. Em Java, existem diferentes tipos de escopo, cada um com suas próprias regras e características.</p>
+
+<h3>Escopo Local</h3>
+<p>Variáveis declaradas dentro de um método têm escopo local, o que significa que só podem ser acessadas dentro desse método. Elas são criadas quando o método é chamado e destruídas quando o método termina sua execução.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> ExemploEscopoLocal {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> metodoExemplo() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> variavelLocal = <span class="number">10</span>; <span class="comment">// Escopo local</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do método: "</span> + variavelLocal);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metodoExemplo();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// System.out.println(variavelLocal); // Erro! variavelLocal não é acessível aqui</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Escopo de Bloco { }</h3>
+<p>Variáveis declaradas dentro de um bloco de código (delimitado por chaves { }) têm escopo limitado a esse bloco. Isso inclui estruturas como if, for, while, etc.</p>
+
+<div class="code-block">
+<span class="keyword">public static void</span> exemploBloco() {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> x = <span class="number">10</span>; <span class="comment">// Disponível em todo o método</span><br><br>
+&nbsp;&nbsp;<span class="keyword">if</span> (x > <span class="number">5</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> y = <span class="number">20</span>; <span class="comment">// Disponível apenas dentro deste bloco if</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do if: "</span> + y);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// System.out.println(y); // Erro! y não é acessível fora do bloco if</span><br><br>
+&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> z = i * <span class="number">2</span>; <span class="comment">// Disponível apenas dentro deste bloco for</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do for: "</span> + z);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// System.out.println(z); // Erro! z não é acessível fora do bloco for</span><br>
+}
+</div>
+
+<h3>Escopo de Parâmetros</h3>
+<p>Os parâmetros de um método têm escopo local ao método, podendo ser acessados em qualquer parte dentro dele. Eles funcionam como variáveis locais que recebem os valores passados na chamada do método.</p>
+
+<div class="code-block">
+<span class="keyword">public static void</span> exemploParametros(<span class="keyword">int</span> a, <span class="keyword">String</span> b) {<br>
+&nbsp;&nbsp;<span class="comment">// a e b são parâmetros com escopo local ao método</span><br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Parâmetro a: "</span> + a);<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Parâmetro b: "</span> + b);<br>
+}<br><br>
+<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;exemploParametros(<span class="number">10</span>, <span class="string">"Olá"</span>);<br>
+&nbsp;&nbsp;<span class="comment">// System.out.println(a); // Erro! a não é acessível aqui</span><br>
+}
+</div>
+
+<h3>Escopo Global static (evitar)</h3>
+<p>Variáveis declaradas fora de qualquer método, mas dentro da classe e com o modificador <code>static</code>, têm escopo global e podem ser acessadas por qualquer método da classe. No entanto, o uso excessivo de variáveis globais é considerado uma má prática de programação.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> ExemploGlobal {<br>
+&nbsp;&nbsp;<span class="keyword">private static int</span> contador = <span class="number">0</span>; <span class="comment">// Variável global estática</span><br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> incrementar() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contador++; <span class="comment">// Acessando a variável global</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> exibir() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Valor do contador: "</span> + contador);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;incrementar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;incrementar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exibir(); <span class="comment">// Exibe: Valor do contador: 2</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<div class="warning-box">
+<h4>Cuidado com Variáveis Globais!</h4>
+<p>O uso excessivo de variáveis globais pode tornar o código difícil de entender, manter e depurar. Prefira passar dados como parâmetros sempre que possível.</p>
+</div>
+
+<h3>Boas Práticas de Escopo</h3>
+<ul>
+<li><strong>Declare variáveis no menor escopo possível:</strong> Isso reduz a chance de erros e torna o código mais claro.</li>
+<li><strong>Evite variáveis globais:</strong> Use-as apenas quando estritamente necessário e com moderação.</li>
+<li><strong>Nomes significativos:</strong> Use nomes claros e descritivos para variáveis, especialmente quando houver variáveis com o mesmo nome em escopos diferentes.</li>
+<li><strong>Inicialize variáveis:</strong> Sempre inicialize variáveis locais antes de usá-las.</li>
+</ul>
+
+<h3>Sombreamento de Variáveis (Variable Shadowing)</h3>
+<p>Ocorre quando uma variável em um escopo interno tem o mesmo nome de uma variável em um escopo externo. Nesse caso, a variável do escopo interno "sombra" a do escopo externo.</p>
+
+<div class="code-block">
+<span class="keyword">public static void</span> exemploSombreamento() {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> x = <span class="number">10</span>; <span class="comment">// Variável do escopo do método</span><br>
+&nbsp;&nbsp;System.out.println(<span class="string">"x externo: "</span> + x); <span class="comment">// Exibe 10</span><br><br>
+&nbsp;&nbsp;<span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> x = <span class="number">20</span>; <span class="comment">// Variável do escopo do bloco (sombra a externa)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"x interno: "</span> + x); <span class="comment">// Exibe 20</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;System.out.println(<span class="string">"x externo novamente: "</span> + x); <span class="comment">// Exibe 10</span><br>
+}
+</div>
+
+<div class="tip-box">
+<h4>Dica sobre Escopo</h4>
+<p>O sombreamento de variáveis pode tornar o código confuso. Evite usar o mesmo nome para variáveis em escopos diferentes, a menos que tenha uma boa razão para isso.</p>
+</div>
+
+<h3>Exemplo Prático de Escopos</h3>
+<div class="code-block">
+<span class="keyword">public class</span> ExemploEscopos {<br>
+&nbsp;&nbsp;<span class="keyword">private static int</span> global = <span class="number">100</span>; <span class="comment">// Escopo global</span><br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> localMain = <span class="number">10</span>; <span class="comment">// Escopo local ao main</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"global: "</span> + global);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"localMain: "</span> + localMain);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;metodoExemplo(localMain);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> metodoExemplo(<span class="keyword">int</span> parametro) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// parametro tem escopo local ao método</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> localMetodo = <span class="number">20</span>; <span class="comment">// Escopo local ao método</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"global: "</span> + global);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"parametro: "</span> + parametro);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"localMetodo: "</span> + localMetodo);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (parametro > <span class="number">5</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> localBloco = <span class="number">30</span>; <span class="comment">// Escopo do bloco if</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"localBloco: "</span> + localBloco);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// System.out.println(localBloco); // Erro! localBloco não é acessível aqui</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique o escopo de cada variável no código abaixo:</p>
+<div class="code-block">
+<span class="keyword">public class</span> TesteEscopo {<br>
+&nbsp;&nbsp;<span class="keyword">private static int</span> x = <span class="number">10</span>;<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> y = <input type="text" id="escopo1" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metodoA(y);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> metodoA(<span class="keyword">int</span> z) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> w = <input type="text" id="escopo2" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (z > <span class="number">5</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> v = <input type="text" id="escopo3" style="width: 150px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(v);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(w);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkEscopo" class="btn">Verificar Respostas</button>
+<div id="escopoFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 4: Passagem de Parâmetros -->
+<section id="parametros" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>4. Passagem de Parâmetros</h2>
+<p>A <strong>passagem de parâmetros</strong> é o mecanismo pelo qual dados são transferidos entre métodos. Em Java, existem duas formas principais de passagem de parâmetros: por valor (para tipos primitivos) e por referência (para objetos, incluindo arrays).</p>
+
+<h3>Passagem por Valor (Primitivos)</h3>
+<p>Quando passamos tipos primitivos (int, double, char, boolean, etc.) como parâmetros, estamos fazendo uma <strong>passagem por valor</strong>. Isso significa que uma cópia do valor é criada e passada para o método. Qualquer modificação nessa cópia não afeta a variável original.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> PassagemPorValor {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> numero = <span class="number">10</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Antes do método: "</span> + numero); <span class="comment">// 10</span><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;tentarModificar(numero);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Depois do método: "</span> + numero); <span class="comment">// 10 (não mudou)</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> tentarModificar(<span class="keyword">int</span> valor) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do método (antes): "</span> + valor); <span class="comment">// 10</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;valor = <span class="number">20</span>; <span class="comment">// Modifica apenas a cópia local</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do método (depois): "</span> + valor); <span class="comment">// 20</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Cópia de Referência para Arrays</h3>
+<p>Quando passamos arrays (ou qualquer objeto) como parâmetros, estamos passando uma <strong>cópia da referência</strong> ao objeto original. Isso significa que o método pode modificar o conteúdo do array, e essas modificações serão visíveis fora do método.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> PassagemArray {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] numeros = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Antes do método: "</span> + Arrays.toString(numeros)); <span class="comment">// [1, 2, 3]</span><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;modificarArray(numeros);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Depois do método: "</span> + Arrays.toString(numeros)); <span class="comment">// [10, 2, 3]</span><br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> modificarArray(<span class="keyword">int</span>[] array) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do método (antes): "</span> + Arrays.toString(array)); <span class="comment">// [1, 2, 3]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;array[<span class="number">0</span>] = <span class="number">10</span>; <span class="comment">// Modifica o array original</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dentro do método (depois): "</span> + Arrays.toString(array)); <span class="comment">// [10, 2, 3]</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Alterações em Primitivos × Arrays</h3>
+<p>A tabela abaixo resume as diferenças entre a passagem de tipos primitivos e arrays:</p>
+
+<div class="comparison-table">
+<table>
+<tr>
+<th>Aspecto</th>
+<th>Tipos Primitivos</th>
+<th>Arrays</th>
+</tr>
+<tr>
+<td>Tipo de passagem</td>
+<td>Por valor</td>
+<td>Por referência (cópia da referência)</td>
+</tr>
+<tr>
+<td>Modificações no método</td>
+<td>Afetam apenas a cópia local</td>
+<td>Afetam o objeto original</td>
+</tr>
+<tr>
+<td>Performance</td>
+td>Mais eficiente para valores pequenos</td>
+<td>Mais eficiente para grandes estruturas de dados</td>
+</tr>
+<tr>
+<td>Uso de memória</td>
+<td>Cria uma cópia do valor</td>
+<td>Cria uma cópia da referência (não do objeto)</td>
+</tr>
+</table>
+</div>
+
+<h3>Parâmetros Formais e Reais</h3>
+<p>Na passagem de parâmetros, distinguimos entre:</p>
+<ul>
+<li><strong>Parâmetros formais:</strong> São as variáveis declaradas na assinatura do método.</li>
+<li><strong>Parâmetros reais (ou argumentos):</strong> São os valores ou variáveis passados na chamada do método.</li>
+</ul>
+
+<div class="code-block">
+<span class="keyword">public static void</span> exemplo(<span class="keyword">int</span> a, <span class="keyword">int</span> b) { <span class="comment">// a e b são parâmetros formais</span>
+&nbsp;&nbsp;System.out.println(<span class="string">"a = "</span> + a + <span class="string">", b = "</span> + b);<br>
+}<br><br>
+<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;<span class="keyword">int</span> x = <span class="number">5</span>;<br>
+&nbsp;&nbsp;<span class="keyword">int</span> y = <span class="number">10</span>;<br>
+&nbsp;&nbsp;exemplo(x, y); <span class="comment">// x e y são parâmetros reais</span><br>
+&nbsp;&nbsp;exemplo(<span class="number">20</span>, <span class="number">30</span>); <span class="comment">// 20 e 30 são parâmetros reais</span><br>
+}
+</div>
+
+<h3>Passagem de Múltiplos Parâmetros</h3>
+<p>Java permite a passagem de múltiplos parâmetros para um método. A ordem dos parâmetros na chamada deve corresponder à ordem na declaração do método.</p>
+
+<div class="code-block">
+<span class="keyword">public static</span> String criarSaudacao(String nome, <span class="keyword">int</span> idade, <span class="keyword">boolean</span> formal) {<br>
+&nbsp;&nbsp;String saudacao = formal ? <span class="string">"Prezado(a) "</span> : <span class="string">"Olá, "</span>;<br>
+&nbsp;&nbsp;<span class="keyword">return</span> saudacao + nome + <span class="string">"! Você tem "</span> + idade + <span class="string">" anos."</span>;<br>
+}<br><br>
+<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;String mensagem1 = criarSaudacao(<span class="string">"Ana"</span>, <span class="number">25</span>, <span class="keyword">true</span>);<br>
+&nbsp;&nbsp;String mensagem2 = criarSaudacao(<span class="string">"Carlos"</span>, <span class="number">30</span>, <span class="keyword">false</span>);<br>
+&nbsp;&nbsp;System.out.println(mensagem1);<br>
+&nbsp;&nbsp;System.out.println(mensagem2);<br>
+}
+</div>
+
+<h3>Parâmetros com Valores Padrão (Simulação)</h3>
+<p>Java não suporta diretamente parâmetros com valores padrão como algumas outras linguagens. No entanto, podemos simular esse comportamento usando sobrecarga de métodos.</p>
+
+<div class="code-block">
+<span class="keyword">public static void</span> exibirMensagem(String mensagem) {<br>
+&nbsp;&nbsp;exibirMensagem(mensagem, <span class="keyword">false</span>); <span class="comment">// Chama a versão com dois parâmetros</span>
+}<br><br>
+<span class="keyword">public static void</span> exibirMensagem(String mensagem, <span class="keyword">boolean</span> uppercase) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (uppercase) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(mensagem.toUpperCase());<br>
+&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(mensagem);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;exibirMensagem(<span class="string">"Olá, mundo!"</span>); <span class="comment">// Usa o valor padrão (false)</span><br>
+&nbsp;&nbsp;exibirMensagem(<span class="string">"Olá, mundo!"</span>, <span class="keyword">true</span>); <span class="comment">// Especifica o valor explicitamente</span>
+}
+</div>
+
+<h3>Passagem de Arrays como Parâmetros</h3>
+<p>Arrays são frequentemente passados como parâmetros para métodos que realizam operações em conjunto de dados, como cálculos estatísticos, ordenação, busca, etc.</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> OperacoesArray {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span>[] notas = {<span class="number">7.5</span>, <span class="number">8.2</span>, <span class="number">6.9</span>, <span class="number">9.1</span>, <span class="number">7.8</span>};<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> media = calcularMedia(notas);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> maior = encontrarMaior(notas);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> menor = encontrarMenor(notas);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Média: "</span> + media);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Maior nota: "</span> + maior);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Menor nota: "</span> + menor);<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> calcularMedia(<span class="keyword">double</span>[] valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> soma = <span class="number">0</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> valor : valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soma += valor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> soma / valores.length;<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> encontrarMaior(<span class="keyword">double</span>[] valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> maior = valores[<span class="number">0</span>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> valor : valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (valor > maior) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maior = valor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> maior;<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static double</span> encontrarMenor(<span class="keyword">double</span>[] valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> menor = valores[<span class="number">0</span>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">double</span> valor : valores) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (valor < menor) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menor = valor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> menor;<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<div class="tip-box">
+<h4>Dica sobre Passagem de Parâmetros</h4>
+<p>Lembre-se: para tipos primitivos, o método recebe uma cópia do valor. Para objetos (incluindo arrays), o método recebe uma cópia da referência, mas pode modificar o conteúdo do objeto original.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para implementar um método que troca os valores de duas posições em um array:</p>
+<div class="code-block">
+<span class="keyword">public class</span> TrocaPosicoes {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] numeros = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> pos1 = <input type="text" id="pos1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> pos2 = <input type="text" id="pos2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Antes da troca: "</span> + Arrays.toString(numeros));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;trocarPosicoes(numeros, pos1, pos2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Depois da troca: "</span> + Arrays.toString(numeros));<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> trocarPosicoes(<span class="keyword">int</span>[] array, <span class="keyword">int</span> i, <span class="keyword">int</span> j) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i >= <input type="text" id="condicao1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> && i < array.<input type="text" id="length" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;"> &&<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j >= <input type="text" id="condicao2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> && j < array.<input type="text" id="length2" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> temp = array[<input type="text" id="indice1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array[<input type="text" id="indice2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">] = array[<input type="text" id="indice3" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array[<input type="text" id="indice4" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">] = temp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Índices inválidos!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkParametros" class="btn">Verificar Código</button>
+<div id="parametrosFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container">
+<p>&copy; Modularidade, Funções, Procedimentos, Escopo e Parâmetros em Java - Material educativo</p>
+</div>
+</footer>
+<script>
+// Navegação entre tópicos
+const navTabs = document.querySelectorAll('.nav-tab');
+const topicSections = document.querySelectorAll('.topic-section');
+navTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const targetTopic = tab.getAttribute('data-topic');
+        
+        // Remove classe active de todas as abas e seções
+        navTabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
+        topicSections.forEach(section => section.classList.remove('active'));
+        
+        // Adiciona classe active na aba e seção correspondentes
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        document.getElementById(targetTopic).classList.add('active');
+    });
+});
+
+// Controle de tamanho da fonte
+const increaseFontBtn = document.getElementById('increaseFont');
+const decreaseFontBtn = document.getElementById('decreaseFont');
+const root = document.documentElement;
+let currentFontSize = 18;
+
+increaseFontBtn.addEventListener('click', () => {
+    if (currentFontSize < 24) {
+        currentFontSize += 2;
+        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+    }
+});
+
+decreaseFontBtn.addEventListener('click', () => {
+    if (currentFontSize > 14) {
+        currentFontSize -= 2;
+        root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+    }
+});
+
+// Atividade 1: Modularidade
+const checkModularidadeBtn = document.getElementById('checkModularidade');
+if (checkModularidadeBtn) {
+    checkModularidadeBtn.addEventListener('click', () => {
+        const modulo1 = document.getElementById('modulo1').value;
+        const modulo2 = document.getElementById('modulo2').value;
+        const modulo3 = document.getElementById('modulo3').value;
+        
+        const feedback = document.getElementById('modularidadeFeedback');
+        feedback.style.display = 'block';
+        
+        const correct1 = modulo1 === 'entrada';
+        const correct2 = modulo2 === 'conversao';
+        const correct3 = modulo3 === 'saida';
+        
+        if (correct1 && correct2 && correct3) {
+            feedback.className = 'feedback success';
+            feedback.textContent = 'Excelente! Você identificou corretamente os módulos.';
+        } else {
+            feedback.className = 'feedback error';
+            let message = 'Algumas respostas estão incorretas. ';
+            if (!correct1) message += 'O primeiro módulo é a entrada de dados. ';
+            if (!correct2) message += 'O segundo módulo é a conversão de temperatura. ';
+            if (!correct3) message += 'O terceiro módulo é a saída de dados. ';
+            feedback.textContent = message;
+        }
+    });
+}
+
+// Atividade 2: Funções e Procedimentos
+const checkFuncoesBtn = document.getElementById('checkFuncoes');
+if (checkFuncoesBtn) {
+    checkFuncoesBtn.addEventListener('click', () => {
+        const numero = document.getElementById('numero').value.trim();
+        const modificador = document.getElementById('modificador').value.trim();
+        const tipoRetorno = document.getElementById('tipoRetorno').value.trim();
+        const tipoParametro = document.getElementById('tipoParametro').value.trim();
+        const condicao = document.getElementById('condicao').value.trim();
+        const condicao2 = document.getElementById('condicao2').value.trim();
+        const retorno1 = document.getElementById('retorno1').value.trim();
+        const inicializacao = document.getElementById('inicializacao').value.trim();
+        const iInicial = document.getElementById('iInicial').value.trim();
+        const operacao = document.getElementById('operacao').value.trim();
+        const retorno2 = document.getElementById('retorno2').value.trim();
+        
+        const feedback = document.getElementById('funcoesFeedback');
+        feedback.style.display = 'block';
+        
+        const correctNumero = numero === '5';
+        const correctModificador = modificador === 'public static';
+        const correctTipoRetorno = tipoRetorno === 'long';
+        const correctTipoParametro = tipoParametro === 'int';
+        const correctCondicao = condicao === '0';
+        const correctCondicao2 = condicao2 === '1';
+        const correctRetorno1 = retorno1 === '1';
+        const correctInicializacao = inicializacao === '1';
+        const correctIInicial = iInicial === '2';
+        const correctOperacao = operacao === '*=';
+        const correctRetorno2 = retorno2 === 'fatorial';
+        
+        if (correctNumero && correctModificador && correctTipoRetorno && correctTipoParametro &&
+            correctCondicao && correctCondicao2 && correctRetorno1 && correctInicializacao &&
+            correctIInicial && correctOperacao && correctRetorno2) {
+            feedback.className = 'feedback success';
+            feedback.textContent = 'Excelente! Você completou o código corretamente.';
+        } else {
+            feedback.className = 'feedback error';
+            let message = 'Corrija as seguintes partes: ';
+            if (!correctNumero) message += 'Número de exemplo: 5. ';
+            if (!correctModificador) message += 'Modificador: public static. ';
+            if (!correctTipoRetorno) message += 'Tipo de retorno: long. ';
+            if (!correctTipoParametro) message += 'Tipo do parâmetro: int. ';
+            if (!correctCondicao || !correctCondicao2) message += 'Condições: 0 e 1. ';
+            if (!correctRetorno1) message += 'Retorno 1: 1. ';
+            if (!correctInicializacao) message += 'Inicialização: 1. ';
+            if (!correctIInicial) message += 'i inicial: 2. ';
+            if (!correctOperacao) message += 'Operação: *=. ';
+            if (!correctRetorno2) message += 'Retorno 2: fatorial. ';
+            feedback.textContent = message;
+        }
+    });
+}
+
+// Atividade 3: Escopo de Variáveis
+const checkEscopoBtn = document.getElementById('checkEscopo');
+if (checkEscopoBtn) {
+    checkEscopoBtn.addEventListener('click', () => {
+        const escopo1 = document.getElementById('escopo1').value.trim();
+        const escopo2 = document.getElementById('escopo2').value.trim();
+        const escopo3 = document.getElementById('escopo3').value.trim();
+        
+        const feedback = document.getElementById('escopoFeedback');
+        feedback.style.display = 'block';
+        
+        const correct1 = escopo1 === 'Escopo local ao método main';
+        const correct2 = escopo2 === 'Escopo local ao método metodoA';
+        const correct3 = escopo3 === 'Escopo do bloco if';
+        
+        if (correct1 && correct2 && correct3) {
+            feedback.className = 'feedback success';
+            feedback.textContent = 'Excelente! Você identificou corretamente os escopos das variáveis.';
+        } else {
+            feedback.className = 'feedback error';
+            let message = 'Algumas respostas estão incorretas. ';
+            if (!correct1) message += 'y tem escopo local ao método main. ';
+            if (!correct2) message += 'w tem escopo local ao método metodoA. ';
+            if (!correct3) message += 'v tem escopo do bloco if. ';
+            feedback.textContent = message;
+        }
+    });
+}
+
+// Atividade 4: Passagem de Parâmetros
+const checkParametrosBtn = document.getElementById('checkParametros');
+if (checkParametrosBtn) {
+    checkParametrosBtn.addEventListener('click', () => {
+        const pos1 = document.getElementById('pos1').value.trim();
+        const pos2 = document.getElementById('pos2').value.trim();
+        const condicao1 = document.getElementById('condicao1').value.trim();
+        const length = document.getElementById('length').value.trim();
+        const condicao2 = document.getElementById('condicao2').value.trim();
+        const length2 = document.getElementById('length2').value.trim();
+        const indice1 = document.getElementById('indice1').value.trim();
+        const indice2 = document.getElementById('indice2').value.trim();
+        const indice3 = document.getElementById('indice3').value.trim();
+        const indice4 = document.getElementById('indice4').value.trim();
+        
+        const feedback = document.getElementById('parametrosFeedback');
+        feedback.style.display = 'block';
+        
+        const correctPos1 = pos1 === '1';
+        const correctPos2 = pos2 === '3';
+        const correctCondicao1 = condicao1 === '0';
+        const correctLength = length === 'length';
+        const correctCondicao2 = condicao2 === '0';
+        const correctLength2 = length2 === 'length';
+        const correctIndice1 = indice1 === 'i';
+        const correctIndice2 = indice2 === 'i';
+        const correctIndice3 = indice3 === 'j';
+        const correctIndice4 = indice4 === 'i';
+        
+        if (correctPos1 && correctPos2 && correctCondicao1 && correctLength &&
+            correctCondicao2 && correctLength2 && correctIndice1 && correctIndice2 &&
+            correctIndice3 && correctIndice4) {
+            feedback.className = 'feedback success';
+            feedback.textContent = 'Excelente! Você completou o código corretamente.';
+        } else {
+            feedback.className = 'feedback error';
+            let message = 'Corrija as seguintes partes: ';
+            if (!correctPos1) message += 'Posição 1: 1. ';
+            if (!correctPos2) message += 'Posição 2: 3. ';
+            if (!correctCondicao1) message += 'Condição 1: 0. ';
+            if (!correctLength) message += 'Propriedade 1: length. ';
+            if (!correctCondicao2) message += 'Condição 2: 0. ';
+            if (!correctLength2) message += 'Propriedade 2: length. ';
+            if (!correctIndice1) message += 'Índice 1: i. ';
+            if (!correctIndice2) message += 'Índice 2: i. ';
+            if (!correctIndice3) message += 'Índice 3: j. ';
+            if (!correctIndice4) message += 'Índice 4: i. ';
+            feedback.textContent = message;
+        }
+    });
+}
+</script>
+</body>
+</html>
