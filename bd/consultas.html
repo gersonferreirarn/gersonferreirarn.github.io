@@ -1,0 +1,1593 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos SQL de Consulta e Filtros</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #9b59b6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--warning);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-menu button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+        }
+
+        .module-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            background: var(--light);
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .module-link.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .module-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .module-status {
+            margin-left: auto;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        .module-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+            scroll-margin-top: 100px;
+        }
+
+        .module-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .module-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .module-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lesson {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .lesson h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .lesson p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .lesson ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .lesson li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: var(--dark);
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "SQL";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .code-block code {
+            display: block;
+            line-height: 1.5;
+        }
+
+        .key-point {
+            background: #e8f4fc;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .key-point h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .key-point.warning {
+            background: #fef5e7;
+            border-left-color: var(--warning);
+        }
+
+        .key-point.warning h4 {
+            color: var(--warning);
+        }
+
+        .key-point.success {
+            background: #eafaf1;
+            border-left-color: var(--success);
+        }
+
+        .key-point.success h4 {
+            color: var(--success);
+        }
+
+        .quiz-section {
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-header h3 {
+            color: var(--primary);
+        }
+
+        .quiz-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #27ae60;
+        }
+
+        .resources {
+            margin-top: 30px;
+        }
+
+        .resources h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .resource-card p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .resource-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        .module-completion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light);
+        }
+
+        .completion-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .completion-btn:hover {
+            background: #27ae60;
+        }
+
+        .completion-btn.completed {
+            background: var(--info);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .module-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .resource-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Module specific colors */
+        .module-1 { border-left: 5px solid #3498db; }
+        .module-2 { border-left: 5px solid #e74c3c; }
+        .module-3 { border-left: 5px solid #2ecc71; }
+        .module-4 { border-left: 5px solid #f39c12; }
+        .module-5 { border-left: 5px solid #9b59b6; }
+        .module-6 { border-left: 5px solid #1abc9c; }
+        .module-7 { border-left: 5px solid #34495e; }
+        .module-8 { border-left: 5px solid #e67e22; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <h1>Comandos SQL de Consulta e Filtros</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="progress-container">
+                        <span>Seu progresso:</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="mainProgress"></div>
+                        </div>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <button><i class="fas fa-user"></i> Perfil</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Tópicos do Curso</h2>
+                <ul class="module-list">
+                    <li class="module-item">
+                        <a href="#modulo1" class="module-link" data-module="1">
+                            <i class="fas fa-search"></i>
+                            <span>SELECT e FROM</span>
+                            <span class="module-status" id="status1">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo2" class="module-link" data-module="2">
+                            <i class="fas fa-filter"></i>
+                            <span>WHERE</span>
+                            <span class="module-status" id="status2">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo3" class="module-link" data-module="3">
+                            <i class="fas fa-equals"></i>
+                            <span>Operadores Relacionais</span>
+                            <span class="module-status" id="status3">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo4" class="module-link" data-module="4">
+                            <i class="fas fa-code-branch"></i>
+                            <span>Operadores Lógicos</span>
+                            <span class="module-status" id="status4">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo5" class="module-link" data-module="5">
+                            <i class="fas fa-font"></i>
+                            <span>LIKE</span>
+                            <span class="module-status" id="status5">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo6" class="module-link" data-module="6">
+                            <i class="fas fa-arrows-alt-h"></i>
+                            <span>BETWEEN e IN</span>
+                            <span class="module-status" id="status6">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo7" class="module-link" data-module="7">
+                            <i class="fas fa-ban"></i>
+                            <span>IS NULL</span>
+                            <span class="module-status" id="status7">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo8" class="module-link" data-module="8">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Funções de Agrupamento</span>
+                            <span class="module-status" id="status8">Pendente</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="content-area">
+                <!-- Módulo 1 -->
+                <section id="modulo1" class="module-section module-1">
+                    <div class="module-header">
+                        <h2>SELECT e FROM</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Comando SELECT</h3>
+                        <p>O comando SELECT é usado para recuperar dados de um banco de dados. É o comando mais fundamental em SQL para consulta de informações.</p>
+                        <p>A sintaxe básica do SELECT é:</p>
+                        <div class="code-block">
+                            <code>SELECT coluna1, coluna2, ...
+FROM tabela;</code>
+                        </div>
+                        <p>Para selecionar todas as colunas de uma tabela, use o asterisco (*) como atalho:</p>
+                        <div class="code-block">
+                            <code>SELECT * FROM tabela;</code>
+                        </div>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>O SELECT sempre retorna um conjunto de resultados (result set) com os dados solicitados.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Comando FROM</h3>
+                        <p>O comando FROM especifica a tabela ou tabelas de onde os dados serão recuperados. Ele sempre acompanha o comando SELECT.</p>
+                        <p>Exemplos de uso:</p>
+                        <div class="code-block">
+                            <code>-- Selecionar colunas específicas
+SELECT nome, email, telefone FROM clientes;
+
+-- Selecionar todas as colunas
+SELECT * FROM produtos;</code>
+                        </div>
+                        <p>O FROM também pode ser usado com aliases (apelidos) para simplificar a escrita de consultas complexas:</p>
+                        <div class="code-block">
+                            <code>SELECT c.nome, p.descricao
+FROM clientes AS c, pedidos AS p
+WHERE c.id = p.cliente_id;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Combinando SELECT e FROM</h3>
+                        <p>A combinação de SELECT e FROM forma a base de qualquer consulta SQL. Vamos ver alguns exemplos práticos:</p>
+                        <div class="code-block">
+                            <code>-- Exemplo 1: Selecionar informações de clientes
+SELECT id, nome, email, data_cadastro 
+FROM clientes;
+
+-- Exemplo 2: Selecionar produtos com preço acima de 100
+SELECT nome, preco, estoque 
+FROM produtos;
+
+-- Exemplo 3: Selecionar pedidos com informações do cliente
+SELECT p.id, p.data_pedido, c.nome, c.email
+FROM pedidos AS p
+JOIN clientes AS c ON p.cliente_id = c.id;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Evite usar SELECT * em código de produção. Especifique apenas as colunas necessárias para melhorar a performance e a clareza do código.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(1)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre SELECT e FROM para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(1)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 2 -->
+                <section id="modulo2" class="module-section module-2">
+                    <div class="module-header">
+                        <h2>WHERE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 35 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução ao WHERE</h3>
+                        <p>O comando WHERE é usado para filtrar registros que atendem a condições específicas. Ele permite restringir os resultados retornados por uma consulta.</p>
+                        <p>A sintaxe básica é:</p>
+                        <div class="code-block">
+                            <code>SELECT coluna1, coluna2, ...
+FROM tabela
+WHERE condição;</code>
+                        </div>
+                        <p>A condição no WHERE pode usar diversos operadores que veremos nos próximos módulos.</p>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>O WHERE é aplicado antes do agrupamento e ordenação dos dados, filtrando os registros individualmente.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplos básicos com WHERE</h3>
+                        <p>Vamos ver alguns exemplos práticos do uso do WHERE:</p>
+                        <div class="code-block">
+                            <code>-- Filtrar clientes por ID
+SELECT * FROM clientes WHERE id = 10;
+
+-- Filtrar produtos por categoria
+SELECT nome, preco FROM produtos WHERE categoria = 'Eletrônicos';
+
+-- Filtrar pedidos por data
+SELECT id, valor FROM pedidos WHERE data_pedido = '2023-05-15';</code>
+                        </div>
+                        <p>O WHERE também pode ser combinado com outros comandos SQL:</p>
+                        <div class="code-block">
+                            <code>-- Atualizar registros específicos
+UPDATE produtos SET preco = preco * 1.1 WHERE categoria = 'Eletrônicos';
+
+-- Excluir registros específicos
+DELETE FROM logs WHERE data_criacao < '2022-01-01';</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Múltiplas condições com WHERE</h3>
+                        <p>O WHERE permite combinar múltiplas condições usando operadores lógicos como AND e OR:</p>
+                        <div class="code-block">
+                            <code>-- Usando AND (todas as condições devem ser verdadeiras)
+SELECT nome, email FROM clientes 
+WHERE cidade = 'São Paulo' AND status = 'ativo';
+
+-- Usando OR (pelo menos uma condição deve ser verdadeira)
+SELECT nome, email FROM clientes 
+WHERE cidade = 'São Paulo' OR cidade = 'Rio de Janeiro';
+
+-- Combinando AND e OR com parênteses
+SELECT nome, email FROM clientes 
+WHERE (cidade = 'São Paulo' OR cidade = 'Rio de Janeiro') 
+AND status = 'ativo';</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Quando combinar AND e OR, use parênteses para garantir a ordem correta de avaliação das condições.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(2)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre WHERE para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(2)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 3 -->
+                <section id="modulo3" class="module-section module-3">
+                    <div class="module-header">
+                        <h2>Operadores Relacionais</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução aos Operadores Relacionais</h3>
+                        <p>Operadores relacionais são usados para comparar valores em condições do WHERE. Eles retornam verdadeiro ou falso, determinando quais registros serão incluídos no resultado.</p>
+                        <p>Os principais operadores relacionais em SQL são:</p>
+                        <ul>
+                            <li><strong>=</strong> - Igual a</li>
+                            <li><strong>!= ou &lt;&gt;</strong> - Diferente de</li>
+                            <li><strong>&gt;</strong> - Maior que</li>
+                            <li><strong>&lt;</strong> - Menor que</li>
+                            <li><strong>&gt;=</strong> - Maior ou igual a</li>
+                            <li><strong>&lt;=</strong> - Menor ou igual a</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Operadores relacionais são a base para a maioria das condições em cláusulas WHERE.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplos com Operadores Relacionais</h3>
+                        <p>Vamos ver exemplos práticos com cada operador:</p>
+                        <div class="code-block">
+                            <code>-- Igual a (=)
+SELECT * FROM produtos WHERE preco = 99.90;
+
+-- Diferente de (!= ou <>)
+SELECT * FROM produtos WHERE categoria != 'Eletrônicos';
+
+-- Maior que (>)
+SELECT * FROM produtos WHERE preco > 100;
+
+-- Menor que (<)
+SELECT * FROM produtos WHERE estoque < 10;
+
+-- Maior ou igual a (>=)
+SELECT * FROM funcionarios WHERE salario >= 3000;
+
+-- Menor ou igual a (<=)
+SELECT * FROM pedidos WHERE valor <= 50;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Combinando Operadores Relacionais</h3>
+                        <p>Operadores relacionais podem ser combinados com operadores lógicos para criar condições mais complexas:</p>
+                        <div class="code-block">
+                            <code>-- Faixa de preço entre 50 e 100
+SELECT nome, preco FROM produtos 
+WHERE preco >= 50 AND preco <= 100;
+
+-- Produtos fora da faixa de preço
+SELECT nome, preco FROM produtos 
+WHERE preco < 50 OR preco > 100;
+
+-- Clientes de cidades específicas com idade mínima
+SELECT nome, cidade, idade FROM clientes 
+WHERE (cidade = 'São Paulo' OR cidade = 'Rio de Janeiro') 
+AND idade >= 18;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Para verificar se um valor está dentro de uma faixa, você pode usar o operador BETWEEN, que veremos em um módulo posterior.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(3)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre operadores relacionais para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(3)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 4 -->
+                <section id="modulo4" class="module-section module-4">
+                    <div class="module-header">
+                        <h2>Operadores Lógicos</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 35 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução aos Operadores Lógicos</h3>
+                        <p>Operadores lógicos são usados para combinar múltiplas condições em uma cláusula WHERE. Eles permitem criar consultas mais complexas e específicas.</p>
+                        <p>Os principais operadores lógicos em SQL são:</p>
+                        <ul>
+                            <li><strong>AND</strong> - Retorna verdadeiro se todas as condições forem verdadeiras</li>
+                            <li><strong>OR</strong> - Retorna verdadeiro se pelo menos uma condição for verdadeira</li>
+                            <li><strong>NOT</strong> - Inverte o resultado da condição</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Operadores lógicos seguem a precedência: NOT é avaliado primeiro, depois AND, e finalmente OR. Use parênteses para alterar essa ordem.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador AND</h3>
+                        <p>O operador AND exige que todas as condições sejam verdadeiras para que o registro seja incluído no resultado:</p>
+                        <div class="code-block">
+                            <code>-- Clientes ativos de São Paulo
+SELECT * FROM clientes 
+WHERE cidade = 'São Paulo' AND status = 'ativo';
+
+-- Produtos com preço entre 50 e 100 e estoque disponível
+SELECT * FROM produtos 
+WHERE preco >= 50 AND preco <= 100 AND estoque > 0;
+
+-- Pedidos recentes de alto valor
+SELECT * FROM pedidos 
+WHERE data_pedido >= '2023-01-01' AND valor > 1000;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador OR</h3>
+                        <p>O operador OR retorna registros que atendem a pelo menos uma das condições:</p>
+                        <div class="code-block">
+                            <code>-- Clientes de São Paulo ou Rio de Janeiro
+SELECT * FROM clientes 
+WHERE cidade = 'São Paulo' OR cidade = 'Rio de Janeiro';
+
+-- Produtos das categorias Eletrônicos ou Informática
+SELECT * FROM produtos 
+WHERE categoria = 'Eletrônicos' OR categoria = 'Informática';
+
+-- Pedidos com status específicos
+SELECT * FROM pedidos 
+WHERE status = 'pendente' OR status = 'processando';</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador NOT e Combinações</h3>
+                        <p>O operador NOT inverte o resultado de uma condição. Ele também pode ser combinado com outros operadores lógicos:</p>
+                        <div class="code-block">
+                            <code>-- Clientes que não são de São Paulo
+SELECT * FROM clientes WHERE NOT cidade = 'São Paulo';
+
+-- Produtos que não estão na categoria Eletrônicos
+SELECT * FROM produtos WHERE NOT categoria = 'Eletrônicos';
+
+-- Combinação de AND, OR e NOT
+SELECT * FROM clientes 
+WHERE (cidade = 'São Paulo' OR cidade = 'Rio de Janeiro') 
+AND NOT status = 'inativo';</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Quando combinar AND e OR, use parênteses para garantir a ordem correta de avaliação. Sem parênteses, AND tem precedência sobre OR.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(4)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre operadores lógicos para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(4)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 5 -->
+                <section id="modulo5" class="module-section module-5">
+                    <div class="module-header">
+                        <h2>LIKE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução ao LIKE</h3>
+                        <p>O operador LIKE é usado em cláusulas WHERE para buscar padrões em colunas de texto. Ele é mais flexível que o operador de igualdade (=), permitindo buscas parciais.</p>
+                        <p>O LIKE utiliza dois caracteres curinga principais:</p>
+                        <ul>
+                            <li><strong>%</strong> - Representa zero, um ou múltiplos caracteres</li>
+                            <li><strong>_</strong> - Representa exatamente um caractere</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>O LIKE é sensível a maiúsculas e minúsculas em alguns bancos de dados, mas não em outros. Verifique a documentação do seu SGBD.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Usando o curinga %</h3>
+                        <p>O curinga % é o mais utilizado com o LIKE. Veja exemplos:</p>
+                        <div class="code-block">
+                            <code>-- Começa com 'Silva'
+SELECT * FROM clientes WHERE nome LIKE 'Silva%';
+
+-- Termina com 'silva'
+SELECT * FROM clientes WHERE nome LIKE '%silva';
+
+-- Contém 'silva' em qualquer posição
+SELECT * FROM clientes WHERE nome LIKE '%silva%';
+
+-- Produtos cuja descrição contém 'HD'
+SELECT * FROM produtos WHERE descricao LIKE '%HD%';</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Buscas que começam com curinga (LIKE '%texto') são mais lentas que buscas que terminam com curinga (LIKE 'texto%'), pois não podem usar índices eficientemente.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Usando o curinga _ e combinações</h3>
+                        <p>O curinga _ representa exatamente um caractere. Ele pode ser combinado com % para criar padrões mais específicos:</p>
+                        <div class="code-block">
+                            <code>-- Nomes com 5 letras que começam com 'Maria'
+SELECT * FROM clientes WHERE nome LIKE 'Maria_';
+
+-- CEPs no formato 99999-999
+SELECT * FROM clientes WHERE cep LIKE '_____-___';
+
+-- Combinação de curingas
+-- Produtos cujo código começa com 'A', tem qualquer caractere 
+-- em seguida e termina com '5'
+SELECT * FROM produtos WHERE codigo LIKE 'A_%5';</code>
+                        </div>
+                        <p>Para buscar os próprios caracteres curinga, use a cláusula ESCAPE:</p>
+                        <div class="code-block">
+                            <code>-- Buscar nomes que contêm exatamente 20%
+SELECT * FROM produtos WHERE nome LIKE '%20\%%' ESCAPE '\';</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(5)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre LIKE para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(5)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 6 -->
+                <section id="modulo6" class="module-section module-6">
+                    <div class="module-header">
+                        <h2>BETWEEN e IN</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador BETWEEN</h3>
+                        <p>O operador BETWEEN é usado para selecionar valores dentro de um intervalo. Os valores podem ser números, texto ou datas.</p>
+                        <p>A sintaxe do BETWEEN é:</p>
+                        <div class="code-block">
+                            <code>SELECT coluna(s)
+FROM tabela
+WHERE coluna BETWEEN valor1 AND valor2;</code>
+                        </div>
+                        <p>É importante notar que o BETWEEN é inclusivo, ou seja, inclui os valores de início e fim do intervalo.</p>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>O BETWEEN é equivalente a usar "coluna >= valor1 AND coluna <= valor2", mas torna a consulta mais legível.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplos com BETWEEN</h3>
+                        <p>Vamos ver exemplos práticos do uso do BETWEEN com diferentes tipos de dados:</p>
+                        <div class="code-block">
+                            <code>-- Intervalo de preços
+SELECT nome, preco FROM produtos 
+WHERE preco BETWEEN 50 AND 100;
+
+-- Intervalo de datas
+SELECT nome, data_pedido FROM pedidos 
+WHERE data_pedido BETWEEN '2023-01-01' AND '2023-01-31';
+
+-- Intervalo alfabético
+SELECT nome, sobrenome FROM clientes 
+WHERE sobrenome BETWEEN 'A' AND 'M';</code>
+                        </div>
+                        <p>O BETWEEN também pode ser combinado com NOT para selecionar valores fora do intervalo:</p>
+                        <div class="code-block">
+                            <code>-- Produtos com preço fora da faixa
+SELECT nome, preco FROM produtos 
+WHERE preco NOT BETWEEN 50 AND 100;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador IN</h3>
+                        <p>O operador IN permite especificar múltiplos valores em uma cláusula WHERE. É uma alternativa mais limpa ao uso de múltiplos OR.</p>
+                        <p>A sintaxe do IN é:</p>
+                        <div class="code-block">
+                            <code>SELECT coluna(s)
+FROM tabela
+WHERE coluna IN (valor1, valor2, ...);</code>
+                        </div>
+                        <p>Exemplos de uso do IN:</p>
+                        <div class="code-block">
+                            <code>-- Clientes de cidades específicas
+SELECT * FROM clientes 
+WHERE cidade IN ('São Paulo', 'Rio de Janeiro', 'Belo Horizonte');
+
+-- Produtos de categorias específicas
+SELECT * FROM produtos 
+WHERE categoria IN ('Eletrônicos', 'Informática', 'Celulares');
+
+-- Pedidos com status específicos
+SELECT * FROM pedidos 
+WHERE status IN ('pendente', 'processando', 'enviado');</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>IN com subconsultas e NOT IN</h3>
+                        <p>O operador IN pode ser usado com subconsultas, permitindo comparar valores com o resultado de outra consulta:</p>
+                        <div class="code-block">
+                            <code>-- Clientes que fizeram pedidos
+SELECT * FROM clientes 
+WHERE id IN (SELECT DISTINCT cliente_id FROM pedidos);
+
+-- Produtos que nunca foram vendidos
+SELECT * FROM produtos 
+WHERE id NOT IN (SELECT DISTINCT produto_id FROM itens_pedido);</code>
+                        </div>
+                        <p>O NOT IN seleciona registros que não correspondem a nenhum dos valores da lista:</p>
+                        <div class="code-block">
+                            <code>-- Clientes que não são das cidades listadas
+SELECT * FROM clientes 
+WHERE cidade NOT IN ('São Paulo', 'Rio de Janeiro', 'Belo Horizonte');</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Se a subconsulta no IN retornar valores NULL, o resultado da consulta será vazio. Use NOT EXISTS ou trate os NULLs explicitamente nesses casos.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(6)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre BETWEEN e IN para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(6)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 7 -->
+                <section id="modulo7" class="module-section module-7">
+                    <div class="module-header">
+                        <h2>IS NULL</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 25 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Entendendo valores NULL</h3>
+                        <p>NULL é um valor especial em SQL que representa a ausência de dados ou um valor desconhecido. É diferente de zero, string vazia ou qualquer outro valor.</p>
+                        <p>Características importantes do NULL:</p>
+                        <ul>
+                            <li>NULL não é igual a nada, nem mesmo a outro NULL</li>
+                            <li>Qualquer operação com NULL resulta em NULL</li>
+                            <li>NULL não pode ser comparado com operadores como =, !=, &lt;, &gt;</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Para verificar se um valor é NULL, você deve usar os operadores IS NULL ou IS NOT NULL. Não use = NULL ou != NULL.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador IS NULL</h3>
+                        <p>O operador IS NULL é usado para encontrar registros que contêm valores NULL em colunas específicas:</p>
+                        <div class="code-block">
+                            <code>-- Clientes sem telefone cadastrado
+SELECT * FROM clientes WHERE telefone IS NULL;
+
+-- Produtos sem data de validade
+SELECT * FROM produtos WHERE data_validade IS NULL;
+
+-- Pedidos sem data de envio
+SELECT * FROM pedidos WHERE data_envio IS NULL;</code>
+                        </div>
+                        <p>Exemplo de como NULL afeta operações:</p>
+                        <div class="code-block">
+                            <code>-- Esta consulta não retornará registros onde bonus é NULL
+SELECT * FROM funcionarios WHERE bonus = 0;
+
+-- Esta consulta retornará registros onde bonus é NULL
+SELECT * FROM funcionarios WHERE bonus IS NULL;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Operador IS NOT NULL e tratamento de NULLs</h3>
+                        <p>O operador IS NOT NULL é usado para encontrar registros que não contêm valores NULL:</p>
+                        <div class="code-block">
+                            <code>-- Clientes com telefone cadastrado
+SELECT * FROM clientes WHERE telefone IS NOT NULL;
+
+-- Produtos com data de validade definida
+SELECT * FROM produtos WHERE data_validade IS NOT NULL;</code>
+                        </div>
+                        <p>Alguns bancos de dados oferecem funções para tratar valores NULL:</p>
+                        <div class="code-block">
+                            <code>-- Usando COALESCE (retorna o primeiro valor não NULL)
+SELECT nome, COALESCE(telefone, 'Não informado') AS telefone 
+FROM clientes;
+
+-- Usando IFNULL (MySQL) ou ISNULL (SQL Server)
+SELECT nome, IFNULL(telefone, 'Não informado') AS telefone 
+FROM clientes;
+
+-- Usando NVL (Oracle)
+SELECT nome, NVL(telefone, 'Não informado') AS telefone 
+FROM clientes;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Evite permitir NULLs em colunas que serão usadas em condições WHERE, JOINs ou cálculos. Sempre que possível, defina valores padrão.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(7)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre IS NULL para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(7)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 8 -->
+                <section id="modulo8" class="module-section module-8">
+                    <div class="module-header">
+                        <h2>Funções de Agrupamento</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 45 minutos</span>
+                            <span><i class="fas fa-signal"></i> Avançado</span>
+                            <span><i class="fas fa-file-alt"></i> 5 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Introdução às Funções de Agrupamento</h3>
+                        <p>Funções de agregação (ou agrupamento) realizam cálculos em um conjunto de valores e retornam um único valor. Elas são frequentemente usadas com a cláusula GROUP BY.</p>
+                        <p>As principais funções de agregação em SQL são:</p>
+                        <ul>
+                            <li><strong>COUNT()</strong> - Conta o número de registros</li>
+                            <li><strong>SUM()</strong> - Calcula a soma dos valores</li>
+                            <li><strong>AVG()</strong> - Calcula a média dos valores</li>
+                            <li><strong>MIN()</strong> - Retorna o valor mínimo</li>
+                            <li><strong>MAX()</strong> - Retorna o valor máximo</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Funções de agregação ignoram valores NULL, exceto COUNT(*), que conta todos os registros, incluindo aqueles com NULLs.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Funções COUNT, SUM e AVG</h3>
+                        <p>Vamos ver exemplos das funções mais comuns:</p>
+                        <div class="code-block">
+                            <code>-- COUNT: contar registros
+SELECT COUNT(*) AS total_clientes FROM clientes;
+SELECT COUNT(email) AS clientes_com_email FROM clientes;
+
+-- SUM: somar valores
+SELECT SUM(valor) AS total_vendas FROM pedidos;
+SELECT SUM(quantidade * preco) AS valor_estoque FROM itens_pedido;
+
+-- AVG: calcular média
+SELECT AVG(preco) AS preco_medio FROM produtos;
+SELECT AVG(salario) AS salario_medio FROM funcionarios;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Use COUNT(1) em vez de COUNT(*) para melhor performance em alguns bancos de dados, pois evita a leitura de todas as colunas.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Funções MIN e MAX</h3>
+                        <p>As funções MIN e MAX retornam os valores mínimo e máximo de um conjunto de valores:</p>
+                        <div class="code-block">
+                            <code>-- MIN: valor mínimo
+SELECT MIN(preco) AS menor_preco FROM produtos;
+SELECT MIN(data_pedido) AS primeiro_pedido FROM pedidos;
+
+-- MAX: valor máximo
+SELECT MAX(preco) AS maior_preco FROM produtos;
+SELECT MAX(data_pedido) AS ultimo_pedido FROM pedidos;
+
+-- Combinando MIN e MAX
+SELECT 
+    MIN(preco) AS menor_preco,
+    MAX(preco) AS maior_preco,
+    MAX(preco) - MIN(preco) AS diferenca
+FROM produtos;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Cláusula GROUP BY</h3>
+                        <p>A cláusula GROUP BY agrupa registros que têm os mesmos valores em colunas especificadas, permitindo aplicar funções de agregação a cada grupo:</p>
+                        <div class="code-block">
+                            <code>-- Contar clientes por cidade
+SELECT cidade, COUNT(*) AS total_clientes 
+FROM clientes 
+GROUP BY cidade;
+
+-- Valor total de pedidos por cliente
+SELECT cliente_id, SUM(valor) AS total_compras 
+FROM pedidos 
+GROUP BY cliente_id;
+
+-- Preço médio por categoria de produto
+SELECT categoria, AVG(preco) AS preco_medio 
+FROM produtos 
+GROUP BY categoria;</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Todas as colunas no SELECT que não estão em funções de agregação devem estar na cláusula GROUP BY.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Cláusula HAVING e ORDER BY</h3>
+                        <p>A cláusula HAVING filtra grupos criados pelo GROUP BY, similar ao que o WHERE faz para registros individuais:</p>
+                        <div class="code-block">
+                            <code>-- Cidades com mais de 10 clientes
+SELECT cidade, COUNT(*) AS total_clientes 
+FROM clientes 
+GROUP BY cidade 
+HAVING COUNT(*) > 10;
+
+-- Categorias com preço médio acima de 100
+SELECT categoria, AVG(preco) AS preco_medio 
+FROM produtos 
+GROUP BY categoria 
+HAVING AVG(preco) > 100;</code>
+                        </div>
+                        <p>A cláusula ORDER BY ordena o resultado final:</p>
+                        <div class="code-block">
+                            <code>-- Clientes por cidade, ordenados pelo total
+SELECT cidade, COUNT(*) AS total_clientes 
+FROM clientes 
+GROUP BY cidade 
+ORDER BY total_clientes DESC;
+
+-- Produtos por categoria, ordenados pelo preço médio
+SELECT categoria, AVG(preco) AS preco_medio 
+FROM produtos 
+GROUP BY categoria 
+ORDER BY preco_medio;</code>
+                        </div>
+                        <div class="key-point">
+                            <h4>Diferença entre WHERE e HAVING</h4>
+                            <p>WHERE filtra registros antes do agrupamento; HAVING filtra grupos após o agrupamento.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(8)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre funções de agrupamento para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(8)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recursos Adicionais -->
+                <section class="module-section">
+                    <div class="module-header">
+                        <h2>Recursos Adicionais</h2>
+                    </div>
+                    <div class="resources">
+                        <div class="resource-list">
+                            <div class="resource-card">
+                                <h4>Documentação Oficial</h4>
+                                <p>Referência completa de comandos SQL</p>
+                                <a href="#">Acessar documentação</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Exercícios Práticos</h4>
+                                <p>Desafios para praticar todos os conceitos</p>
+                                <a href="#">Ver exercícios</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Projetos Completos</h4>
+                                <p>Aplicações reais usando SQL</p>
+                                <a href="#">Explorar projetos</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Certificação</h4>
+                                <p>Obtenha seu certificado de conclusão</p>
+                                <a href="#">Solicitar certificado</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Portal SQL</h3>
+                    <p>Aprenda SQL de forma estruturada e prática com nosso portal de aprendizagem completo.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Página Inicial</a></li>
+                        <li><a href="#">Todos os Módulos</a></li>
+                        <li><a href="#">Certificações</a></li>
+                        <li><a href="#">Fórum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recursos</h3>
+                    <ul>
+                        <li><a href="#">Documentação</a></li>
+                        <li><a href="#">Exercícios</a></li>
+                        <li><a href="#">Projetos Práticos</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Suporte</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Portal de Aprendizagem SQL. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de progresso
+        let completedModules = new Set();
+        const totalModules = 8;
+
+        function updateProgress() {
+            const progress = (completedModules.size / totalModules) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        function completeModule(moduleNumber) {
+            completedModules.add(moduleNumber);
+            document.getElementById(`status${moduleNumber}`).textContent = 'Concluído';
+            document.getElementById(`status${moduleNumber}`).style.background = 'var(--success)';
+            
+            const button = event.target.closest('.completion-btn');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Concluído';
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            updateProgress();
+            
+            // Mostrar mensagem de sucesso
+            showNotification(`Módulo ${moduleNumber} concluído com sucesso!`);
+        }
+
+        function startQuiz(moduleNumber) {
+            showNotification(`Iniciando quiz do Módulo ${moduleNumber}. Boa sorte!`);
+        }
+
+        function showNotification(message) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Adicionar ao corpo
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Navegação suave e destaque do módulo ativo
+        document.querySelectorAll('.module-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover active class de todos os links
+                document.querySelectorAll('.module-link').forEach(l => l.classList.remove('active'));
+                
+                // Adicionar active class ao link clicado
+                this.classList.add('active');
+                
+                // Scroll suave até a seção
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Detectar qual módulo está visível durante o scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.module-section');
+            const scrollPosition = window.scrollY + 200;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    document.querySelectorAll('.module-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar
+        updateProgress();
+    </script>
+</body>
+</html>
