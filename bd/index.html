@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Aprendizado SQL</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --structure: #9b59b6; /* Cor para módulo de estrutura */
+            --queries: #16a085; /* Cor para módulo de consultas */
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --font-size-base: 18px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            font-size: var(--font-size-base);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        main {
+            padding: 3rem 0;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .welcome-section h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .welcome-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--dark);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--secondary);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        .topic-card h3 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .topic-card .icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+        .topic-card p {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .topic-card .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            margin-top: auto;
+        }
+        .topic-card .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        .topic-card.structure {
+            border-top-color: var(--structure);
+        }
+        .topic-card.structure .btn {
+            background-color: var(--structure);
+        }
+        .topic-card.structure .btn:hover {
+            background-color: #8e44ad;
+        }
+        .topic-card.queries {
+            border-top-color: var(--queries);
+        }
+        .topic-card.queries .btn {
+            background-color: var(--queries);
+        }
+        .topic-card.queries .btn:hover {
+            background-color: #138d75;
+        }
+        .features-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        .features-section h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+        }
+        .feature-item:hover {
+            background-color: var(--light);
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .feature-item h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .feature-item p {
+            color: #666;
+        }
+        .learning-path {
+            background-color: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        .learning-path h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .path-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .path-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .path-step:hover {
+            background-color: var(--light);
+            transform: translateY(-5px);
+        }
+        .path-step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            line-height: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .path-step.structure .path-step-number {
+            background-color: var(--structure);
+        }
+        .path-step.queries .path-step-number {
+            background-color: var(--queries);
+        }
+        .path-step h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .path-step p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        /* Acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        :focus {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .welcome-section h2 {
+                font-size: 2rem;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .path-steps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Portal de Aprendizado SQL</h1>
+                    <p class="subtitle">Materiais de estudo para linguagem SQL</p>
+                </div>
+                <div>
+                    <button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+                    <button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="welcome-section">
+            <h2>Bem-vindo ao Portal de Aprendizado SQL</h2>
+            <p>Aqui você encontrará materiais completos para aprender SQL, desde a criação de estruturas de bancos de dados até consultas complexas. Explore nossos módulos e comece sua jornada no mundo dos bancos de dados!</p>
+        </section>
+        
+        <section class="learning-path">
+            <h2>Seu Caminho de Aprendizado</h2>
+            <div class="path-steps">
+                <div class="path-step structure">
+                    <div class="path-step-number">1</div>
+                    <h3>Estrutura e Dados</h3>
+                    <p>Criação de tabelas, definição de tipos de dados e inserção de registros</p>
+                </div>
+                <div class="path-step queries">
+                    <div class="path-step-number">2</div>
+                    <h3>Consultas SQL</h3>
+                    <p>Recuperação e manipulação de dados com SELECT, JOIN, filtros e agregações</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cards-grid">
+            <div class="topic-card structure">
+                <h3><span class="icon">🏗️</span> Estrutura e Dados</h3>
+                <p>Aprenda a criar estruturas de bancos de dados, definir tabelas, tipos de dados, chaves primárias e estrangeiras. Domine os comandos DDL como CREATE, ALTER e DROP, além de inserir dados com INSERT.</p>
+                <a href="estrutura.html" class="btn">Acessar Módulo</a>
+            </div>
+            
+            <div class="topic-card queries">
+                <h3><span class="icon">🔍</span> Consultas SQL</h3>
+                <p>Domine a arte de recuperar dados com SELECT, filtrar informações com WHERE, ordenar resultados, agrupar dados com GROUP BY e juntar tabelas com JOIN. Aprenda também a usar subconsultas e funções de agregação.</p>
+                <a href="consultas.html" class="btn">Acessar Módulo</a>
+            </div>
+        </section>
+        
+        <section class="features-section">
+            <h2>Recursos de Aprendizagem</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📚</div>
+                    <h3>Conteúdo Teórico</h3>
+                    <p>Explicações detalhadas de conceitos SQL com exemplos práticos e ilustrações.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">💻</div>
+                    <h3>Exemplos Práticos</h3>
+                    <p>Código SQL comentado mostrando a aplicação real de cada comando e função.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🧩</div>
+                    <h3>Atividades Interativas</h3>
+                    <p>Exercícios para testar seu conhecimento e fixar o aprendizado.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Ambiente Prático</h3>
+                    <p>Tutoriais para implementar projetos em ambientes como MySQL, PostgreSQL e SQLite.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; Portal de Aprendizado SQL - Material educativo para bancos de dados</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Controle de tamanho da fonte
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const root = document.documentElement;
+        let currentFontSize = 18;
+        
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+        
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+    </script>
+</body>
+</html>
