@@ -13,6 +13,7 @@
             --danger: #e74c3c;
             --modular: #9b59b6; /* Nova cor para modularidade */
             --sequence: #16a085; /* Nova cor para estrutura de sequência */
+            --string: #e67e22; /* Nova cor para strings */
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
@@ -172,6 +173,15 @@
         .topic-card.sequence .btn:hover {
             background-color: #138d75;
         }
+        .topic-card.string {
+            border-top-color: var(--string);
+        }
+        .topic-card.string .btn {
+            background-color: var(--string);
+        }
+        .topic-card.string .btn:hover {
+            background-color: #d35400;
+        }
         .features-section {
             background-color: white;
             border-radius: 15px;
@@ -266,6 +276,9 @@
         }
         .path-step.loop .path-step-number {
             background-color: var(--warning);
+        }
+        .path-step.string .path-step-number {
+            background-color: var(--string);
         }
         .path-step h3 {
             color: var(--dark);
@@ -374,6 +387,11 @@
                     <h3>Estruturas de Repetição</h3>
                     <p>Loops com for, while, do-while, break e continue</p>
                 </div>
+                <div class="path-step string">
+                    <div class="path-step-number">4</div>
+                    <h3>Manipulação de Strings</h3>
+                    <p>Trabalhando com textos e caracteres em Java</p>
+                </div>
             </div>
         </section>
         
@@ -394,6 +412,12 @@
                 <h3><span class="icon">🔄</span> Estruturas de Repetição</h3>
                 <p>Aprenda a usar for, while e do-while para criar loops eficientes. Domine o controle de fluxo com break e continue.</p>
                 <a href="repeticao.html" class="btn">Acessar Módulo</a>
+            </div>
+            
+            <div class="topic-card string">
+                <h3><span class="icon">📝</span> Manipulação de Strings</h3>
+                <p>Aprenda a trabalhar com textos em Java. Domine os principais métodos para manipulação de strings, como concatenação, busca, substituição e formatação.</p>
+                <a href="string.html" class="btn">Acessar Módulo</a>
             </div>
             
             <div class="topic-card modular">
