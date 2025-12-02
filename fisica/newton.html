@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Virtual da Lei de Newton</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .simulation-area {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .input-group input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .input-group.friction-input {
+            display: none;
+            margin-top: 10px;
+            margin-left: 25px;
+        }
+        .input-group.friction-input.show {
+            display: block;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #f7fafc;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        .info-panel {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+        .friction-info {
+            background: #fff5f5;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #e53e3e;
+            display: none;
+        }
+        .friction-info.show {
+            display: block;
+        }
+        .friction-info h4 {
+            color: #e53e3e;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .friction-info p {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        #canvas {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #667eea';
+        }
+        .chart {
+            width: 100%;
+            height: 250px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .experiments-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .experiment-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .experiment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea';
+        }
+        .experiment-card.active {
+            background: '#eef2ff';
+            border-color: '#667eea';
+        }
+        .experiment-card h4 {
+            color: '#667eea';
+            margin-bottom: 10px;
+        }
+        .theory-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .theory-section h2 {
+            color: '#667eea';
+            margin-bottom: 15px;
+        }
+        .formula {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 15px 0;
+            border-left: 4px solid '#667eea';
+        }
+        .challenge-section {
+            background: #fef3c7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid '#f59e0b';
+        }
+        .challenge-section h3 {
+            color: #d97706;
+            margin-bottom: 10px;
+        }
+        .challenge-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .challenge-input-group {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .challenge-input-group label {
+            display: block;
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 5px;
+        }
+        .challenge-input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #f59e0b;
+            border-radius: 5px;
+        }
+        .challenge-answer {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border: 2px solid '#48bb78';
+        }
+        .challenge-answer.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .challenge-answer h4 {
+            color: '#48bb78';
+            margin-bottom: 10px;
+        }
+        .challenge-feedback {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        .challenge-feedback.show {
+            display: block;
+        }
+        .challenge-feedback.correct {
+            border: 2px solid #48bb78;
+            color: '#48bb78';
+        }
+        .challenge-feedback.incorrect {
+            border: 2px solid #e53e3e;
+            color: #e53e3e;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+            .challenge-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Laboratório Virtual da Lei de Newton</h1>
+            <p>Explore a Segunda Lei de Newton através de simulações interativas</p>
+        </header>
+        <section class="theory-section">
+            <h2>📚 A Segunda Lei de Newton</h2>
+            <p>A Segunda Lei de Newton estabelece que a aceleração de um objeto é diretamente proporcional à força resultante aplicada sobre ele e inversamente proporcional à sua massa. Em outras palavras, quanto maior a força aplicada, maior será a aceleração, e quanto maior a massa, menor será a aceleração.</p>
+            
+            <div class="formula">
+                F = m × a
+            </div>
+            
+            <p>Onde:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>F</strong> = Força resultante (em Newtons, N)</li>
+                <li><strong>m</strong> = Massa do objeto (em quilogramas, kg)</li>
+                <li><strong>a</strong> = Aceleração (em metros por segundo ao quadrado, m/s²)</li>
+            </ul>
+            
+            <p style="margin-top: 15px;"><strong>Exemplos do mundo real:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Um carro acelerando em uma estrada reta</li>
+                <li>Empurrar uma caixa pesada pelo chão</li>
+                <li>Um foguete decolando</li>
+                <li>Um atleta correndo e aumentando sua velocidade</li>
+            </ul>
+        </section>
+        <div class="main-content">
+            <div class="control-panel">
+                <h3>🎮 Controles da Simulação</h3>
+                
+                <div class="input-group">
+                    <label for="mass">Massa (kg)</label>
+                    <input type="number" id="mass" value="10" min="1" max="100" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="force">Força (N)</label>
+                    <input type="number" id="force" value="50" min="0" max="500" step="0.1">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="friction">
+                    <label for="friction">Incluir atrito</label>
+                </div>
+                
+                <div class="input-group friction-input" id="frictionInput">
+                    <label for="frictionCoeff">Coeficiente de atrito (μ)</label>
+                    <input type="number" id="frictionCoeff" value="0.3" min="0" max="2" step="0.01">
+                </div>
+                
+                <div class="controls">
+                    <button class="btn-primary" id="startBtn">▶️ Iniciar</button>
+                    <button class="btn-secondary" id="pauseBtn">⏸️ Pausar</button>
+                    <button class="btn-danger" id="resetBtn">🔄 Resetar</button>
+                </div>
+                
+                <div class="slider-container">
+                    <label for="timeScale">Velocidade da Simulação: <span id="timeScaleValue">1x</span></label>
+                    <input type="range" id="timeScale" min="0.1" max="3" step="0.1" value="1">
+                </div>
+                
+                <div class="info-panel">
+                    <h3>📊 Dados em Tempo Real</h3>
+                    <div class="info-item">
+                        <span>Aceleração:</span>
+                        <span class="info-value" id="acceleration">0 m/s²</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Velocidade:</span>
+                        <span class="info-value" id="velocity">0 m/s</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Posição:</span>
+                        <span class="info-value" id="position">0 m</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Tempo:</span>
+                        <span class="info-value" id="time">0 s</span>
+                    </div>
+                </div>
+                
+                <div class="friction-info" id="frictionInfo">
+                    <h4>📌 Informações de Atrito</h4>
+                    <p>Força de atrito: <span id="frictionForce">0 N</span></p>
+                    <p>Força resultante: <span id="resultantForce">0 N</span></p>
+                </div>
+                
+                <div class="challenge-section">
+                    <h3>🎯 Desafio do Professor</h3>
+                    <p id="challengeText">Qual força é necessária para uma massa de <span id="challengeMassValue">10</span> kg atingir uma aceleração de 2 m/s²?</p>
+                    
+                    <div class="challenge-inputs">
+                        <div class="challenge-input-group">
+                            <label>Massa (kg)</label>
+                            <input type="number" id="challengeMass" value="10" step="0.1">
+                        </div>
+                        <div class="challenge-input-group">
+                            <label>Força (N)</label>
+                            <input type="number" id="challengeForce" placeholder="Digite sua resposta" step="0.1">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" id="checkAnswer" style="margin-top: 10px;">Verificar Resposta</button>
+                    
+                    <div class="challenge-feedback" id="challengeFeedback"></div>
+                    
+                    <div class="challenge-answer" id="challengeAnswer">
+                        <h4>✅ Resposta Correta!</h4>
+                        <p><strong>Cálculo:</strong> F = m × a</p>
+                        <p>F = <span id="answerMass">10</span> kg × 2 m/s² = <span id="answerForce">20</span> N</p>
+                        <p>Portanto, são necessários <span id="answerForce2">20</span> Newtons de força.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="simulation-area">
+                <h3>🎬 Simulação Visual</h3>
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+        
+        <section class="charts-section">
+            <div class="chart-container">
+                <h3>📈 Velocidade × Tempo</h3>
+                <canvas class="chart" id="velocityChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>📍 Posição × Tempo</h3>
+                <canvas class="chart" id="positionChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>⚡ Força × Aceleração</h3>
+                <canvas class="chart" id="forceChart"></canvas>
+            </div>
+        </section>
+        
+        <section class="experiments-section">
+            <h3>🧪 Experimentos Guiados</h3>
+            
+            <div class="experiment-card" data-experiment="1">
+                <h4>Cenário 1: Força constante e massa variável</h4>
+                <p>Mantenha a força constante em 50 N e varie a massa de 5 kg a 50 kg. Observe como a aceleração diminui à medida que a massa aumenta.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="2">
+                <h4>Cenário 2: Massa constante e força variável</h4>
+                <p>Mantenha a massa constante em 10 kg e varie a força de 10 N a 100 N. Observe como a aceleração aumenta linearmente com a força.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="3">
+                <h4>Cenário 3: Comparação entre dois objetos</h4>
+                <p>Compare dois objetos: um com massa 5 kg e outro com massa 20 kg, ambos sob a mesma força de 40 N. Observe a diferença de aceleração.</p>
+            </div>
+            
+            <div class="experiment-card" data-experiment="4">
+                <h4>Cenário 4: Efeito do atrito</h4>
+                <p>Ative o atrito e experimente diferentes coeficientes (0.1 a 0.8). Observe como o atrito reduz a aceleração e a velocidade máxima.</p>
+            </div>
+        </section>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    <script>
+        // Classe principal da simulação
+        class NewtonSimulation {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.setupCanvas();
+                
+                // Propriedades do objeto
+                this.mass = 10;
+                this.force = 50;
+                this.friction = false;
+                this.frictionCoeff = 0.3;
+                
+                // Estado da simulação
+                this.isRunning = false;
+                this.isPaused = false;
+                this.time = 0;
+                this.position = 0;
+                this.velocity = 0;
+                this.acceleration = 0;
+                this.timeScale = 1;
+                this.reachedLimit = false;
+                
+                // Dados para gráficos
+                this.velocityData = [];
+                this.positionData = [];
+                this.forceData = [];
+                this.timeData = [];
+                
+                // Objeto visual (boneco e caixa)
+                this.doll = {
+                    x: 50,
+                    y: 130,
+                    width: 30,
+                    height: 60,
+                    color: '#4c51bf'
+                };
+                
+                this.box = {
+                    x: 90,
+                    y: 150,
+                    width: 60,
+                    height: 40,
+                    color: '#667eea'
+                };
+                
+                // Posição base do objeto (sem atrito)
+                this.baseX = 50;
+                
+                this.setupEventListeners();
+                this.setupCharts();
+                this.updateCalculations();
+                this.updateChallengeText();
+                this.draw();
+            }
+            
+            setupCanvas() {
+                const resizeCanvas = () => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.canvas.width = rect.width;
+                    this.canvas.height = rect.height;
+                };
+                
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+            }
+            
+            setupEventListeners() {
+                // Inputs
+                document.getElementById('mass').addEventListener('input', (e) => {
+                    this.mass = parseFloat(e.target.value);
+                    this.updateCalculations();
+                    this.updateChallengeText();
+                    this.draw();
+                });
+                
+                document.getElementById('force').addEventListener('input', (e) => {
+                    this.force = parseFloat(e.target.value);
+                    this.updateCalculations();
+                    this.draw();
+                });
+                
+                document.getElementById('friction').addEventListener('change', (e) => {
+                    const wasFrictionActive = this.friction;
+                    this.friction = e.target.checked;
+                    const frictionInput = document.getElementById('frictionInput');
+                    const frictionInfo = document.getElementById('frictionInfo');
+                    
+                    if (this.friction) {
+                        frictionInput.classList.add('show');
+                        frictionInfo.classList.add('show');
+                        
+                        // Se acabou de ativar o atrito, ajustar posição do objeto
+                        if (!wasFrictionActive) {
+                            this.adjustObjectPositionForFriction();
+                        }
+                    } else {
+                        frictionInput.classList.remove('show');
+                        frictionInfo.classList.remove('show');
+                        
+                        // Se acabou de desativar o atrito, voltar posição original
+                        if (wasFrictionActive) {
+                            this.resetObjectPosition();
+                        }
+                    }
+                    
+                    this.updateCalculations();
+                    this.draw();
+                });
+                
+                document.getElementById('frictionCoeff').addEventListener('input', (e) => {
+                    this.frictionCoeff = parseFloat(e.target.value);
+                    this.updateCalculations();
+                    
+                    // Se o atrito está ativo, readjustar posição quando coeficiente muda
+                    if (this.friction) {
+                        this.adjustObjectPositionForFriction();
+                    }
+                    
+                    this.draw();
+                });
+                
+                document.getElementById('timeScale').addEventListener('input', (e) => {
+                    this.timeScale = parseFloat(e.target.value);
+                    document.getElementById('timeScaleValue').textContent = this.timeScale + 'x';
+                });
+                
+                // Botões
+                document.getElementById('startBtn').addEventListener('click', () => this.start());
+                document.getElementById('pauseBtn').addEventListener('click', () => this.pause());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+                
+                // Experimentos
+                document.querySelectorAll('.experiment-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.experiment-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        this.loadExperiment(parseInt(card.dataset.experiment));
+                    });
+                });
+                
+                // Desafio
+                document.getElementById('checkAnswer').addEventListener('click', () => this.checkChallenge());
+                
+                // Inputs do desafio
+                document.getElementById('challengeMass').addEventListener('input', (e) => {
+                    // Sincronizar com o input principal
+                    document.getElementById('mass').value = e.target.value;
+                    this.mass = parseFloat(e.target.value);
+                    this.updateCalculations();
+                    this.updateChallengeText();
+                    this.draw();
+                });
+                
+                document.getElementById('challengeForce').addEventListener('input', (e) => {
+                    // Sincronizar com o input principal
+                    document.getElementById('force').value = e.target.value;
+                    this.force = parseFloat(e.target.value);
+                    this.updateCalculations();
+                    this.draw();
+                });
+            }
+            
+            setupCharts() {
+                // Configurar gráficos
+                this.velocityChart = document.getElementById('velocityChart');
+                this.velocityCtx = this.velocityChart.getContext('2d');
+                
+                this.positionChart = document.getElementById('positionChart');
+                this.positionCtx = this.positionChart.getContext('2d');
+                
+                this.forceChart = document.getElementById('forceChart');
+                this.forceCtx = this.forceChart.getContext('2d');
+                
+                // Ajustar tamanho dos gráficos
+                [this.velocityChart, this.positionChart, this.forceChart].forEach(chart => {
+                    const rect = chart.getBoundingClientRect();
+                    chart.width = rect.width;
+                    chart.height = rect.height;
+                });
+            }
+            
+            updateChallengeText() {
+                // Atualizar o texto do desafio com a massa atual
+                const challengeMassValue = document.getElementById('challengeMassValue');
+                challengeMassValue.textContent = this.mass.toFixed(1);
+                
+                // Atualizar o input do desafio
+                document.getElementById('challengeMass').value = this.mass;
+            }
+            
+            adjustObjectPositionForFriction() {
+                // Calcular o tamanho necessário para o vetor de atrito
+                const frictionForce = this.frictionCoeff * this.mass * 9.8;
+                const scale = 1.5;
+                const arrowLength = Math.min(frictionForce * scale, 60);
+                const spacing = 15; // Espaço entre o vetor e o objeto
+                
+                // Nova posição base considerando o vetor de atrito
+                const newX = this.baseX + arrowLength + spacing;
+                
+                // Ajustar posição do objeto se não estiver em movimento
+                if (!this.isRunning && this.velocity === 0) {
+                    const offset = newX - this.baseX;
+                    this.doll.x = 50 + offset;
+                    this.box.x = 90 + offset;
+                    // Ajustar também a posição base para manter a proporção
+                    this.position = (this.box.x - 90) / 2;
+                }
+            }
+            
+            resetObjectPosition() {
+                // Voltar para a posição original se não estiver em movimento
+                if (!this.isRunning && this.velocity === 0) {
+                    this.doll.x = 50;
+                    this.box.x = 90;
+                    this.position = 0;
+                }
+            }
+            
+            updateCalculations() {
+                // Calcular força resultante
+                let resultantForce = this.force;
+                let frictionForce = 0;
+                
+                if (this.friction) {
+                    frictionForce = this.frictionCoeff * this.mass * 9.8; // F_atrito = μ * m * g
+                    resultantForce = Math.max(0, this.force - frictionForce);
+                }
+                
+                // Calcular aceleração (F = m * a => a = F / m)
+                this.acceleration = resultantForce / this.mass;
+                
+                // Atualizar displays
+                document.getElementById('acceleration').textContent = this.acceleration.toFixed(2) + ' m/s²';
+                
+                // Atualizar informações de atrito
+                if (this.friction) {
+                    document.getElementById('frictionForce').textContent = frictionForce.toFixed(2) + ' N';
+                    document.getElementById('resultantForce').textContent = resultantForce.toFixed(2) + ' N';
+                }
+            }
+            
+            start() {
+                // Se atingiu o limite, resetar antes de iniciar
+                if (this.reachedLimit) {
+                    this.reset();
+                    this.reachedLimit = false;
+                }
+                
+                if (!this.isRunning) {
+                    // Verificar se há força resultante para mover o objeto
+                    if (this.acceleration > 0.001) { // Usar um pequeno threshold para evitar problemas de ponto flutuante
+                        this.isRunning = true;
+                        this.isPaused = false;
+                        this.animate();
+                        this.showNotification('Simulação iniciada!', 'success');
+                    } else {
+                        // Se não há força resultante, mostrar mensagem informativa
+                        let message = 'O objeto não se moverá porque ';
+                        if (this.friction) {
+                            const frictionForce = this.frictionCoeff * this.mass * 9.8;
+                            if (this.force < frictionForce) {
+                                message += `a força de atrito (${frictionForce.toFixed(1)} N) é maior que a força aplicada (${this.force} N).`;
+                            } else {
+                                message += `a força resultante é muito pequena para mover o objeto.`;
+                            }
+                        } else {
+                            message += 'não há força aplicada suficiente.';
+                        }
+                        this.showNotification(message, 'warning');
+                    }
+                }
+            }
+            
+            pause() {
+                if (this.isRunning && !this.isPaused) {
+                    this.isPaused = true;
+                    this.showNotification('Simulação pausada', 'info');
+                } else if (this.isPaused) {
+                    this.isPaused = false;
+                    this.animate();
+                    this.showNotification('Simulação retomada', 'info');
+                }
+            }
+            
+            reset() {
+                this.isRunning = false;
+                this.isPaused = false;
+                this.time = 0;
+                this.position = 0;
+                this.velocity = 0;
+                this.reachedLimit = false;
+                
+                // Resetar posição do objeto considerando o estado do atrito
+                if (this.friction) {
+                    this.adjustObjectPositionForFriction();
+                } else {
+                    this.resetObjectPosition();
+                }
+                
+                // Limpar dados dos gráficos
+                this.velocityData = [];
+                this.positionData = [];
+                this.forceData = [];
+                this.timeData = [];
+                
+                this.updateDisplay();
+                this.draw();
+                this.drawCharts();
+                this.showNotification('Simulação resetada', 'info');
+            }
+            
+            animate() {
+                if (!this.isRunning || this.isPaused) return;
+                
+                // Atualizar tempo
+                const dt = 0.016 * this.timeScale; // 60 FPS
+                this.time += dt;
+                
+                // Atualizar velocidade (v = v0 + a * t)
+                this.velocity += this.acceleration * dt;
+                
+                // Atualizar posição (s = s0 + v * t + 0.5 * a * t²)
+                this.position += this.velocity * dt;
+                
+                // Calcular a nova posição da caixa
+                const newBoxX = 90 + (this.position * 2);
+                const newDollX = 50 + (this.position * 2);
+                
+                // Calcular onde a ponta da seta da força estaria
+                const forceScale = 2; // Mesma escala usada no drawForceVector
+                const arrowTipX = newBoxX + this.box.width + (this.force * forceScale);
+                
+                // Verificar limites:
+                // 1. Se a ponta da seta da força atingir o limite da tela
+                // 2. Se a caixa atingir o limite da tela
+                const maxX = this.canvas.width - 20;
+                const boxLimit = this.canvas.width - this.box.width - 50;
+                
+                if (arrowTipX >= maxX || newBoxX >= boxLimit) {
+                    // Parar o movimento
+                    this.velocity = 0;
+                    this.isRunning = false;
+                    this.reachedLimit = true;
+                    
+                    // Ajustar posições finais para não ultrapassar os limites
+                    if (newBoxX >= boxLimit) {
+                        this.doll.x = boxLimit - 40;
+                        this.box.x = boxLimit;
+                    } else {
+                        // Se a seta atingiu o limite primeiro, calcular a posição máxima permitida
+                        const maxPosition = (maxX - this.box.width - 90 - (this.force * forceScale)) / 2;
+                        this.position = Math.max(0, maxPosition);
+                        this.doll.x = 50 + (this.position * 2);
+                        this.box.x = 90 + (this.position * 2);
+                    }
+                    
+                    this.showNotification('Objeto atingiu o limite! Pressione Iniciar para recomeçar.', 'warning');
+                } else {
+                    // Atualizar posições visuais
+                    this.doll.x = newDollX;
+                    this.box.x = newBoxX;
+                }
+                
+                // Coletar dados para gráficos
+                this.collectData();
+                
+                // Atualizar displays
+                this.updateDisplay();
+                this.draw();
+                
+                // Continuar animação
+                if (this.isRunning) {
+                    requestAnimationFrame(() => this.animate());
+                }
+            }
+            
+            collectData() {
+                this.timeData.push(this.time);
+                this.velocityData.push(this.velocity);
+                this.positionData.push(this.position);
+                this.forceData.push(this.force);
+                
+                // Limitar quantidade de dados
+                if (this.timeData.length > 100) {
+                    this.timeData.shift();
+                    this.velocityData.shift();
+                    this.positionData.shift();
+                    this.forceData.shift();
+                }
+                
+                // Atualizar gráficos periodicamente
+                if (Math.floor(this.time * 10) % 5 === 0) {
+                    this.drawCharts();
+                }
+            }
+            
+            updateDisplay() {
+                document.getElementById('velocity').textContent = this.velocity.toFixed(2) + ' m/s';
+                document.getElementById('position').textContent = this.position.toFixed(2) + ' m';
+                document.getElementById('time').textContent = this.time.toFixed(2) + ' s';
+            }
+            
+            draw() {
+                // Limpar canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Desenhar plano
+                this.ctx.fillStyle = '#e0e0e0';
+                this.ctx.fillRect(0, this.box.y + this.box.height, this.canvas.width, 5);
+                
+                // Desenhar vetor de atrito primeiro (para ficar atrás do objeto)
+                if (this.friction && this.force > 0) {
+                    this.drawFrictionVector();
+                }
+                
+                // Desenhar boneco
+                this.drawDoll();
+                
+                // Desenhar caixa
+                this.drawBox();
+                
+                // Desenhar vetor de força
+                if (this.force > 0) {
+                    this.drawForceVector();
+                }
+                
+                // Desenhar informações
+                this.ctx.fillStyle = '#333';
+                this.ctx.font = '14px Arial';
+                
+                // Ajustar posição do texto baseado na posição do objeto
+                let infoY = this.box.y - 10;
+                if (this.box.x > this.canvas.width - 150) {
+                    // Se o objeto está perto do limite direito, colocar texto à esquerda
+                    this.ctx.textAlign = 'right';
+                    this.ctx.fillText(`m = ${this.mass} kg`, this.box.x - 5, infoY);
+                    this.ctx.fillText(`F = ${this.force} N`, this.box.x - 5, infoY - 20);
+                    
+                    if (this.friction) {
+                        this.ctx.fillStyle = '#e53e3e';
+                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.box.x - 5, infoY - 40);
+                    }
+                    this.ctx.textAlign = 'left';
+                } else {
+                    // Posição normal
+                    this.ctx.fillText(`m = ${this.mass} kg`, this.box.x, infoY);
+                    this.ctx.fillText(`F = ${this.force} N`, this.box.x, infoY - 20);
+                    
+                    if (this.friction) {
+                        this.ctx.fillStyle = '#e53e3e';
+                        this.ctx.fillText(`μ = ${this.frictionCoeff}`, this.box.x, infoY - 40);
+                    }
+                }
+            }
+            
+            drawDoll() {
+                const ctx = this.ctx;
+                const doll = this.doll;
+                
+                // Corpo
+                ctx.fillStyle = doll.color;
+                ctx.fillRect(doll.x + 10, doll.y + 20, 10, 30);
+                
+                // Cabeça
+                ctx.beginPath();
+                ctx.arc(doll.x + 15, doll.y + 10, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pernas
+                ctx.fillRect(doll.x + 10, doll.y + 45, 4, 15);
+                ctx.fillRect(doll.x + 16, doll.y + 45, 4, 15);
+                
+                // Braços (em posição de empurrar)
+                ctx.fillRect(doll.x + 5, doll.y + 25, 8, 4);
+                ctx.fillRect(doll.x + 17, doll.y + 25, 15, 4);
+                
+                // Mão tocando a caixa
+                ctx.beginPath();
+                ctx.arc(doll.x + 32, doll.y + 27, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            drawBox() {
+                const ctx = this.ctx;
+                const box = this.box;
+                
+                // Corpo da caixa
+                ctx.fillStyle = box.color;
+                ctx.fillRect(box.x, box.y, box.width, box.height);
+                
+                // Detalhes da caixa (linhas para dar efeito 3D)
+                ctx.strokeStyle = '#4c51bf';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(box.x, box.y);
+                ctx.lineTo(box.x + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width, box.y);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(box.x + box.width, box.y);
+                ctx.lineTo(box.x + box.width + 10, box.y - 10);
+                ctx.lineTo(box.x + box.width + 10, box.y + box.height - 10);
+                ctx.lineTo(box.x + box.width, box.y + box.height);
+                ctx.stroke();
+                
+                // Símbolo de peso na caixa
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`${this.mass}kg`, box.x + 15, box.y + 25);
+            }
+            
+            drawForceVector() {
+                // A seta da força começa na caixa e aponta para a direita (direção do movimento)
+                const arrowStartX = this.box.x + this.box.width;
+                const arrowStartY = this.box.y + this.box.height / 2;
+                
+                // Calcular o comprimento total do vetor baseado na força
+                const scale = 2; // Escala para visualização
+                const totalArrowLength = this.force * scale;
+                
+                // Calcular onde o vetor terminaria sem limites
+                const idealEndX = arrowStartX + totalArrowLength;
+                const idealEndY = arrowStartY;
+                
+                // Determinar o ponto visível máximo
+                const maxX = this.canvas.width - 20;
+                const visibleEndX = Math.min(idealEndX, maxX);
+                const visibleLength = visibleEndX - arrowStartX;
+                
+                // Desenhar a parte visível do vetor
+                this.ctx.strokeStyle = '#667eea';
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(arrowStartX, arrowStartY);
+                this.ctx.lineTo(visibleEndX, idealEndY);
+                this.ctx.stroke();
+                
+                // Desenhar ponta da seta (sempre, mesmo que parcialmente fora da tela)
+                if (totalArrowLength > 15) {
+                    this.ctx.fillStyle = '#667eea';
+                    this.ctx.beginPath();
+                    
+                    // Calcular a posição da ponta da seta
+                    let arrowTipX = idealEndX;
+                    let arrowTipY = idealEndY;
+                    
+                    // Se a ponta da seta está fora da tela, ajustar para o limite
+                    if (arrowTipX > maxX) {
+                        arrowTipX = maxX;
+                    }
+                    
+                    // Desenhar a ponta da seta
+                    this.ctx.moveTo(arrowTipX, arrowTipY);
+                    this.ctx.lineTo(arrowTipX - 10, arrowTipY - 5);
+                    this.ctx.lineTo(arrowTipX - 10, arrowTipY + 5);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                }
+                
+                // Se o vetor foi cortado, desenhar linha pontilhada indicando continuação
+                if (idealEndX > maxX) {
+                    this.ctx.setLineDash([5, 5]);
+                    this.ctx.strokeStyle = '#667eea';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(maxX, idealEndY);
+                    this.ctx.lineTo(maxX + 20, idealEndY);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                }
+                
+                // Label da força
+                this.ctx.fillStyle = '#667eea';
+                this.ctx.font = 'bold 16px Arial';
+                
+                // Posicionar o label de forma inteligente
+                let labelX, labelY;
+                
+                if (visibleLength > 30) {
+                    // Se há espaço, colocar o label no meio do vetor visível
+                    labelX = arrowStartX + (visibleLength / 2) - 5;
+                    labelY = idealEndY - 15;
+                    
+                    // Se o label sair da tela, reposicionar
+                    if (labelX + 20 > this.canvas.width) {
+                        labelX = arrowStartX - 25;
+                        labelY = arrowStartY - 15;
+                    }
+                } else {
+                    // Se não há espaço, colocar o label acima da caixa
+                    labelX = this.box.x + this.box.width / 2 - 5;
+                    labelY = this.box.y - 45;
+                }
+                
+                this.ctx.fillText('F', labelX, labelY);
+                
+                // Adicionar indicador de magnitude se o vetor foi cortado
+                if (idealEndX > maxX) {
+                    this.ctx.fillStyle = '#666';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText(`${this.force}N`, maxX + 25, idealEndY + 5);
+                }
+            }
+            
+            drawFrictionVector() {
+                // Calcular força de atrito
+                const frictionForce = this.frictionCoeff * this.mass * 9.8;
+                const scale = 1.5; // Escala para visualização
+                const arrowLength = Math.min(frictionForce * scale, 60);
+                
+                // Posicionar o vetor de atrito bem atrás do boneco
+                // Início do vetor: 20 pixels antes do início do boneco
+                const arrowStartX = this.doll.x - 20;
+                const arrowStartY = this.doll.y + this.doll.height / 2;
+                
+                // O vetor de atrito termina à esquerda do ponto inicial
+                const arrowEndX = arrowStartX - arrowLength;
+                const arrowEndY = arrowStartY;
+                
+                // Garantir que não fique fora da tela à esquerda
+                const minEndX = 15;
+                const adjustedEndX = Math.max(minEndX, arrowEndX);
+                
+                // Desenhar linha
+                this.ctx.strokeStyle = '#e53e3e';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(arrowStartX, arrowStartY);
+                this.ctx.lineTo(adjustedEndX, arrowEndY);
+                this.ctx.stroke();
+                
+                // Desenhar ponta da seta no final (lado esquerdo)
+                this.ctx.fillStyle = '#e53e3e';
+                this.ctx.beginPath();
+                this.ctx.moveTo(adjustedEndX, arrowEndY);
+                this.ctx.lineTo(adjustedEndX + 8, arrowEndY - 3);
+                this.ctx.lineTo(adjustedEndX + 8, arrowEndY + 3);
+                this.ctx.closePath();
+                this.ctx.fill();
+                
+                // Label do atrito - posicionar mais acima e à esquerda para evitar sobreposição
+                this.ctx.fillStyle = '#e53e3e';
+                this.ctx.font = 'bold 12px Arial';
+                
+                // Posicionar o label bem acima do vetor para evitar sobreposição
+                let labelX = arrowStartX - arrowLength / 2;
+                let labelY = arrowEndY - 25; // Mais acima do que antes
+                
+                // Se o label ficar muito à esquerda, ajustar
+                if (labelX < 25) {
+                    labelX = arrowStartX - 5;
+                    labelY = arrowEndY - 30;
+                }
+                
+                this.ctx.fillText('Fat', labelX, labelY);
+            }
+            
+            drawCharts() {
+                this.drawVelocityChart();
+                this.drawPositionChart();
+                this.drawForceChart();
+            }
+            
+            drawVelocityChart() {
+                const ctx = this.velocityCtx;
+                const width = this.velocityChart.width;
+                const height = this.velocityChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                if (this.timeData.length < 2) return;
+                
+                // Encontrar valores máximos
+                const maxTime = Math.max(...this.timeData);
+                const maxVelocity = Math.max(...this.velocityData, 10);
+                
+                // Desenhar eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Tempo (s)', width / 2 - 30, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Velocidade (m/s)', -40, 0);
+                ctx.restore();
+                
+                // Desenhar gráfico
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                this.timeData.forEach((time, i) => {
+                    const x = 40 + (time / maxTime) * (width - 60);
+                    const y = height - 30 - (this.velocityData[i] / maxVelocity) * (height - 50);
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                
+                ctx.stroke();
+            }
+            
+            drawPositionChart() {
+                const ctx = this.positionCtx;
+                const width = this.positionChart.width;
+                const height = this.positionChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                if (this.timeData.length < 2) return;
+                
+                const maxTime = Math.max(...this.timeData);
+                const maxPosition = Math.max(...this.positionData, 10);
+                
+                // Eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Tempo (s)', width / 2 - 30, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Posição (m)', -35, 0);
+                ctx.restore();
+                
+                // Gráfico
+                ctx.strokeStyle = '#48bb78';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                this.timeData.forEach((time, i) => {
+                    const x = 40 + (time / maxTime) * (width - 60);
+                    const y = height - 30 - (this.positionData[i] / maxPosition) * (height - 50);
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                
+                ctx.stroke();
+            }
+            
+            drawForceChart() {
+                const ctx = this.forceCtx;
+                const width = this.forceChart.width;
+                const height = this.forceChart.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                // Gerar dados para relação F x a
+                const forces = [];
+                const accelerations = [];
+                
+                for (let f = 0; f <= 100; f += 5) {
+                    forces.push(f);
+                    let resultantForce = f;
+                    if (this.friction) {
+                        resultantForce = Math.max(0, f - this.frictionCoeff * this.mass * 9.8);
+                    }
+                    accelerations.push(resultantForce / this.mass);
+                }
+                
+                const maxForce = 100;
+                const maxAcceleration = Math.max(...accelerations, 10);
+                
+                // Eixos
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(width - 20, height - 30);
+                ctx.moveTo(40, height - 30);
+                ctx.lineTo(40, 20);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText('Força (N)', width / 2 - 25, height - 5);
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Aceleração (m/s²)', -50, 0);
+                ctx.restore();
+                
+                // Gráfico
+                ctx.strokeStyle = '#ed8936';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                forces.forEach((force, i) => {
+                    const x = 40 + (force / maxForce) * (width - 60);
+                    const y = height - 30 - (accelerations[i] / maxAcceleration) * (height - 50);
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                
+                ctx.stroke();
+                
+                // Marcar ponto atual
+                if (this.force > 0) {
+                    ctx.fillStyle = '#e53e3e';
+                    ctx.beginPath();
+                    const currentX = 40 + (this.force / maxForce) * (width - 60);
+                    const currentY = height - 30 - (this.acceleration / maxAcceleration) * (height - 50);
+                    ctx.arc(currentX, currentY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            loadExperiment(experiment) {
+                this.reset();
+                
+                switch(experiment) {
+                    case 1:
+                        document.getElementById('mass').value = 10;
+                        document.getElementById('force').value = 50;
+                        document.getElementById('challengeMass').value = 10;
+                        document.getElementById('challengeForce').value = '';
+                        this.mass = 10;
+                        this.force = 50;
+                        this.updateChallengeText();
+                        this.showNotification('Cenário 1 carregado: Varie a massa mantendo a força constante', 'info');
+                        break;
+                    case 2:
+                        document.getElementById('mass').value = 10;
+                        document.getElementById('force').value = 50;
+                        document.getElementById('challengeMass').value = 10;
+                        document.getElementById('challengeForce').value = '';
+                        this.mass = 10;
+                        this.force = 50;
+                        this.updateChallengeText();
+                        this.showNotification('Cenário 2 carregado: Varie a força mantendo a massa constante', 'info');
+                        break;
+                    case 3:
+                        document.getElementById('mass').value = 5;
+                        document.getElementById('force').value = 40;
+                        document.getElementById('challengeMass').value = 5;
+                        document.getElementById('challengeForce').value = '';
+                        this.mass = 5;
+                        this.force = 40;
+                        this.updateChallengeText();
+                        this.showNotification('Cenário 3 carregado: Compare com massa de 20 kg', 'info');
+                        break;
+                    case 4:
+                        document.getElementById('mass').value = 10;
+                        document.getElementById('force').value = 60;
+                        document.getElementById('friction').checked = true;
+                        document.getElementById('frictionInput').classList.add('show');
+                        document.getElementById('frictionInfo').classList.add('show');
+                        document.getElementById('frictionCoeff').value = 0.3;
+                        document.getElementById('challengeMass').value = 10;
+                        document.getElementById('challengeForce').value = '';
+                        this.mass = 10;
+                        this.force = 60;
+                        this.friction = true;
+                        this.frictionCoeff = 0.3;
+                        this.updateChallengeText();
+                        this.adjustObjectPositionForFriction();
+                        this.showNotification('Cenário 4 carregado: Experimente diferentes coeficientes de atrito', 'info');
+                        break;
+                }
+                
+                this.updateCalculations();
+                this.draw();
+            }
+            
+            checkChallenge() {
+                // Obter valores dos inputs do desafio
+                const challengeMass = parseFloat(document.getElementById('challengeMass').value);
+                const challengeForce = parseFloat(document.getElementById('challengeForce').value);
+                
+                // Verificar se os valores foram preenchidos
+                if (isNaN(challengeMass) || isNaN(challengeForce)) {
+                    this.showChallengeFeedback('Por favor, preencha todos os campos!', 'incorrect');
+                    return;
+                }
+                
+                // Valores esperados para o desafio (agora dinâmicos)
+                const expectedMass = challengeMass; // Usa a massa informada pelo usuário
+                const expectedAcceleration = 2; // m/s² (fixo)
+                const expectedForce = expectedMass * expectedAcceleration; // Cálculo dinâmico
+                
+                // Tolerâncias
+                const massTolerance = 0.5;
+                const forceTolerance = 1;
+                
+                // Verificar se a massa está correta
+                const massCorrect = Math.abs(challengeMass - expectedMass) <= massTolerance;
+                
+                // Verificar se a força está correta
+                const forceCorrect = Math.abs(challengeForce - expectedForce) <= forceTolerance;
+                
+                // Obter elemento de feedback
+                const feedback = document.getElementById('challengeFeedback');
+                
+                if (massCorrect && forceCorrect) {
+                    // Resposta correta
+                    feedback.className = 'challenge-feedback show correct';
+                    feedback.innerHTML = `
+                        <strong>✅ Excelente!</strong><br>
+                        Você acertou! Para uma massa de ${challengeMass} kg atingir ${expectedAcceleration} m/s² de aceleração, 
+                        são necessários ${challengeForce} N de força.
+                    `;
+                    
+                    // Atualizar a resposta detalhada com os valores dinâmicos
+                    document.getElementById('answerMass').textContent = challengeMass;
+                    document.getElementById('answerForce').textContent = challengeForce;
+                    document.getElementById('answerForce2').textContent = challengeForce;
+                    
+                    // Mostrar resposta detalhada
+                    document.getElementById('challengeAnswer').classList.add('show');
+                    
+                    this.showNotification('Parabéns! Resposta correta!', 'success');
+                } else {
+                    // Resposta incorreta
+                    let message = '<strong>❌ Tente novamente!</strong><br>';
+                    
+                    if (!massCorrect) {
+                        message += `A massa deve ser ${expectedMass} kg. `;
+                    }
+                    
+                    if (!forceCorrect) {
+                        const calculatedForce = challengeMass * expectedAcceleration;
+                        message += `Para massa ${challengeMass} kg e aceleração ${expectedAcceleration} m/s², a força correta seria ${calculatedForce} N.`;
+                    }
+                    
+                    feedback.className = 'challenge-feedback show incorrect';
+                    feedback.innerHTML = message;
+                    
+                    // Esconder resposta detalhada
+                    document.getElementById('challengeAnswer').classList.remove('show');
+                    
+                    this.showNotification('Resposta incorreta. Tente novamente!', 'error');
+                }
+            }
+            
+            showChallengeFeedback(message, type) {
+                const feedback = document.getElementById('challengeFeedback');
+                feedback.className = `challenge-feedback show ${type}`;
+                feedback.innerHTML = message;
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = 'notification show';
+                
+                // Cor baseada no tipo
+                switch(type) {
+                    case 'success':
+                        notification.style.background = '#48bb78';
+                        break;
+                    case 'error':
+                        notification.style.background = '#e53e3e';
+                        break;
+                    case 'warning':
+                        notification.style.background = '#ed8936';
+                        break;
+                    default:
+                        notification.style.background = '#667eea';
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000); // Aumentado para 4 segundos para mensagens mais longas
+            }
+        }
+        
+        // Inicializar simulação quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            const simulation = new NewtonSimulation();
+        });
+    </script>
+</body>
+</html>
