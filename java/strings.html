@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manipulação de Strings em Java</title>
+<style>
+:root {
+--primary: #2c3e50;
+--secondary: #3498db;
+--success: #27ae60;
+--warning: #f39c12;
+--danger: #e74c3c;
+--light: #ecf0f1;
+--dark: #34495e;
+--font-size-base: 18px;
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+line-height: 1.6;
+color: #333;
+background-color: #f8f9fa;
+font-size: var(--font-size-base);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+header {
+background-color: var(--primary);
+color: white;
+padding: 1.5rem 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+}
+h1 {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+}
+.subtitle {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+.nav-tabs {
+display: flex;
+overflow-x: auto;
+background-color: var(--dark);
+margin-top: 1rem;
+border-radius: 8px;
+}
+.nav-tab {
+padding: 1rem 1.5rem;
+background-color: transparent;
+border: none;
+color: white;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 1rem;
+white-space: nowrap;
+}
+.nav-tab:hover {
+background-color: rgba(255,255,255,0.1);
+}
+.nav-tab.active {
+background-color: var(--secondary);
+}
+main {
+padding: 2rem 0;
+}
+.topic-section {
+display: none;
+animation: fadeIn 0.5s;
+}
+.topic-section.active {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.card {
+background: white;
+border-radius: 10px;
+padding: 2rem;
+margin-bottom: 2rem;
+box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+border-left: 5px solid var(--secondary);
+}
+.card h2 {
+color: var(--primary);
+margin-bottom: 1rem;
+font-size: 1.8rem;
+}
+.card h3 {
+color: var(--dark);
+margin: 1.5rem 0 0.8rem;
+font-size: 1.4rem;
+}
+.card h4 {
+color: var(--secondary);
+margin: 1rem 0 0.5rem;
+font-size: 1.2rem;
+}
+.card p, .card li {
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+ul {
+padding-left: 2rem;
+}
+.code-block {
+background-color: #2d3748;
+color: #e2e8f0;
+padding: 1.5rem;
+border-radius: 8px;
+margin: 1.5rem 0;
+overflow-x: auto;
+font-family: 'Courier New', monospace;
+font-size: 1rem;
+line-height: 1.5;
+}
+.code-block .keyword {
+color: #f687b3;
+}
+.code-block .string {
+color: #68d391;
+}
+.code-block .comment {
+color: #a0aec0;
+font-style: italic;
+}
+.code-block .number {
+color: #fbb6ce;
+}
+.activity {
+background-color: #f7fafc;
+border: 2px dashed var(--secondary);
+border-radius: 8px;
+padding: 1.5rem;
+margin: 2rem 0;
+}
+.activity h3 {
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.input-group {
+margin: 1rem 0;
+}
+.input-group label {
+display: block;
+margin-bottom: 0.5rem;
+font-weight: bold;
+color: var(--dark);
+}
+.input-group input, .input-group select, .input-group textarea {
+width: 100%;
+padding: 0.8rem;
+border: 2px solid #ddd;
+border-radius: 5px;
+font-size: 1rem;
+transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+outline: none;
+border-color: var(--secondary);
+}
+.btn {
+display: inline-block;
+background-color: var(--secondary);
+color: white;
+padding: 0.8rem 1.5rem;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.3s;
+margin-top: 1rem;
+}
+.btn:hover {
+background-color: #2980b9;
+transform: translateY(-2px);
+}
+.btn-success {
+background-color: var(--success);
+}
+.btn-success:hover {
+background-color: #229954;
+}
+.feedback {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 5px;
+display: none;
+}
+.feedback.success {
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
+}
+.feedback.error {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+}
+.method-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.method-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1rem;
+transition: all 0.3s;
+}
+.method-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.method-name {
+font-size: 1.2rem;
+font-weight: bold;
+color: var(--primary);
+margin-bottom: 0.5rem;
+}
+.method-description {
+color: #666;
+font-size: 0.9rem;
+}
+.method-example {
+background-color: #f1f5f9;
+border-radius: 5px;
+padding: 0.5rem;
+margin-top: 0.5rem;
+font-family: 'Courier New', monospace;
+font-size: 0.85rem;
+}
+.string-visual {
+display: flex;
+flex-wrap: wrap;
+gap: 0.5rem;
+margin: 1.5rem 0;
+}
+.string-char {
+background-color: var(--light);
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+min-width: 60px;
+transition: all 0.3s;
+}
+.string-char:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.string-char .index {
+font-weight: bold;
+color: var(--dark);
+margin-bottom: 0.5rem;
+font-size: 0.9rem;
+}
+.string-char .char {
+font-size: 1.5rem;
+color: var(--secondary);
+}
+.comparison-table {
+width: 100%;
+border-collapse: collapse;
+margin: 1.5rem 0;
+font-size: 1rem;
+}
+.comparison-table th, .comparison-table td {
+padding: 1rem;
+text-align: left;
+border-bottom: 1px solid #ddd;
+}
+.comparison-table th {
+background-color: var(--secondary);
+color: white;
+}
+.comparison-table tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+.comparison-table tr:hover {
+background-color: #e2e2e2;
+}
+.tip-box {
+background-color: #e3f2fd;
+border-left: 4px solid var(--secondary);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.tip-box h4 {
+color: var(--secondary);
+margin-bottom: 0.5rem;
+}
+.warning-box {
+background-color: #fff3cd;
+border-left: 4px solid var(--warning);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.warning-box h4 {
+color: var(--warning);
+margin-bottom: 0.5rem;
+}
+.code-comparison {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.code-column {
+flex: 1;
+min-width: 300px;
+}
+.code-column h4 {
+color: var(--dark);
+margin-bottom: 0.5rem;
+text-align: center;
+}
+.immutability-visual {
+background-color: #f8f9fa;
+border-radius: 8px;
+padding: 1.5rem;
+margin: 1.5rem 0;
+border-left: 4px solid var(--warning);
+}
+.immutability-step {
+background-color: white;
+border-radius: 8px;
+padding: 1rem;
+margin: 1rem 0;
+display: flex;
+align-items: center;
+}
+.step-number {
+background-color: var(--warning);
+color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 1rem;
+font-weight: bold;
+}
+.step-content {
+flex: 1;
+}
+.step-code {
+background-color: #f1f5f9;
+border-radius: 5px;
+padding: 0.5rem;
+margin-top: 0.5rem;
+font-family: 'Courier New', monospace;
+font-size: 0.9rem;
+}
+footer {
+background-color: var(--primary);
+color: white;
+text-align: center;
+padding: 1.5rem 0;
+margin-top: 3rem;
+}
+/* Acessibilidade */
+.sr-only {
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border: 0;
+}
+:focus {
+outline: 3px solid var(--secondary);
+outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="header-content">
+<div>
+<h1>Manipulação de Strings em Java</h1>
+<p class="subtitle">Principais Métodos e Conceitos</p>
+</div>
+<div>
+<button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+<button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+</div>
+</div>
+<nav class="nav-tabs" role="tablist">
+<button class="nav-tab active" data-topic="conceitos" role="tab" aria-selected="true">Conceitos Básicos</button>
+<button class="nav-tab" data-topic="acesso" role="tab" aria-selected="false">Acesso e Informações</button>
+<button class="nav-tab" data-topic="modificacoes" role="tab" aria-selected="false">Substrings e Modificações</button>
+<button class="nav-tab" data-topic="busca" role="tab" aria-selected="false">Busca e Comparação</button>
+<button class="nav-tab" data-topic="divisao" role="tab" aria-selected="false">Divisão e Conversão</button>
+<button class="nav-tab" data-topic="imutabilidade" role="tab" aria-selected="false">Imutabilidade</button>
+</nav>
+</div>
+</header>
+<main class="container">
+<!-- Tópico 1: Conceitos Básicos -->
+<section id="conceitos" class="topic-section active" role="tabpanel">
+<div class="card">
+<h2>1. Conceitos Básicos de Strings</h2>
+<p>Em Java, <strong>String</strong> é uma classe que representa uma sequência de caracteres. É um dos tipos mais utilizados na linguagem e possui diversas funcionalidades para manipulação de texto.</p>
+
+<h3>O que é uma String?</h3>
+<p>Uma String é um objeto que contém uma sequência de caracteres. Em Java, strings são imutáveis, o que significa que uma vez criadas, não podem ser modificadas. Qualquer operação que pareça modificar uma string, na verdade, cria uma nova string.</p>
+
+<div class="string-visual">
+<div class="string-char">
+<div class="index">0</div>
+<div class="char">I</div>
+</div>
+<div class="string-char">
+<div class="index">1</div>
+<div class="char">F</div>
+</div>
+<div class="string-char">
+<div class="index">2</div>
+<div class="char">R</div>
+</div>
+<div class="string-char">
+<div class="index">3</div>
+<div class="char">N</div>
+</div>
+</div>
+
+<h3>Criação de Strings</h3>
+<p>Existem várias formas de criar strings em Java:</p>
+
+<div class="code-block">
+<span class="comment">// Forma 1: Literal de String</span><br>
+<span class="keyword">String</span> nome = <span class="string">"IFRN"</span>;<br><br>
+<span class="comment">// Forma 2: Usando o construtor</span><br>
+<span class="keyword">String</span> nome2 = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"IFRN"</span>);<br><br>
+<span class="comment">// Forma 3: A partir de um array de caracteres</span><br>
+<span class="keyword">char</span>[] chars = {<span class="string">'I'</span>, <span class="string">'F'</span>, <span class="string">'R'</span>, <span class="string">'N'</span>};<br>
+<span class="keyword">String</span> nome3 = <span class="keyword">new</span> <span class="keyword">String</span>(chars);
+</div>
+
+<h3>String é um Objeto</h3>
+<p>Em Java, String não é um tipo primitivo como int, double ou char. String é uma classe, e quando criamos uma string, estamos na verdade criando um objeto dessa classe. Isso significa que podemos chamar métodos nesse objeto.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem orientada a objetos"</span>;<br><br>
+<span class="comment">// Chamando métodos no objeto String</span><br>
+<span class="keyword">int</span> tamanho = texto.length(); <span class="comment">// Retorna o tamanho da string</span><br>
+<span class="keyword">String</span> maiuscula = texto.toUpperCase(); <span class="comment">// Converte para maiúsculas</span><br>
+<span class="keyword">boolean</span> contem = texto.contains(<span class="string">"linguagem"</span>); <span class="comment">// Verifica se contém a substring</span>
+</div>
+
+<h3>Pool de Strings</h3>
+<p>Java mantém um pool de strings para otimizar o uso de memória. Quando criamos uma string usando um literal, Java verifica se essa string já existe no pool. Se existir, reutiliza a referência em vez de criar uma nova string.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> s1 = <span class="string">"IFRN"</span>; <span class="comment">// Criada no pool</span><br>
+<span class="keyword">String</span> s2 = <span class="string">"IFRN"</span>; <span class="comment">Reutiliza a mesma referência do pool</span><br>
+<span class="keyword">String</span> s3 = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"IFRN"</span>); <span class="comment">// Criada fora do pool</span><br><br>
+System.out.println(s1 == s2); <span class="comment">// true - mesma referência</span><br>
+System.out.println(s1 == s3); <span class="comment">// false - referências diferentes</span><br>
+System.out.println(s1.equals(s3)); <span class="comment">// true - mesmo conteúdo</span>
+</div>
+
+<div class="tip-box">
+<h4>Dica Importante</h4>
+<p>Use sempre o método <code>equals()</code> para comparar o conteúdo de strings, e não o operador <code>==</code>, que compara referências de objetos.</p>
+</div>
+
+<h3>Concatenação de Strings</h3>
+<p>Concatenar strings significa unir duas ou mais strings. Em Java, podemos fazer isso de várias formas:</p>
+
+<div class="code-block">
+<span class="keyword">String</span> saudacao = <span class="string">"Olá"</span>;<br>
+<span class="keyword">String</span> nome = <span class="string">"Mundo"</span>;<br><br>
+<span class="comment">// Forma 1: Usando o operador +</span><br>
+<span class="keyword">String</span> resultado1 = saudacao + <span class="string">", "</span> + nome + <span class="string">"!"</span>;<br><br>
+<span class="comment">// Forma 2: Usando o método concat()</span><br>
+<span class="keyword">String</span> resultado2 = saudacao.concat(<span class="string">", "</span>).concat(nome).concat(<span class="string">"!"</span>);<br><br>
+System.out.println(resultado1); <span class="comment">// "Olá, Mundo!"</span><br>
+System.out.println(resultado2); <span class="comment">// "Olá, Mundo!"</span>
+</div>
+
+<div class="warning-box">
+<h4>Atenção com Concatenação em Loops</h4>
+<p>Como strings são imutáveis, cada concatenação cria um novo objeto. Para muitas concatenações (especialmente em loops), prefira usar <code>StringBuilder</code> para melhor performance.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique quais afirmações sobre strings em Java são verdadeiras:</p>
+<div class="input-group">
+<label><input type="checkbox" id="afirm1"> String é um tipo primitivo em Java.</label>
+</div>
+<div class="input-group">
+<label><input type="checkbox" id="afirm2"> Strings em Java são imutáveis.</label>
+</div>
+<div class="input-group">
+<label><input type="checkbox" id="afirm3"> O operador == deve ser usado para comparar o conteúdo de strings.</label>
+</div>
+<div class="input-group">
+<label><input type="checkbox" id="afirm4"> Java mantém um pool de strings para otimizar o uso de memória.</label>
+</div>
+<div class="input-group">
+<label><input type="checkbox" id="afirm5"> Cada concatenação de strings cria um novo objeto.</label>
+</div>
+<button id="checkAfirmacoes" class="btn">Verificar Respostas</button>
+<div id="afirmacoesFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 2: Métodos de Acesso e Informações -->
+<section id="acesso" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>2. Métodos de Acesso e Informações</h2>
+<p>Os métodos de acesso e informações permitem obter dados sobre uma string, como seu tamanho, caracteres específicos e verificar se está vazia.</p>
+
+<h3>length()</h3>
+<p>O método <code>length()</code> retorna o número de caracteres em uma string. É importante notar que este é um método, não uma propriedade como em arrays (que usam <code>.length</code> sem parênteses).</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java"</span>;<br>
+<span class="keyword">int</span> tamanho = texto.length();<br>
+System.out.println(<span class="string">"Tamanho: "</span> + tamanho); <span class="comment">// Imprime "Tamanho: 4"</span>
+</div>
+
+<h3>charAt(int index)</h3>
+<p>O método <code>charAt(int index)</code> retorna o caractere na posição especificada pelo índice. Os índices em Java começam em 0, então o primeiro caractere está no índice 0.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"IFRN"</span>;<br>
+<span class="keyword">char</span> primeiro = texto.charAt(<span class="number">0</span>); <span class="comment">// 'I'</span><br>
+<span class="keyword">char</span> terceiro = texto.charAt(<span class="number">2</span>); <span class="comment">// 'R'</span><br><br>
+System.out.println(<span class="string">"Primeiro caractere: "</span> + primeiro);<br>
+System.out.println(<span class="string">"Terceiro caractere: "</span> + terceiro);
+</div>
+
+<div class="warning-box">
+<h4>Cuidado com os Índices!</h4>
+<p>Se você tentar acessar um índice que não existe (maior ou igual ao tamanho da string ou negativo), será lançada uma exceção <code>StringIndexOutOfBoundsException</code>.</p>
+</div>
+
+<h3>isEmpty()</h3>
+<p>O método <code>isEmpty()</code> retorna <code>true</code> se a string estiver vazia (tamanho 0) e <code>false</code> caso contrário. Uma string vazia é diferente de uma string nula.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> vazia = <span class="string">""</span>;<br>
+<span class="keyword">String</span> naoVazia = <span class="string">"IFRN"</span>;<br>
+<span class="keyword">String</span> nula = <span class="keyword">null</span>;<br><br>
+System.out.println(<span class="string">"String vazia está vazia? "</span> + vazia.isEmpty()); <span class="comment">// true</span><br>
+System.out.println(<span class="string">"String não vazia está vazia? "</span> + naoVazia.isEmpty()); <span class="comment">// false</span><br>
+<span class="comment">// System.out.println("String nula está vazia? " + nula.isEmpty()); // Erro: NullPointerException</span>
+</div>
+
+<h3>Exemplos Práticos</h3>
+
+<h4>Contando Caracteres Específicos</h4>
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">int</span> contadorVogais = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < texto.length(); i++) {<br>
+&nbsp;&nbsp;<span class="keyword">char</span> c = texto.charAt(i);<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (c == <span class="string">'a'</span> || c == <span class="string">'e'</span> || c == <span class="string">'i'</span> || c == <span class="string">'o'</span> || c == <span class="string">'u'</span> ||<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c == <span class="string">'A'</span> || c == <span class="string">'E'</span> || c == <span class="string">'I'</span> || c == <span class="string">'O'</span> || c == <span class="string">'U'</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contadorVogais++;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Número de vogais: "</span> + contadorVogais);
+</div>
+
+<h4>Invertendo uma String</h4>
+<div class="code-block">
+<span class="keyword">String</span> original = <span class="string">"Java"</span>;<br>
+<span class="keyword">String</span> invertida = <span class="string">""</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = original.length() - <span class="number">1</span>; i >= <span class="number">0</span>; i--) {<br>
+&nbsp;&nbsp;invertida += original.charAt(i);<br>
+}<br><br>
+System.out.println(<span class="string">"Original: "</span> + original);<br>
+System.out.println(<span class="string">"Invertida: "</span> + invertida); <span class="comment">// "avaJ"</span>
+</div>
+
+<h4>Verificando Palíndromos</h4>
+<div class="code-block">
+<span class="keyword">String</span> palavra = <span class="string">"radar"</span>;<br>
+<span class="keyword">boolean</span> ehPalindromo = <span class="keyword">true</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < palavra.length() / <span class="number">2</span>; i++) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (palavra.charAt(i) != palavra.charAt(palavra.length() - <span class="number">1</span> - i)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ehPalindromo = <span class="keyword">false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(palavra + <span class="string">" é um palíndromo? "</span> + ehPalindromo); <span class="comment">// true</span>
+</div>
+
+<div class="method-grid">
+<div class="method-card">
+<div class="method-name">length()</div>
+<div class="method-description">Retorna o número de caracteres na string</div>
+<div class="method-example">"Java".length() // 4</div>
+</div>
+<div class="method-card">
+<div class="method-name">charAt(int index)</div>
+<div class="method-description">Retorna o caractere na posição especificada</div>
+<div class="method-example">"Java".charAt(0) // 'J'</div>
+</div>
+<div class="method-card">
+<div class="method-name">isEmpty()</div>
+<div class="method-description">Verifica se a string está vazia</div>
+<div class="method-example">"".isEmpty() // true</div>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para contar quantas vezes a letra 'a' (maiúscula ou minúscula) aparece em uma string:</p>
+<div class="code-block">
+<span class="keyword">public class</span> ContaLetraA {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> texto = <input type="text" id="texto" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> contador = <input type="text" id="contador" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <input type="text" id="iInicial" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">; i < texto.<input type="text" id="length" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;">(); i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">char</span> c = texto.<input type="text" id="charAt" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;">(i);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (c == <input type="text" id="aMinuscula" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> || c == <input type="text" id="aMaiuscula" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contador<input type="text" id="incremento" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Número de letras 'a': "</span> + contador);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkAcessoCode" class="btn">Verificar Código</button>
+<div id="acessoCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 3: Métodos de Substrings e Modificações -->
+<section id="modificacoes" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>3. Métodos de Substrings e Modificações</h2>
+<p>Os métodos de substring e modificações permitem extrair partes de uma string ou criar versões modificadas da string original. Lembre-se que, devido à imutabilidade das strings, esses métodos sempre retornam uma nova string.</p>
+
+<h3>substring(int início)</h3>
+<p>O método <code>substring(int início)</code> retorna uma nova string que é uma substring da string original, começando no índice especificado até o final da string.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">String</span> sub = texto.substring(<span class="number">13</span>);<br>
+System.out.println(sub); <span class="comment">// "Java"</span>
+</div>
+
+<h3>substring(int início, int fim)</h3>
+<p>O método <code>substring(int início, int fim)</code> retorna uma nova string que é uma substring da string original, começando no índice especificado por <code>início</code> e terminando no índice <code>fim - 1</code>.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">String</span> sub = texto.substring(<span class="number">0</span>, <span class="number">11</span>);<br>
+System.out.println(sub); <span class="comment">// "Programação"</span>
+</div>
+
+<div class="tip-box">
+<h4>Importante</h4>
+<p>No método <code>substring(início, fim)</code>, o caractere no índice <code>fim</code> não é incluído na substring. Por exemplo, <code>"Java".substring(0, 2)</code> retorna "Ja", não "Jav".</p>
+</div>
+
+<h3>replace(old, new)</h3>
+<p>O método <code>replace(old, new)</code> substitui todas as ocorrências da sequência de caracteres <code>old</code> pela sequência <code>new</code> na string.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem. Java é popular."</span>;<br>
+<span class="keyword">String</span> novoTexto = texto.replace(<span class="string">"Java"</span>, <span class="string">"Python"</span>);<br>
+System.out.println(novoTexto); <span class="comment">// "Python é uma linguagem. Python é popular."</span>
+</div>
+
+<h3>toUpperCase()</h3>
+<p>O método <code>toUpperCase()</code> converte todos os caracteres da string para maiúsculas.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">String</span> maiusculas = texto.toUpperCase();<br>
+System.out.println(maiusculas); <span class="comment">// "PROGRAMAÇÃO EM JAVA"</span>
+</div>
+
+<h3>toLowerCase()</h3>
+<p>O método <code>toLowerCase()</code> converte todos os caracteres da string para minúsculas.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">String</span> minusculas = texto.toLowerCase();<br>
+System.out.println(minusculas); <span class="comment">// "programação em java"</span>
+</div>
+
+<h3>trim()</h3>
+<p>O método <code>trim()</code> remove os espaços em branco do início e do final da string.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"   Java   "</span>;<br>
+<span class="keyword">String</span> textoTrim = texto.trim();<br>
+System.out.println(<span class="string">"Tamanho original: "</span> + texto.length()); <span class="comment">// 9</span><br>
+System.out.println(<span class="string">"Tamanho após trim(): "</span> + textoTrim.length()); <span class="comment">// 4</span><br>
+System.out.println(<span class="string">"Texto após trim(): '"</span> + textoTrim + <span class="string">"'"</span>); <span class="comment">// 'Java'</span>
+</div>
+
+<h3>Exemplos Práticos</h3>
+
+<h4>Extraindo o Nome do Arquivo de um Caminho</h4>
+<div class="code-block">
+<span class="keyword">String</span> caminho = <span class="string">"/home/user/documentos/relatorio.pdf"</span>;<br>
+<span class="keyword">int</span> ultimaBarra = caminho.lastIndexOf(<span class="string">'/'</span>);<br>
+<span class="keyword">String</span> nomeArquivo = caminho.substring(ultimaBarra + <span class="number">1</span>);<br>
+System.out.println(<span class="string">"Nome do arquivo: "</span> + nomeArquivo); <span class="comment">// "relatorio.pdf"</span>
+</div>
+
+<h4>Formatando um Nome Próprio</h4>
+<div class="code-block">
+<span class="keyword">String</span> nome = <span class="string">"joão da silva"</span>;<br>
+<span class="keyword">String</span> nomeFormatado = <span class="string">""</span>;<br>
+<span class="keyword">boolean</span> espacoAnterior = <span class="keyword">true</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < nome.length(); i++) {<br>
+&nbsp;&nbsp;<span class="keyword">char</span> c = nome.charAt(i);<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (espacoAnterior && c != <span class="string">' '</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nomeFormatado += Character.toUpperCase(c);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;espacoAnterior = <span class="keyword">false</span>;<br>
+&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nomeFormatado += Character.toLowerCase(c);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (c == <span class="string">' '</span>) espacoAnterior = <span class="keyword">true</span>;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Nome formatado: "</span> + nomeFormatado); <span class="comment">// "João Da Silva"</span>
+</div>
+
+<h4>Removendo Caracteres Especiais</h4>
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java@#é$%uma&*linguagem"</span>;<br>
+<span class="keyword">String</span> textoLimpo = texto.replaceAll(<span class="string">"[^a-zA-Z0-9áéíóúÁÉÍÓÚãõÃÕçÇ ]"</span>, <span class="string">""</span>);<br>
+System.out.println(<span class="string">"Texto original: "</span> + texto);<br>
+System.out.println(<span class="string">"Texto limpo: "</span> + textoLimpo); <span class="comment">// "Javaéuma linguagem"</span>
+</div>
+
+<div class="method-grid">
+<div class="method-card">
+<div class="method-name">substring(int início)</div>
+<div class="method-description">Retorna uma substring a partir do índice especificado</div>
+<div class="method-example">"Java".substring(2) // "va"</div>
+</div>
+<div class="method-card">
+<div class="method-name">substring(int início, int fim)</div>
+<div class="method-description">Retorna uma substring entre os índices especificados</div>
+<div class="method-example">"Java".substring(0, 2) // "Ja"</div>
+</div>
+<div class="method-card">
+<div class="method-name">replace(old, new)</div>
+<div class="method-description">Substitui todas as ocorrências de old por new</div>
+<div class="method-example">"Java".replace("a", "o") // "Jovo"</div>
+</div>
+<div class="method-card">
+<div class="method-name">toUpperCase()</div>
+<div class="method-description">Converte a string para maiúsculas</div>
+<div class="method-example">"Java".toUpperCase() // "JAVA"</div>
+</div>
+<div class="method-card">
+<div class="method-name">toLowerCase()</div>
+<div class="method-description">Converte a string para minúsculas</div>
+<div class="method-example">"Java".toLowerCase() // "java"</div>
+</div>
+<div class="method-card">
+<div class="method-name">trim()</div>
+<div class="method-description">Remove espaços em branco do início e fim</div>
+<div class="method-example">"  Java  ".trim() // "Java"</div>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para formatar um CPF, removendo caracteres não numéricos e adicionando a formatação correta (XXX.XXX.XXX-XX):</p>
+<div class="code-block">
+<span class="keyword">public class</span> FormataCPF {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> cpf = <input type="text" id="cpf" style="width: 200px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Remove caracteres não numéricos</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> cpfLimpo = cpf.replaceAll(<input type="text" id="regex" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="replaceEmpty" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Formata o CPF</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> cpfFormatado = cpfLimpo.substring(<input type="text" id="p1" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="p2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) + <span class="string">"."</span> +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpfLimpo.substring(<input type="text" id="p3" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="p4" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) + <span class="string">"."</span> +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpfLimpo.substring(<input type="text" id="p5" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">, <input type="text" id="p6" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) + <span class="string">"-"</span> +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpfLimpo.substring(<input type="text" id="p7" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"CPF formatado: "</span> + cpfFormatado);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkModificacoesCode" class="btn">Verificar Código</button>
+<div id="modificacoesCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 4: Métodos de Busca e Comparação -->
+<section id="busca" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>4. Métodos de Busca e Comparação</h2>
+<p>Os métodos de busca e comparação permitem encontrar substrings dentro de uma string, comparar strings e verificar se uma string começa ou termina com determinada sequência de caracteres.</p>
+
+<h3>equals()</h3>
+<p>O método <code>equals()</code> compara o conteúdo de duas strings, retornando <code>true</code> se forem iguais e <code>false</code> caso contrário. Esta comparação é sensível a maiúsculas e minúsculas.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> s1 = <span class="string">"Java"</span>;<br>
+<span class="keyword">String</span> s2 = <span class="string">"Java"</span>;<br>
+<span class="keyword">String</span> s3 = <span class="string">"java"</span>;<br><br>
+System.out.println(s1.equals(s2)); <span class="comment">// true</span><br>
+System.out.println(s1.equals(s3)); <span class="comment">// false (diferença de maiúsculas/minúsculas)</span>
+</div>
+
+<h3>equalsIgnoreCase()</h3>
+<p>O método <code>equalsIgnoreCase()</code> compara o conteúdo de duas strings, ignorando diferenças entre maiúsculas e minúsculas.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> s1 = <span class="string">"Java"</span>;<br>
+<span class="keyword">String</span> s2 = <span class="string">"JAVA"</span>;<br>
+<span class="keyword">String</span> s3 = <span class="string">"java"</span>;<br><br>
+System.out.println(s1.equalsIgnoreCase(s2)); <span class="comment">// true</span><br>
+System.out.println(s1.equalsIgnoreCase(s3)); <span class="comment">// true</span>
+</div>
+
+<h3>startsWith()</h3>
+<p>O método <code>startsWith()</code> verifica se a string começa com a sequência de caracteres especificada.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+System.out.println(texto.startsWith(<span class="string">"Pro"</span>)); <span class="comment">// true</span><br>
+System.out.println(texto.startsWith(<span class="string">"pro"</span>)); <span class="comment">// false (sensível a maiúsculas/minúsculas)</span><br>
+System.out.println(texto.startsWith(<span class="string">"Java"</span>)); <span class="comment">// false</span>
+</div>
+
+<h3>endsWith()</h3>
+<p>O método <code>endsWith()</code> verifica se a string termina com a sequência de caracteres especificada.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+System.out.println(texto.endsWith(<span class="string">"Java"</span>)); <span class="comment">// true</span><br>
+System.out.println(texto.endsWith(<span class="string">"java"</span>)); <span class="comment">// false (sensível a maiúsculas/minúsculas)</span><br>
+System.out.println(texto.endsWith(<span class="string">"Pro"</span>)); <span class="comment">// false</span>
+</div>
+
+<h3>indexOf()</h3>
+<p>O método <code>indexOf()</code> retorna o índice da primeira ocorrência da sequência de caracteres especificada. Se a sequência não for encontrada, retorna -1.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem. Java é popular."</span>;<br>
+System.out.println(texto.indexOf(<span class="string">"Java"</span>)); <span class="comment">// 0</span><br>
+System.out.println(texto.indexOf(<span class="string">"linguagem"</span>)); <span class="comment">// 11</span><br>
+System.out.println(texto.indexOf(<span class="string">"Python"</span>)); <span class="comment">// -1 (não encontrado)</span>
+</div>
+
+<h3>lastIndexOf()</h3>
+<p>O método <code>lastIndexOf()</code> retorna o índice da última ocorrência da sequência de caracteres especificada. Se a sequência não for encontrada, retorna -1.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem. Java é popular."</span>;<br>
+System.out.println(texto.lastIndexOf(<span class="string">"Java"</span>)); <span class="comment">// 23</span><br>
+System.out.println(texto.lastIndexOf(<span class="string">"linguagem"</span>)); <span class="comment">// 11</span><br>
+System.out.println(texto.lastIndexOf(<span class="string">"Python"</span>)); <span class="comment">// -1 (não encontrado)</span>
+</div>
+
+<h3>Exemplos Práticos</h3>
+
+<h4>Verificando se um Texto Contém uma Palavra</h4>
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem de programação orientada a objetos"</span>;<br>
+<span class="keyword">String</span> palavraBusca = <span class="string">"linguagem"</span>;<br><br>
+<span class="keyword">boolean</span> contem = texto.indexOf(palavraBusca) != -<span class="number">1</span>;<br>
+System.out.println(<span class="string">"O texto contém a palavra '"</span> + palavraBusca + <span class="string">"'? "</span> + contem); <span class="comment">// true</span>
+</div>
+
+<h4>Contando Ocorrências de uma Substring</h4>
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java é uma linguagem. Java é popular. Java é versátil."</span>;<br>
+<span class="keyword">String</span> palavra = <span class="string">"Java"</span>;<br>
+<span class="keyword">int</span> contador = <span class="number">0</span>;<br>
+<span class="keyword">int</span> indice = texto.indexOf(palavra);<br><br>
+<span class="keyword">while</span> (indice != -<span class="number">1</span>) {<br>
+&nbsp;&nbsp;contador++;<br>
+&nbsp;&nbsp;indice = texto.indexOf(palavra, indice + <span class="number">1</span>);<br>
+}<br><br>
+System.out.println(<span class="string">"A palavra '"</span> + palavra + <span class="string">"' aparece "</span> + contador + <span class="string">" vezes."</span>); <span class="comment">// 3</span>
+</div>
+
+<h4>Validando uma Extensão de Arquivo</h4>
+<div class="code-block">
+<span class="keyword">String</span> nomeArquivo = <span class="string">"relatorio.pdf"</span>;<br>
+<span class="keyword">String</span> extensao = <span class="string">".pdf"</span>;<br><br>
+<span class="keyword">if</span> (nomeArquivo.toLowerCase().endsWith(extensao)) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Arquivo PDF válido."</span>);<br>
+} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Arquivo não é um PDF."</span>);<br>
+}
+</div>
+
+<div class="method-grid">
+<div class="method-card">
+<div class="method-name">equals()</div>
+<div class="method-description">Compara o conteúdo de duas strings</div>
+<div class="method-example">"Java".equals("Java") // true</div>
+</div>
+<div class="method-card">
+<div class="method-name">equalsIgnoreCase()</div>
+<div class="method-description">Compara strings ignorando maiúsculas/minúsculas</div>
+<div class="method-example">"Java".equalsIgnoreCase("java") // true</div>
+</div>
+<div class="method-card">
+<div class="method-name">startsWith()</div>
+<div class="method-description">Verifica se a string começa com a sequência</div>
+<div class="method-example">"Java".startsWith("Ja") // true</div>
+</div>
+<div class="method-card">
+<div class="method-name">endsWith()</div>
+<div class="method-description">Verifica se a string termina com a sequência</div>
+<div class="method-example">"Java".endsWith("va") // true</div>
+</div>
+<div class="method-card">
+<div class="method-name">indexOf()</div>
+<div class="method-description">Retorna o índice da primeira ocorrência</div>
+<div class="method-example">"Java".indexOf("av") // 1</div>
+</div>
+<div class="method-card">
+<div class="method-name">lastIndexOf()</div>
+<div class="method-description">Retorna o índice da última ocorrência</div>
+<div class="method-example">"Java Java".lastIndexOf("Java") // 5</div>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para verificar se uma string é um endereço de e-mail válido (deve conter "@" e terminar com ".com" ou ".br"):</p>
+<div class="code-block">
+<span class="keyword">public class</span> ValidaEmail {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> email = <input type="text" id="email" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Verifica se contém @</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">boolean</span> temArroba = email.<input type="text" id="arrobaMetodo" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">(<input type="text" id="arrobaParam" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) != <input type="text" id="arrobaResult" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Verifica se termina com .com ou .br</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">boolean</span> terminacaoValida = email.<input type="text" id="terminacaoMetodo" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">(<input type="text" id="terminacaoParam1" style="width: 50px; padding: 0.3rem; margin: 0 0.5rem;">) ||<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email.<input type="text" id="terminacaoMetodo2" style="width: 100px; padding: 0.3rem; margin: 0 0.5rem;">(<input type="text" id="terminacaoParam2" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (temArroba <input type="text" id="operadorLogico" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;"> terminacaoValida) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"E-mail válido: "</span> + email);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"E-mail inválido: "</span> + email);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkBuscaCode" class="btn">Verificar Código</button>
+<div id="buscaCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 5: Métodos de Divisão e Conversão -->
+<section id="divisao" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>5. Métodos de Divisão e Conversão</h2>
+<p>Os métodos de divisão e conversão permitem dividir uma string em partes menores ou converter strings para outros tipos de dados e vice-versa.</p>
+
+<h3>split(String regex)</h3>
+<p>O método <code>split(String regex)</code> divide a string em um array de substrings com base em uma expressão regular (regex) que especifica o delimitador.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java,Python,C++,JavaScript"</span>;<br>
+<span class="keyword">String</span>[] linguagens = texto.split(<span class="string">","</span>);<br><br>
+<span class="keyword">for</span> (<span class="keyword">String</span> linguagem : linguagens) {<br>
+&nbsp;&nbsp;System.out.println(linguagem.trim());<br>
+}<br><br>
+<span class="comment">// Saída:</span><br>
+<span class="comment">// Java</span><br>
+<span class="comment">// Python</span><br>
+<span class="comment">// C++</span><br>
+<span class="comment">// JavaScript</span>
+</div>
+
+<h3>valueOf()</h3>
+<p>O método estático <code>valueOf()</code> converte diferentes tipos de dados em sua representação de string. Este método está sobrecarregado para aceitar vários tipos de dados.</p>
+
+<div class="code-block">
+<span class="keyword">int</span> numero = <span class="number">42</span>;<br>
+<span class="keyword">double</span> decimal = <span class="number">3.14</span>;<br>
+<span class="keyword">boolean</span> logico = <span class="keyword">true</span>;<br>
+<span class="keyword">char</span> caractere = <span class="string">'A'</span>;<br><br>
+<span class="keyword">String</span> sNumero = String.valueOf(numero);<br>
+<span class="keyword">String</span> sDecimal = String.valueOf(decimal);<br>
+<span class="keyword">String</span> sLogico = String.valueOf(logico);<br>
+<span class="keyword">String</span> sCaractere = String.valueOf(caractere);<br><br>
+System.out.println(<span class="string">"Número: "</span> + sNumero); <span class="comment">// "42"</span><br>
+System.out.println(<span class="string">"Decimal: "</span> + sDecimal); <span class="comment">// "3.14"</span><br>
+System.out.println(<span class="string">"Lógico: "</span> + sLogico); <span class="comment">// "true"</span><br>
+System.out.println(<span class="string">"Caractere: "</span> + sCaractere); <span class="comment">// "A"</span>
+</div>
+
+<h3>toCharArray()</h3>
+<p>O método <code>toCharArray()</code> converte a string em um array de caracteres.</p>
+
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Java"</span>;<br>
+<span class="keyword">char</span>[] caracteres = texto.toCharArray();<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < caracteres.length; i++) {<br>
+&nbsp;&nbsp;System.out.println(<span class="string">"Caractere "</span> + i + <span class="string">": "</span> + caracteres[i]);<br>
+}<br><br>
+<span class="comment">// Saída:</span><br>
+<span class="comment">// Caractere 0: J</span><br>
+<span class="comment">// Caractere 1: a</span><br>
+<span class="comment">// Caractere 2: v</span><br>
+<span class="comment">// Caractere 3: a</span>
+</div>
+
+<h3>Exemplos Práticos</h3>
+
+<h4>Analisando uma Frase em Palavras</h4>
+<div class="code-block">
+<span class="keyword">String</span> frase = <span class="string">"Java é uma linguagem de programação orientada a objetos"</span>;<br>
+<span class="keyword">String</span>[] palavras = frase.split(<span class="string">" "</span>);<br><br>
+System.out.println(<span class="string">"A frase contém "</span> + palavras.length + <span class="string">" palavras:"</span>);<br><br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < palavras.length; i++) {<br>
+&nbsp;&nbsp;System.out.println((i + <span class="number">1</span>) + <span class="string">". "</span> + palavras[i]);<br>
+}
+</div>
+
+<h4>Convertendo String para Número</h4>
+<div class="code-block">
+<span class="keyword">String</span> sNumero = <span class="string">"123"</span>;<br>
+<span class="keyword">String</span> sDecimal = <span class="string">"3.14"</span>;<br><br>
+<span class="comment">// Convertendo para tipos primitivos</span><br>
+<span class="keyword">int</span> numero = Integer.parseInt(sNumero);<br>
+<span class="keyword">double</span> decimal = Double.parseDouble(sDecimal);<br><br>
+System.out.println(<span class="string">"Número inteiro: "</span> + numero); <span class="comment">// 123</span><br>
+System.out.println(<span class="string">"Número decimal: "</span> + decimal); <span class="comment">// 3.14</span><br><br>
+<span class="comment">// Convertendo de volta para string</span><br>
+<span class="keyword">String</span> deVolta1 = String.valueOf(numero);<br>
+<span class="keyword">String</span> deVolta2 = String.valueOf(decimal);<br>
+</div>
+
+<h4>Processando Dados CSV</h4>
+<div class="code-block">
+<span class="keyword">String</span> csv = <span class="string">"João,Silva,30,joao.silva@email.com"</span>;<br>
+<span class="keyword">String</span>[] dados = csv.split(<span class="string">","</span>);<br><br>
+<span class="keyword">String</span> nome = dados[<span class="number">0</span>];<br>
+<span class="keyword">String</span> sobrenome = dados[<span class="number">1</span>];<br>
+<span class="keyword">int</span> idade = Integer.parseInt(dados[<span class="number">2</span>]);<br>
+<span class="keyword">String</span> email = dados[<span class="number">3</span>];<br><br>
+System.out.println(<span class="string">"Nome: "</span> + nome + <span class="string">" "</span> + sobrenome);<br>
+System.out.println(<span class="string">"Idade: "</span> + idade);<br>
+System.out.println(<span class="string">"E-mail: "</span> + email);
+</div>
+
+<h4>Contando Letras em uma String</h4>
+<div class="code-block">
+<span class="keyword">String</span> texto = <span class="string">"Programação em Java"</span>;<br>
+<span class="keyword">char</span>[] caracteres = texto.toCharArray();<br>
+<span class="keyword">int</span> contadorLetras = <span class="number">0</span>;<br>
+<span class="keyword">int</span> contadorEspacos = <span class="number">0</span>;<br><br>
+<span class="keyword">for</span> (<span class="keyword">char</span> c : caracteres) {<br>
+&nbsp;&nbsp;<span class="keyword">if</span> (Character.isLetter(c)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contadorLetras++;<br>
+&nbsp;&nbsp;} <span class="keyword">else if</span> (Character.isWhitespace(c)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contadorEspacos++;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+System.out.println(<span class="string">"Número de letras: "</span> + contadorLetras);<br>
+System.out.println(<span class="string">"Número de espaços: "</span> + contadorEspacos);
+</div>
+
+<div class="method-grid">
+<div class="method-card">
+<div class="method-name">split(String regex)</div>
+<div class="method-description">Divide a string em um array de substrings</div>
+<div class="method-example">"a,b,c".split(",") // ["a", "b", "c"]</div>
+</div>
+<div class="method-card">
+<div class="method-name">valueOf()</div>
+<div class="method-description">Converte diferentes tipos para string</div>
+<div class="method-example">String.valueOf(42) // "42"</div>
+</div>
+<div class="method-card">
+<div class="method-name">toCharArray()</div>
+<div class="method-description">Converte a string para um array de caracteres</div>
+<div class="method-example">"Java".toCharArray() // ['J', 'a', 'v', 'a']</div>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Complete o código abaixo para extrair o nome de usuário de um endereço de e-mail (parte antes do "@"):</p>
+<div class="code-block">
+<span class="keyword">public class</span> ExtraiUsuario {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> email = <input type="text" id="email" style="width: 300px; padding: 0.3rem; margin: 0 0.5rem;">;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Divide o e-mail em partes usando @ como separador</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span>[] partes = email.<input type="text" id="splitMetodo" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;">(<input type="text" id="splitParam" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Verifica se o e-mail é válido (tem duas partes)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (partes.<input type="text" id="length" style="width: 60px; padding: 0.3rem; margin: 0 0.5rem;"> == <input type="text" id="lengthValue" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> usuario = partes[<input type="text" id="indice" style="width: 30px; padding: 0.3rem; margin: 0 0.5rem;">];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nome de usuário: "</span> + usuario);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"E-mail inválido!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<button id="checkDivisaoCode" class="btn">Verificar Código</button>
+<div id="divisaoCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 6: Imutabilidade e StringBuilder -->
+<section id="imutabilidade" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>6. Imutabilidade e StringBuilder</h2>
+<p>Um dos conceitos mais importantes sobre strings em Java é a sua imutabilidade. Vamos entender o que isso significa e como trabalhar com strings de forma eficiente quando precisamos fazer muitas modificações.</p>
+
+<h3>O que é Imutabilidade?</h3>
+<p>Imutabilidade significa que, uma vez criado, um objeto não pode ser modificado. No caso de strings em Java, qualquer operação que parece modificar uma string, na verdade, cria uma nova string com as modificações desejadas.</p>
+
+<div class="immutability-visual">
+<div class="immutability-step">
+<div class="step-number">1</div>
+<div class="step-content">
+<p>Criamos uma string:</p>
+<div class="step-code">
+String s = "Java";
+</div>
+</div>
+</div>
+<div class="immutability-step">
+<div class="step-number">2</div>
+<div class="step-content">
+<p>Quando tentamos modificar a string:</p>
+<div class="step-code">
+s = s + " é divertido";
+</div>
+</div>
+</div>
+<div class="immutability-step">
+<div class="step-number">3</div>
+<div class="step-content">
+<p>Na verdade, uma nova string é criada:</p>
+<div class="step-code">
+// A string original "Java" permanece inalterada
+// Uma nova string "Java é divertido" é criada
+// A variável s agora referencia a nova string
+</div>
+</div>
+</div>
+</div>
+
+<h3>Problemas de Performance com Concatenação</h3>
+<p>Devido à imutabilidade, cada operação de concatenação cria um novo objeto string. Isso pode causar problemas de performance quando fazemos muitas concatenações, especialmente em loops.</p>
+
+<div class="code-comparison">
+<div class="code-column">
+<h4>Forma Ineficiente</h4>
+<div class="code-block">
+<span class="keyword">String</span> resultado = <span class="string">""</span>;<br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10000</span>; i++) {<br>
+&nbsp;&nbsp;resultado += i + <span class="string">","</span>;<br>
+}<br>
+<span class="comment">// Cria 10000 objetos String!</span>
+</div>
+</div>
+<div class="code-column">
+<h4>Forma Eficiente</h4>
+<div class="code-block">
+StringBuilder sb = <span class="keyword">new</span> StringBuilder();<br>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10000</span>; i++) {<br>
+&nbsp;&nbsp;sb.append(i).append(<span class="string">","</span>);<br>
+}<br>
+<span class="keyword">String</span> resultado = sb.toString();<br>
+<span class="comment">// Cria apenas 1 objeto String!</span>
+</div>
+</div>
+</div>
+
+<h3>StringBuilder</h3>
+<p>Para resolver os problemas de performance com strings imutáveis, Java oferece a classe <code>StringBuilder</code>. Ao contrário de String, StringBuilder é mutável e permite modificar seu conteúdo sem criar novos objetos.</p>
+
+<h4>Principais Métodos do StringBuilder</h4>
+<ul>
+<li><strong>append()</strong>: Adiciona conteúdo ao final do StringBuilder</li>
+<li><strong>insert()</strong>: Insere conteúdo em uma posição específica</li>
+<li><strong>delete()</strong>: Remove caracteres entre duas posições</li>
+<li><strong>replace()</strong>: Substitui caracteres entre duas posições</li>
+<li><strong>reverse()</strong>: Inverte o conteúdo do StringBuilder</li>
+<li><strong>toString()</strong>: Converte o StringBuilder para String</li>
+</ul>
+
+<h3>Exemplos Práticos com StringBuilder</h3>
+
+<h4>Construindo uma String com StringBuilder</h4>
+<div class="code-block">
+StringBuilder sb = <span class="keyword">new</span> StringBuilder();<br>
+sb.append(<span class="string">"Java"</span>);<br>
+sb.append(<span class="string">" é uma "</span>);<br>
+sb.append(<span class="string">"linguagem "</span>);<br>
+sb.append(<span class="string">"de programação"</span>);<br><br>
+<span class="keyword">String</span> resultado = sb.toString();<br>
+System.out.println(resultado); <span class="comment">// "Java é uma linguagem de programação"</span>
+</div>
+
+<h4>Invertendo uma String com StringBuilder</h4>
+<div class="code-block">
+<span class="keyword">String</span> original = <span class="string">"Java"</span>;<br>
+StringBuilder sb = <span class="keyword">new</span> StringBuilder(original);<br>
+sb.reverse();<br><br>
+<span class="keyword">String</span> invertida = sb.toString();<br>
+System.out.println(<span class="string">"Original: "</span> + original); <span class="comment">// "Java"</span><br>
+System.out.println(<span class="string">"Invertida: "</span> + invertida); <span class="comment">// "avaJ"</span>
+</div>
+
+<h4>Construindo uma Consulta SQL</h4>
+<div class="code-block">
+StringBuilder query = <span class="keyword">new</span> StringBuilder();<br>
+query.append(<span class="string">"SELECT * FROM usuarios "</span>);<br>
+query.append(<span class="string">"WHERE ativo = true "</span>);<br><br>
+<span class="keyword">String</span> nomeBusca = <span class="string">"João"</span>;<br>
+<span class="keyword">if</span> (!nomeBusca.isEmpty()) {<br>
+&nbsp;&nbsp;query.append(<span class="string">"AND nome LIKE '%"</span>).append(nomeBusca).append(<span class="string">"%' "</span>);<br>
+}<br><br>
+query.append(<span class="string">"ORDER BY nome"</span>);<br><br>
+System.out.println(query.toString());
+</div>
+
+<h3>StringBuffer vs StringBuilder</h4>
+<p>Java também oferece a classe <code>StringBuffer</code>, que é semelhante ao StringBuilder, mas com uma diferença importante: StringBuffer é thread-safe (seguro para uso em ambientes concorrentes), enquanto StringBuilder não é.</p>
+
+<div class="comparison-table">
+<table>
+<tr>
+<th>Característica</th>
+<th>String</th>
+<th>StringBuilder</th>
+<th>StringBuffer</th>
+</tr>
+<tr>
+<td>Imutabilidade</td>
+<td>Imutável</td>
+<td>Mutável</td>
+<td>Mutável</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Lenta para muitas modificações</td>
+td>Rápida</td>
+<td>Rápida, mas um pouco mais lenta que StringBuilder</td>
+</tr>
+<tr>
+<td>Thread-safety</td>
+<td>Thread-safe (imutabilidade garante isso)</td>
+<td>Não thread-safe</td>
+<td>Thread-safe</td>
+</tr>
+<tr>
+<td>Quando usar</td>
+<td>Para strings que não serão modificadas</td>
+<td>Para strings que serão modificadas em um único thread</td>
+<td>Para strings que serão modificadas em múltiplos threads</td>
+</tr>
+</table>
+</div>
+
+<div class="tip-box">
+<h4>Dica de Performance</h4>
+<p>Use StringBuilder sempre que precisar fazer muitas modificações em strings, especialmente em loops. Para operações simples com poucas concatenações, usar o operador + é aceitável e mais legível.</p>
+</div>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Reescreva o código abaixo usando StringBuilder para melhorar a performance:</p>
+<div class="code-block">
+<span class="keyword">public class</span> GeraRelatorio {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">String</span> relatorio = <span class="string">"Relatório de Vendas\n"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;relatorio += <span class="string">"===================\n"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;relatorio += <span class="string">"Data: "</span> + java.time.LocalDate.now() + <span class="string">"\n"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;relatorio += <span class="string">"\n"</span>;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span>[] vendas = {<span class="number">1200.50</span>, <span class="number">850.75</span>, <span class="number">1500.00</span>, <span class="number">950.25</span>};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> total = <span class="number">0</span>;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < vendas.length; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;relatorio += <span class="string">"Venda "</span> + (i + <span class="number">1</span>) + <span class="string">": R$ "</span> + vendas[i] + <span class="string">"\n"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total += vendas[i];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;relatorio += <span class="string">"\nTotal: R$ "</span> + total;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(relatorio);<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<div class="input-group">
+<label for="codigoMelhorado">Código melhorado com StringBuilder:</label>
+<textarea id="codigoMelhorado" rows="25" placeholder="Reescreva o código usando StringBuilder..."></textarea>
+</div>
+<button id="checkImutabilidadeCode" class="btn">Verificar Código</button>
+<div id="imutabilidadeCodeFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container">
+<p>&copy; Manipulação de Strings em Java - Material educativo</p>
+</div>
+</footer>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Navegação entre tópicos
+    const navTabs = document.querySelectorAll('.nav-tab');
+    const topicSections = document.querySelectorAll('.topic-section');
+    
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTopic = tab.getAttribute('data-topic');
+            
+            // Remove classe active de todas as abas e seções
+            navTabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            topicSections.forEach(section => section.classList.remove('active'));
+            
+            // Adiciona classe active na aba e seção correspondentes
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            
+            const targetSection = document.getElementById(targetTopic);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+    
+    // Controle de tamanho da fonte
+    const increaseFontBtn = document.getElementById('increaseFont');
+    const decreaseFontBtn = document.getElementById('decreaseFont');
+    const root = document.documentElement;
+    let currentFontSize = 18;
+    
+    if (increaseFontBtn) {
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+    }
+    
+    if (decreaseFontBtn) {
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+            }
+        });
+    }
+    
+    // Atividade 1: Situações para strings
+    const checkStringsBtn = document.getElementById('checkStrings');
+    if (checkStringsBtn) {
+        checkStringsBtn.addEventListener('click', () => {
+            const nome = document.getElementById('nome').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            
+            const feedback = document.getElementById('stringsFeedback');
+            feedback.style.display = 'block';
+            
+            const hasQuotes = curso.includes('"');
+            const hasNewLine = endereco.includes('\\n');
+            
+            if (nome && hasQuotes && hasNewLine) {
+                feedback.className = 'feedback success';
+                feedback.textContent = 'Excelente! Você criou as strings corretamente.';
+            } else {
+                feedback.className = 'feedback error';
+                let message = 'Corrija as seguintes partes: ';
+                if (!nome) message += 'Nome completo não preenchido. ';
+                if (!hasQuotes) message += 'Curso precisa conter aspas duplas. ';
+                if (!hasNewLine) message += 'Endereço precisa conter \\n para nova linha. ';
+                feedback.textContent = message;
+            }
+        });
+    }
+    
+    // Atividade 2: Contar vogais
+    const checkVogaisBtn = document.getElementById('checkVogais');
+    if (checkVogaisBtn) {
+        checkVogaisBtn.addEventListener('click', () => {
+            const contadorInicial = document.getElementById('contadorInicial').value.trim();
+            const iInicial = document.getElementById('iInicial').value.trim();
+            const lengthMethod = document.getElementById('lengthMethod').value.trim();
+            const charAtMethod = document.getElementById('charAtMethod').value.trim();
+            const vogal1 = document.getElementById('vogal1').value.trim();
+            const vogal2 = document.getElementById('vogal2').value.trim();
+            const vogal3 = document.getElementById('vogal3').value.trim();
+            const vogal4 = document.getElementById('vogal4').value.trim();
+            const vogal5 = document.getElementById('vogal5').value.trim();
+            const incremento = document.getElementById('incremento').value.trim();
+            
+            const feedback = document.getElementById('vogaisFeedback');
+            feedback.style.display = 'block';
+            
+            const correctContador = contadorInicial === '0';
+            const correctI = iInicial === '0';
+            const correctLength = lengthMethod === 'length';
+            const correctCharAt = charAtMethod === 'charAt';
+            const correctVogais = ['\'a\'', '\'e\'', '\'i\'', '\'o\'', '\'u\''].includes(vogal1) &&
+                                  ['\'a\'', '\'e\'', '\'i\'', '\'o\'', '\'u\''].includes(vogal2) &&
+                                  ['\'a\'', '\'e\'', '\'i\'', '\'o\'', '\'u\''].includes(vogal3) &&
+                                  ['\'a\'', '\'e\'', '\'i\'', '\'o\'', '\'u\''].includes(vogal4) &&
+                                  ['\'a\'', '\'e\'', '\'i\'', '\'o\'', '\'u\''].includes(vogal5);
+            const correctIncremento = incremento === '++';
+            
+            if (correctContador && correctI && correctLength && correctCharAt && correctVogais && correctIncremento) {
+                feedback.className = 'feedback success';
+                feedback.textContent = 'Excelente! Você completou o código corretamente.';
+            } else {
+                feedback.className = 'feedback error';
+                let message = 'Corrija as seguintes partes: ';
+                if (!correctContador) message += 'Inicialização do contador: 0. ';
+                if (!correctI) message += 'Inicialização de i: 0. ';
+                if (!correctLength) message += 'Método: length. ';
+                if (!correctCharAt) message += 'Método: charAt. ';
+                if (!correctVogais) message += 'Vogais: \'a\', \'e\', \'i\', \'o\', \'u\'. ';
+                if (!correctIncremento) message += 'Incremento: ++. ';
+                feedback.textContent = message;
+            }
+        });
+    }
+    
+    // Atividade 3: Formatação de arquivo
+    const checkFormatacaoBtn = document.getElementById('checkFormatacao');
+    if (checkFormatacaoBtn) {
+        checkFormatacaoBtn.addEventListener('click', () => {
+            const trimMethod = document.getElementById('trimMethod').value.trim();
+            const lowerMethod = document.getElementById('lowerMethod').value.trim();
+            const replaceMethod = document.getElementById('replaceMethod').value.trim();
+            const oldValue = document.getElementById('oldValue').value.trim();
+            const newValue = document.getElementById('newValue').value.trim();
+            
+            const feedback = document.getElementById('formatacaoFeedback');
+            feedback.style.display = 'block';
+            
+            const correctTrim = trimMethod === 'trim';
+            const correctLower = lowerMethod === 'toLowerCase';
+            const correctReplace = replaceMethod === 'replace';
+            const correctOld = oldValue === '" "' || oldValue === "' '";
+            const correctNew = newValue === '"_"';
+            
+            if (correctTrim && correctLower && correctReplace && correctOld && correctNew) {
+                feedback.className = 'feedback success';
+                feedback.textContent = 'Excelente! Você completou o código corretamente.';
+            } else {
+                feedback.className = 'feedback error';
+                let message = 'Corrija as seguintes partes: ';
+                if (!correctTrim) message += 'Método para remover espaços: trim. ';
+                if (!correctLower) message += 'Método para minúsculas: toLowerCase. ';
+                if (!correctReplace) message += 'Método para substituir: replace. ';
+                if (!correctOld) message += 'Valor antigo: espaço. ';
+                if (!correctNew) message += 'Valor novo: underscore. ';
+                feedback.textContent = message;
+            }
+        });
+    }
+    
+    // Atividade 4: Validação de URL
+    const checkURLBtn = document.getElementById('checkURL');
+    if (checkURLBtn) {
+        checkURLBtn.addEventListener('click', () => {
+            const urlValidaInicial = document.getElementById('urlValidaInicial').value.trim();
+            const startsWithMethod = document.getElementById('startsWithMethod').value.trim();
+            const httpValue = document.getElementById('httpValue').value.trim();
+            const startsWithMethod2 = document.getElementById('startsWithMethod2').value.trim();
+            const httpsValue = document.getElementById('httpsValue').value.trim();
+            const endsWithMethod = document.getElementById('endsWithMethod').value.trim();
+            const comValue = document.getElementById('comValue').value.trim();
+            const endsWithMethod2 = document.getElementById('endsWithMethod2').value.trim();
+            const brValue = document.getElementById('brValue').value.trim();
+            const orOperator = document.getElementById('orOperator').value.trim();
+            
+            const feedback = document.getElementById('urlFeedback');
+            feedback.style.display = 'block';
+            
+            const correctUrlValida = urlValidaInicial === 'false';
+            const correctStartsWith = startsWithMethod === 'startsWith';
+            const correctHttp = httpValue === '"http://"' || httpValue === "'http://'";
+            const correctStartsWith2 = startsWithMethod2 === 'startsWith';
+            const correctHttps = httpsValue === '"https://"' || httpsValue === "'https://'";
+            const correctEndsWith = endsWithMethod === 'endsWith';
+            const correctCom = comValue === '".com"' || comValue === "'.com'";
+            const correctEndsWith2 = endsWithMethod2 === 'endsWith';
+            const correctBr = brValue === '".br"' || brValue === "'.br'";
+            const correctOr = orOperator === '||';
+            
+            if (correctUrlValida && correctStartsWith && correctHttp && correctStartsWith2 && correctHttps &&
+                correctEndsWith && correctCom && correctEndsWith2 && correctBr && correctOr) {
+                feedback.className = 'feedback success';
+                feedback.textContent = 'Excelente! Você completou o código corretamente.';
+            } else {
+                feedback.className = 'feedback error';
+                let message = 'Corrija as seguintes partes: ';
+                if (!correctUrlValida) message += 'Inicialização de urlValida: false. ';
+                if (!correctStartsWith) message += 'Método: startsWith. ';
+                if (!correctHttp) message += 'Valor: "http://". ';
+                if (!correctStartsWith2) message += 'Método: startsWith. ';
+                if (!correctHttps) message += 'Valor: "https://". ';
+                if (!correctEndsWith) message += 'Método: endsWith. ';
+                if (!correctCom) message += 'Valor: ".com". ';
+                if (!correctEndsWith2) message += 'Método: endsWith. ';
+                if (!correctBr) message += 'Valor: ".br". ';
+                if (!correctOr) message += 'Operador: ||. ';
+                feedback.textContent = message;
+            }
+        });
+    }
+});
+</script>
