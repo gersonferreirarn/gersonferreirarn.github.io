@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,6 +13,7 @@
             --danger: #e74c3c;
             --structure: #9b59b6; /* Cor para módulo de estrutura */
             --queries: #16a085; /* Cor para módulo de consultas */
+            --insert: #2ecc71; /* Cor para módulo de inserção */
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
@@ -147,6 +146,15 @@
         .topic-card.queries .btn:hover {
             background-color: #138d75;
         }
+        .topic-card.insert {
+            border-top-color: var(--insert);
+        }
+        .topic-card.insert .btn {
+            background-color: var(--insert);
+        }
+        .topic-card.insert .btn:hover {
+            background-color: #27ae60;
+        }
         .features-section {
             background-color: white;
             border-radius: 15px;
@@ -238,6 +246,9 @@
         }
         .path-step.queries .path-step-number {
             background-color: var(--queries);
+        }
+        .path-step.insert .path-step-number {
+            background-color: var(--insert);
         }
         .path-step h3 {
             color: var(--dark);
@@ -336,8 +347,13 @@
                     <h3>Estrutura e Dados</h3>
                     <p>Criação de tabelas, definição de tipos de dados e inserção de registros</p>
                 </div>
-                <div class="path-step queries">
+                <div class="path-step insert">
                     <div class="path-step-number">2</div>
+                    <h3>Inserção de Dados</h3>
+                    <p>Domine o comando INSERT para adicionar dados em tabelas de forma eficiente</p>
+                </div>
+                <div class="path-step queries">
+                    <div class="path-step-number">3</div>
                     <h3>Consultas SQL</h3>
                     <p>Recuperação e manipulação de dados com SELECT, JOIN, filtros e agregações</p>
                 </div>
@@ -349,6 +365,12 @@
                 <h3><span class="icon">🏗️</span> Estrutura e Dados</h3>
                 <p>Aprenda a criar estruturas de bancos de dados, definir tabelas, tipos de dados, chaves primárias e estrangeiras. Domine os comandos DDL como CREATE, ALTER e DROP, além de inserir dados com INSERT.</p>
                 <a href="estrutura.html" class="btn">Acessar Módulo</a>
+            </div>
+            
+            <div class="topic-card insert">
+                <h3><span class="icon">➕</span> Inserção de Dados</h3>
+                <p>Aprofunde-se no comando INSERT e suas variações. Aprenda a inserir dados simples, múltiplos registros, usar INSERT com SELECT, trabalhar com dados especiais e otimizar operações de inserção para melhor performance.</p>
+                <a href="inserir.html" class="btn">Acessar Módulo</a>
             </div>
             
             <div class="topic-card queries">
