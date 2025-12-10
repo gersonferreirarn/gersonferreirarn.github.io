@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Inserção de Dados SQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #9b59b6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--warning);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-menu button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+        }
+
+        .module-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            background: var(--light);
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .module-link.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .module-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .module-status {
+            margin-left: auto;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        .module-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+            scroll-margin-top: 100px;
+        }
+
+        .module-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .module-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .module-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lesson {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .lesson h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .lesson p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .lesson ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .lesson li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: var(--dark);
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "SQL";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .code-block code {
+            display: block;
+            line-height: 1.5;
+        }
+
+        .key-point {
+            background: #e8f4fc;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .key-point h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .key-point.warning {
+            background: #fef5e7;
+            border-left-color: var(--warning);
+        }
+
+        .key-point.warning h4 {
+            color: var(--warning);
+        }
+
+        .key-point.success {
+            background: #eafaf1;
+            border-left-color: var(--success);
+        }
+
+        .key-point.success h4 {
+            color: var(--success);
+        }
+
+        .quiz-section {
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-header h3 {
+            color: var(--primary);
+        }
+
+        .quiz-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #27ae60;
+        }
+
+        .resources {
+            margin-top: 30px;
+        }
+
+        .resources h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .resource-card p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .resource-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        .module-completion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light);
+        }
+
+        .completion-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .completion-btn:hover {
+            background: #27ae60;
+        }
+
+        .completion-btn.completed {
+            background: var(--info);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .module-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .resource-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Module specific colors */
+        .module-1 { border-left: 5px solid #3498db; }
+        .module-2 { border-left: 5px solid #e74c3c; }
+        .module-3 { border-left: 5px solid #2ecc71; }
+        .module-4 { border-left: 5px solid #f39c12; }
+        .module-5 { border-left: 5px solid #9b59b6; }
+        .module-6 { border-left: 5px solid #1abc9c; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <h1>Portal de Inserção de Dados SQL</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="progress-container">
+                        <span>Seu progresso:</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="mainProgress"></div>
+                        </div>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <button><i class="fas fa-user"></i> Perfil</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Módulos do Curso</h2>
+                <ul class="module-list">
+                    <li class="module-item">
+                        <a href="#modulo1" class="module-link" data-module="1">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Módulo 1 – Introdução ao INSERT</span>
+                            <span class="module-status" id="status1">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo2" class="module-link" data-module="2">
+                            <i class="fas fa-code"></i>
+                            <span>Módulo 2 – Sintaxe Básica</span>
+                            <span class="module-status" id="status2">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo3" class="module-link" data-module="3">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Módulo 3 – Múltiplos Registros</span>
+                            <span class="module-status" id="status3">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo4" class="module-link" data-module="4">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Módulo 4 – INSERT com SELECT</span>
+                            <span class="module-status" id="status4">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo5" class="module-link" data-module="5">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Módulo 5 – Dados Especiais</span>
+                            <span class="module-status" id="status5">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo6" class="module-link" data-module="6">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Módulo 6 – Performance</span>
+                            <span class="module-status" id="status6">Pendente</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="content-area">
+                <!-- Módulo 1 -->
+                <section id="modulo1" class="module-section module-1">
+                    <div class="module-header">
+                        <h2>Módulo 1 – Introdução ao INSERT</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>O que é o comando INSERT?</h3>
+                        <p>O comando INSERT é uma das operações fundamentais da linguagem SQL, pertencente ao grupo DML (Data Manipulation Language). Sua principal função é adicionar novos registros (linhas) a uma tabela existente no banco de dados.</p>
+                        <p>O INSERT é essencial para:</p>
+                        <ul>
+                            <li>Popular tabelas com dados iniciais</li>
+                            <li>Adicionar novas informações ao sistema</li>
+                            <li>Registrar transações e eventos</li>
+                            <li>Manter o banco de dados atualizado</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>INSERT é um dos comandos SQL mais utilizados em qualquer aplicação que interaja com um banco de dados relacional.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Componentes do comando INSERT</h3>
+                        <p>O comando INSERT possui uma estrutura básica composta por:</p>
+                        <ul>
+                            <li><strong>Cláusula INSERT INTO</strong> - Especifica a tabela que receberá os dados</li>
+                            <li><strong>Lista de colunas</strong> - Define quais colunas serão preenchidas</li>
+                            <li><strong>Cláusula VALUES</strong> - Contém os valores a serem inseridos</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>INSERT INTO tabela (coluna1, coluna2, ...)
+VALUES (valor1, valor2, ...);</code>
+                        </div>
+                        <p>Os valores devem seguir a mesma ordem das colunas especificadas e ser compatíveis com seus tipos de dados.</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Preparando o ambiente para inserção</h3>
+                        <p>Antes de executar comandos INSERT, é necessário:</p>
+                        <ul>
+                            <li>Criar a tabela no banco de dados</li>
+                            <li>Definir a estrutura correta das colunas</li>
+                            <li>Estabelecer conexão com o banco</li>
+                            <li>Verificar permissões de escrita</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo de criação de tabela
+CREATE TABLE clientes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    data_cadastro DATE DEFAULT CURRENT_DATE
+);</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Antes de inserir dados em produção, sempre teste seus comandos INSERT em um ambiente de desenvolvimento.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(1)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre introdução ao INSERT para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(1)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 2 -->
+                <section id="modulo2" class="module-section module-2">
+                    <div class="module-header">
+                        <h2>Módulo 2 – Sintaxe Básica do INSERT</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Sintaxe padrão do INSERT</h3>
+                        <p>A sintaxe padrão do comando INSERT é a seguinte:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO nome_tabela (coluna1, coluna2, coluna3)
+VALUES (valor1, valor2, valor3);</code>
+                        </div>
+                        <p>Exemplo prático:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO clientes (nome, email)
+VALUES ('João Silva', 'joao.silva@example.com');</code>
+                        </div>
+                        <p>Neste exemplo, estamos inserindo um novo cliente na tabela "clientes", preenchendo apenas as colunas "nome" e "email". A coluna "id" será preenchida automaticamente por ser AUTO_INCREMENT, e "data_cadastro" receberá a data atual por ter um valor DEFAULT.</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>INSERT sem especificar colunas</h3>
+                        <p>É possível executar um INSERT sem especificar as colunas, desde que você forneça valores para todas as colunas na ordem correta:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO clientes
+VALUES (NULL, 'Maria Santos', 'maria.santos@example.com', '2023-05-15');</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Esta prática não é recomendada, pois torna o código frágil a mudanças na estrutura da tabela. Se uma nova coluna for adicionada, o comando falhará.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Trabalhando com valores padrão e NULL</h3>
+                        <p>Em algumas situações, você pode querer usar valores padrão ou inserir NULL explicitamente:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO clientes (nome, email, data_cadastro)
+VALUES ('Carlos Oliveira', NULL, DEFAULT);</code>
+                        </div>
+                        <p>Neste exemplo:</p>
+                        <ul>
+                            <li>O nome é fornecido normalmente</li>
+                            <li>O email é explicitamente definido como NULL</li>
+                            <li>A data_cadastro usa o valor padrão definido na tabela</li>
+                        </ul>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Colunas com restrição NOT NULL não podem receber valores NULL, a menos que tenham um valor DEFAULT.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Erros comuns no INSERT</h3>
+                        <p>Ao trabalhar com INSERT, alguns erros são comuns:</p>
+                        <ul>
+                            <li><strong>Violação de restrição NOT NULL</strong> - Tentar inserir NULL em coluna que não permite</li>
+                            <li><strong>Incompatibilidade de tipo</strong> - Inserir texto em coluna numérica, por exemplo</li>
+                            <li><strong>Violação de chave única</strong> - Inserir valor duplicado em coluna UNIQUE</li>
+                            <li><strong>Violação de chave estrangeira</strong> - Inserir valor que não existe na tabela referenciada</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Erro: Violação de chave única
+INSERT INTO clientes (email)
+VALUES ('joao.silva@example.com'); -- Erro se email já existir</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(2)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre sintaxe básica do INSERT para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(2)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 3 -->
+                <section id="modulo3" class="module-section module-3">
+                    <div class="module-header">
+                        <h2>Módulo 3 – Inserção de Múltiplos Registros</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 35 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Inserindo múltiplos registros de uma vez</h3>
+                        <p>A maioria dos sistemas de banco de dados modernos permite inserir múltiplos registros em um único comando INSERT, o que é muito mais eficiente do que executar comandos separados para cada linha.</p>
+                        <div class="code-block">
+                            <code>INSERT INTO clientes (nome, email)
+VALUES 
+    ('Ana Costa', 'ana.costa@example.com'),
+    ('Pedro Lima', 'pedro.lima@example.com'),
+    ('Sandra Ferreira', 'sandra.ferreira@example.com');</code>
+                        </div>
+                        <p>Esta abordagem oferece várias vantagens:</p>
+                        <ul>
+                            <li>Melhora significativa de performance</li>
+                            <li>Reduz o tráfego de rede</li>
+                            <li>Simplifica o código da aplicação</li>
+                            <li>Garante que todos os registros sejam inseridos em uma única transação</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Limites e considerações</h3>
+                        <p>Ao inserir múltiplos registros, é importante considerar:</p>
+                        <ul>
+                            <li><strong>Limites do sistema</strong> - Alguns bancos têm limites no número de registros por comando</li>
+                            <li><strong>Uso de memória</strong> - Comandos muito grandes podem consumir muita memória</li>
+                            <li><strong>Tratamento de erros</strong> - Se um registro falhar, toda a operação pode ser revertida</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo com grande volume de dados
+INSERT INTO produtos (nome, preco, estoque)
+VALUES 
+    ('Produto A', 10.50, 100),
+    ('Produto B', 15.75, 50),
+    ('Produto C', 8.99, 200),
+    -- ... mais produtos
+    ('Produto Z', 22.30, 75);</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Para inserções muito grandes (milhares de registros), considere dividir em lotes menores ou usar ferramentas especializadas como LOAD DATA INFILE.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Performance em inserções em lote</h3>
+                        <p>Para otimizar inserções de múltiplos registros:</p>
+                        <ul>
+                            <li><strong>Desative índices</strong> - Temporariamente, se possível</li>
+                            <li><strong>Aumente o tamanho do transaction log</strong> - Para evitar estouros</li>
+                            <li><strong>Use transações explícitas</strong> - Para controle melhor</li>
+                            <li><strong>Considere usar INSERT DELAYED</strong> - Se disponível no seu SGBD</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Usando transação explícita
+BEGIN TRANSACTION;
+
+INSERT INTO vendas (produto_id, quantidade, valor)
+VALUES 
+    (1, 5, 50.00),
+    (2, 3, 75.00),
+    (3, 10, 120.00);
+
+COMMIT;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Para grandes volumes de dados, considere usar bulk load em vez de INSERT. Muitos SGBDs oferecem comandos especializados para esta finalidade.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(3)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre inserção de múltiplos registros para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(3)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 4 -->
+                <section id="modulo4" class="module-section module-4">
+                    <div class="module-header">
+                        <h2>Módulo 4 – INSERT com SELECT</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 45 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Conceito de INSERT com SELECT</h3>
+                        <p>O INSERT com SELECT permite inserir em uma tabela os resultados de uma consulta em outra tabela (ou na mesma). Esta técnica é extremamente útil para:</p>
+                        <ul>
+                            <li>Copiar dados entre tabelas</li>
+                            <li>Agregar informações de múltiplas fontes</li>
+                            <li>Transformar dados durante a inserção</li>
+                            <li>Popular tabelas de histórico ou auditoria</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>INSERT INTO tabela_destino (coluna1, coluna2)
+SELECT colunaA, colunaB
+FROM tabela_origem
+WHERE condição;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Sintaxe e exemplos práticos</h3>
+                        <p>A sintaxe completa do INSERT com SELECT:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO clientes_vip (nome, email, data_cadastro)
+SELECT nome, email, data_cadastro
+FROM clientes
+WHERE compras > 10;</code>
+                        </div>
+                        <p>Outro exemplo com transformação de dados:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO relatorio_vendas (produto, total_vendido)
+SELECT p.nome, SUM(v.quantidade * v.valor_unitario)
+FROM vendas v
+JOIN produtos p ON v.produto_id = p.id
+WHERE v.data_venda BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY p.id, p.nome;</code>
+                        </div>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>O número de colunas no SELECT deve corresponder exatamente ao número de colunas especificadas no INSERT, e os tipos de dados devem ser compatíveis.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>INSERT com SELECT e junções</h3>
+                        <p>É possível combinar dados de múltiplas tabelas usando junções (JOIN) no SELECT:</p>
+                        <div class="code-block">
+                            <code>INSERT INTO pedidos_completos (pedido_id, cliente_nome, produto_nome, quantidade)
+SELECT p.id, c.nome, pr.nome, i.quantidade
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+JOIN itens_pedido i ON p.id = i.pedido_id
+JOIN produtos pr ON i.produto_id = pr.id
+WHERE p.data_pedido > '2023-06-01';</code>
+                        </div>
+                        <p>Esta técnica permite criar visões consolidadas de dados relacionais complexos em uma única tabela.</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Casos de uso avançados</h3>
+                        <p>O INSERT com SELECT pode ser usado em cenários mais complexos:</p>
+                        <ul>
+                            <li><strong>Atualização incremental</strong> - Inserir apenas registros novos</li>
+                            <li><strong>Sincronização de tabelas</strong> - Manter tabelas espelhadas</li>
+                            <li><strong>Arquivamento de dados</strong> - Mover dados antigos para tabelas de histórico</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Inserindo apenas registros que não existem
+INSERT INTO novos_clientes (id, nome, email)
+SELECT c.id, c.nome, c.email
+FROM clientes c
+LEFT JOIN novos_clientes n ON c.id = n.id
+WHERE n.id IS NULL;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Antes de executar um INSERT com SELECT em produção, sempre teste o SELECT separadamente para verificar se os resultados são os esperados.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(4)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre INSERT com SELECT para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(4)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 5 -->
+                <section id="modulo5" class="module-section module-5">
+                    <div class="module-header">
+                        <h2>Módulo 5 – Inserção de Dados Especiais</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Trabalhando com datas e horas</h3>
+                        <p>Inserir datas e horas requer atenção especial devido aos diferentes formatos e funções específicas de cada SGBD:</p>
+                        <div class="code-block">
+                            <code>-- Formato padrão ANSI (YYYY-MM-DD)
+INSERT INTO eventos (nome, data_evento, hora_inicio)
+VALUES ('Conferência SQL', '2023-12-15', '14:30:00');
+
+-- Usando funções do sistema
+INSERT INTO logs (mensagem, data_hora)
+VALUES ('Sistema iniciado', CURRENT_TIMESTAMP);</code>
+                        </div>
+                        <p>Funções comuns para datas e horas:</p>
+                        <ul>
+                            <li><strong>CURRENT_DATE</strong> - Data atual</li>
+                            <li><strong>CURRENT_TIME</strong> - Hora atual</li>
+                            <li><strong>CURRENT_TIMESTAMP</strong> - Data e hora atuais</li>
+                            <li><strong>NOW()</strong> - Data e hora atuais (MySQL)</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Inserindo dados binários e BLOBs</h3>
+                        <p>Dados binários, como imagens, documentos ou outros arquivos, são armazenados em colunas do tipo BLOB (Binary Large Object):</p>
+                        <div class="code-block">
+                            <code>-- Inserção de dados binários (exemplo conceitual)
+INSERT INTO arquivos (nome, tipo, conteudo, data_upload)
+VALUES ('relatorio.pdf', 'application/pdf', 
+        x'255044462d312e350a25c4e5f2d312e350a', 
+        CURRENT_DATE);</code>
+                        </div>
+                        <p>Na prática, a inserção de BLOBs geralmente é feita através de APIs específicas da linguagem de programação, e não diretamente via SQL.</p>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Armazenar arquivos grandes diretamente no banco de dados pode impactar negativamente a performance. Considere armazenar apenas o caminho do arquivo no sistema de arquivos.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Tratamento de valores NULL</h3>
+                        <p>Valores NULL representam a ausência de dados e exigem tratamento especial:</p>
+                        <div class="code-block">
+                            <code>-- Inserindo NULL explicitamente
+INSERT INTO funcionarios (nome, departamento_id, gerente_id)
+VALUES ('João Silva', 3, NULL);
+
+-- Usando expressões condicionais
+INSERT INTO produtos (nome, preco, desconto)
+SELECT nome, preco, 
+       CASE WHEN promocao = 'S' THEN preco * 0.1 ELSE NULL END
+FROM produtos_temp;</code>
+                        </div>
+                        <p>É importante distinguir entre NULL e valores vazios ou zero:</p>
+                        <ul>
+                            <li><strong>NULL</strong> - Ausência de valor</li>
+                            <li><strong>''</strong> - String vazia</li>
+                            <li><strong>0</strong> - Valor numérico zero</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Inserção de dados JSON e XML</h3>
+                        <p>Muitos bancos de dados modernos suportam tipos de dados JSON e XML:</p>
+                        <div class="code-block">
+                            <code>-- Inserindo dados JSON
+INSERT INTO configuracoes (aplicacao, parametros)
+VALUES ('sistema_vendas', 
+        '{"tema": "escuro", "limite_resultados": 50, "notificacoes": true}');
+
+-- Inserindo dados XML
+INSERT INTO documentos (id, conteudo_xml)
+VALUES (1, 
+        '<produto><id>101</id><nome>Notebook</nome><preco>3500.00</preco></produto>');</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Use funções específicas do seu SGBD para validar e manipular dados JSON/XML antes da inserção, garantindo a integridade dos dados.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(5)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre inserção de dados especiais para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(5)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 6 -->
+                <section id="modulo6" class="module-section module-6">
+                    <div class="module-header">
+                        <h2>Módulo 6 – Boas Práticas e Performance</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 45 minutos</span>
+                            <span><i class="fas fa-signal"></i> Avançado</span>
+                            <span><i class="fas fa-file-alt"></i> 5 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Otimização de inserções em massa</h3>
+                        <p>Para melhorar a performance em inserções de grandes volumes de dados:</p>
+                        <ul>
+                            <li><strong>Desative índices e restrições</strong> - Temporariamente durante a carga</li>
+                            <li><strong>Aumente o tamanho do transaction log</strong> - Para evitar estouros</li>
+                            <li><strong>Use transações explícitas</strong> - Para controle melhor</li>
+                            <li><strong>Considere usar bulk load</strong> - Ferramentas especializadas</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo de otimização
+BEGIN TRANSACTION;
+
+-- Desativar índices (se suportado)
+ALTER TABLE vendas DISABLE TRIGGER ALL;
+
+-- Inserir dados em lote
+INSERT INTO vendas (produto_id, quantidade, valor)
+VALUES 
+    (1, 5, 50.00),
+    (2, 3, 75.00),
+    -- ... mais registros
+    (100, 10, 120.00);
+
+-- Reativar índices
+ALTER TABLE vendas ENABLE TRIGGER ALL;
+
+COMMIT;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Gerenciamento de transações</h3>
+                        <p>O uso adequado de transações é crucial para a integridade dos dados durante inserções:</p>
+                        <div class="code-block">
+                            <code>-- Transação explícita para múltiplas operações
+BEGIN TRANSACTION;
+
+BEGIN TRY
+    INSERT INTO pedidos (cliente_id, data_pedido, total)
+    VALUES (123, CURRENT_DATE, 150.75);
+    
+    DECLARE @pedido_id INT = SCOPE_IDENTITY();
+    
+    INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario)
+    VALUES 
+        (@pedido_id, 45, 2, 25.50),
+        (@pedido_id, 67, 1, 99.75);
+    
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    -- Tratar erro
+END CATCH</code>
+                        </div>
+                        <div class="key-point">
+                            <h4>Ponto-chave</h4>
+                            <p>Transações garantem que todas as operações sejam concluídas com sucesso ou nenhuma delas seja aplicada, mantendo a consistência dos dados.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Segurança em operações de inserção</h3>
+                        <p>Proteja seu banco de dados contra ataques relacionados a inserções:</p>
+                        <ul>
+                            <li><strong>Use parâmetros</strong> - Evite concatenação direta de strings</li>
+                            <li><strong>Valide dados na aplicação</strong> - Antes de enviar ao banco</li>
+                            <li><strong>Implemente restrições</strong> - No nível do banco de dados</li>
+                            <li><strong>Limite permissões</strong> - Conceda apenas o necessário</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo inseguro (vulnerável a SQL Injection)
+-- "INSERT INTO usuarios (nome, email) VALUES ('" + nome + "', '" + email + "')"
+
+-- Exemplo seguro com parâmetros
+-- "INSERT INTO usuarios (nome, email) VALUES (?, ?)"</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>SQL Injection é uma das vulnerabilidades mais graves em aplicações web. Nunca construa consultas SQL concatenando entradas do usuário.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Monitoramento e diagnóstico</h3>
+                        <p>Ferramentas e técnicas para monitorar operações de inserção:</p>
+                        <ul>
+                            <li><strong>Logs de transações</strong> - Para rastrear operações</li>
+                            <li><strong>Profiling de consultas</strong> - Identificar gargalos</li>
+                            <li><strong>Contadores de performance</strong> - Métricas do sistema</li>
+                            <li><strong>Auditoria</strong> - Registrar alterações críticas</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- Exemplo de auditoria em MySQL
+CREATE TABLE audit_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tabela VARCHAR(50),
+    operacao VARCHAR(10),
+    dados_antigos TEXT,
+    dados_novos TEXT,
+    usuario VARCHAR(50),
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Boas práticas gerais</h3>
+                        <p>Resumo das melhores práticas para operações de inserção:</p>
+                        <ul>
+                            <li><strong>Especifique sempre as colunas</strong> - Não dependa da ordem das colunas</li>
+                            <li><strong>Use transações apropriadas</strong> - Para garantir atomicidade</li>
+                            <li><strong>Valide dados antes da inserção</strong> - Na aplicação e no banco</li>
+                            <li><strong>Considere o impacto nos índices</strong> - Especialmente em inserções em massa</li>
+                            <li><strong>Use bulk load para grandes volumes</strong> - Em vez de INSERT tradicional</li>
+                        </ul>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Documente seus procedimentos de inserção de dados, especialmente para operações críticas ou complexas. Isso facilita a manutenção e o treinamento da equipe.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(6)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre boas práticas e performance para consolidar seu aprendizado.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(6)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recursos Adicionais -->
+                <section class="module-section">
+                    <div class="module-header">
+                        <h2>Recursos Adicionais</h2>
+                    </div>
+                    <div class="resources">
+                        <div class="resource-list">
+                            <div class="resource-card">
+                                <h4>Documentação Oficial</h4>
+                                <p>Referência completa do comando INSERT</p>
+                                <a href="#">Acessar documentação</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Exercícios Práticos</h4>
+                                <p>Desafios para praticar inserção de dados</p>
+                                <a href="#">Ver exercícios</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Estudos de Caso</h4>
+                                <p>Exemplos reais de otimização de INSERT</p>
+                                <a href="#">Explorar casos</a>
+                            </div>
+                            <div class="resource-card">
+                                <h4>Certificação</h4>
+                                <p>Obtenha seu certificado de conclusão</p>
+                                <a href="#">Solicitar certificado</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Portal de Inserção de Dados SQL</h3>
+                    <p>Aprenda a inserir dados em SQL de forma eficiente e segura com nosso portal especializado.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Página Inicial</a></li>
+                        <li><a href="#">Todos os Módulos</a></li>
+                        <li><a href="#">Certificações</a></li>
+                        <li><a href="#">Fórum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recursos</h3>
+                    <ul>
+                        <li><a href="#">Documentação</a></li>
+                        <li><a href="#">Exercícios</a></li>
+                        <li><a href="#">Estudos de Caso</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Suporte</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Portal de Inserção de Dados SQL. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de progresso
+        let completedModules = new Set();
+        const totalModules = 6;
+
+        function updateProgress() {
+            const progress = (completedModules.size / totalModules) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        function completeModule(moduleNumber) {
+            completedModules.add(moduleNumber);
+            document.getElementById(`status${moduleNumber}`).textContent = 'Concluído';
+            document.getElementById(`status${moduleNumber}`).style.background = 'var(--success)';
+            
+            const button = event.target.closest('.completion-btn');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Concluído';
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            updateProgress();
+            
+            // Mostrar mensagem de sucesso
+            showNotification(`Módulo ${moduleNumber} concluído com sucesso!`);
+        }
+
+        function startQuiz(moduleNumber) {
+            showNotification(`Iniciando quiz do Módulo ${moduleNumber}. Boa sorte!`);
+        }
+
+        function showNotification(message) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Adicionar ao corpo
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Navegação suave e destaque do módulo ativo
+        document.querySelectorAll('.module-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover active class de todos os links
+                document.querySelectorAll('.module-link').forEach(l => l.classList.remove('active'));
+                
+                // Adicionar active class ao link clicado
+                this.classList.add('active');
+                
+                // Scroll suave até a seção
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Detectar qual módulo está visível durante o scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.module-section');
+            const scrollPosition = window.scrollY + 200;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    document.querySelectorAll('.module-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar
+        updateProgress();
+    </script>
+</body>
+</html>
