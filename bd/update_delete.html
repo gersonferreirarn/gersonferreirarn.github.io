@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos SQL: UPDATE e DELETE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #9b59b6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--warning);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-menu button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+        }
+
+        .module-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            background: var(--light);
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .module-link.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .module-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .module-status {
+            margin-left: auto;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        .module-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+            scroll-margin-top: 100px;
+        }
+
+        .module-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .module-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .module-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lesson {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .lesson h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .lesson p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .lesson ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .lesson li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: var(--dark);
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "SQL";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .code-block code {
+            display: block;
+            line-height: 1.5;
+        }
+
+        .key-point {
+            background: #e8f4fc;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .key-point h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .key-point.warning {
+            background: #fef5e7;
+            border-left-color: var(--warning);
+        }
+
+        .key-point.warning h4 {
+            color: var(--warning);
+        }
+
+        .key-point.danger {
+            background: #fdedec;
+            border-left-color: var(--accent);
+        }
+
+        .key-point.danger h4 {
+            color: var(--accent);
+        }
+
+        .key-point.success {
+            background: #eafaf1;
+            border-left-color: var(--success);
+        }
+
+        .key-point.success h4 {
+            color: var(--success);
+        }
+
+        .quiz-section {
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-header h3 {
+            color: var(--primary);
+        }
+
+        .quiz-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #27ae60;
+        }
+
+        .module-completion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light);
+        }
+
+        .completion-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .completion-btn:hover {
+            background: #27ae60;
+        }
+
+        .completion-btn.completed {
+            background: var(--info);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .module-header h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Module specific colors */
+        .module-1 { border-left: 5px solid #3498db; }
+        .module-2 { border-left: 5px solid #e74c3c; }
+        .module-3 { border-left: 5px solid #2ecc71; }
+        .module-4 { border-left: 5px solid #f39c12; }
+        .module-5 { border-left: 5px solid #9b59b6; }
+        .module-6 { border-left: 5px solid #34495e; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-sync-alt"></i>
+                    <h1>Comandos SQL: UPDATE e DELETE</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="progress-container">
+                        <span>Seu progresso:</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="mainProgress"></div>
+                        </div>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <button><i class="fas fa-user"></i> Perfil</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Tópicos do Curso</h2>
+                <ul class="module-list">
+                    <li class="module-item">
+                        <a href="#modulo1" class="module-link" data-module="1">
+                            <i class="fas fa-edit"></i>
+                            <span>Sintaxe UPDATE</span>
+                            <span class="module-status" id="status1">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo2" class="module-link" data-module="2">
+                            <i class="fas fa-crosshairs"></i>
+                            <span>WHERE no UPDATE</span>
+                            <span class="module-status" id="status2">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo3" class="module-link" data-module="3">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Múltiplas Colunas</span>
+                            <span class="module-status" id="status3">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo4" class="module-link" data-module="4">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Sintaxe DELETE</span>
+                            <span class="module-status" id="status4">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo5" class="module-link" data-module="5">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>WHERE no DELETE</span>
+                            <span class="module-status" id="status5">Pendente</span>
+                        </a>
+                    </li>
+                    <li class="module-item">
+                        <a href="#modulo6" class="module-link" data-module="6">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Segurança e Transações</span>
+                            <span class="module-status" id="status6">Pendente</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="content-area">
+                <!-- Módulo 1 -->
+                <section id="modulo1" class="module-section module-1">
+                    <div class="module-header">
+                        <h2>Sintaxe UPDATE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Comando UPDATE</h3>
+                        <p>O comando UPDATE é usado para modificar dados existentes em uma tabela. É uma das operações mais críticas do DML (Data Manipulation Language), pois altera o estado do banco de dados.</p>
+                        <p>A sintaxe básica do UPDATE é:</p>
+                        <div class="code-block">
+                            <code>UPDATE tabela
+SET coluna1 = valor1, coluna2 = valor2, ...
+WHERE condição;</code>
+                        </div>
+                        <div class="key-point danger">
+                            <h4>Cuidado!</h4>
+                            <p>Se você omitir a cláusula WHERE, <strong>todos os registros</strong> da tabela serão atualizados!</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Atualizando valores simples</h3>
+                        <p>Vamos começar com um exemplo simples de atualização de uma única coluna em um registro específico.</p>
+                        <div class="code-block">
+                            <code>-- Atualizar o preço de um produto específico
+UPDATE produtos
+SET preco = 49.90
+WHERE id = 10;</code>
+                        </div>
+                        <p>Você também pode usar valores literais ou expressões matemáticas:</p>
+                        <div class="code-block">
+                            <code>-- Aumentar o preço em 10%
+UPDATE produtos
+SET preco = preco * 1.10
+WHERE id = 10;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Atualizando com dados de texto</h3>
+                        <p>Para atualizar colunas de texto (VARCHAR, CHAR, TEXT), os novos valores devem estar entre aspas simples.</p>
+                        <div class="code-block">
+                            <code>-- Atualizar o email de um cliente
+UPDATE clientes
+SET email = 'novo.email@exemplo.com'
+WHERE id = 5;
+
+-- Atualizar o endereço completo
+UPDATE clientes
+SET endereco = 'Av. Paulista, 1000',
+    cidade = 'São Paulo'
+WHERE id = 5;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Antes de executar um UPDATE, faça um SELECT com a mesma cláusula WHERE para garantir que você está alterando os registros corretos.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(1)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre a sintaxe básica do UPDATE.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(1)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 2 -->
+                <section id="modulo2" class="module-section module-2">
+                    <div class="module-header">
+                        <h2>WHERE no UPDATE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>A importância do WHERE</h3>
+                        <p>A cláusula WHERE no comando UPDATE funciona exatamente como no SELECT: ela filtra quais linhas serão afetadas pela alteração. É a sua principal ferramenta de segurança.</p>
+                        <p>Os operadores lógicos e relacionais aprendidos anteriormente (=, >, <, AND, OR, IN) são totalmente aplicáveis aqui.</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Filtrando atualizações</h3>
+                        <p>Exemplos práticos de uso do WHERE para direcionar atualizações:</p>
+                        <div class="code-block">
+                            <code>-- Reajustar salários acima de um valor
+UPDATE funcionarios
+SET salario = salario * 1.05
+WHERE salario < 3000;
+
+-- Mudar o status de pedidos antigos
+UPDATE pedidos
+SET status = 'arquivado'
+WHERE data_pedido < '2020-01-01';
+
+-- Atualizar estoque de uma categoria
+UPDATE produtos
+SET estoque = estoque + 100
+WHERE categoria = 'Eletrônicos' AND fornecedor_id = 2;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Subconsultas no UPDATE</h3>
+                        <p>É possível usar subconsultas na cláusula WHERE para definir quais linhas atualizar, baseando-se em dados de outras tabelas.</p>
+                        <div class="code-block">
+                            <code>-- Dar bônus para clientes que gastaram muito
+UPDATE clientes
+SET nivel = 'VIP'
+WHERE id IN (
+    SELECT cliente_id 
+    FROM pedidos 
+    GROUP BY cliente_id 
+    HAVING SUM(valor) > 10000
+);</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Cenário de perigo: Onde o WHERE falha</h3>
+                        <p>Veja o que acontece se você esquecer o WHERE ou se a condição for muito ampla:</p>
+                        <div class="code-block">
+                            <code>-- PERIGO: Isso atualizará TODOS os clientes para 'SP'
+UPDATE clientes
+SET estado = 'SP'
+-- WHERE id = 10 (Esquecido!)</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Em ambientes de produção, muitas empresas exigem que você escreva o WHERE antes do SET no comando, para garantir que nunca o esqueça.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(2)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre o uso de filtros no UPDATE.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(2)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 3 -->
+                <section id="modulo3" class="module-section module-3">
+                    <div class="module-header">
+                        <h2>Atualizando Múltiplas Colunas</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 25 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 2 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Sintaxe para várias colunas</h3>
+                        <p>Você pode atualizar quantas colunas quiser em um único comando UPDATE. Isso é mais eficiente do que executar vários UPDATEs separados, pois reduz a quantidade de transações no banco de dados.</p>
+                        <p>A sintaxe separa cada atribuição por vírgula:</p>
+                        <div class="code-block">
+                            <code>UPDATE tabela
+SET coluna1 = valor1,
+    coluna2 = valor2,
+    coluna3 = valor3
+WHERE condição;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplos práticos</h3>
+                        <p>Vamos ver situações onde precisamos alterar vários dados de uma vez:</p>
+                        <div class="code-block">
+                            <code>-- Atualizar dados completos de um usuário
+UPDATE usuarios
+SET nome = 'Carlos Silva',
+    email = 'carlos.silva@novaempresa.com',
+    telefone = '(11) 99999-8888',
+    departamento = 'TI'
+WHERE id = 42;
+
+-- Atualizar endereço e data de modificação
+UPDATE clientes
+SET rua = 'Rua das Flores, 123',
+    bairro = 'Centro',
+    ultima_atualizacao = GETDATE()
+WHERE id = 10;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Dica profissional</h4>
+                            <p>Em tabelas com muitas colunas, liste explicitamente apenas as colunas que precisam ser alteradas. Deixar colunas desnecessárias no SET pode tornar o comando lento e propenso a erros.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(3)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre atualização de múltiplas colunas.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(3)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 4 -->
+                <section id="modulo4" class="module-section module-4">
+                    <div class="module-header">
+                        <h2>Sintaxe DELETE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 30 minutos</span>
+                            <span><i class="fas fa-signal"></i> Básico</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Comando DELETE</h3>
+                        <p>O comando DELETE é usado para remover linhas (registros) de uma tabela. Diferente do DROP TABLE (que remove a tabela inteira), o DELETE remove apenas os dados especificados, mantendo a estrutura da tabela.</p>
+                        <p>A sintaxe básica é:</p>
+                        <div class="code-block">
+                            <code>DELETE FROM tabela
+WHERE condição;</code>
+                        </div>
+                        <div class="key-point danger">
+                            <h4>Cuidado!</h4>
+                            <p>Assim como no UPDATE, se você não especificar o WHERE, <strong>todos os dados da tabela serão apagados</strong>. Use com extrema cautela.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Diferença entre DELETE e TRUNCATE</h3>
+                        <p>Existem duas formas principais de limpar uma tabela: DELETE e TRUNCATE.</p>
+                        <ul>
+                            <li><strong>DELETE</strong>: Remove linha por linha. Pode ser usado com WHERE. Pode ser desfeito (rollback). Aciona gatilhos (triggers).</li>
+                            <li><strong>TRUNCATE TABLE</strong>: Remove todas as linhas instantaneamente. Não aceita WHERE. Não pode ser desfeito na maioria dos bancos. Não aciona triggers. Mais rápido para limpar tabelas grandes.</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>-- DELETE (remove linhas específicas)
+DELETE FROM logs WHERE data < '2020-01-01';
+
+-- TRUNCATE (remove TUDO instantaneamente)
+TRUNCATE TABLE tabela_temporaria;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Integridade Referencial</h3>
+                        <p>Ao tentar excluir um registro que é referenciado por outra tabela (chave estrangeira), o banco de dados bloqueará a operação, a menos que você tenha configurado ações em cascata (ON DELETE CASCADE).</p>
+                        <div class="code-block">
+                            <code>-- Se tentar excluir um cliente que tem pedidos...
+DELETE FROM clientes WHERE id = 5;
+-- Erro: Violação de chave estrangeira (se não houver CASCADE)
+
+-- Excluir os pedidos primeiro
+DELETE FROM pedidos WHERE cliente_id = 5;
+-- Agora sim, é possível excluir o cliente
+DELETE FROM clientes WHERE id = 5;</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(4)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre a sintaxe e conceitos do DELETE.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(4)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 5 -->
+                <section id="modulo5" class="module-section module-5">
+                    <div class="module-header">
+                        <h2>WHERE no DELETE</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 35 minutos</span>
+                            <span><i class="fas fa-signal"></i> Intermediário</span>
+                            <span><i class="fas fa-file-alt"></i> 3 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Filtrando exclusões</h3>
+                        <p>A regra de ouro do DELETE é: <strong>Sempre use uma cláusula WHERE</strong> para garantir que você está removendo apenas os dados indesejados.</p>
+                        <p>Podemos usar qualquer condição válida de SELECT no WHERE do DELETE.</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplos de exclusão filtrada</h3>
+                        <div class="code-block">
+                            <code>-- Excluir um usuário específico pelo ID
+DELETE FROM usuarios WHERE id = 15;
+
+-- Excluir pedidos cancelados
+DELETE FROM pedidos WHERE status = 'cancelado';
+
+-- Excluir registros antigos de log (mais de 1 ano)
+DELETE FROM logs 
+WHERE data_criacao < DATEADD(year, -1, GETDATE());
+
+-- Excluir produtos de uma categoria que não tem estoque
+DELETE FROM produtos 
+WHERE categoria = 'Obsoleto' AND estoque = 0;</code>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Usando IN e subconsultas no DELETE</h3>
+                        <p>Muitas vezes precisamos excluir registros baseados em uma lista de IDs ou em condições complexas envolvendo outras tabelas.</p>
+                        <div class="code-block">
+                            <code>-- Excluir clientes que não compram há 5 anos
+DELETE FROM clientes
+WHERE id IN (
+    SELECT cliente_id 
+    FROM pedidos 
+    WHERE data_pedido < '2019-01-01'
+);
+
+-- Excluir duplicatas (exemplo avançado usando row_id)
+-- Depende do SGBD, mas a lógica envolve identificar e deletar
+-- mantendo apenas o registro mais antigo ou mais novo.</code>
+                        </div>
+                        <div class="key-point warning">
+                            <h4>Atenção!</h4>
+                            <p>Antes de rodar um DELETE com WHERE complexo ou subconsultas, rode um SELECT id FROM tabela WHERE [sua_condicao]. Se o SELECT retornar os IDs esperados, então rode o DELETE.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(5)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre exclusões filtradas.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(5)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Módulo 6 -->
+                <section id="modulo6" class="module-section module-6">
+                    <div class="module-header">
+                        <h2>Segurança e Transações</h2>
+                        <div class="module-meta">
+                            <span><i class="fas fa-clock"></i> 40 minutos</span>
+                            <span><i class="fas fa-signal"></i> Avançado</span>
+                            <span><i class="fas fa-file-alt"></i> 4 lições</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Transações (BEGIN, COMMIT, ROLLBACK)</h3>
+                        <p>Operações de UPDATE e DELETE são irreversíveis a menos que você esteja usando uma transação. Transações permitem agrupar várias operações, de forma que se uma falhar, nenhuma seja aplicada.</p>
+                        <ul>
+                            <li><strong>BEGIN TRANSACTION</strong>: Inicia o bloco de transação.</li>
+                            <li><strong>COMMIT</strong>: Salva permanentemente as alterações.</li>
+                            <li><strong>ROLLBACK</strong>: Desfaz todas as alterações feitas desde o BEGIN.</li>
+                        </ul>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Exemplo de Transação Segura</h3>
+                        <div class="code-block">
+                            <code>BEGIN TRANSACTION;
+
+-- Tenta atualizar o estoque
+UPDATE produtos SET estoque = estoque - 1 WHERE id = 100;
+-- Tenta criar o pedido
+INSERT INTO pedidos (produto_id, quantidade) VALUES (100, 1);
+
+-- Se ocorrer erro acima, executa:
+-- ROLLBACK;
+
+-- Se tudo deu certo:
+COMMIT;</code>
+                        </div>
+                        <div class="key-point success">
+                            <h4>Boa Prática</h4>
+                            <p>Em ambientes de desenvolvimento, comece suas sessões de modificação de dados com um "BEGIN TRANSACTION" para poder testar comandos perigosos e desfazê-los com "ROLLBACK" se necessário.</p>
+                        </div>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Soft Delete (Exclusão Lógica)</h3>
+                        <p>Em vez de apagar fisicamente o registro (DELETE), muitas vezes é melhor apenas marcá-lo como "inativo". Isso preserva o histórico de dados e integridade referencial.</p>
+                        <div class="code-block">
+                            <code>-- Ao invés de DELETE FROM usuarios WHERE id = 10;
+-- Usamos UPDATE para marcar como excluído:
+
+UPDATE usuarios
+SET ativo = 0,
+    data_exclusao = GETDATE(),
+    excluido_por = 'admin'
+WHERE id = 10;</code>
+                        </div>
+                        <p>Nas consultas, basta adicionar <code>WHERE ativo = 1</code> para filtrar os registros "excluídos".</p>
+                    </div>
+
+                    <div class="lesson">
+                        <h3>Backups e Permissões</h3>
+                        <p>Antes de executar operações massivas de UPDATE ou DELETE em produção:</p>
+                        <ol>
+                            <li>Verifique se o backup do banco está atualizado.</li>
+                            <li>Execute o comando em um ambiente de staging/homologação primeiro.</li>
+                            <li>Certifique-se de que seu usuário tem as permissões mínimas necessárias (evite usar 'sa' ou 'root').</li>
+                            <li>Use LIMIT (MySQL/PostgreSQL) ou TOP (SQL Server) para testar em poucos registros.</li>
+                        </ol>
+                        <div class="code-block">
+                            <code>-- MySQL: Atualizar apenas 5 linhas para teste
+UPDATE produtos SET preco = 0 WHERE categoria = 'Teste' LIMIT 5;</code>
+                        </div>
+                    </div>
+
+                    <div class="quiz-section">
+                        <div class="quiz-header">
+                            <h3>Teste seu conhecimento</h3>
+                            <button class="quiz-btn" onclick="startQuiz(6)">Iniciar Quiz</button>
+                        </div>
+                        <p>Responda a 5 perguntas sobre segurança, transações e boas práticas.</p>
+                    </div>
+
+                    <div class="module-completion">
+                        <button class="completion-btn" onclick="completeModule(6)">
+                            <i class="fas fa-check"></i> Marcar como Concluído
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recursos Adicionais -->
+                <section class="module-section">
+                    <div class="module-header">
+                        <h2>Recursos Adicionais</h2>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">Material de Apoio</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+                            <div style="background: white; border: 1px solid var(--light); border-radius: 8px; padding: 15px; transition: all 0.3s;">
+                                <h4 style="color: var(--secondary); margin-bottom: 8px;">Guia de Transações</h4>
+                                <p style="font-size: 0.9rem; color: #7f8c8d;">Aprenda a gerenciar BEGIN, COMMIT e ROLLBACK.</p>
+                                <a href="#" style="display: inline-block; margin-top: 10px; color: var(--secondary); text-decoration: none; font-weight: 500;">Ler guia</a>
+                            </div>
+                            <div style="background: white; border: 1px solid var(--light); border-radius: 8px; padding: 15px; transition: all 0.3s;">
+                                <h4 style="color: var(--secondary); margin-bottom: 8px;">Estratégias de Backup</h4>
+                                <p style="font-size: 0.9rem; color: #7f8c8d;">Como proteger seus dados antes de alterações.</p>
+                                <a href="#" style="display: inline-block; margin-top: 10px; color: var(--secondary); text-decoration: none; font-weight: 500;">Ver estratégias</a>
+                            </div>
+                            <div style="background: white; border: 1px solid var(--light); border-radius: 8px; padding: 15px; transition: all 0.3s;">
+                                <h4 style="color: var(--secondary); margin-bottom: 8px;">Soft Delete vs Hard Delete</h4>
+                                <p style="font-size: 0.9rem; color: #7f8c8d;">Artigo comparando as abordagens de exclusão.</p>
+                                <a href="#" style="display: inline-block; margin-top: 10px; color: var(--secondary); text-decoration: none; font-weight: 500;">Ler artigo</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Portal SQL</h3>
+                    <p>Domine a manipulação de dados com segurança e eficiência através de nossos cursos estruturados.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Página Inicial</a></li>
+                        <li><a href="#">Comandos SELECT</a></li>
+                        <li><a href="#">Comandos DML</a></li>
+                        <li><a href="#">Certificações</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recursos</h3>
+                    <ul>
+                        <li><a href="#">Documentação</a></li>
+                        <li><a href="#">Playground SQL</a></li>
+                        <li><a href="#">Cheat Sheets</a></li>
+                        <li><a href="#">Fórum da Comunidade</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Suporte</a></li>
+                        <li><a href="#">Reportar Bug</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Portal de Aprendizagem SQL. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de progresso
+        let completedModules = new Set();
+        // Alterado totalModules para 6, pois temos 6 seções neste curso
+        const totalModules = 6;
+
+        function updateProgress() {
+            const progress = (completedModules.size / totalModules) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        function completeModule(moduleNumber) {
+            completedModules.add(moduleNumber);
+            document.getElementById(`status${moduleNumber}`).textContent = 'Concluído';
+            document.getElementById(`status${moduleNumber}`).style.background = 'var(--success)';
+            
+            const button = event.target.closest('.completion-btn');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Concluído';
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            updateProgress();
+            
+            // Mostrar mensagem de sucesso
+            showNotification(`Módulo ${moduleNumber} concluído com sucesso!`);
+        }
+
+        function startQuiz(moduleNumber) {
+            showNotification(`Iniciando quiz do Módulo ${moduleNumber}. Boa sorte!`);
+        }
+
+        function showNotification(message) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Adicionar ao corpo
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Navegação suave e destaque do módulo ativo
+        document.querySelectorAll('.module-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover active class de todos os links
+                document.querySelectorAll('.module-link').forEach(l => l.classList.remove('active'));
+                
+                // Adicionar active class ao link clicado
+                this.classList.add('active');
+                
+                // Scroll suave até a seção
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Detectar qual módulo está visível durante o scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.module-section');
+            const scrollPosition = window.scrollY + 200;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    document.querySelectorAll('.module-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar
+        updateProgress();
+    </script>
+</body>
+</html>
