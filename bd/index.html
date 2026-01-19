@@ -14,6 +14,7 @@
             --structure: #9b59b6; /* Cor para módulo de estrutura */
             --queries: #16a085; /* Cor para módulo de consultas */
             --insert: #2ecc71; /* Cor para módulo de inserção */
+            --update: #e67e22; /* Cor para módulo de atualização/exclusão */
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
@@ -125,9 +126,9 @@
             margin-top: auto;
         }
         .topic-card .btn:hover {
-            background-color: #2980b9;
             transform: translateY(-2px);
         }
+        /* Estilos específicos por categoria */
         .topic-card.structure {
             border-top-color: var(--structure);
         }
@@ -155,6 +156,16 @@
         .topic-card.insert .btn:hover {
             background-color: #27ae60;
         }
+        .topic-card.update {
+            border-top-color: var(--update);
+        }
+        .topic-card.update .btn {
+            background-color: var(--update);
+        }
+        .topic-card.update .btn:hover {
+            background-color: #d35400;
+        }
+
         .features-section {
             background-color: white;
             border-radius: 15px;
@@ -244,11 +255,14 @@
         .path-step.structure .path-step-number {
             background-color: var(--structure);
         }
+        .path-step.insert .path-step-number {
+            background-color: var(--insert);
+        }
         .path-step.queries .path-step-number {
             background-color: var(--queries);
         }
-        .path-step.insert .path-step-number {
-            background-color: var(--insert);
+        .path-step.update .path-step-number {
+            background-color: var(--update);
         }
         .path-step h3 {
             color: var(--dark);
@@ -357,6 +371,11 @@
                     <h3>Consultas SQL</h3>
                     <p>Recuperação e manipulação de dados com SELECT, JOIN, filtros e agregações</p>
                 </div>
+                <div class="path-step update">
+                    <div class="path-step-number">4</div>
+                    <h3>Atualização e Exclusão</h3>
+                    <p>Modifique e remova dados com segurança usando UPDATE e DELETE</p>
+                </div>
             </div>
         </section>
         
@@ -377,6 +396,12 @@
                 <h3><span class="icon">🔍</span> Consultas SQL</h3>
                 <p>Domine a arte de recuperar dados com SELECT, filtrar informações com WHERE, ordenar resultados, agrupar dados com GROUP BY e juntar tabelas com JOIN. Aprenda também a usar subconsultas e funções de agregação.</p>
                 <a href="consultas.html" class="btn">Acessar Módulo</a>
+            </div>
+
+            <div class="topic-card update">
+                <h3><span class="icon">🔄</span> Atualização e Exclusão</h3>
+                <p>Aprenda a modificar dados existentes com UPDATE e remover registros com DELETE de forma segura. Entenda a importância do WHERE, integridade referencial, transações e como evitar perdas acidentais de dados.</p>
+                <a href="update_delete.html" class="btn">Acessar Módulo</a>
             </div>
         </section>
         
