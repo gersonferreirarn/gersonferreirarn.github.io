@@ -14,6 +14,7 @@
             --modular: #9b59b6; /* Nova cor para modularidade */
             --sequence: #16a085; /* Nova cor para estrutura de sequência */
             --string: #e67e22; /* Nova cor para strings */
+            --persistence: #5d6d7e; /* Nova cor para persistência de arquivos (Dark Slate Blue) */
             --light: #ecf0f1;
             --dark: #34495e;
             --font-size-base: 18px;
@@ -125,63 +126,60 @@
             margin-top: auto;
         }
         .topic-card .btn:hover {
-            background-color: #2980b9;
             transform: translateY(-2px);
+            opacity: 0.9;
         }
+        /* Estilos específicos por tipo de card */
         .topic-card.intro {
             border-top-color: var(--success);
         }
         .topic-card.intro .btn {
             background-color: var(--success);
         }
-        .topic-card.intro .btn:hover {
-            background-color: #229954;
-        }
+        
         .topic-card.decision {
             border-top-color: var(--danger);
         }
         .topic-card.decision .btn {
             background-color: var(--danger);
         }
-        .topic-card.decision .btn:hover {
-            background-color: #c0392b;
-        }
+        
         .topic-card.loop {
             border-top-color: var(--warning);
         }
         .topic-card.loop .btn {
             background-color: var(--warning);
         }
-        .topic-card.loop .btn:hover {
-            background-color: #d68910;
-        }
+        
         .topic-card.modular {
             border-top-color: var(--modular);
         }
         .topic-card.modular .btn {
             background-color: var(--modular);
         }
-        .topic-card.modular .btn:hover {
-            background-color: #8e44ad;
-        }
+        
         .topic-card.sequence {
             border-top-color: var(--sequence);
         }
         .topic-card.sequence .btn {
             background-color: var(--sequence);
         }
-        .topic-card.sequence .btn:hover {
-            background-color: #138d75;
-        }
+        
         .topic-card.string {
             border-top-color: var(--string);
         }
         .topic-card.string .btn {
             background-color: var(--string);
         }
-        .topic-card.string .btn:hover {
-            background-color: #d35400;
+
+        /* Novo estilo para Persistência */
+        .topic-card.persistence {
+            border-top-color: var(--persistence);
         }
+        .topic-card.persistence .btn {
+            background-color: var(--persistence);
+        }
+
         .features-section {
             background-color: white;
             border-radius: 15px;
@@ -244,7 +242,7 @@
         }
         .path-step {
             flex: 1;
-            min-width: 200px;
+            min-width: 180px;
             text-align: center;
             padding: 1.5rem;
             border-radius: 10px;
@@ -279,6 +277,9 @@
         }
         .path-step.string .path-step-number {
             background-color: var(--string);
+        }
+        .path-step.persistence .path-step-number {
+            background-color: var(--persistence);
         }
         .path-step h3 {
             color: var(--dark);
@@ -392,6 +393,12 @@
                     <h3>Manipulação de Strings</h3>
                     <p>Trabalhando com textos e caracteres em Java</p>
                 </div>
+                <!-- Novo passo adicionado -->
+                <div class="path-step persistence">
+                    <div class="path-step-number">5</div>
+                    <h3>Persistência</h3>
+                    <p>Gravação e leitura de objetos em arquivos</p>
+                </div>
             </div>
         </section>
         
@@ -430,6 +437,13 @@
                 <h3><span class="icon">📊</span> Estrutura de Sequência</h3>
                 <p>Domine o uso de vetores e matrizes em Java. Aprenda a declarar, inicializar e manipular estruturas de dados sequenciais para armazenar múltiplos valores.</p>
                 <a href="sequencia.html" class="btn">Acessar Módulo</a>
+            </div>
+
+            <!-- NOVO CARD ADICIONADO -->
+            <div class="topic-card persistence">
+                <h3><span class="icon">💾</span> Persistência de Arquivos</h3>
+                <p>Aprenda a salvar e recuperar dados utilizando arquivos. Entenda o funcionamento de ObjectOutputStream e ObjectInputStream para gravar e ler objetos, garantindo que seus dados não sejam perdidos.</p>
+                <a href="persistencia_arquivo.html" class="btn">Acessar Módulo</a>
             </div>
         </section>
         
