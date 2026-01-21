@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persistência de Dados em Java</title>
+<style>
+:root {
+--primary: #2c3e50;
+--secondary: #3498db;
+--success: #27ae60;
+--warning: #f39c12;
+--danger: #e74c3c;
+--light: #ecf0f1;
+--dark: #34495e;
+--font-size-base: 18px;
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+line-height: 1.6;
+color: #333;
+background-color: #f8f9fa;
+font-size: var(--font-size-base);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+header {
+background-color: var(--primary);
+color: white;
+padding: 1.5rem 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+}
+h1 {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+}
+.subtitle {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+.nav-tabs {
+display: flex;
+overflow-x: auto;
+background-color: var(--dark);
+margin-top: 1rem;
+border-radius: 8px;
+}
+.nav-tab {
+padding: 1rem 1.5rem;
+background-color: transparent;
+border: none;
+color: white;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 1rem;
+white-space: nowrap;
+}
+.nav-tab:hover {
+background-color: rgba(255,255,255,0.1);
+}
+.nav-tab.active {
+background-color: var(--secondary);
+}
+main {
+padding: 2rem 0;
+}
+.topic-section {
+display: none;
+animation: fadeIn 0.5s;
+}
+.topic-section.active {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.card {
+background: white;
+border-radius: 10px;
+padding: 2rem;
+margin-bottom: 2rem;
+box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+border-left: 5px solid var(--secondary);
+}
+.card h2 {
+color: var(--primary);
+margin-bottom: 1rem;
+font-size: 1.8rem;
+}
+.card h3 {
+color: var(--dark);
+margin: 1.5rem 0 0.8rem;
+font-size: 1.4rem;
+}
+.card h4 {
+color: var(--secondary);
+margin: 1rem 0 0.5rem;
+font-size: 1.2rem;
+}
+.card p, .card li {
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+ul {
+padding-left: 2rem;
+}
+.code-block {
+background-color: #2d3748;
+color: #e2e8f0;
+padding: 1.5rem;
+border-radius: 8px;
+margin: 1.5rem 0;
+overflow-x: auto;
+font-family: 'Courier New', monospace;
+font-size: 1rem;
+line-height: 1.5;
+}
+.code-block .keyword {
+color: #f687b3;
+}
+.code-block .string {
+color: #68d391;
+}
+.code-block .comment {
+color: #a0aec0;
+font-style: italic;
+}
+.code-block .number {
+color: #fbb6ce;
+}
+.code-block .type {
+color: #63b3ed;
+}
+.code-block .method {
+color: #f6ad55;
+}
+.activity {
+background-color: #f7fafc;
+border: 2px dashed var(--secondary);
+border-radius: 8px;
+padding: 1.5rem;
+margin: 2rem 0;
+}
+.activity h3 {
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.input-group {
+margin: 1rem 0;
+}
+.input-group label {
+display: block;
+margin-bottom: 0.5rem;
+font-weight: bold;
+color: var(--dark);
+}
+.input-group input, .input-group select, .input-group textarea {
+width: 100%;
+padding: 0.8rem;
+border: 2px solid #ddd;
+border-radius: 5px;
+font-size: 1rem;
+transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+outline: none;
+border-color: var(--secondary);
+}
+.btn {
+display: inline-block;
+background-color: var(--secondary);
+color: white;
+padding: 0.8rem 1.5rem;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.3s;
+margin-top: 1rem;
+}
+.btn:hover {
+background-color: #2980b9;
+transform: translateY(-2px);
+}
+.btn-success {
+background-color: var(--success);
+}
+.btn-success:hover {
+background-color: #229954;
+}
+.feedback {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 5px;
+display: none;
+}
+.feedback.success {
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
+}
+.feedback.error {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+}
+.memory-visual {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.memory-cell {
+background-color: var(--light);
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+min-width: 120px;
+transition: all 0.3s;
+}
+.memory-cell:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.memory-cell .name {
+font-weight: bold;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+.memory-cell .value {
+font-size: 1.2rem;
+color: var(--secondary);
+}
+.memory-cell .type {
+font-size: 0.9rem;
+color: #666;
+margin-top: 0.5rem;
+}
+.operator-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.operator-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1rem;
+text-align: center;
+transition: all 0.3s;
+}
+.operator-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.operator-symbol {
+font-size: 1.5rem;
+font-weight: bold;
+color: var(--primary);
+margin-bottom: 0.5rem;
+}
+.operator-name {
+color: var(--dark);
+margin-bottom: 0.3rem;
+}
+.operator-example {
+font-size: 0.9rem;
+color: #666;
+}
+.tip-box {
+background-color: #e3f2fd;
+border-left: 4px solid var(--secondary);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.tip-box h4 {
+color: var(--secondary);
+margin-bottom: 0.5rem;
+}
+.warning-box {
+background-color: #fff3cd;
+border-left: 4px solid var(--warning);
+padding: 1rem;
+margin: 1rem 0;
+border-radius: 5px;
+}
+.warning-box h4 {
+color: var(--warning);
+margin-bottom: 0.5rem;
+}
+.flowchart {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 2rem 0;
+}
+.flowchart-element {
+background-color: white;
+border: 2px solid var(--secondary);
+border-radius: 8px;
+padding: 1rem;
+margin: 0.5rem 0;
+text-align: center;
+width: 80%;
+max-width: 400px;
+position: relative;
+}
+.flowchart-arrow {
+height: 30px;
+width: 2px;
+background-color: var(--secondary);
+position: relative;
+}
+.flowchart-arrow::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: -4px;
+width: 0;
+height: 0;
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+border-top: 8px solid var(--secondary);
+}
+.feature-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 1rem;
+margin: 1.5rem 0;
+}
+.feature-card {
+background-color: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+padding: 1.5rem;
+transition: all 0.3s;
+}
+.feature-card:hover {
+border-color: var(--secondary);
+transform: translateY(-3px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.feature-icon {
+font-size: 2rem;
+color: var(--secondary);
+margin-bottom: 1rem;
+}
+.feature-title {
+font-size: 1.2rem;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+.feature-description {
+color: #666;
+}
+footer {
+background-color: var(--primary);
+color: white;
+text-align: center;
+padding: 1.5rem 0;
+margin-top: 3rem;
+}
+/* Acessibilidade */
+.sr-only {
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border: 0;
+}
+:focus {
+outline: 3px solid var(--secondary);
+outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="header-content">
+<div>
+<h1>Persistência de Dados em Java</h1>
+<p class="subtitle">Serialização e Manipulação de Arquivos</p>
+</div>
+<div>
+<button id="increaseFont" class="btn" aria-label="Aumentar fonte">A+</button>
+<button id="decreaseFont" class="btn" aria-label="Diminuir fonte">A-</button>
+</div>
+</div>
+<nav class="nav-tabs" role="tablist">
+<button class="nav-tab active" data-topic="conceitos" role="tab" aria-selected="true">Conceitos</button>
+<button class="nav-tab" data-topic="gravador" role="tab" aria-selected="false">A Classe Gravador</button>
+<button class="nav-tab" data-topic="modelo" role="tab" aria-selected="false">O Modelo (Serializable)</button>
+<button class="nav-tab" data-topic="fluxo" role="tab" aria-selected="false">Fluxo de Dados</button>
+<button class="nav-tab" data-topic="excecoes" role="tab" aria-selected="false">Exceções e Boas Práticas</button>
+</nav>
+</div>
+</header>
+<main class="container">
+<!-- Tópico 1: Conceitos -->
+<section id="conceitos" class="topic-section active" role="tabpanel">
+<div class="card">
+<h2>1. Conceitos de Persistência</h2>
+<p>A <strong>persistência de dados</strong> é a capacidade de um programa manter o estado dos objetos mesmo após o término de sua execução. Sem persistência, todos os dados armazenados na memória RAM são perdidos quando o programa fecha.</p>
+
+<h3>Memória Volátil vs. Persistente</h3>
+
+<div class="operator-grid">
+<div class="operator-card">
+<div class="operator-symbol">RAM</div>
+<div class="operator-name">Memória Volátil</div>
+<div class="operator-example"> rápida, mas os dados somem ao desligar (Variáveis, Objetos)</div>
+</div>
+<div class="operator-card">
+<div class="operator-symbol">HDD/SSD</div>
+<div class="operator-name">Armazenamento Persistente</div>
+<div class="operator-example"> mais lento, mas mantém os dados gravados (Arquivos, Banco de Dados)</div>
+</div>
+</div>
+
+<h3>Serialização em Java</h3>
+<p>Para salvar objetos em arquivos, Java utiliza um processo chamado <strong>Serialização</strong>. É o processo de converter o estado de um objeto em um fluxo de bytes para armazená-lo em disco ou enviá-lo pela rede.</p>
+<ul>
+<li><strong>Serialização:</strong> Objeto (Java) &rarr; Bytes (Arquivo).</li>
+<li><strong>Desserialização:</strong> Bytes (Arquivo) &rarr; Objeto (Java).</li>
+</ul>
+
+<div class="feature-grid">
+<div class="feature-card">
+<div class="feature-icon">&#128190;</div>
+<div class="feature-title">FileOutputStream</div>
+<div class="feature-description">Conecta o programa ao sistema de arquivos para escrita bruta de bytes.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">&#128269;</div>
+<div class="feature-title">ObjectOutputStream</div>
+<div class="feature-description">Envolve o fluxo de arquivo para gravar objetos (serialização automática).</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">&#128196;</div>
+<div class="feature-title">FileInputStream</div>
+<div class="feature-description">Abre um arquivo existente para leitura de bytes.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">&#128226;</div>
+<div class="feature-title">ObjectInputStream</div>
+<div class="feature-description">Lê bytes de um arquivo e os reconstrói como um objeto (desserialização).</div>
+</div>
+</div>
+
+<div class="activity">
+<h3>Atividade Rápida</h3>
+<p>Associe o conceito à sua definição:</p>
+<div class="input-group">
+<label>1. Processo de transformar um objeto em bytes para salvar em arquivo:</label>
+<select id="concept1">
+<option value="">Selecione...</option>
+<option value="serializacao">Serialização</option>
+<option value="desserializacao">Desserialização</option>
+<option value="compilacao">Compilação</option>
+</select>
+</div>
+<div class="input-group">
+<label>2. Tipo de memória onde os dados são perdidos ao desligar o computador:</label>
+<select id="concept2">
+<option value="">Selecione...</option>
+<option value="ram">RAM (Volátil)</option>
+<option value="disco">Disco Rígido (Persistente)</option>
+</select>
+</div>
+<button id="checkConcepts" class="btn">Verificar Respostas</button>
+<div id="conceptsFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 2: A Classe Gravador -->
+<section id="gravador" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>2. A Classe Gravador</h2>
+<p>Esta classe é uma utilitária estática que encapsula a complexidade das streams Java, fornecendo métodos simples para <strong>gravar</strong> e <strong>ler</strong> objetos.</p>
+
+<h3>Código Completo da Classe</h3>
+<div class="code-block">
+<span class="keyword">import</span> java.io.FileInputStream;<br>
+<span class="keyword">import</span> java.io.FileNotFoundException;<br>
+<span class="keyword">import</span> java.io.FileOutputStream;<br>
+<span class="keyword">import</span> java.io.IOException;<br>
+<span class="keyword">import</span> java.io.ObjectInputStream;<br>
+<span class="keyword">import</span> java.io.ObjectOutputStream;<br><br>
+<span class="keyword">public class</span> <span class="type">Gravador</span> {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> <span class="method">gravar</span>(<span class="type">String</span> arquivo, <span class="type">Object</span> objeto) <span class="keyword">throws</span> FileNotFoundException, IOException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">FileOutputStream</span> outFile = <span class="keyword">new</span> <span class="type">FileOutputStream</span>(arquivo); <span class="comment">// Cria um arquivo</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">ObjectOutputStream</span> s = <span class="keyword">new</span> <span class="type">ObjectOutputStream</span>(outFile); <span class="comment">// Recebe o arquivo criado</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;s.writeObject(objeto); <span class="comment">// Grava os bytes do objeto no arquivo</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;s.close();<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="keyword">public static</span> <span class="type">Object</span> <span class="method">ler</span>(<span class="type">String</span> arquivo) <span class="keyword">throws</span> FileNotFoundException, IOException, ClassNotFoundException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">FileInputStream</span> inFile = <span class="keyword">new</span> <span class="type">FileInputStream</span>(arquivo); <span class="comment">// Abre o arquivo</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">ObjectInputStream</span> s = <span class="keyword">new</span> <span class="type">ObjectInputStream</span>(inFile); <span class="comment">// Recebe o arquivo com os objetos</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Object</span> objeto = s.readObject(); <span class="comment">// Lê os bytes e retorna o objeto</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;s.close();<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> objeto;<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<h3>Análise do Método <code>gravar</code></h3>
+<p>O método recebe o nome do arquivo (String) e o objeto a ser salvo (Object). Observe o encadeamento das streams:</p>
+<ul>
+<li><strong>FileOutputStream:</strong> Responsável por criar/manipular o arquivo físico no disco.</li>
+<li><strong>ObjectOutputStream:</strong> Responsável por pegar o objeto Java e transformá-lo em bytes. Ele recebe o FileOutputStream como parâmetro no construtor.</li>
+<li><strong>writeObject:</strong> O comando mágico que escreve o objeto.</li>
+<li><strong>close:</strong> Libera os recursos (salva o buffer e fecha o arquivo).</li>
+</ul>
+
+<div class="tip-box">
+<h4>Importância do close()</h4>
+<p>Sempre feche as streams! Se você não chamar <code>close()</code>, o arquivo pode ficar corrompido ou os dados podem não ser gravados no disco imediatamente.</p>
+</div>
+
+<h3>Análise do Método <code>ler</code></h3>
+<p>O processo inverso usa classes análogas para entrada (Input):</p>
+<ul>
+<li><strong>FileInputStream:</strong> Abre o arquivo existente no disco.</li>
+<li><strong>ObjectInputStream:</strong> Lê os bytes brutos e tenta reconstruir o objeto original.</li>
+<li><strong>readObject:</strong> Retorna um tipo genérico <code>Object</code>, que geralmente precisamos fazer o cast (conversão explícita) para o tipo original.</li>
+</ul>
+
+<div class="activity">
+<h3>Atividade Prática</h3>
+<p>Identifique a ordem correta de criação dos objetos para gravar dados:</p>
+<div class="input-group">
+<select id="streamOrder">
+<option value="">Selecione a ordem correta...</option>
+<option value="errado1">ObjectOutputStream -> FileOutputStream -> writeObject</option>
+<option value="correto">FileOutputStream -> ObjectOutputStream -> writeObject</option>
+<option value="errado2">writeObject -> ObjectOutputStream -> FileOutputStream</option>
+</select>
+</div>
+<button id="checkGravador" class="btn">Verificar</button>
+<div id="gravadorFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 3: O Modelo (Serializable) -->
+<section id="modelo" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>3. O Objeto a Ser Salvo (Serializable)</h2>
+<p>Nem todo objeto pode ser gravado usando a classe <code>Gravador</code>. Para que o <code>ObjectOutputStream</code> funcione, a classe do objeto deve implementar a interface <code>java.io.Serializable</code>.</p>
+
+<h3>Interface Serializable</h3>
+<p>A interface <code>Serializable</code> é uma <strong>interface marcadora</strong>. Ela não possui métodos a serem implementados. Serve apenas para dizer ao Java: "Objetos desta classe podem ser serializados".</p>
+
+<h3>Exemplo de Classe de Modelo</h3>
+<p>Vamos imaginar que queremos salvar uma lista de usuários. Primeiro, precisamos da classe <code>Usuario</code>:</p>
+
+<div class="code-block">
+<span class="keyword">import</span> java.io.Serializable;<br><br>
+<span class="keyword">public class</span> <span class="type">Usuario</span> <span class="keyword">implements</span> <span class="type">Serializable</span> {<br>
+&nbsp;&nbsp;<span class="comment">// Identificador de versão para controle de serialização</span><br>
+&nbsp;&nbsp;<span class="keyword">private static final long</span> serialVersionUID = <span class="number">1L</span>;<br><br>
+&nbsp;&nbsp;<span class="keyword">private</span> <span class="type">String</span> nome;<br>
+&nbsp;&nbsp;<span class="keyword">private</span> <span class="type">int</span> idade;<br><br>
+&nbsp;&nbsp;<span class="keyword">public</span> <span class="type">Usuario</span>(<span class="type">String</span> nome, <span class="keyword">int</span> idade) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.nome = nome;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.idade = idade;<br>
+&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;<span class="comment">// Getters e Setters...</span><br>
+}
+</div>
+
+<div class="warning-box">
+<h4>Atenção: serialVersionUID</h4>
+<p>Ao implementar <code>Serializable</code>, é uma boa prática gerar um <code>serialVersionUID</code>. Se você não fornecer um, o Java gera um automaticamente baseado na estrutura da classe. Se você alterar a classe depois, o ID muda e você não conseguirá ler arquivos antigos.</p>
+</div>
+
+<h3>Exemplo de Uso (Main)</h3>
+<p>Como integrar a classe <code>Gravador</code> e a classe <code>Usuario</code>:</p>
+
+<div class="code-block">
+<span class="keyword">public class</span> <span class="type">Main</span> {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Usuario</span> user = <span class="keyword">new</span> <span class="type">Usuario</span>(<span class="string">"Carlos"</span>, <span class="number">30</span>);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// GRAVANDO</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Gravador</span>.gravar(<span class="string">"usuario.dat"</span>, user);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Usuário salvo!"</span>);<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// LENDO</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Object</span> obj = <span class="type">Gravador</span>.ler(<span class="string">"usuario.dat"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Usuario</span> recuperado = (<span class="type">Usuario</span>) obj; <span class="comment">// Cast explícito necessário</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nome recuperado: "</span> + recuperado.getNome());<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (<span class="type">Exception</span> e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+
+<div class="activity">
+<h3>Quiz: Serializable</h3>
+<p>O que acontece se tentarmos gravar um objeto de uma classe que <strong>não</strong> implementa <code>Serializable</code>?</p>
+<div class="input-group">
+<select id="serializableError">
+<option value="">Selecione...</option>
+<option value="compila">Erro de Compilação</option>
+<option value="runtime">Erro em Tempo de Execução (RuntimeException)</option>
+<option value="silencio">O Java ignora e grava apenas o nome da classe</option>
+</select>
+</div>
+<button id="checkModelo" class="btn">Verificar</button>
+<div id="modeloFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 4: Fluxo de Dados -->
+<section id="fluxo" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>4. O Fluxo de Dados (Visual)</h2>
+<p>Entender o caminho que os dados percorrem é essencial para evitar erros. O processo segue uma ordem estrita de abertura e fechamento de "tubos" (streams).</p>
+
+<h3>Processo de Gravação</h3>
+<div class="flowchart">
+<div class="flowchart-element">
+<strong>Objeto Java (RAM)</strong><br>
+<small>Ex: new Usuario("Ana", 25)</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element" style="border-color: var(--success);">
+<strong>ObjectOutputStream</strong><br>
+<small>Converte Objeto &rarr; Bytes</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element" style="border-color: var(--warning);">
+<strong>FileOutputStream</strong><br>
+<small>Escreve Bytes no Disco</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element" style="border-color: var(--primary);">
+<strong>Arquivo Físico (disco)</strong><br>
+<small>Ex: "dados.dat"</small>
+</div>
+</div>
+
+<h3>Processo de Leitura</h3>
+<div class="flowchart">
+<div class="flowchart-element" style="border-color: var(--primary);">
+<strong>Arquivo Físico (disco)</strong><br>
+<small>Ex: "dados.dat"</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element" style="border-color: var(--warning);">
+<strong>FileInputStream</strong><br>
+<small>Lê Bytes do Disco</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element" style="border-color: var(--success);">
+<strong>ObjectInputStream</strong><br>
+<small>Converte Bytes &rarr; Objeto</small>
+</div>
+<div class="flowchart-arrow"></div>
+<div class="flowchart-element">
+<strong>Objeto Java (RAM)</strong><br>
+<small>Pronto para uso (fazendo cast)</small>
+</div>
+</div>
+
+<h3>Pilha de Streams</h3>
+<p>Pense nas streams como canos encaixados um dentro do outro.</p>
+<div class="memory-visual" style="justify-content: center;">
+<div class="memory-cell" style="border-color: var(--secondary);">
+<div class="name">ObjectOutputStream</div>
+<div class="value">Manipula Objetos</div>
+<div class="type">High Level</div>
+</div>
+<div style="display:flex; align-items:center; color: #999;">&#8615;</div>
+<div class="memory-cell" style="border-color: var(--warning);">
+<div class="name">FileOutputStream</div>
+<div class="value">Manipula Bytes</div>
+<div class="type">Low Level</div>
+</div>
+<div style="display:flex; align-items:center; color: #999;">&#8615;</div>
+<div class="memory-cell" style="border-color: var(--primary);">
+<div class="name">Arquivo "dados.dat"</div>
+<div class="value">01010101</div>
+<div class="type">Disk</div>
+</div>
+</div>
+
+<div class="tip-box">
+<h4>Boa Prática: Encadeamento</h4>
+<p>Embora a classe <code>Gravador</code> fornecida use variáveis separadas para clareza pedagógica, é comum encadear a criação:</p>
+<div class="code-block">
+<span class="keyword">new</span> <span class="type">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="type">FileOutputStream</span>(<span class="string">"arquivo.dat"</span>));
+</div>
+</div>
+</div>
+</section>
+
+<!-- Tópico 5: Exceções e Boas Práticas -->
+<section id="excecoes" class="topic-section" role="tabpanel">
+<div class="card">
+<h2>5. Tratamento de Exceções e Boas Práticas</h2>
+<p>Operações de I/O (Entrada/Saída) são propensas a falhas. Arquivos podem não existir, o disco pode estar cheio ou o usuário pode não ter permissão de escrita.</p>
+
+<h3>Principais Exceções</h3>
+<ul>
+<li><strong>FileNotFoundException:</strong> Ocorre no método <code>ler</code> se o arquivo especificado não existir.</li>
+<li><strong>IOException:</strong> Erro genérico de entrada/saída (disco cheio, arquivo corrompido, cabo desconectado).</li>
+<li><strong>ClassNotFoundException:</strong> Ocorre no <code>ler</code> se o arquivo existir, mas a classe do objeto foi alterada ou removida desde a gravação.</li>
+</ul>
+
+<h3>Boas Práticas de Código</h3>
+
+<h4>1. Try-With-Resources (Java 7+)</h4>
+<p>Ao invés de chamar <code>close()</code> manualmente (o que pode falhar se ocorrer um erro antes), use o bloco <code>try</code> com recursos. O Java fecha automaticamente os streams.</p>
+<div class="code-block">
+<span class="comment">// Versão melhorada do método gravar</span><br>
+<span class="keyword">public static void</span> <span class="method">gravar</span>(<span class="type">String</span> arquivo, <span class="type">Object</span> objeto) <span class="keyword">throws</span> <span class="type">IOException</span> {<br>
+&nbsp;&nbsp;<span class="keyword">try</span> (<span class="type">ObjectOutputStream</span> s = <span class="keyword">new</span> <span class="type">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="type">FileOutputStream</span>(arquivo))) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;s.writeObject(objeto);<br>
+&nbsp;&nbsp;} <span class="comment">// O close é chamado automaticamente aqui</span><br>
+}
+</div>
+
+<h4>2. Validação de Nulos</h4>
+<p>Verifique se o objeto a ser gravado não é nulo antes de tentar abrir o arquivo.</p>
+
+<div class="code-block">
+<span class="keyword">if</span> (objeto == <span class="keyword">null</span>) {<br>
+&nbsp;&nbsp;<span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(<span class="string">"Objeto não pode ser nulo"</span>);<br>
+}
+</div>
+
+<h4>3. Cuidado com a Sobrescrita</h4>
+<p>O <code>FileOutputStream</code> sempre cria um novo arquivo ou zera o arquivo existente se ele já tiver conteúdo. Se você quer adicionar dados ao final de um arquivo existente, o construtor deve mudar para:</p>
+<div class="code-block">
+<span class="comment">// O segundo parâmetro 'true' ativa o modo append (adição)</span><br>
+<span class="keyword">new</span> <span class="type">FileOutputStream</span>(arquivo, <span class="keyword">true</span>);
+</div>
+<div class="warning-box">
+<h4>Atenção com Append em Objetos</h4>
+<p>Adicionar objetos a um arquivo (<code>append</code>) com <code>ObjectOutputStream</code> é problemático. Ao ler de volta, você pode receber <code>StreamCorruptedException</code>. Para listas de objetos, o ideal é gravar uma <code>Collection</code> (como uma ArrayList) inteira de uma vez, em vez de um objeto por vez.</p>
+</div>
+
+<div class="activity">
+<h3>Cenário de Erro</h3>
+<p>Um programador gravou um objeto da classe <code>Pessoa</code> no arquivo <code>pessoas.dat</code>. Depois, ele alterou a classe <code>Pessoa</code> adicionando um novo atributo (private String email). Ao tentar ler o arquivo antigo, qual exceção provavelmente ocorrerá?</p>
+<div class="input-group">
+<select id="errorScenario">
+<option value="">Selecione...</option>
+<option value="FileNotFoundException">FileNotFoundException</option>
+<option value="IOException">IOException</option>
+<option value="ClassNotFoundException">ClassNotFoundException</option>
+<option value="Nenhuma">Nenhuma, desde que serialVersionUID seja o mesmo</option>
+</select>
+</div>
+<button id="checkExcecoes" class="btn">Verificar</button>
+<div id="excecoesFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container">
+<p>&copy; Persistência de Dados em Java - Material educativo baseado em IO/Streams</p>
+</div>
+</footer>
+<script>
+// Navegação entre tópicos
+const navTabs = document.querySelectorAll('.nav-tab');
+const topicSections = document.querySelectorAll('.topic-section');
+navTabs.forEach(tab => {
+tab.addEventListener('click', () => {
+const targetTopic = tab.getAttribute('data-topic');
+// Remove classe active de todas as abas e seções
+navTabs.forEach(t => {
+t.classList.remove('active');
+t.setAttribute('aria-selected', 'false');
+});
+topicSections.forEach(section => section.classList.remove('active'));
+// Adiciona classe active na aba e seção correspondentes
+tab.classList.add('active');
+tab.setAttribute('aria-selected', 'true');
+document.getElementById(targetTopic).classList.add('active');
+});
+});
+
+// Controle de tamanho da fonte
+const increaseFontBtn = document.getElementById('increaseFont');
+const decreaseFontBtn = document.getElementById('decreaseFont');
+const root = document.documentElement;
+let currentFontSize = 18;
+increaseFontBtn.addEventListener('click', () => {
+if (currentFontSize < 24) {
+currentFontSize += 2;
+root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+}
+});
+decreaseFontBtn.addEventListener('click', () => {
+if (currentFontSize > 14) {
+currentFontSize -= 2;
+root.style.setProperty('--font-size-base', `${currentFontSize}px`);
+}
+});
+
+// Atividade 1: Conceitos
+const checkConceptsBtn = document.getElementById('checkConcepts');
+if (checkConceptsBtn) {
+checkConceptsBtn.addEventListener('click', () => {
+const c1 = document.getElementById('concept1').value;
+const c2 = document.getElementById('concept2').value;
+const feedback = document.getElementById('conceptsFeedback');
+feedback.style.display = 'block';
+if (c1 === 'serializacao' && c2 === 'ram') {
+feedback.className = 'feedback success';
+feedback.textContent = 'Correto! Serialização converte para bytes, e a memória RAM é volátil.';
+} else {
+feedback.className = 'feedback error';
+feedback.textContent = 'Incorreto. Tente novamente.';
+}
+});
+}
+
+// Atividade 2: Ordem dos Streams
+const checkGravadorBtn = document.getElementById('checkGravador');
+if (checkGravadorBtn) {
+checkGravadorBtn.addEventListener('click', () => {
+const order = document.getElementById('streamOrder').value;
+const feedback = document.getElementById('gravadorFeedback');
+feedback.style.display = 'block';
+if (order === 'correto') {
+feedback.className = 'feedback success';
+feedback.textContent = 'Correto! O arquivo físico (FileOutputStream) deve existir antes de o ObjectOutputStream usá-lo.';
+} else {
+feedback.className = 'feedback error';
+feedback.textContent = 'Errado. Lembre-se que o ObjectOutputStream envolve (recebe) o FileOutputStream.';
+}
+});
+}
+
+// Atividade 3: Serializable
+const checkModeloBtn = document.getElementById('checkModelo');
+if (checkModeloBtn) {
+checkModeloBtn.addEventListener('click', () => {
+const error = document.getElementById('serializableError').value;
+const feedback = document.getElementById('modeloFeedback');
+feedback.style.display = 'block';
+if (error === 'runtime') {
+feedback.className = 'feedback success';
+feedback.textContent = 'Exato! O código compila, mas em execução lança `NotSerializableException`.';
+} else {
+feedback.className = 'feedback error';
+feedback.textContent = 'Incorreto. A interface Serializable não é verificada em tempo de compilação.';
+}
+});
+}
+
+// Atividade 4: Exceções
+const checkExcecoesBtn = document.getElementById('checkExcecoes');
+if (checkExcecoesBtn) {
+checkExcecoesBtn.addEventListener('click', () => {
+const scenario = document.getElementById('errorScenario').value;
+const feedback = document.getElementById('excecoesFeedback');
+feedback.style.display = 'block';
+if (scenario === 'Nenhuma') {
+feedback.className = 'feedback success';
+feedback.textContent = 'Perfeito! Se o `serialVersionUID` for explícito e igual, a JVM ignora os campos extras ao ler.';
+} else {
+feedback.className = 'feedback error';
+feedback.textContent = 'Não é necessariamente essa exceção. Com o serialVersionUID controlado, a leitura costuma funcionar.';
+}
+});
+}
+</script>
+</body>
+</html>
