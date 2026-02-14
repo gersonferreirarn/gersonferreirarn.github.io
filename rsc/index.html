@@ -4,116 +4,319 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Ferramenta Pessoal de Apoio ao Cálculo de RSC</title>
+<title>Ferramenta de Apoio ao Cálculo de RSC - IFRN</title>
 
-<!-- Bootstrap -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 <!-- SheetJS para Excel -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
-body { background:#f4f6f9; }
-
-.card-diretriz { margin-bottom:20px; }
-.criterio { margin-bottom:8px; }
-.resultado-box { font-size:1.3rem; font-weight:bold; }
-.apto { color:green; }
-.nao-apto { color:red; }
-
-.aviso {
-    background:#fff3cd;
-    border-left:5px solid #ffc107;
-    padding:15px;
-    margin-bottom:20px;
-}
-
-.botoes-topo {
-    margin-bottom:20px;
-}
-
-@media print {
-    .aviso, .botoes-topo, button, select {
-        display:none !important;
+    :root {
+        --primary-color: #2c3e50;
+        --accent-color: #3498db;
+        --success-bg: #d1e7dd;
+        --success-text: #0f5132;
+        --danger-bg: #f8d7da;
+        --danger-text: #842029;
+        --bg-color: #f4f6f9;
+        --card-radius: 12px;
     }
-    body { background:white; }
-}
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Container Principal */
+    .main-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        border-radius: var(--card-radius);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        padding: 40px;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    /* Aviso Legal Estilizado */
+    .aviso-box {
+        background-color: #fff8e1;
+        border: 1px solid #ffe0b2;
+        border-left: 5px solid #ffca28;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        font-size: 0.9rem;
+        color: #5d4037;
+    }
+    
+    .aviso-box strong { color: #bf360c; }
+    .aviso-footer {
+        margin-top: 15px;
+        text-align: right;
+        font-style: italic;
+        font-size: 0.85rem;
+        border-top: 1px solid rgba(0,0,0,0.05);
+        padding-top: 10px;
+    }
+
+    /* Botões de Ação */
+    .botoes-topo {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .btn-custom {
+        border-radius: 50px;
+        padding: 10px 24px;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Seletor de Nível */
+    .card-select {
+        border: none;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: var(--card-radius);
+        margin-bottom: 30px;
+    }
+    
+    .form-select {
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border-color: #ced4da;
+        cursor: pointer;
+    }
+
+    /* Cards de Diretriz (Gerados via JS) */
+    .card-diretriz {
+        border: 1px solid #e9ecef;
+        border-left: 5px solid var(--accent-color);
+        border-radius: 10px;
+        margin-bottom: 25px;
+        background: #fff;
+        transition: transform 0.2s;
+        overflow: hidden;
+    }
+
+    .card-diretriz:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .card-diretriz h5 {
+        background-color: #f8f9fa;
+        padding: 15px 20px;
+        margin: 0;
+        color: var(--primary-color);
+        border-bottom: 1px solid #e9ecef;
+        font-weight: 600;
+    }
+
+    .card-diretriz p {
+        padding: 10px 20px 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 15px;
+    }
+
+    /* Linhas de Critério */
+    .criterio {
+        background: white;
+        border-bottom: 1px solid #f1f3f5;
+        padding: 15px 20px;
+        margin-bottom: 0; /* Resetado */
+        display: flex;
+        align-items: center;
+    }
+
+    .criterio:last-child {
+        border-bottom: none;
+    }
+
+    .criterio small {
+        color: #868e96;
+        font-size: 0.8rem;
+    }
+
+    /* Inputs */
+    .criterio .form-control {
+        text-align: center;
+        font-weight: 600;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        height: 45px;
+    }
+
+    .criterio .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+
+    /* Área de Resultado */
+    #resultado {
+        margin-top: 30px;
+        border: none;
+        display: none; /* Escondido até calcular */
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .resultado-box {
+        padding: 30px;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .apto {
+        background-color: var(--success-bg);
+        color: var(--success-text);
+        border: 1px solid #badbcc;
+    }
+
+    .nao-apto {
+        background-color: var(--danger-bg);
+        color: var(--danger-text);
+        border: 1px solid #f5c2c7;
+    }
+
+    .resultado-box small {
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.9;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .criteria-info {
+        font-size: 0.9rem;
+        color: #555;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    /* Print Styles */
+    @media print {
+        .no-print { display: none !important; }
+        body { background: white; }
+        .main-container { box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
+        .card-diretriz { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+        .form-control { border: 1px solid #ccc; }
+    }
+
+    @media (max-width: 768px) {
+        .main-container { padding: 20px; margin: 0; border-radius: 0; }
+        .criterio { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .criterio .col-md-4 { width: 100%; }
+        .botoes-topo { flex-direction: column; }
+        .btn-custom { width: 100%; justify-content: center; }
+    }
 </style>
 </head>
 <body>
 
-<div class="container py-4">
+<div class="main-container">
 
-<h2 class="text-center mb-4">Ferramenta Pessoal de Apoio ao Cálculo de RSC</h2>
+<h2 class="no-print">
+    <i class="bi bi-calculator me-2"></i>Ferramenta de Apoio ao Cálculo de RSC
+</h2>
 
-<div class="aviso">
-<strong>Atenção:</strong><br>
-
-Esta é uma ferramenta <strong>não oficial</strong>, desenvolvida exclusivamente para fins pessoais, acadêmicos e de estudo.
-
-<br><br>
-
-Os cálculos apresentados são baseados na 
-<strong>Resolução nº 15/2014-CONSUP/IFRN</strong>, que regulamenta o Reconhecimento de Saberes e Competências (RSC) no âmbito do IFRN.
-
-<br><br>
-
-Podem existir erros de interpretação normativa, cálculo ou implementação técnica. 
-Esta ferramenta não substitui a leitura integral da resolução nem a análise oficial realizada pela instituição.
-
-<br><br>
-
-<strong>O autor não se responsabiliza por decisões tomadas com base exclusiva nos resultados aqui apresentados, nem por eventual uso inadequado, incorreto ou divergente da finalidade proposta.</strong>
-
-<br><br>
-
-Recomenda-se sempre a consulta ao documento oficial e, se necessário, aos setores competentes do IFRN antes de qualquer protocolo administrativo.
-
-<br><br>
-
-<div class="text-end">
-<em>Desenvolvido por Gesson Brener Ferreira da Silva em 14 de Fevereiro de 2026</em>
-</div>
+<!-- Aviso -->
+<div class="aviso-box no-print">
+    <h6 class="fw-bold text-uppercase mb-2">Atenção: Leitura Obrigatória</h6>
+    <p class="mb-2">
+        Esta é uma ferramenta <strong>não oficial</strong>, desenvolvida exclusivamente para fins pessoais, acadêmicos e de estudo.
+        Os cálculos apresentados são baseados na <strong>Resolução nº 15/2014-CONSUP/IFRN</strong>.
+    </p>
+    <p class="mb-2 small">
+        Podem existir erros de interpretação normativa, cálculo ou implementação técnica. Esta ferramenta não substitui a leitura integral da resolução nem a análise oficial realizada pela instituição.
+    </p>
+    <p class="mb-0 small fw-bold">
+        O autor não se responsabiliza por decisões tomadas com base exclusiva nos resultados aqui apresentados.
+    </p>
+    <div class="aviso-footer">
+        Desenvolvido por Gesson Brener Ferreira da Silva em 14/02/2026
+    </div>
 </div>
 
-
-<div class="text-center botoes-topo">
-<a href="https://portal.ifrn.edu.br/documents/5225/Resdolucao_15_ifrn.pdf" 
-target="_blank" 
-class="btn btn-outline-dark me-2">
-Consultar Resolução nº 15/2014-CONSUP/IFRN
-</a>
-
-<button class="btn btn-outline-primary me-2" onclick="window.print()">
-Imprimir
-</button>
-
-<button class="btn btn-success" onclick="exportarExcel()">
-Exportar para Excel
-</button>
+<!-- Botões Superiores -->
+<div class="botoes-topo no-print">
+    <a href="https://portal.ifrn.edu.br/documents/5225/Resdolucao_15_ifrn.pdf" 
+       target="_blank" 
+       class="btn btn-outline-dark btn-custom">
+        <i class="bi bi-file-earmark-text"></i> Consultar Resolução Oficial
+    </a>
+    <button class="btn btn-outline-primary btn-custom" onclick="window.print()">
+        <i class="bi bi-printer"></i> Imprimir / PDF
+    </button>
+    <button class="btn btn-success btn-custom" onclick="exportarExcel()">
+        <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+    </button>
 </div>
 
-<div class="card p-3 mb-3">
-<label class="form-label"><strong>Selecione o Nível do RSC:</strong></label>
-<select id="nivel" class="form-select" onchange="renderizarRSC()">
-<option value="">Selecione...</option>
-<option value="RSC1">RSC I</option>
-<option value="RSC2">RSC II</option>
-<option value="RSC3">RSC III</option>
-</select>
+<!-- Seleção de Nível -->
+<div class="card-select no-print">
+    <label class="form-label fw-bold mb-2">Selecione o Nível do RSC:</label>
+    <select id="nivel" class="form-select" onchange="renderizarRSC()">
+        <option value="">Selecione um nível para começar...</option>
+        <option value="RSC1">RSC I</option>
+        <option value="RSC2">RSC II</option>
+        <option value="RSC3">RSC III</option>
+    </select>
 </div>
 
+<!-- Área Dinâmica -->
 <div id="areaRSC"></div>
 
-<div class="card p-3 mt-3 text-center botoes-topo">
-<button class="btn btn-primary" onclick="calcular()">Calcular Pontuação</button>
+<!-- Botão Calcular -->
+<div class="text-center mt-4 mb-3 no-print" id="container-calcular" style="display:none;">
+    <button class="btn btn-primary btn-custom btn-lg w-100" onclick="calcular()">
+        <i class="bi bi-check-circle-fill"></i> Calcular Pontuação Atual
+    </button>
 </div>
 
-<div id="resultado" class="card p-4 mt-3 text-center"></div>
+<!-- Resultado -->
+<div id="resultado" class="card p-4 text-center"></div>
 
 </div>
 
-<!-- Dados -->
+
 <script src="rsc-data.js"></script>
 
 <script>
@@ -121,17 +324,29 @@ Exportar para Excel
 function renderizarRSC(){
 const nivel = document.getElementById("nivel").value;
 const area = document.getElementById("areaRSC");
-area.innerHTML = "";
+const btnContainer = document.getElementById("container-calcular");
+const resultado = document.getElementById("resultado");
 
-if(!nivel || !RSC_DATA[nivel]) return;
+area.innerHTML = "";
+resultado.style.display = 'none';
+resultado.innerHTML = "";
+
+if(!nivel || !RSC_DATA[nivel]) {
+    btnContainer.style.display = "none";
+    return;
+}
+
+btnContainer.style.display = "block";
 
 RSC_DATA[nivel].diretrizes.forEach((diretriz, i)=>{
 
 let html = `
-<div class="card card-diretriz p-3">
+<div class="card card-diretriz p-0">
+<div class="p-3">
 <h5>${diretriz.codigo} - ${diretriz.nome}</h5>
-<p><strong>Peso:</strong> ${diretriz.peso} | 
+<p class="mb-2"><strong>Peso:</strong> ${diretriz.peso} | 
 <strong>Máx. Diretriz:</strong> ${diretriz.maxDiretriz}</p>
+</div>
 `;
 
 diretriz.criterios.forEach((criterio, j)=>{
@@ -139,8 +354,7 @@ diretriz.criterios.forEach((criterio, j)=>{
 html += `
 <div class="row criterio">
 <div class="col-md-8">
-${criterio.item}. ${criterio.descricao}
-<br>
+<div>${criterio.item}. ${criterio.descricao}</div>
 <small>Fator: ${criterio.fator} | Unidade: ${criterio.unidade} | Máx: ${criterio.max}</small>
 </div>
 <div class="col-md-4">
@@ -149,7 +363,7 @@ class="form-control"
 min="0"
 max="${criterio.max}"
 id="campo_${i}_${j}"
-placeholder="Quantidade">
+placeholder="0">
 </div>
 </div>
 `;
@@ -167,6 +381,7 @@ const nivel = document.getElementById("nivel").value;
 if(!nivel) return;
 
 let totalNivel = 0;
+const resultadoDiv = document.getElementById("resultado");
 
 RSC_DATA[nivel].diretrizes.forEach((diretriz, i)=>{
 
@@ -199,27 +414,28 @@ let mensagem = "";
 
 if(totalFinal >= 50 && totalNivel >= 25){
 classe = "apto";
-mensagem = "Resultado indicativo: Perfil potencialmente apto conforme critérios mínimos.";
+mensagem = "Perfil potencialmente apto conforme critérios mínimos.";
 }else{
 classe = "nao-apto";
-mensagem = "Resultado indicativo: Perfil possivelmente não atinge critérios mínimos.";
+mensagem = "Perfil possivelmente não atinge critérios mínimos.";
 }
 
-document.getElementById("resultado").innerHTML = `
+// Exibindo o resultado
+resultadoDiv.style.display = "block";
+resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+resultadoDiv.innerHTML = `
 <div class="resultado-box ${classe}">
-Pontuação Calculada: ${totalFinal.toFixed(2)} / 100
-<br><br>
-${mensagem}
+    <span>${totalFinal.toFixed(2)} / 100</span>
+    <small>${mensagem}</small>
 </div>
 
-<hr>
-
-<div>
-<strong>Critérios mínimos conforme Resolução nº 15/2014-CONSUP/IFRN:</strong>
-<br>
-• Mínimo de 50 pontos totais
-<br>
-• Mínimo de 25 pontos no nível pretendido
+<div class="criteria-info text-start">
+    <strong>Regras de Validação (Res. 15/2014-CONSUP/IFRN):</strong>
+    <ul class="mb-0 mt-2 ps-3">
+        <li>Pontuação Total Mínima: 50 pontos</li>
+        <li>Pontuação no Nível Pretendido: 25 pontos</li>
+    </ul>
 </div>
 `;
 }
@@ -282,7 +498,6 @@ XLSX.utils.book_append_sheet(workbook, worksheet, "Relatório RSC");
 
 XLSX.writeFile(workbook, `Relatorio_RSC_${nivel}.xlsx`);
 }
-
 </script>
 
 </body>
