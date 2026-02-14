@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Ferramenta Pessoal de Apoio ao Cálculo de RSC</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- SheetJS para Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<style>
+body { background:#f4f6f9; }
+
+.card-diretriz { margin-bottom:20px; }
+.criterio { margin-bottom:8px; }
+.resultado-box { font-size:1.3rem; font-weight:bold; }
+.apto { color:green; }
+.nao-apto { color:red; }
+
+.aviso {
+    background:#fff3cd;
+    border-left:5px solid #ffc107;
+    padding:15px;
+    margin-bottom:20px;
+}
+
+.botoes-topo {
+    margin-bottom:20px;
+}
+
+@media print {
+    .aviso, .botoes-topo, button, select {
+        display:none !important;
+    }
+    body { background:white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container py-4">
+
+<h2 class="text-center mb-4">Ferramenta Pessoal de Apoio ao Cálculo de RSC</h2>
+
+<div class="aviso">
+<strong>Atenção:</strong><br>
+
+Esta é uma ferramenta <strong>não oficial</strong>, desenvolvida exclusivamente para fins pessoais, acadêmicos e de estudo.
+
+<br><br>
+
+Os cálculos apresentados são baseados na 
+<strong>Resolução nº 15/2014-CONSUP/IFRN</strong>, que regulamenta o Reconhecimento de Saberes e Competências (RSC) no âmbito do IFRN.
+
+<br><br>
+
+Podem existir erros de interpretação normativa, cálculo ou implementação técnica. 
+Esta ferramenta não substitui a leitura integral da resolução nem a análise oficial realizada pela instituição.
+
+<br><br>
+
+<strong>O autor não se responsabiliza por decisões tomadas com base exclusiva nos resultados aqui apresentados, nem por eventual uso inadequado, incorreto ou divergente da finalidade proposta.</strong>
+
+<br><br>
+
+Recomenda-se sempre a consulta ao documento oficial e, se necessário, aos setores competentes do IFRN antes de qualquer protocolo administrativo.
+
+<br><br>
+
+<div class="text-end">
+<em>Desenvolvido por Gesson Brener Ferreira da Silva em 14 de Fevereiro de 2026</em>
+</div>
+</div>
+
+
+<div class="text-center botoes-topo">
+<a href="https://portal.ifrn.edu.br/documents/5225/Resdolucao_15_ifrn.pdf" 
+target="_blank" 
+class="btn btn-outline-dark me-2">
+Consultar Resolução nº 15/2014-CONSUP/IFRN
+</a>
+
+<button class="btn btn-outline-primary me-2" onclick="window.print()">
+Imprimir
+</button>
+
+<button class="btn btn-success" onclick="exportarExcel()">
+Exportar para Excel
+</button>
+</div>
+
+<div class="card p-3 mb-3">
+<label class="form-label"><strong>Selecione o Nível do RSC:</strong></label>
+<select id="nivel" class="form-select" onchange="renderizarRSC()">
+<option value="">Selecione...</option>
+<option value="RSC1">RSC I</option>
+<option value="RSC2">RSC II</option>
+<option value="RSC3">RSC III</option>
+</select>
+</div>
+
+<div id="areaRSC"></div>
+
+<div class="card p-3 mt-3 text-center botoes-topo">
+<button class="btn btn-primary" onclick="calcular()">Calcular Pontuação</button>
+</div>
+
+<div id="resultado" class="card p-4 mt-3 text-center"></div>
+
+</div>
+
+<!-- Dados -->
+<script src="rsc-data.js"></script>
+
+<script>
+
+function renderizarRSC(){
+const nivel = document.getElementById("nivel").value;
+const area = document.getElementById("areaRSC");
+area.innerHTML = "";
+
+if(!nivel || !RSC_DATA[nivel]) return;
+
+RSC_DATA[nivel].diretrizes.forEach((diretriz, i)=>{
+
+let html = `
+<div class="card card-diretriz p-3">
+<h5>${diretriz.codigo} - ${diretriz.nome}</h5>
+<p><strong>Peso:</strong> ${diretriz.peso} | 
+<strong>Máx. Diretriz:</strong> ${diretriz.maxDiretriz}</p>
+`;
+
+diretriz.criterios.forEach((criterio, j)=>{
+
+html += `
+<div class="row criterio">
+<div class="col-md-8">
+${criterio.item}. ${criterio.descricao}
+<br>
+<small>Fator: ${criterio.fator} | Unidade: ${criterio.unidade} | Máx: ${criterio.max}</small>
+</div>
+<div class="col-md-4">
+<input type="number"
+class="form-control"
+min="0"
+max="${criterio.max}"
+id="campo_${i}_${j}"
+placeholder="Quantidade">
+</div>
+</div>
+`;
+});
+
+html += "</div>";
+area.innerHTML += html;
+
+});
+}
+
+function calcular(){
+
+const nivel = document.getElementById("nivel").value;
+if(!nivel) return;
+
+let totalNivel = 0;
+
+RSC_DATA[nivel].diretrizes.forEach((diretriz, i)=>{
+
+let somaDiretriz = 0;
+
+diretriz.criterios.forEach((criterio, j)=>{
+
+let qtd = parseFloat(document.getElementById(`campo_${i}_${j}`).value) || 0;
+
+if(qtd > criterio.max)
+qtd = criterio.max;
+
+let pontos = qtd * criterio.fator;
+somaDiretriz += pontos;
+
+});
+
+if(somaDiretriz > diretriz.maxDiretriz)
+somaDiretriz = diretriz.maxDiretriz;
+
+let ponderado = somaDiretriz * diretriz.peso;
+totalNivel += ponderado;
+
+});
+
+let totalFinal = totalNivel;
+
+let classe = "";
+let mensagem = "";
+
+if(totalFinal >= 50 && totalNivel >= 25){
+classe = "apto";
+mensagem = "Resultado indicativo: Perfil potencialmente apto conforme critérios mínimos.";
+}else{
+classe = "nao-apto";
+mensagem = "Resultado indicativo: Perfil possivelmente não atinge critérios mínimos.";
+}
+
+document.getElementById("resultado").innerHTML = `
+<div class="resultado-box ${classe}">
+Pontuação Calculada: ${totalFinal.toFixed(2)} / 100
+<br><br>
+${mensagem}
+</div>
+
+<hr>
+
+<div>
+<strong>Critérios mínimos conforme Resolução nº 15/2014-CONSUP/IFRN:</strong>
+<br>
+• Mínimo de 50 pontos totais
+<br>
+• Mínimo de 25 pontos no nível pretendido
+</div>
+`;
+}
+
+function exportarExcel(){
+
+const nivel = document.getElementById("nivel").value;
+if(!nivel){
+alert("Selecione um nível antes de exportar.");
+return;
+}
+
+let dadosPlanilha = [];
+let totalFinal = 0;
+
+RSC_DATA[nivel].diretrizes.forEach((diretriz, i)=>{
+
+let somaDiretriz = 0;
+
+diretriz.criterios.forEach((criterio, j)=>{
+
+let qtd = parseFloat(document.getElementById(`campo_${i}_${j}`).value) || 0;
+if(qtd > criterio.max) qtd = criterio.max;
+
+let pontos = qtd * criterio.fator;
+somaDiretriz += pontos;
+
+dadosPlanilha.push({
+"Diretriz": diretriz.codigo,
+"Item": criterio.item,
+"Descrição": criterio.descricao,
+"Quantidade": qtd,
+"Fator": criterio.fator,
+"Pontuação Bruta": pontos
+});
+
+});
+
+if(somaDiretriz > diretriz.maxDiretriz)
+somaDiretriz = diretriz.maxDiretriz;
+
+let ponderado = somaDiretriz * diretriz.peso;
+totalFinal += ponderado;
+
+});
+
+dadosPlanilha.push({});
+dadosPlanilha.push({
+"Diretriz":"TOTAL FINAL",
+"Item":"",
+"Descrição":"",
+"Quantidade":"",
+"Fator":"",
+"Pontuação Bruta": totalFinal
+});
+
+const worksheet = XLSX.utils.json_to_sheet(dadosPlanilha);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Relatório RSC");
+
+XLSX.writeFile(workbook, `Relatorio_RSC_${nivel}.xlsx`);
+}
+
+</script>
+
+</body>
+</html>
