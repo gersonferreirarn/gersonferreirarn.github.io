@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portal Solar — Dashboard de Investimento</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-gradient: radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%),
+                      radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
+      --glass-bg: rgba(30, 41, 59, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-highlight: rgba(255, 255, 255, 0.03);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-orange: #f59e0b;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Header */
+    .main-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+    }
+
+    /* Typography & Helpers */
+    h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; }
+    .text-glow { text-shadow: 0 0 20px rgba(6, 182, 212, 0.3); }
+    .text-accent-cyan { color: var(--accent-cyan); }
+    .text-accent-purple { color: var(--accent-purple); }
+    .text-accent-green { color: var(--accent-green); }
+    .text-accent-orange { color: var(--accent-orange); }
+    
+    .text-muted-custom { color: var(--text-secondary); font-size: 0.9rem; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85em; }
+
+    /* Navigation Pills */
+    .nav-pills-cloud .nav-link {
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    
+    .nav-pills-cloud .nav-link:hover {
+      color: var(--text-primary);
+      background: var(--glass-highlight);
+    }
+
+    .nav-pills-cloud .nav-link.active {
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent-cyan);
+      border-color: rgba(6, 182, 212, 0.3);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+    }
+
+    /* Buttons */
+    .btn-glass {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      transition: all 0.2s;
+    }
+    .btn-glass:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      transform: translateY(-1px);
+    }
+    .btn-primary-glass {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.8), rgba(59, 130, 246, 0.8));
+      border: none;
+      color: white;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-primary-glass:hover {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.9), rgba(59, 130, 246, 0.9));
+      color: white;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Tables */
+    .table-cloud {
+      --bs-table-bg: transparent;
+      --bs-table-color: var(--text-primary);
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+    .table-cloud th {
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem;
+    }
+    .table-cloud td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      vertical-align: middle;
+    }
+    .table-cloud tr:last-child td { border-bottom: none; }
+    .table-cloud tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Accordion */
+    .accordion-item {
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 0.5rem;
+      border-radius: 12px !important;
+      overflow: hidden;
+    }
+    .accordion-button {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-primary);
+      font-weight: 500;
+      box-shadow: none !important;
+    }
+    .accordion-button:not(.collapsed) {
+      background: rgba(255,255,255,0.06);
+      color: var(--accent-cyan);
+    }
+    .accordion-body {
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    /* Key Metrics Cards */
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .bg-glow-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
+    .bg-glow-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+    .bg-glow-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
+
+    /* Soft HR */
+    .hr-soft {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+      margin: 1.5rem 0;
+    }
+
+    canvas {
+      max-height: 300px;
+    }
+    
+    .badge-glass {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 600;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header Navigation -->
+  <header class="main-header">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="kpi-icon bg-glow-cyan" style="margin-bottom:0; width:40px; height:40px; font-size:1.2rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          </div>
+          <div>
+            <h1 class="h5 mb-0 fw-bold">Portal Solar <span class="text-accent-cyan">Analytics</span></h1>
+            <div class="text-muted-custom" style="font-size: 0.8rem;">Investimento, Projeções e Payback</div>
+          </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <button class="btn btn-glass btn-sm" onclick="window.print()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="me-1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Imprimir
+          </button>
+          <button class="btn btn-primary-glass btn-sm" onclick="downloadJSON()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="me-1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Baixar JSON
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    
+    <!-- KPI Section -->
+    <div class="row g-4 mb-5">
+      <!-- Card 1: Sistema -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card p-4 h-100 position-relative overflow-hidden">
+          <div class="kpi-icon bg-glow-cyan">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div class="text-muted-custom text-uppercase tracking-wide small mb-1">Potência Instalada</div>
+          <div class="display-6 fw-bold mb-2">7,44 <span class="fs-5 text-muted-custom fw-normal">kWp</span></div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge-glass text-accent-cyan">12 Módulos</span>
+            <span class="badge-glass text-accent-cyan">Inversor 10kW</span>
+          </div>
+          <div class="mt-3 small text-muted-custom border-top border-secondary border-opacity-25 pt-2">
+            Modelo: Dah Solar Bifacial + Huawei
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Investimento -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card p-4 h-100">
+          <div class="kpi-icon bg-glow-purple">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div class="text-muted-custom text-uppercase tracking-wide small mb-1">Investimento Total</div>
+          <div class="display-6 fw-bold mb-2 text-accent-purple" id="invTotal">R$ —</div>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="small text-muted-custom">Custo por kWp</div>
+            <div class="fw-bold text-white" id="custoPorKwp">—</div>
+          </div>
+          <div class="progress mt-2" style="height: 4px; background: rgba(255,255,255,0.1);">
+            <div class="progress-bar bg-gradient-to-r from-purple-500 to-indigo-500" style="width: 100%; background: var(--accent-purple);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Payback -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card p-4 h-100">
+          <div class="kpi-icon bg-glow-green">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          </div>
+          <div class="text-muted-custom text-uppercase tracking-wide small mb-1">Payback Estimado</div>
+          <div class="display-6 fw-bold mb-2 text-accent-green" id="paybackRange">—</div>
+          <div class="small text-muted-custom mt-3">
+            Baseado na fatura de Dezembro. Economia projetada: <span class="fw-semibold text-white" id="economiaRange">—</span>/mês.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="d-flex justify-content-center mb-4">
+      <ul class="nav nav-pills cloud-nav nav-pills-cloud p-1 glass-card" id="tabs" style="display: inline-flex; padding: 0.5rem;">
+        <li class="nav-item"><a class="nav-link active" href="#resumo" data-bs-toggle="pill">Resumo</a></li>
+        <li class="nav-item"><a class="nav-link" href="#investimento" data-bs-toggle="pill">Investimento</a></li>
+        <li class="nav-item"><a class="nav-link" href="#fatura" data-bs-toggle="pill">Análise Fatura</a></li>
+        <li class="nav-item"><a class="nav-link" href="#indicadores" data-bs-toggle="pill">Indicadores</a></li>
+        <li class="nav-item"><a class="nav-link" href="#graficos" data-bs-toggle="pill">Gráficos</a></li>
+      </ul>
+    </div>
+
+    <div class="tab-content">
+      
+      <!-- TAB: RESUMO -->
+      <section class="tab-pane fade show active" id="resumo">
+        <div class="row g-4">
+          <div class="col-12 col-xl-8">
+            <div class="glass-card p-4 h-100">
+              <h4 class="mb-3 d-flex align-items-center gap-2">
+                <svg width="20" height="20" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Resumo Executivo
+              </h4>
+              <p class="text-muted-custom mb-4">
+                Compilação completa de gastos e análise de viabilidade financeira baseada nos dados de consumo (Dez/2025).
+                Projeção conservadora de 25 anos.
+              </p>
+
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <div class="glass-card p-3" style="border-color: rgba(139, 92, 246, 0.2); background: rgba(139, 92, 246, 0.05);">
+                    <div class="small text-muted-custom text-uppercase">Materiais</div>
+                    <div class="h4 mb-0 fw-bold text-accent-purple" id="materiaisTotal">—</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="glass-card p-3" style="border-color: rgba(6, 182, 212, 0.2); background: rgba(6, 182, 212, 0.05);">
+                    <div class="small text-muted-custom text-uppercase">Serviços</div>
+                    <div class="h4 mb-0 fw-bold text-accent-cyan" id="servicosTotal">—</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert alert-dark border-secondary border-opacity-25 d-flex align-items-start gap-3" role="alert" style="background: rgba(255,255,255,0.03);">
+                <svg class="flex-shrink-0 text-accent-cyan" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="small text-muted-custom">
+                  <strong class="text-white">Cenários considerados:</strong> O cálculo leva em conta a linha "ICMS-parc 25,11" (Cenário B) e a ausência dela (Cenário A), gerando uma faixa de Payback.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-xl-4">
+            <div class="glass-card p-4 h-100">
+              <h5 class="mb-3">Escopo do Projeto</h5>
+              <ul class="list-unstyled text-muted-custom small space-y-2">
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Kit completo (Cabos, MC4, 12 módulos, Inversor)
+                </li>
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Estrutura Pratyc + Placa de Sinalização
+                </li>
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Proteção Clamper Front Box
+                </li>
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Materiais elétricos e Eletrodutos
+                </li>
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Aterramento completo
+                </li>
+                <li class="mb-2 d-flex gap-2">
+                  <svg class="text-accent-green flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  Mão de obra e Projeto/Homologação
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: INVESTIMENTO -->
+      <section class="tab-pane fade" id="investimento">
+        <div class="glass-card p-4">
+          <h4 class="mb-4">Detalhamento de Custos</h4>
+          
+          <div class="row g-4 mb-4">
+            <div class="col-12 col-lg-6">
+              <div class="glass-card p-3 h-100" style="background: rgba(0,0,0,0.2);">
+                <h6 class="text-accent-cyan mb-3">Por Categoria</h6>
+                <div class="table-responsive">
+                  <table class="table table-cloud mb-0">
+                    <thead>
+                      <tr>
+                        <th>Categoria</th>
+                        <th class="text-end">Valor</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tblCategorias"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="glass-card p-3 h-100" style="background: rgba(0,0,0,0.2);">
+                <h6 class="text-accent-cyan mb-3">Consolidação</h6>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted-custom">Subtotal Materiais</span>
+                  <span class="fw-semibold" id="subtotalMateriais">—</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="text-muted-custom">Subtotal Serviços</span>
+                  <span class="fw-semibold" id="subtotalServicos">—</span>
+                </div>
+                <div class="hr-soft"></div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="h5 mb-0 fw-bold">Total Investido</span>
+                  <span class="h4 mb-0 fw-bold text-accent-purple" id="totalInvestido2">—</span>
+                </div>
+                
+                <div class="mt-3 p-2 rounded bg-opacity-10 bg-dark border border-secondary border-opacity-25 small">
+                   <div class="d-flex justify-content-between"><span>M.O. Módulos (12x80):</span> <span id="maoObraModulos">—</span></div>
+                   <div class="d-flex justify-content-between"><span>M.O. Inversor:</span> <span id="maoObraInversor">—</span></div>
+                   <div class="d-flex justify-content-between"><span>Projeto:</span> <span id="projetoHomologacao">—</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="text-muted-custom mb-3">Itens Detalhados</h6>
+          <div class="accordion" id="accItens">
+            <!-- JS Populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: FATURA -->
+      <section class="tab-pane fade" id="fatura">
+        <div class="glass-card p-4">
+          <h4 class="mb-4">Análise da Fatura (Dez/2025)</h4>
+          
+          <div class="row g-4">
+            <div class="col-12 col-lg-5">
+              <div class="glass-card p-3 h-100" style="background: rgba(0,0,0,0.2);">
+                <h6 class="mb-3">Inputs (Tarifas e Consumo)</h6>
+                <div class="row g-2 text-muted-custom small">
+                  <div class="col-6"><span class="font-mono text-white">Consumo:</span> 461 kWh</div>
+                  <div class="col-6"><span class="font-mono text-white">Dias:</span> 33 dias</div>
+                  <div class="col-6"><span class="font-mono text-white">TE:</span> R$ 0,4142</div>
+                  <div class="col-6"><span class="font-mono text-white">TUSD:</span> R$ 0,4787</div>
+                  <div class="col-6"><span class="font-mono text-white">B. Amarela:</span> R$ 4,39</div>
+                  <div class="col-6"><span class="font-mono text-white">B. Vermelha:</span> R$ 12,48</div>
+                  <div class="col-12 mt-2 pt-2 border-top border-secondary border-opacity-25">
+                    <span class="font-mono text-white">CIP:</span> R$ 39,75 <br>
+                    <span class="font-mono text-warning">ICMS-parc (Cenário B):</span> R$ 25,11
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+              <div class="glass-card p-3 h-100" style="background: rgba(0,0,0,0.2);">
+                <h6 class="mb-3">Cálculo da Conta Cheia</h6>
+                <div class="table-responsive">
+                  <table class="table table-cloud mb-0 small">
+                    <tbody>
+                      <tr><td>Energia (TE + TUSD)</td><td class="text-end text-white" id="energiaBase">—</td></tr>
+                      <tr><td>Bandeiras</td><td class="text-end text-white" id="bandeiras">—</td></tr>
+                      <tr><td>CIP</td><td class="text-end text-white" id="cip">—</td></tr>
+                      <tr style="background: rgba(255,255,255,0.05);">
+                        <td class="fw-bold pt-3">Total Cenário A</td>
+                        <td class="text-end fw-bold text-white pt-3" id="totalA">—</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Total Cenário B (+ICMS)</td>
+                        <td class="text-end fw-bold text-white" id="totalB">—</td>
+                      </tr>
+                      <tr><td>Custo Médio/kWh (A)</td><td class="text-end" id="kwhMedioA">—</td></tr>
+                      <tr><td>Custo Médio/kWh (B)</td><td class="text-end" id="kwhMedioB">—</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="glass-card p-3" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                  <div class="kpi-icon bg-glow-green" style="margin-bottom:0; width:32px; height:32px; font-size:1rem;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                  </div>
+                  <h6 class="mb-0 text-accent-green">Conta Mínima Estimada (Com Solar)</h6>
+                </div>
+                <div class="row align-items-end">
+                  <div class="col-md-6 text-muted-custom small mb-2 mb-md-0">
+                    Refere-se ao custo de disponibilidade (30kWh) + CIP.
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <span class="text-muted-custom me-2">Total Mínimo:</span>
+                    <span class="h4 mb-0 fw-bold text-accent-green" id="minConta">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: INDICADORES -->
+      <section class="tab-pane fade" id="indicadores">
+        <div class="glass-card p-4">
+          <h4 class="mb-4">Indicadores Financeiros</h4>
+          
+          <div class="row g-4">
+            <!-- Economia -->
+            <div class="col-12 col-lg-6">
+              <div class="glass-card p-4 h-100">
+                <h6 class="mb-3">Economia Mensal Estimada</h6>
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+                  <span class="text-muted-custom">Cenário A (Sem ICMS-parc)</span>
+                  <span class="h5 mb-0 fw-bold text-white" id="ecoA">—</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-muted-custom">Cenário B (Com ICMS-parc)</span>
+                  <span class="h5 mb-0 fw-bold text-white" id="ecoB">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payback -->
+            <div class="col-12 col-lg-6">
+              <div class="glass-card p-4 h-100">
+                <h6 class="mb-3">Tempo de Retorno (Payback)</h6>
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+                  <span class="text-muted-custom">Cenário A</span>
+                  <span class="h5 mb-0 fw-bold text-accent-orange" id="payA">—</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-muted-custom">Cenário B</span>
+                  <span class="h5 mb-0 fw-bold text-accent-orange" id="payB">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Longo Prazo -->
+            <div class="col-12">
+              <div class="glass-card p-4" style="background: linear-gradient(to right, rgba(139, 92, 246, 0.05), transparent);">
+                <h6 class="mb-3">Projeção de 25 Anos (Sem reajuste)</h6>
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="text-muted-custom small mb-1">Economia Bruta Total (Cenário A)</div>
+                    <div class="h4 text-white" id="eco25A">—</div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="text-muted-custom small mb-1">Economia Líquida (A) (Bruta - Investimento)</div>
+                    <div class="h3 fw-bold text-accent-purple" id="liq25A">—</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-2">
+                    <div class="text-muted-custom small mb-1">Economia Bruta Total (Cenário B)</div>
+                    <div class="h4 text-white" id="eco25B">—</div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <div class="text-muted-custom small mb-1">Economia Líquida (B) (Bruta - Investimento)</div>
+                    <div class="h3 fw-bold text-accent-purple" id="liq25B">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: GRÁFICOS -->
+      <section class="tab-pane fade" id="graficos">
+        <div class="row g-4">
+          <div class="col-12 col-xl-4">
+            <div class="glass-card p-4 h-100">
+              <h6 class="mb-4 text-center">Composição do Investimento</h6>
+              <div style="position: relative; height: 250px; display: flex; justify-content: center;">
+                <canvas id="chartInvest"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4">
+            <div class="glass-card p-4 h-100">
+              <h6 class="mb-4 text-center">Conta Cheia vs Mínima</h6>
+              <div style="position: relative; height: 250px;">
+                <canvas id="chartConta"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4">
+            <div class="glass-card p-4 h-100">
+              <h6 class="mb-4 text-center">Economia Acumulada (25 Anos)</h6>
+              <div style="position: relative; height: 250px;">
+                <canvas id="chartAcum"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+             <div class="glass-card p-4">
+               <h6 class="mb-3">Dados Utilizados nos Gráficos</h6>
+               <div class="table-responsive">
+                  <table class="table table-cloud mb-0 small" id="tblQuick"></table>
+               </div>
+             </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="mt-5 py-4 text-center text-muted-custom small border-top border-secondary border-opacity-10">
+      <div class="container">
+        <p class="opacity-50">Portal de Compilação e Análise — Uso Pessoal</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // =========================
+    //  DADOS 
+    // =========================
+    const data = {
+      sistema: {
+        potencia_kWp: 7.44,
+        modulos: { qtd: 12, potencia_W: 620, tipo: "Bifacial", marcaModelo: "Dah Solar DHN-66Z20/DG" },
+        inversor: { qtd: 1, modelo: "Huawei SUN2000-10K-LC0", potencia_kW: 10, tensao: "220V" }
+      },
+      investimentos: {
+        materiais: [
+          {
+            categoria: "Kit solar completo",
+            valor: 10292.48,
+            itens: [
+              { qtd: 1, un: "un", desc: "Cabo solar 4mm² vermelho — 50m" },
+              { qtd: 1, un: "un", desc: "Cabo solar 4mm² preto — 50m" },
+              { qtd: 8, un: "par", desc: "Conector MC4 (par)" },
+              { qtd: 12, un: "un", desc: "Módulo fotovoltaico 620W bifacial" },
+              { qtd: 1, un: "un", desc: "Inversor Huawei SUN2000-10K-LC0" }
+            ]
+          },
+          {
+            categoria: "Estrutura de fixação",
+            valor: 1369.84,
+            itens: [
+              { qtd: 3, un: "un", desc: "Estrutura Pratyc 1,20m telha colonial" },
+              { qtd: 1, un: "un", desc: "Placa ‘Cuidado — Geração Própria’" }
+            ]
+          },
+          {
+            categoria: "Proteção (Clamper)",
+            valor: 256.49,
+            itens: [
+              { qtd: 1, un: "un", desc: "Clamper Front Box 275V 20kA 2P 63A" }
+            ]
+          },
+          {
+            categoria: "Materiais elétricos",
+            valor: 204.82,
+            itens: [
+              { qtd: 4, un: "und", desc: "Abraçadeira 3/4" }, { qtd: 4, un: "und", desc: "Bucha D10" },
+              { qtd: 2, un: "und", desc: "Caixa padrão 4×2" }, { qtd: 1, un: "und", desc: "Cotovelo 90° 3/4" },
+              { qtd: 2, un: "und", desc: "Curva elet. PVC 20mm" }, { qtd: 2, un: "pc", desc: "Placa 4×2 cega" },
+              { qtd: 2, un: "pc", desc: "Tubo eletroduto 20mm" }, { qtd: 5, un: "pc", desc: "Tubo eletroduto 25mm" },
+              { qtd: 1, un: "und", desc: "Tubo leve 3/4 (3m)" }, { qtd: 4, un: "und", desc: "Parafuso SX 1/4×50mm" }
+            ]
+          },
+          {
+            categoria: "Disjuntor + prensa cabo",
+            valor: 25.99,
+            itens: [
+              { qtd: 1, un: "pc", desc: "Prensa cabo PG21" },
+              { qtd: 1, un: "und", desc: "Disjuntor Easy9 1P 63A" }
+            ]
+          },
+          {
+            categoria: "Cabos e aterramento",
+            valor: 387.53,
+            itens: [
+              { qtd: 14, un: "m", desc: "Cabo 10mm² preto" }, { qtd: 14, un: "m", desc: "Cabo 10mm² azul" },
+              { qtd: 4, un: "m", desc: "Cabo 10mm² verde" }, { qtd: 1, un: "un", desc: "Conector haste" },
+              { qtd: 1, un: "un", desc: "Haste aterramento 1,0m" }, { qtd: 1, un: "un", desc: "Caixa inspeção" },
+              { qtd: 20, un: "un", desc: "Parafuso lote" }, { qtd: 20, un: "un", desc: "Bucha 8mm lote" }
+            ]
+          }
+        ],
+        servicos: [
+          { categoria: "Mão de obra — instalação módulos", valor: 12 * 80, detalhe: "12 módulos × R$ 80" },
+          { categoria: "Mão de obra — instalação inversor", valor: 250.00, detalhe: "Valor fixo" },
+          { categoria: "Projeto e homologação", valor: 600.00, detalhe: "Valor fixo" }
+        ]
+      },
+      fatura: {
+        consumo_kWh: 461, dias: 33, te: 0.41421912, tusd: 0.47872655,
+        bandeira_amarela: 4.39, bandeira_vermelha: 12.48, cip: 39.75, icms_parc: 25.11,
+        tipo_fornecimento: "Monofásico", disponibilidade_kWh: 30
+      },
+      projecao: { anos: 25 }
+    };
+
+    // =========================
+    //  LÓGICA E CÁLCULOS
+    // =========================
+    const brl = (n) => n.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    const num = (n, d=2) => n.toLocaleString("pt-BR", { minimumFractionDigits:d, maximumFractionDigits:d });
+    const sum = (arr, key="valor") => arr.reduce((acc, x) => acc + (x[key] || 0), 0);
+
+    const tarifaEnergia = data.fatura.te + data.fatura.tusd;
+    const energiaBase = data.fatura.consumo_kWh * tarifaEnergia;
+    const bandeiras = data.fatura.bandeira_amarela + data.fatura.bandeira_vermelha;
+    const totalA = energiaBase + bandeiras + data.fatura.cip;
+    const totalB = totalA + data.fatura.icms_parc;
+    const custoMedioA = totalA / data.fatura.consumo_kWh;
+    const custoMedioB = totalB / data.fatura.consumo_kWh;
+    const contaMin = (data.fatura.disponibilidade_kWh * tarifaEnergia) + data.fatura.cip;
+    const ecoA = totalA - contaMin;
+    const ecoB = totalB - contaMin;
+
+    const materiaisTotal = sum(data.investimentos.materiais);
+    const servicosTotal = sum(data.investimentos.servicos);
+    const investimentoTotal = materiaisTotal + servicosTotal;
+    const custoPorKwp = investimentoTotal / data.sistema.potencia_kWp;
+
+    const payA_meses = investimentoTotal / ecoA;
+    const payB_meses = investimentoTotal / ecoB;
+    const payA_anos = payA_meses / 12;
+    const payB_anos = payB_meses / 12;
+
+    const eco25A = ecoA * 12 * data.projecao.anos;
+    const eco25B = ecoB * 12 * data.projecao.anos;
+    const liq25A = eco25A - investimentoTotal;
+    const liq25B = eco25B - investimentoTotal;
+
+    const years = Array.from({length: data.projecao.anos + 1}, (_, i) => i);
+    const acumA = years.map(y => (ecoA * 12 * y) - investimentoTotal);
+    const acumB = years.map(y => (ecoB * 12 * y) - investimentoTotal);
+
+    // =========================
+    //  RENDER FUNCTIONS
+    // =========================
+    function renderTop() {
+      document.getElementById("invTotal").textContent = brl(investimentoTotal);
+      document.getElementById("custoPorKwp").textContent = `${brl(custoPorKwp)} / kWp`;
+      document.getElementById("materiaisTotal").textContent = brl(materiaisTotal);
+      document.getElementById("servicosTotal").textContent = brl(servicosTotal);
+
+      const payRangeTxt = `${num(Math.min(payB_anos, payA_anos), 1)} – ${num(Math.max(payB_anos, payA_anos), 1)} anos`;
+      document.getElementById("paybackRange").textContent = payRangeTxt;
+
+      document.getElementById("economiaRange").textContent = `${brl(Math.min(ecoA, ecoB))} a ${brl(Math.max(ecoA, ecoB))}`;
+    }
+
+    function renderInvestimento() {
+      document.getElementById("subtotalMateriais").textContent = brl(materiaisTotal);
+      document.getElementById("subtotalServicos").textContent = brl(servicosTotal);
+      document.getElementById("totalInvestido2").textContent = brl(investimentoTotal);
+
+      const maoMod = data.investimentos.servicos.find(x => x.categoria.includes("módulos"));
+      const maoInv = data.investimentos.servicos.find(x => x.categoria.includes("inversor"));
+      const proj   = data.investimentos.servicos.find(x => x.categoria.includes("Projeto"));
+
+      document.getElementById("maoObraModulos").textContent = brl(maoMod.valor);
+      document.getElementById("maoObraInversor").textContent = brl(maoInv.valor);
+      document.getElementById("projetoHomologacao").textContent = brl(proj.valor);
+
+      const categorias = [
+        ...data.investimentos.materiais.map(x => ({ categoria: x.categoria, valor: x.valor })),
+        ...data.investimentos.servicos.map(x => ({ categoria: x.categoria, valor: x.valor }))
+      ];
+
+      document.getElementById("tblCategorias").innerHTML = categorias.map(x => `
+        <tr><td>${x.categoria}</td><td class="text-end font-mono">${brl(x.valor)}</td></tr>
+      `).join("");
+
+      const acc = document.getElementById("accItens");
+      acc.innerHTML = "";
+
+      const createItem = (title, val, content, id) => `
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${id}">
+              <div class="w-100 d-flex justify-content-between me-3">
+                <span class="fw-semibold">${title}</span>
+                <span class="font-mono text-white">${brl(val)}</span>
+              </div>
+            </button>
+          </h2>
+          <div id="${id}" class="accordion-collapse collapse" data-bs-parent="#accItens">
+            <div class="accordion-body">${content}</div>
+          </div>
+        </div>`;
+
+      data.investimentos.materiais.forEach((cat, idx) => {
+        const id = `mat_${idx}`;
+        const table = `
+          <table class="table table-cloud table-sm mb-0">
+            <thead><tr><th>Qtd</th><th>Un</th><th>Descrição</th></tr></thead>
+            <tbody>
+              ${cat.itens.map(it => `<tr><td>${it.qtd}</td><td>${it.un}</td><td>${it.desc}</td></tr>`).join("")}
+            </tbody>
+          </table>`;
+        acc.innerHTML += createItem(cat.categoria, cat.valor, table, id);
+      });
+
+      data.investimentos.servicos.forEach((srv, idx) => {
+        const id = `srv_${idx}`;
+        const detail = `<div class="font-mono text-muted-custom">Detalhe: ${srv.detalhe}</div>`;
+        acc.innerHTML += createItem(srv.categoria, srv.valor, detail, id);
+      });
+    }
+
+    function renderFatura() {
+      document.getElementById("energiaBase").textContent = brl(energiaBase);
+      document.getElementById("bandeiras").textContent = brl(bandeiras);
+      document.getElementById("cip").textContent = brl(data.fatura.cip);
+      document.getElementById("totalA").textContent = brl(totalA);
+      document.getElementById("totalB").textContent = brl(totalB);
+      document.getElementById("kwhMedioA").textContent = `${brl(custoMedioA)}`;
+      document.getElementById("kwhMedioB").textContent = `${brl(custoMedioB)}`;
+      document.getElementById("minConta").textContent = brl(contaMin);
+    }
+
+    function renderIndicadores() {
+      document.getElementById("ecoA").textContent = brl(ecoA);
+      document.getElementById("ecoB").textContent = brl(ecoB);
+      document.getElementById("payA").textContent = `${num(payA_meses,1)} meses (${num(payA_anos,1)} anos)`;
+      document.getElementById("payB").textContent = `${num(payB_meses,1)} meses (${num(payB_anos,1)} anos)`;
+      document.getElementById("eco25A").textContent = brl(eco25A);
+      document.getElementById("liq25A").textContent = brl(liq25A);
+      document.getElementById("eco25B").textContent = brl(eco25B);
+      document.getElementById("liq25B").textContent = brl(liq25B);
+    }
+
+    // =========================
+    //  CHARTS (Modern Styling)
+    // =========================
+    let chartInvest, chartConta, chartAcum;
+
+    function renderCharts() {
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.font.family = "'Inter', sans-serif";
+      
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { usePointStyle: true, boxWidth: 8 } },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+            titleColor: '#f8fafc',
+            bodyColor: '#cbd5e1',
+            borderColor: 'rgba(255,255,255,0.1)',
+            borderWidth: 1,
+            padding: 10,
+            displayColors: true,
+            callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${brl(ctx.raw)}` }
+          }
+        }
+      };
+
+      // Chart 1: Doughnut
+      const ctx1 = document.getElementById("chartInvest");
+      if(ctx1) {
+        chartInvest = new Chart(ctx1, {
+          type: "doughnut",
+          data: {
+            labels: [...data.investimentos.materiais.map(x => x.categoria), ...data.investimentos.servicos.map(x => x.categoria)],
+            datasets: [{
+              data: [...data.investimentos.materiais.map(x => x.valor), ...data.investimentos.servicos.map(x => x.valor)],
+              backgroundColor: ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#6366f1', '#334155'],
+              borderWidth: 0,
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            ...commonOptions,
+            cutout: '70%',
+            plugins: { ...commonOptions.plugins, legend: { display: false } }
+          }
+        });
+      }
+
+      // Chart 2: Bar
+      const ctx2 = document.getElementById("chartConta");
+      if(ctx2) {
+        chartConta = new Chart(ctx2, {
+          type: "bar",
+          data: {
+            labels: ["Cenário A", "Cenário B"],
+            datasets: [
+              { label: "Conta Cheia", data: [totalA, totalB], backgroundColor: '#334155', borderRadius: 4 },
+              { label: "Conta Mínima", data: [contaMin, contaMin], backgroundColor: '#10b981', borderRadius: 4 },
+              { label: "Economia", data: [ecoA, ecoB], backgroundColor: '#06b6d4', borderRadius: 4 }
+            ]
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: (v) => 'R$' + v } }
+            }
+          }
+        });
+      }
+
+      // Chart 3: Line
+      const ctx3 = document.getElementById("chartAcum");
+      if(ctx3) {
+        chartAcum = new Chart(ctx3, {
+          type: "line",
+          data: {
+            labels: years.map(y => `Ano ${y}`),
+            datasets: [
+              { label: "Líquido (A)", data: acumA, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.4, pointRadius: 0 },
+              { label: "Líquido (B)", data: acumB, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }
+            ]
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false }, ticks: { maxTicksLimit: 6 } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: (v) => 'R$' + v/1000 + 'k' } }
+            },
+            interaction: { intersect: false, mode: 'index' }
+          }
+        });
+      }
+
+      // Quick Table
+      const rows = [
+        { k: "Total conta cheia", a: totalA, b: totalB },
+        { k: "Economia mensal", a: ecoA, b: ecoB },
+        { k: "Payback (anos)", a: payA_anos, b: payB_anos, fmt: "num1" },
+        { k: "Economia Líq. 25 anos", a: liq25A, b: liq25B }
+      ];
+      document.getElementById("tblQuick").innerHTML = `
+        <thead><tr><th>Indicador</th><th class="text-end">Cenário A</th><th class="text-end">Cenário B</th></tr></thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td class="text-muted-custom">${r.k}</td>
+              <td class="text-end font-mono">${r.fmt === "num1" ? num(r.a,1) : brl(r.a)}</td>
+              <td class="text-end font-mono">${r.fmt === "num1" ? num(r.b,1) : brl(r.b)}</td>
+            </tr>`).join('')}
+        </tbody>`;
+    }
+
+    function downloadJSON() {
+      const payload = { ...data, calculos: { investimentoTotal, paybackAnos: {a: payA_anos, b: payB_anos}, economia25: {a: liq25A, b: liq25B} } };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url; a.download = "solar-dados.json"; a.click();
+    }
+
+    // Initialize
+    renderTop();
+    renderInvestimento();
+    renderFatura();
+    renderIndicadores();
+    
+    // Render charts when tab is visible
+    document.querySelector('a[href="#graficos"]').addEventListener("shown.bs.tab", () => {
+      if (!chartInvest) renderCharts();
+    });
+    // Fallback
+    setTimeout(() => { if (!chartInvest) renderCharts(); }, 500);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
