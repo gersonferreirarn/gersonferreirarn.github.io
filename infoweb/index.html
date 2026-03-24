@@ -1,134 +1,621 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Grade Curricular</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Técnico em Informática para Internet - IFRN</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ifrn-green: #00985A;
+            --ifrn-green-dark: #006644;
+            --ifrn-yellow: #F9B825;
+            --ifrn-light-bg: #f4f6f9;
+            --ifrn-text: #333;
+        }
 
-<style>
-body { background:#f4f6f9; }
-h1 { text-align:center; margin:30px 0; }
-.card { margin-bottom:20px; border-radius:15px; }
-</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--ifrn-light-bg);
+            color: var(--ifrn-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--ifrn-green) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            color: var(--ifrn-yellow) !important;
+        }
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--ifrn-green) 0%, var(--ifrn-green-dark) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: var(--ifrn-light-bg);
+            transform: skewY(-2deg);
+            z-index: 1;
+        }
+        .hero h1 { font-weight: 800; font-size: 2.8rem; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; position: relative; z-index: 2; }
+        .badge-ifrn {
+            background-color: var(--ifrn-yellow);
+            color: var(--ifrn-green-dark);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        /* Seções */
+        .section-title {
+            color: var(--ifrn-green-dark);
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background-color: var(--ifrn-yellow);
+            border-radius: 2px;
+        }
+
+        /* Cards de Informação */
+        .info-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            height: 100%;
+            background: white;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .icon-box {
+            font-size: 2.5rem;
+            color: var(--ifrn-green);
+            margin-bottom: 15px;
+        }
+
+        /* Grade Curricular */
+        .grade-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .grade-header {
+            background-color: var(--ifrn-green);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .grade-header.bg-alt { background-color: var(--ifrn-green-dark); }
+        
+        .table {
+            margin-bottom: 0;
+            background: white;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 152, 90, 0.05);
+        }
+
+        /* Badges Tipo Disciplina */
+        .badge-tipo {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        .badge-anual { background-color: #e3f2fd; color: #1565c0; }
+        .badge-semestral { background-color: #fff3e0; color: #ef6c00; }
+        
+        /* Núcleos */
+        .nucleo-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .nucleo-estruturante { background-color: #3f51b5; }
+        .nucleo-tecnologico { background-color: #009688; }
+        .nucleo-articulador { background-color: #ff5722; }
+
+        /* Links PDF */
+        .link-pdf {
+            color: var(--ifrn-green-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+            font-size: 0.95rem;
+        }
+        .link-pdf:hover {
+            color: var(--ifrn-yellow);
+            text-decoration: underline;
+        }
+        .link-pdf i { margin-right: 5px; }
+
+        /* Acesso */
+        .acesso-item {
+            border-left: 4px solid var(--ifrn-green);
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--ifrn-green-dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: auto;
+        }
+        footer a { color: var(--ifrn-yellow); text-decoration: none; }
+        footer a:hover { color: white; }
+
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-<h1>📘 Grade Curricular - Informática</h1>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-mortarboard-fill"></i> IFRN
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre o Curso</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#organizacao">Organização</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#grade">Grade Curricular</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#acesso">Como Entrar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<!-- ================= 1º PERÍODO ================= -->
-<div class="card shadow">
-<div class="card-header bg-primary text-white">1º Período</div>
-<div class="card-body table-responsive">
-<table class="table table-striped">
-<thead>
-<tr>
-<th>Disciplina</th><th>1º</th><th>2º</th><th>Tipo</th>
-</tr>
-</thead>
-<tbody>
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="container position-relative" style="z-index: 2;">
+            <span class="badge-ifrn mb-3 d-inline-block">Ensino Médio Integrado</span>
+            <h1>Técnico em Informática para Internet</h1>
+            <p class="lead px-md-5">Formação humana integral articulando ciência, trabalho, tecnologia e cultura para o desenvolvimento de soluções digitais inovadoras.</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="#grade" class="btn btn-light btn-lg mt-3 fw-bold" style="color: var(--ifrn-green);">
+                    <i class="bi bi-table"></i> Ver Grade
+                </a>
+                <a href="#acesso" class="btn btn-outline-light btn-lg mt-3 fw-bold">
+                    <i class="bi bi-door-open"></i> Como Ingressar
+                </a>
+            </div>
+        </div>
+    </header>
 
-<tr><td><a href="1_Arte I.pdf">Arte I</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="1_Autoria Web.pdf">Autoria Web</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="1_Educação em Tecnologias Digitais.pdf">Educação em Tecnologias Digitais</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="1_Educação Física I.pdf">Educação Física I</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="1_Filosofia I.pdf">Filosofia I</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="1_Geografia I.pdf">Geografia I</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="1_Introdução à Lógica e Programação.pdf">Introdução à Lógica e Programação</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="1_Língua Portuguesa e Literatura I.pdf">Língua Portuguesa e Literatura I</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="1_Matemática I.pdf">Matemática I</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="1_Princípios de Design.pdf">Princípios de Design</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="1_Química: Geral e Inorgânica.pdf">Química: Geral e Inorgânica</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="1_Sociologia I.pdf">Sociologia I</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
+    <div class="container my-5">
 
-</tbody>
-</table>
-</div>
-</div>
+        <!-- SEÇÃO SOBRE -->
+        <section id="sobre" class="py-5">
+            <h2 class="section-title"><i class="bi bi-info-circle-fill"></i> Sobre o Curso</h2>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="info-card p-4">
+                        <h4 class="mb-3" style="color: var(--ifrn-green);">Objetivo Geral</h4>
+                        <p class="lead" style="font-size: 1rem;">
+                            Capacitar profissionais no desenvolvimento de programas de computador para Internet e dispositivos móveis; na utilização de ferramentas para construir soluções que auxiliam o processo de criação de interfaces com o usuário e aplicativos empregados nos diversos seguimentos do comércio e da indústria, e no desenvolvimento e realização de manutenção de sites e portais na internet e na intranet.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-<!-- ================= 2º PERÍODO ================= -->
-<div class="card shadow">
-<div class="card-header bg-success text-white">2º Período</div>
-<div class="card-body table-responsive">
-<table class="table table-striped">
-<tbody>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="info-card p-4 h-100">
+                        <div class="icon-box"><i class="bi bi-person-workspace"></i></div>
+                        <h4>Perfil Profissional</h4>
+                        <p>O egresso estará apto a atuar em atividades voltadas para:</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item border-0 ps-0"><i class="bi bi-check2-circle text-success me-2"></i> Construção de interfaces com o usuário (Web/Mobile)</li>
+                            <li class="list-group-item border-0 ps-0"><i class="bi bi-check2-circle text-success me-2"></i> Construção e manutenção de sites e portais</li>
+                            <li class="list-group-item border-0 ps-0"><i class="bi bi-check2-circle text-success me-2"></i> Análise e desenvolvimento de programas</li>
+                            <li class="list-group-item border-0 ps-0"><i class="bi bi-check2-circle text-success me-2"></i> Projeto de banco de dados</li>
+                            <li class="list-group-item border-0 ps-0"><i class="bi bi-check2-circle text-success me-2"></i> Instalação e configuração de servidores</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="info-card p-4 h-100 bg-light border-start border-4 border-warning">
+                        <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
+                        <h4>Dados do Curso</h4>
+                        <div class="row text-center mt-3">
+                            <div class="col-6 mb-3">
+                                <h2 class="mb-0" style="color: var(--ifrn-green);">3880h</h2>
+                                <small class="text-muted fw-bold">Carga Horária Total</small>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <h2 class="mb-0" style="color: var(--ifrn-green);">400h</h2>
+                                <small class="text-muted fw-bold">Prática Profissional</small>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <p class="mb-0 small text-start">
+                                    <strong>Modalidade:</strong> Presencial<br>
+                                    <strong>Forma de Oferta:</strong> Integrado ao Ensino Médio<br>
+                                    <strong>Eixo Tecnológico:</strong> Informação e Comunicação<br>
+                                    <strong>Regime:</strong> Seriado Anual
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<tr><td><a href="2_Análise e Projeto Orientada a Objetos.pdf">Análise e Projeto Orientada a Objetos</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Arte II.pdf">Arte II</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="2_Arte III.pdf">Arte III</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="2_Banco de Dados.pdf">Banco de Dados</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Design Web.pdf">Design Web</a></td><td>0</td><td>4</td><td>Semestral</td></tr>
-<tr><td><a href="2_Educação Física II.pdf">Educação Física II</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Filosofia II.pdf">Filosofia II</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="2_Geografia II.pdf">Geografia II</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Inglês I.pdf">Inglês I</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Língua Portuguesa e Literatura II.pdf">Língua Portuguesa e Literatura II</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Matemática II.pdf">Matemática II</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="2_Programação Orientada a Objetos.pdf">Programação Orientada a Objetos</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="2_Química: Orgânica e Meio Ambiente.pdf">Química: Orgânica e Meio Ambiente</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="2_Redes de computadores.pdf">Redes de computadores</a></td><td>4</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="2_Sociologia II.pdf">Sociologia II</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
+        <hr class="my-5 border-light">
 
-</tbody>
-</table>
-</div>
-</div>
+        <!-- ORGANIZAÇÃO CURRICULAR -->
+        <section id="organizacao" class="py-5">
+            <h2 class="section-title"><i class="bi bi-diagram-3-fill"></i> Estrutura Curricular</h2>
+            <p class="text-muted mb-4">O curso organiza-se em Núcleos Politécnicos para garantir a integração entre conhecimento, trabalho e cultura.</p>
+            
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="info-card p-3 text-center">
+                        <span class="nucleo-badge nucleo-estruturante mb-2">Núcleo Estruturante</span>
+                        <p class="small mt-2 mb-0">Disciplinas de base científico-tecnológica correspondentes ao Ensino Médio.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-card p-3 text-center">
+                        <span class="nucleo-badge nucleo-tecnologico mb-2">Núcleo Tecnológico</span>
+                        <p class="small mt-2 mb-0">Disciplinas técnicas específicas e comuns ao eixo de Informação e Comunicação.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-card p-3 text-center">
+                        <span class="nucleo-badge nucleo-articulador mb-2">Núcleo Articulador</span>
+                        <p class="small mt-2 mb-0">Prática Profissional: integração entre teoria e prática no mundo do trabalho.</p>
+                    </div>
+                </div>
+            </div>
 
-<!-- ================= 3º PERÍODO ================= -->
-<div class="card shadow">
-<div class="card-header bg-warning">3º Período</div>
-<div class="card-body table-responsive">
-<table class="table table-striped">
-<tbody>
+            <!-- PRÁTICA PROFISSIONAL -->
+            <div class="info-card p-4 mt-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-briefcase-fill fs-3 me-3" style="color: var(--ifrn-green);"></i>
+                    <h4 class="mb-0">Prática Profissional</h4>
+                </div>
+                <p>Com 400 horas obrigatórias, a prática profissional contextualiza os saberes e prepara para o mercado. Inclui:</p>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-stars text-warning me-2"></i> <strong>Projeto Integrador (60h):</strong> Desenvolvido no 3º ano, articula disciplinas técnicas.</li>
+                            <li class="mb-2"><i class="bi bi-book-half text-warning me-2"></i> <strong>Cursos FIC:</strong> Iniciação à Prática, Pesquisa e Extensão (15h cada).</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="small mb-1"><strong>Modalidades opcionais complementares:</strong></p>
+                        <span class="badge bg-light text-dark me-1 mb-1">Estágio</span>
+                        <span class="badge bg-light text-dark me-1 mb-1">Pesquisa</span>
+                        <span class="badge bg-light text-dark me-1 mb-1">Extensão</span>
+                        <span class="badge bg-light text-dark me-1 mb-1">Empreendedorismo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<tr><td><a href="3_Biologia -  Do Indivíduo ao Ambiente.pdf">Biologia -  Do Indivíduo ao Ambiente</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="3_Filosofia III.pdf">Filosofia III</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="3_Física : mecânica clássica e termodinâmica..pdf">Física : mecânica clássica e termodinâmica.</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="3_Gestão e Empreendedorismo.pdf">Gestão e Empreendedorismo</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="3_História e Cultura.pdf">História e Cultura</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="3_Inglês II.pdf">Inglês II</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="3_Instalação e Configuração de Servidores.pdf">Instalação e Configuração de Servidores</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="3_Língua Portuguesa e Literatura III.pdf">Língua Portuguesa e Literatura III</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="3_Matemática III.pdf">Matemática III</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="3_Programação de Aplicação Web.pdf">Programação de Aplicação Web</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="3_Sociologia III.pdf">Sociologia III</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="3_Tópicos Específicos em Informática para Internet I.pdf">Tópicos Específicos em Informática para Internet I</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="3_Tópicos Específicos em Informática para Internet II.pdf">Tópicos Específicos em Informática para Internet II</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
+        <hr class="my-5 border-light">
 
-</tbody>
-</table>
-</div>
-</div>
+        <!-- SEÇÃO GRADE CURRICULAR -->
+        <section id="grade" class="py-5">
+            <h2 class="section-title"><i class="bi bi-table"></i> Grade Curricular</h2>
+            <p class="text-muted mb-4">Disciplinas organizadas por período anual. Clique no nome para acessar o plano de ensino (PDF).</p>
 
-<!-- ================= 4º PERÍODO ================= -->
-<div class="card shadow">
-<div class="card-header bg-danger text-white">4º Período</div>
-<div class="card-body table-responsive">
-<table class="table table-striped">
-<tbody>
+            <div class="row">
+                
+                <!-- 1º PERÍODO -->
+                <div class="col-lg-6 mb-4">
+                    <div class="grade-card">
+                        <div class="grade-header">
+                            1º Período (1º Ano)
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Disciplina</th>
+                                        <th class="text-center">1º S</th>
+                                        <th class="text-center">2º S</th>
+                                        <th class="text-center">Tipo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="1_Arte I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Arte I</a></td>
+                                        <td class="text-center">0</td><td class="text-center">2</td>
+                                        <td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Autoria Web.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Autoria Web</a></td>
+                                        <td class="text-center">2</td><td class="text-center">2</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Educação em Tecnologias Digitais.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Educação em Tecnologias Digitais</a></td>
+                                        <td class="text-center">2</td><td class="text-center">0</td>
+                                        <td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Educação Física I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Educação Física I</a></td>
+                                        <td class="text-center">2</td><td class="text-center">2</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Filosofia I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Filosofia I</a></td>
+                                        <td class="text-center">2</td><td class="text-center">0</td>
+                                        <td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Geografia I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Geografia I</a></td>
+                                        <td class="text-center">4</td><td class="text-center">4</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Introdução à Lógica e Programação.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Introdução à Lógica e Programação</a></td>
+                                        <td class="text-center">4</td><td class="text-center">4</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Língua Portuguesa e Literatura I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Língua Portuguesa e Literatura I</a></td>
+                                        <td class="text-center">4</td><td class="text-center">4</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Matemática I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Matemática I</a></td>
+                                        <td class="text-center">4</td><td class="text-center">4</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Princípios de Design.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Princípios de Design</a></td>
+                                        <td class="text-center">2</td><td class="text-center">2</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Química- Geral e Inorgânica.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Química: Geral e Inorgânica</a></td>
+                                        <td class="text-center">4</td><td class="text-center">4</td>
+                                        <td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="1_Sociologia I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Sociologia I</a></td>
+                                        <td class="text-center">0</td><td class="text-center">2</td>
+                                        <td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-<tr><td><a href="4_Biologia - Hereditariedade, Evolução e suas Tecnologias.pdf">Biologia - Hereditariedade, Evolução e suas Tecnologias</a></td><td>4</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="4_Biologia - Vida e Diversidade.pdf">Biologia - Vida e Diversidade</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="4_Espanhol I.pdf">Espanhol I</a></td><td>4</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="4_Espanhol II.pdf">Espanhol II</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="4_Filosofia, Ciência e Tecnologia - Eixo Informação e Comunicação.pdf">Filosofia, Ciência e Tecnologia - Eixo Informação e Comunicação</a></td><td>0</td><td>2</td><td>Semestral</td></tr>
-<tr><td><a href="4_Física : eletromagnetismo, ondas, óptica  e física moderna.pdf">Física : eletromagnetismo, ondas, óptica  e física moderna</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="4_História, Poder e Trabalho.pdf">História, Poder e Trabalho</a></td><td>4</td><td>4</td><td>Anual</td></tr>
-<tr><td><a href="4_Inglês III.pdf">Inglês III</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="4_Interface do Usuário e Experiência do Usuário.pdf">Interface do Usuário e Experiência do Usuário</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="4_Língua Portuguesa e Literatura IV.pdf">Língua Portuguesa e Literatura IV</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
-<tr><td><a href="4_Programação de Aplicação para Dispositivos Móveis.pdf">Programação de Aplicação para Dispositivos Móveis</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="4_Programação Orientada a Serviço.pdf">Programação Orientada a Serviço</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="4_Química: Físico-química.pdf">Química: Físico-química</a></td><td>2</td><td>2</td><td>Anual</td></tr>
-<tr><td><a href="4_Sociologia do Trabalho.pdf">Sociologia do Trabalho</a></td><td>2</td><td>0</td><td>Semestral</td></tr>
+                <!-- 2º PERÍODO -->
+                <div class="col-lg-6 mb-4">
+                    <div class="grade-card">
+                        <div class="grade-header bg-alt">2º Período (2º Ano)</div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Disciplina</th>
+                                        <th class="text-center">1º S</th>
+                                        <th class="text-center">2º S</th>
+                                        <th class="text-center">Tipo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><a href="2_Análise e Projeto Orientada a Objetos.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Análise e Projeto Orientada a Objetos</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Arte II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Arte II</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="2_Arte III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Arte III</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="2_Banco de Dados.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Banco de Dados</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Design Web.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Design Web</a></td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="2_Educação Física II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Educação Física II</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Filosofia II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Filosofia II</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="2_Geografia II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Geografia II</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Inglês I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Inglês I</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Língua Portuguesa e Literatura II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Língua Portuguesa e Literatura II</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Matemática II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Matemática II</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Programação Orientada a Objetos.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Programação Orientada a Objetos</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Química- Orgânica e Meio Ambiente.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Química: Orgânica e Meio Ambiente</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="2_Redes de computadores.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Redes de computadores</a></td><td class="text-center">4</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="2_Sociologia II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Sociologia II</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-</tbody>
-</table>
-</div>
-</div>
+                <!-- 3º PERÍODO -->
+                <div class="col-lg-6 mb-4">
+                    <div class="grade-card">
+                        <div class="grade-header">3º Período (3º Ano)</div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr><th>Disciplina</th><th class="text-center">1º S</th><th class="text-center">2º S</th><th class="text-center">Tipo</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><a href="3_Biologia - Do Indivíduo ao Ambiente.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Biologia - Do Indivíduo ao Ambiente</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Filosofia III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Filosofia III</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="3_Física - mecânica clássica e termodinâmica.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Física: mecânica clássica e termodinâmica</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Gestão e Empreendedorismo.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Gestão e Empreendedorismo</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="3_História e Cultura.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> História e Cultura</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Inglês II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Inglês II</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Instalação e Configuração de Servidores.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Instalação e Configuração de Servidores</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Língua Portuguesa e Literatura III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Língua Portuguesa e Literatura III</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Matemática III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Matemática III</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Programação de Aplicação Web.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Programação de Aplicação Web</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="3_Sociologia III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Sociologia III</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="3_Tópicos Específicos em Informática para Internet I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Tópicos Específicos em Informática I</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="3_Tópicos Específicos em Informática para Internet II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Tópicos Específicos em Informática II</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-</div>
+                <!-- 4º PERÍODO -->
+                <div class="col-lg-6 mb-4">
+                    <div class="grade-card">
+                        <div class="grade-header bg-alt">4º Período (4º Ano)</div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr><th>Disciplina</th><th class="text-center">1º S</th><th class="text-center">2º S</th><th class="text-center">Tipo</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><a href="4_Biologia - Hereditariedade, Evolução e suas Tecnologias.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Biologia - Hereditariedade e Evolução</a></td><td class="text-center">4</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Biologia - Vida e Diversidade.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Biologia - Vida e Diversidade</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Espanhol I.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Espanhol I</a></td><td class="text-center">4</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Espanhol II.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Espanhol II</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Filosofia, Ciência e Tecnologia - Eixo Informação e Comunicação.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Filosofia, Ciência e Tecnologia</a></td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Física - eletromagnetismo, ondas, óptica e física moderna.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Física: Eletromagnetismo e Física Moderna</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_História, Poder e Trabalho.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> História, Poder e Trabalho</a></td><td class="text-center">4</td><td class="text-center">4</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Inglês III.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Inglês III</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Interface do Usuário e Experiência do Usuário.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Interface e Experiência do Usuário (UI/UX)</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Língua Portuguesa e Literatura IV.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Língua Portuguesa e Literatura IV</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                    <tr><td><a href="4_Programação de Aplicação para Dispositivos Móveis.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Programação para Dispositivos Móveis</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Programação Orientada a Serviço.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Programação Orientada a Serviço</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Química- Físico-química.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Química: Físico-química</a></td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center"><span class="badge-tipo badge-anual">Anual</span></td></tr>
+                                    <tr><td><a href="4_Sociologia do Trabalho.pdf" class="link-pdf"><i class="bi bi-file-earmark-pdf"></i> Sociologia do Trabalho</a></td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center"><span class="badge-tipo badge-semestral">Semestral</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </section>
+
+        <!-- SEÇÃO ACESSO -->
+        <section id="acesso" class="py-5">
+            <h2 class="section-title"><i class="bi bi-door-open-fill"></i> Requisitos e Acesso</h2>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="acesso-item">
+                        <h5><i class="bi bi-mortarboard-fill me-2"></i> Pré-requisitos</h5>
+                        <p class="mb-0">Destinado a portadores de certificado de conclusão do <strong>Ensino Fundamental</strong> ou equivalente.</p>
+                    </div>
+                    <div class="acesso-item">
+                        <h5><i class="bi bi-people-fill me-2"></i> Formas de Ingresso</h5>
+                        <ul>
+                            <li><strong>Processo Seletivo:</strong> Aberto ao público para o 1º período.</li>
+                            <li><strong>Transferência/Reingresso:</strong> Para períodos posteriores.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="info-card p-4 bg-light border-0">
+                        <h5><i class="bi bi-patch-check-fill me-2 text-success"></i> Política de Cotas (Lei 12.711/2012)</h5>
+                        <p class="small">O IFRN reserva, no mínimo, <strong>50%</strong> das vagas para estudantes que cursaram integralmente o Ensino Fundamental em escolas públicas.</p>
+                        <ul class="small">
+                            <li>Reserva para renda familiar igual ou inferior a 1 salário-mínimo per capita.</li>
+                            <li>Proporção de vagas para autodeclarados pretos, pardos, indígenas e quilombolas.</li>
+                            <li>Vagas reservadas para Pessoas com Deficiência.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contato">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="mb-0">IFRN</h5>
+                    <small>Instituto Federal do Rio Grande do Norte</small>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p class="mb-1"><i class="bi bi-geo-alt-fill"></i> Campus Avançado Jucurutu</p>
+                    <p class="mb-0"><i class="bi bi-file-earmark-text-fill"></i> PPC Aprovado - <a href="ppc.pdf">Clique aqui</a></p>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-up-circle"></i> Voltar ao topo</a>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.2);">
+            <small>&copy; 2026 Curso Técnico em Informática para Internet. Todos os direitos reservados.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
